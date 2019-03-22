@@ -139,11 +139,13 @@ Function GetSpecifications(material_id As String) As Object
 End Function
 
 Sub PrintSpecification(frm As MSForms.UserForm)
+    Logger.Log "Printing Specification . . . "
     Set manager.console = Factory.CreateConsoleBox(frm)
     manager.console.PrintObject manager.current_spec
 End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
+    Logger.Log "Printing Template . . . "
     Set manager.console = Factory.CreateConsoleBox(frm)
     manager.console.PrintObject manager.current_template
 End Sub

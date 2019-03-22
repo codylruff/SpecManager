@@ -1,7 +1,5 @@
 Attribute VB_Name = "Logger"
-
 Option Explicit
-Const ms As Double = 0.000000011574
 Private fso As FileSystemObject ' Declare a FileSystemObject.
 Private stream As TextStream ' Declare a TextStream.
 Private buffer As Dictionary
@@ -28,6 +26,7 @@ Public Sub SaveLog(Optional file_name As String = "runtime")
     file_path = folder_path & "\" & file_name & ".log"
     Set fso = CreateObject("Scripting.FileSystemObject")
     If Not fso.FolderExists(folder_path) Then fso.CreateFolder folder_path
+    Logger.Log "Saving : " & file_name & ".log"
     Set stream = fso.CreateTextFile(file_path, True)
     For Each key In buffer
       stream.WriteLine Utils.printf("{0} : {1}", key, buffer.Item(key))

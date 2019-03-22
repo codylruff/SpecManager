@@ -15,12 +15,10 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
 Option Explicit
 
 Private Sub cmdSelectSpecificationType_Click()
+' TODO: When switching from one spec type to another the spec_type value does not seem to change.
     With manager
         Set .current_template = SpecManager.GetTemplate(cboSelectSpecificationType.value)
         .current_template.SpecType = cboSelectSpecificationType.value
@@ -62,13 +60,11 @@ Private Sub cmdSaveChanges_Click()
     End If
 End Sub
 
-Private Sub cmdSubmit_Click()
+Private Sub cmdSetProperty_Click()
 ' This executes a set property command
-' TODO: Change the name of this to cmdSetProperty
     With manager.current_spec
         .Properties.Item(Utils.ConvertToCamelCase( _
                 cboSelectProperty.value)) = txtPropertyValue
-        .Revision = .Properties.Item("Revision")
     End With
     SpecManager.PrintSpecification Me
 End Sub
@@ -96,6 +92,10 @@ End Sub
 
 Private Sub cmdClear_Click()
 'Clears the form
+    Dim i As Integer
+    Do While cboSelectProperty.ListCount > 0
+        cboSelectProperty.RemoveItem 0
+    Loop
     ClearForm Me
 End Sub
 

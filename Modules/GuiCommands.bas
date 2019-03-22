@@ -119,15 +119,15 @@ Public Sub ExportAll()
 
     Next
     
-    Logger.SaveLog "export"
-    
     lngCounter = lngCounter + 1
     Call modProgress.ShowProgress( _
         lngCounter, _
         lngNumberOfTasks, _
         "Finishing...", _
-        False)
-    
+        True)
+        
+    Logger.Log "Export Complete."
+    Logger.SaveLog "export"
 End Sub
 
 Public Sub ConfigControl()

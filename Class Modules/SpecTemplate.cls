@@ -31,12 +31,12 @@ Public Function PropertiesJson() As String
     PropertiesJson = JsonConverter.ConvertToJson(Me.Properties)
 End Function
 
-Public Sub JsonToObject(properties_json As String)
+Public Sub JsonToObject(properties_json As String, spec_type As String, Revision_ As String)
     Set Properties = JsonConverter.ParseJson(properties_json)
-    Properties.Item("Revision") = "1.0"
-    Properties.Item("Spec_Type") = "style"
-    Revision = Me.Properties.Item("Revision")
-    SpecType = Me.Properties.Item("Spec_Type")
+    SpecType = spec_type
+    Revision = Revision_
+    Properties.Item("Revision") = Revision_
+    Properties.Item("Spec_Type") = spec_type
 End Sub
 
 ' Constructor
