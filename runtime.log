@@ -1,0 +1,32 @@
+22-Mar-2019 17:14:12.19 : ------------- Stopping Application -------------
+22-Mar-2019 17:14:14.58 : Not Implemented Exception!
+22-Mar-2019 17:14:16.41 : Not Implemented Exception!
+22-Mar-2019 17:14:28.72 : ------------- Starting Application -------------
+22-Mar-2019 17:14:30.78 : ------------- Stopping Application -------------
+22-Mar-2019 17:14:36.69 : ------------- Starting Application -------------
+22-Mar-2019 17:14:36.74 : --------- formCreateSpec ----------
+22-Mar-2019 17:14:36.75 : Get all template types . . . 
+22-Mar-2019 17:14:36.76 : -----------------------------------
+22-Mar-2019 17:14:36.78 : SELECT * FROM template_specifications
+22-Mar-2019 17:14:36.79 : Column 1 : Id, Row 1 : 1
+22-Mar-2019 17:14:36.81 : Column 2 : Spec_Type, Row 1 : style
+22-Mar-2019 17:14:36.82 : Column 3 : Time_Stamp, Row 1 : 
+22-Mar-2019 17:14:36.84 : Column 4 : Properties_Json, Row 1 : {"Dtex":"","Style":"","WeaveType":"","YarnType":"","Denier":"","MeanWarpCount":"","MinWarpCount":"","MaxWarpCount":"","MeanFillCount":"","MinFillCount":"","MaxFillCount":"","MeanDryWeight":"","MinDryWeight":"","MaxDryWeight":"","MeanConditionedWeight":"","MinConditionedWeight":"","MaxConditionedWeight":"","YarnFinish":"","YarnCode":"","MoistureRegain":"","Twisting":"","YarnColor":"","Notes":"","YarnMerge":""}
+22-Mar-2019 17:14:36.86 : Column 5 : Revision, Row 1 : 1
+22-Mar-2019 17:14:36.87 : Column 1 : Id, Row 2 : 2
+22-Mar-2019 17:14:36.89 : Column 2 : Spec_Type, Row 2 : warping
+22-Mar-2019 17:14:36.90 : Column 3 : Time_Stamp, Row 2 : 
+22-Mar-2019 17:14:36.92 : Column 4 : Properties_Json, Row 2 : {"MaterialNumber":"","MaterialDescription":"","FinalWidthCm":"","NumberOfEnds":"","IsSWrapped":"","SpringColor":"","WarpingSpeed":"","BeamingSpeed":"","CrossWinding":"","DentsPerCm":"","EndsPerDent":"","Style":"","BeamWidth":"","YarnSupplier":"","YarnCode":"","K1":"","WarpingTension":"","K2":"","BeamingTension":"","Dtex":""}
+22-Mar-2019 17:14:36.93 : Column 5 : Revision, Row 2 : 1
+22-Mar-2019 17:14:36.95 : Listing all template types (spec Types) . . . 
+22-Mar-2019 17:14:41.27 : Searching for warping template . . . 
+22-Mar-2019 17:14:41.29 : -----------------------------------
+22-Mar-2019 17:14:41.30 : SELECT * FROM template_specifications WHERE Spec_Type= 'warping'
+22-Mar-2019 17:14:41.32 : Succesfully retrieved template for : warping
+22-Mar-2019 17:14:41.33 : Column 1 : Id, Row 1 : 2
+22-Mar-2019 17:14:41.35 : Column 2 : Spec_Type, Row 1 : warping
+22-Mar-2019 17:14:41.36 : Column 3 : Time_Stamp, Row 1 : 
+22-Mar-2019 17:14:41.38 : Column 4 : Properties_Json, Row 1 : {"MaterialNumber":"","MaterialDescription":"","FinalWidthCm":"","NumberOfEnds":"","IsSWrapped":"","SpringColor":"","WarpingSpeed":"","BeamingSpeed":"","CrossWinding":"","DentsPerCm":"","EndsPerDent":"","Style":"","BeamWidth":"","YarnSupplier":"","YarnCode":"","K1":"","WarpingTension":"","K2":"","BeamingTension":"","Dtex":""}
+22-Mar-2019 17:14:41.39 : Column 5 : Revision, Row 1 : 1
+22-Mar-2019 17:14:55.20 : ------------- Stopping Application -------------
+22-Mar-2019 17:15:31.25 : ------------- Stopping Application -------------
