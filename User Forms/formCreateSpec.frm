@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formCreateSpec 
    Caption         =   "Specification Control"
-   ClientHeight    =   10545
+   ClientHeight    =   10548
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   9735
+   ClientTop       =   468
+   ClientWidth     =   9732
    OleObjectBlob   =   "formCreateSpec.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -15,10 +15,15 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
+
+
+
+
 Option Explicit
 
 Private Sub cmdSelectSpecificationType_Click()
-' TODO: When switching from one spec type to another the spec_type value does not seem to change.
     With manager
         Set .current_template = SpecManager.GetTemplate(cboSelectSpecificationType.value)
         .current_template.SpecType = cboSelectSpecificationType.value
@@ -52,10 +57,10 @@ Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification revision x.0)
     manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 1)
     If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: ", DB_PUSH_FAILURE
+        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
         MsgBox "New Specification Was Not Saved. Contact Admin."
     Else
-        Logger.Log "Data Access returned: ", DB_PUSH_SUCCESS
+        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
         MsgBox "New Specification Succesfully Saved."
     End If
 End Sub
@@ -82,6 +87,10 @@ End Sub
 
 Private Sub PopulateCboSelectProperty()
     Dim prop As Variant
+    Dim i As Integer
+    Do While cboSelectProperty.ListCount > 0
+        cboSelectProperty.RemoveItem 0
+    Loop
     With cboSelectProperty
         For Each prop In manager.current_spec.Properties
           .AddItem Utils.SplitCamelCase(CStr(prop))

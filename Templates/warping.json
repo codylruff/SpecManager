@@ -20,3 +20,30 @@
   "BeamingTension": "",
   "Dtex": ""
 }
+
+{  
+  "MaterialNumber":1,
+  "MaterialDescription":"STY 406 HER 3330D HF211 156CM",
+  "FinalWidthCm":"",
+  "NumberOfEnds":1044,
+  "IsSWrapped":true,
+  "SpringColor":"Yellow",
+  "WarpingSpeed":300,
+  "BeamingSpeed":80,
+  "CrossWinding":10,
+  "DentsPerCm":0,
+  "EndsPerDent":0,
+  "Style":406,
+  "BeamWidth":155.2,
+  "YarnSupplier":"Unknown",
+  "YarnCode":"FHE00003330H6P0000",
+  "K1":"",
+  "WarpingTension":500,
+  "K2":"",
+  "BeamingTension":6003,
+  "Dtex":3330,
+  "Revision":"1",
+  "Spec_Type":"warping",
+  "FinaLwidthCm":156,
+  "K":1.15
+}

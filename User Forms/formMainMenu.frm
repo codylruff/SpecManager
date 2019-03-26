@@ -1,9 +1,9 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formMainMenu 
    Caption         =   "Data Manager Main Menu"
-   ClientHeight    =   3450
-   ClientLeft      =   45
-   ClientTop       =   405
+   ClientHeight    =   3444
+   ClientLeft      =   48
+   ClientTop       =   408
    ClientWidth     =   6300
    OleObjectBlob   =   "formMainMenu.frx":0000
    StartUpPosition =   1  'CenterOwner
@@ -13,6 +13,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
+
+
+
+
 
 
 
@@ -57,7 +63,9 @@ End Sub
 
 Private Sub cmdViewSpecifications_Click()
 ' Form to view existing specifications. Admin not required.
-    Logger.NotImplementedException
+    SpecManager.StartSpecManager
+    Unload Me
+    formViewSpecs.Show
 End Sub
 
 Private Sub cmdEditSpecifications_Click()

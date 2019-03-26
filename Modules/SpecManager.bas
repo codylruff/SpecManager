@@ -118,7 +118,7 @@ Function GetSpecifications(material_id As String) As Object
     Dim rev As String
     Dim key As Variant
     Dim record As DatabaseRecord
-    
+    On Error GoTo NullSpecException
     Set record = DataAccess.GetSpecificationRecords(MaterialInputValidation(material_id))
     record.SetDictionary
     Set json_coll = record.records
@@ -136,6 +136,9 @@ Function GetSpecifications(material_id As String) As Object
         specs_dict.Item(rev).IsLatest = True
         Set GetSpecifications = specs_dict
     End If
+    Exit Function
+NullSpecException:
+    Set GetSpecifications = Nothing
 End Function
 
 Sub PrintSpecification(frm As MSForms.UserForm)
@@ -152,10 +155,6 @@ End Sub
 
 Function SaveSpecification(spec As Specification) As Long
      SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
-End Function
-
-Function SaveStandardSpecification(spec As Specification) As Long
-    'SaveStandardSpecification = ComService.PushSpecJson(spec, True)
 End Function
 
 Function SaveSpecTemplate(template As SpecTemplate) As Long
@@ -192,3 +191,41 @@ Function SelectLatestSpec() As Specification
         End If
     Next key
 End Function
+
+Function InitializeNewSpecification()
+    With manager
+        Set manager.current_spec = New Specification
+        .current_spec.SpecType = .current_template.SpecType
+        .current_spec.Revision = "1.0"
+        Set .current_spec.Properties = .current_template.Properties
+        Set .current_spec.Tolerances = .current_template.Properties
+    End With
+End Function
+
+Sub WorksheetToDatabase()
+    Dim ws As Worksheet
+    Dim i, j As Integer
+    Dim last_row As Integer
+    Dim number_props As Integer
+    Dim property As String
+    
+    With manager
+    Set ws = ActiveWorkbook.Sheets(.current_template.SpecType & " Upload")
+    last_row = ws.Range("A1").End(xlDown).Row
+    number_props = .current_template.Properties.count
+    For i = 2 To last_row
+        InitializeNewSpecification
+        Logger.Log CStr(number_props)
+        For j = 1 To number_props
+        property = Utils.ConvertToCamelCase(CStr(ws.Cells(1, j).value))
+        Logger.Log "Column " & j & ": " & property & ", Row " & i & ": " & CStr(ws.Cells(i, j).value)
+        .current_spec.Properties.Item(property) = ws.Cells(i, j).value
+        If property = "MaterialNumber" Then
+            .current_spec.MaterialId = ws.Cells(i, j).value
+        End If
+        Next j
+        Logger.Log "DataAccess returned : " & SaveSpecification(.current_spec)
+        Set .current_spec = Nothing
+    Next i
+    End With
+End Sub

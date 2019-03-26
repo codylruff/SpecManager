@@ -24,6 +24,13 @@ Sub UnloadAllForms()
     GoToMain
 End Sub
 
+Public Sub WarpingWsToDB()
+    SpecManager.StartSpecManager
+    Set manager.current_template = SpecManager.GetTemplate("warping")
+    SpecManager.WorksheetToDatabase
+    SpecManager.StopSpecManager
+End Sub
+
 Public Sub GoToWarpingMenu()
     Application.Visible = False
     formWarpingMainMenu.Show

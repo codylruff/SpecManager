@@ -1,42 +1,255 @@
-22-Mar-2019 17:52:51.36 : ------------- Stopping Application -------------
-22-Mar-2019 17:52:51.38 : Saving : runtime.log
-22-Mar-2019 17:52:52.93 : ------------- Starting Application -------------
-22-Mar-2019 17:52:52.99 : --------- formCreateSpec ----------
-22-Mar-2019 17:52:52.00 : Get all template types . . . 
-22-Mar-2019 17:52:53.00 : -----------------------------------
-22-Mar-2019 17:52:53.01 : SELECT * FROM template_specifications
-22-Mar-2019 17:52:53.03 : Column 1 : Id, Row 1 : 1
-22-Mar-2019 17:52:53.04 : Column 2 : Spec_Type, Row 1 : style
-22-Mar-2019 17:52:53.05 : Column 3 : Time_Stamp, Row 1 : 
-22-Mar-2019 17:52:53.06 : Column 4 : Properties_Json, Row 1 : {"Dtex":"","Style":"","WeaveType":"","YarnType":"","Denier":"","MeanWarpCount":"","MinWarpCount":"","MaxWarpCount":"","MeanFillCount":"","MinFillCount":"","MaxFillCount":"","MeanDryWeight":"","MinDryWeight":"","MaxDryWeight":"","MeanConditionedWeight":"","MinConditionedWeight":"","MaxConditionedWeight":"","YarnFinish":"","YarnCode":"","MoistureRegain":"","Twisting":"","YarnColor":"","Notes":"","YarnMerge":""}
-22-Mar-2019 17:52:53.07 : Column 5 : Revision, Row 1 : 1
-22-Mar-2019 17:52:53.08 : Column 1 : Id, Row 2 : 2
-22-Mar-2019 17:52:53.09 : Column 2 : Spec_Type, Row 2 : warping
-22-Mar-2019 17:52:53.10 : Column 3 : Time_Stamp, Row 2 : 
-22-Mar-2019 17:52:53.11 : Column 4 : Properties_Json, Row 2 : {"MaterialNumber":"","MaterialDescription":"","FinalWidthCm":"","NumberOfEnds":"","IsSWrapped":"","SpringColor":"","WarpingSpeed":"","BeamingSpeed":"","CrossWinding":"","DentsPerCm":"","EndsPerDent":"","Style":"","BeamWidth":"","YarnSupplier":"","YarnCode":"","K1":"","WarpingTension":"","K2":"","BeamingTension":"","Dtex":""}
-22-Mar-2019 17:52:53.12 : Column 5 : Revision, Row 2 : 1
-22-Mar-2019 17:52:53.13 : Listing all template types (spec Types) . . . 
-22-Mar-2019 17:52:55.61 : Searching for style template . . . 
-22-Mar-2019 17:52:55.63 : -----------------------------------
-22-Mar-2019 17:52:55.64 : SELECT * FROM template_specifications WHERE Spec_Type= 'style'
-22-Mar-2019 17:52:55.66 : Succesfully retrieved template for : style
-22-Mar-2019 17:52:55.68 : Column 1 : Id, Row 1 : 1
-22-Mar-2019 17:52:55.69 : Column 2 : Spec_Type, Row 1 : style
-22-Mar-2019 17:52:55.71 : Column 3 : Time_Stamp, Row 1 : 
-22-Mar-2019 17:52:55.72 : Column 4 : Properties_Json, Row 1 : {"Dtex":"","Style":"","WeaveType":"","YarnType":"","Denier":"","MeanWarpCount":"","MinWarpCount":"","MaxWarpCount":"","MeanFillCount":"","MinFillCount":"","MaxFillCount":"","MeanDryWeight":"","MinDryWeight":"","MaxDryWeight":"","MeanConditionedWeight":"","MinConditionedWeight":"","MaxConditionedWeight":"","YarnFinish":"","YarnCode":"","MoistureRegain":"","Twisting":"","YarnColor":"","Notes":"","YarnMerge":""}
-22-Mar-2019 17:52:55.74 : Column 5 : Revision, Row 1 : 1
-22-Mar-2019 17:52:55.79 : Printing Specification . . . 
-22-Mar-2019 17:53:00.77 : Searching for warping template . . . 
-22-Mar-2019 17:53:00.79 : -----------------------------------
-22-Mar-2019 17:53:00.80 : SELECT * FROM template_specifications WHERE Spec_Type= 'warping'
-22-Mar-2019 17:53:00.82 : Succesfully retrieved template for : warping
-22-Mar-2019 17:53:00.84 : Column 1 : Id, Row 1 : 2
-22-Mar-2019 17:53:00.85 : Column 2 : Spec_Type, Row 1 : warping
-22-Mar-2019 17:53:00.87 : Column 3 : Time_Stamp, Row 1 : 
-22-Mar-2019 17:53:00.88 : Column 4 : Properties_Json, Row 1 : {"MaterialNumber":"","MaterialDescription":"","FinalWidthCm":"","NumberOfEnds":"","IsSWrapped":"","SpringColor":"","WarpingSpeed":"","BeamingSpeed":"","CrossWinding":"","DentsPerCm":"","EndsPerDent":"","Style":"","BeamWidth":"","YarnSupplier":"","YarnCode":"","K1":"","WarpingTension":"","K2":"","BeamingTension":"","Dtex":""}
-22-Mar-2019 17:53:00.90 : Column 5 : Revision, Row 1 : 1
-22-Mar-2019 17:53:00.93 : Printing Specification . . . 
-22-Mar-2019 17:53:04.71 : ------------- Stopping Application -------------
-22-Mar-2019 17:53:04.72 : Saving : runtime.log
-22-Mar-2019 17:53:05.59 : ------------- Stopping Application -------------
-22-Mar-2019 17:53:05.61 : Saving : runtime.log
+26-Mar-2019 14:03:48.71 : ------------- Starting Application -------------
+26-Mar-2019 14:03:48.73 : Searching for warping template . . . 
+26-Mar-2019 14:03:48.75 : -----------------------------------
+26-Mar-2019 14:03:48.76 : SELECT * FROM template_specifications WHERE Spec_Type= 'warping'
+26-Mar-2019 14:03:48.78 : Succesfully retrieved template for : warping
+26-Mar-2019 14:03:48.79 : Column 1 : Id, Row 1 : 2
+26-Mar-2019 14:03:48.81 : Column 2 : Spec_Type, Row 1 : warping
+26-Mar-2019 14:03:48.82 : Column 3 : Time_Stamp, Row 1 : 
+26-Mar-2019 14:03:48.84 : Column 4 : Properties_Json, Row 1 : {"MaterialNumber":"","MaterialDescription":"","FinalWidthCm":"","NumberOfEnds":"","IsSWrapped":"","SpringColor":"","WarpingSpeed":"","BeamingSpeed":"","CrossWinding":"","DentsPerCm":"","EndsPerDent":"","Style":"","BeamWidth":"","YarnSupplier":"","YarnCode":"","K1":"","WarpingTension":"","K2":"","BeamingTension":"","Dtex":""}
+26-Mar-2019 14:03:48.86 : Column 5 : Revision, Row 1 : 1
+26-Mar-2019 14:03:48.87 : 22
+26-Mar-2019 14:03:48.89 : Column 1: Style, Row 2: 406
+26-Mar-2019 14:03:48.90 : Column 2: FinalWidthCm, Row 2: 156
+26-Mar-2019 14:03:48.92 : Column 3: MaterialNumber, Row 2: 1
+26-Mar-2019 14:03:48.93 : Column 4: YarnSupplier, Row 2: Unknown
+26-Mar-2019 14:03:48.95 : Column 5: YarnType, Row 2: 
+26-Mar-2019 14:03:48.96 : Column 6: Dtex, Row 2: 3330
+26-Mar-2019 14:03:48.98 : Column 7: K, Row 2: 0.15
+26-Mar-2019 14:03:48.00 : Column 8: NumberOfEnds, Row 2: 1044
+26-Mar-2019 14:03:49.01 : Column 9: WarpingTension, Row 2: 500
+26-Mar-2019 14:03:49.03 : Column 10: SpringColor, Row 2: Yellow
+26-Mar-2019 14:03:49.04 : Column 11: IsSWrapped, Row 2: True
+26-Mar-2019 14:03:49.06 : Column 12: WarpingSpeed, Row 2: 300
+26-Mar-2019 14:03:49.07 : Column 13: K, Row 2: 1.15
+26-Mar-2019 14:03:49.09 : Column 14: BeamingTension, Row 2: 6003
+26-Mar-2019 14:03:49.11 : Column 15: BeamingSpeed, Row 2: 80
+26-Mar-2019 14:03:49.12 : Column 16: CrossWinding, Row 2: 10
+26-Mar-2019 14:03:49.14 : Column 17: BeamWidth, Row 2: 155.2
+26-Mar-2019 14:03:49.15 : Column 18: DentsPerCm, Row 2: 0
+26-Mar-2019 14:03:49.17 : Column 19: EndsPerDent, Row 2: 0
+26-Mar-2019 14:03:49.18 : Column 20: MaterialDescription, Row 2: STY 406 HER 3330D HF211 156CM
+26-Mar-2019 14:03:49.20 : Column 21: YarnCode, Row 2: FHE00003330H6P0000
+26-Mar-2019 14:03:49.21 : Column 22: , Row 2: 
+26-Mar-2019 14:03:49.23 : -----------------------------------
+26-Mar-2019 14:03:49.25 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('1', '3/26/2019 2:03:49 PM', '{"MaterialNumber":1,"MaterialDescription":"STY 406 HER 3330D HF211 156CM","FinalWidthCm":156,"NumberOfEnds":1044,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":406,"BeamWidth":155.2,"YarnSupplier":"Unknown","YarnCode":"FHE00003330H6P0000","K1":"","WarpingTension":500,"K2":"","BeamingTension":6003,"Dtex":3330,"Revision":"1","Spec_Type":"warping","K":1.15}', '{"MaterialNumber":1,"MaterialDescription":"STY 406 HER 3330D HF211 156CM","FinalWidthCm":156,"NumberOfEnds":1044,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":406,"BeamWidth":155.2,"YarnSupplier":"Unknown","YarnCode":"FHE00003330H6P0000","K1":"","WarpingTension":500,"K2":"","BeamingTension":6003,"Dtex":3330,"Revision":"1","Spec_Type":"warping","K":1.15}', '1.0', 'warping')
+26-Mar-2019 14:03:49.26 : DataAccess returned : 0
+26-Mar-2019 14:03:49.28 : 22
+26-Mar-2019 14:03:49.29 : Column 1: Style, Row 3: 406
+26-Mar-2019 14:03:49.31 : Column 2: FinalWidthCm, Row 3: 156
+26-Mar-2019 14:03:49.32 : Column 3: MaterialNumber, Row 3: 2
+26-Mar-2019 14:03:49.34 : Column 4: YarnSupplier, Row 3: Unknown
+26-Mar-2019 14:03:49.36 : Column 5: YarnType, Row 3: 
+26-Mar-2019 14:03:49.37 : Column 6: Dtex, Row 3: 3330
+26-Mar-2019 14:03:49.39 : Column 7: K, Row 3: 0.15
+26-Mar-2019 14:03:49.40 : Column 8: NumberOfEnds, Row 3: 1044
+26-Mar-2019 14:03:49.42 : Column 9: WarpingTension, Row 3: 500
+26-Mar-2019 14:03:49.43 : Column 10: SpringColor, Row 3: Yellow
+26-Mar-2019 14:03:49.45 : Column 11: IsSWrapped, Row 3: True
+26-Mar-2019 14:03:49.46 : Column 12: WarpingSpeed, Row 3: 300
+26-Mar-2019 14:03:49.48 : Column 13: K, Row 3: 1.15
+26-Mar-2019 14:03:49.50 : Column 14: BeamingTension, Row 3: 6003
+26-Mar-2019 14:03:49.51 : Column 15: BeamingSpeed, Row 3: 80
+26-Mar-2019 14:03:49.53 : Column 16: CrossWinding, Row 3: 10
+26-Mar-2019 14:03:49.54 : Column 17: BeamWidth, Row 3: 155.2
+26-Mar-2019 14:03:49.56 : Column 18: DentsPerCm, Row 3: 0
+26-Mar-2019 14:03:49.57 : Column 19: EndsPerDent, Row 3: 0
+26-Mar-2019 14:03:49.59 : Column 20: MaterialDescription, Row 3: STY 406 HER 3330D HF211 156CM
+26-Mar-2019 14:03:49.61 : Column 21: YarnCode, Row 3: FHE00003330H6P0000
+26-Mar-2019 14:03:49.62 : Column 22: , Row 3: 
+26-Mar-2019 14:03:49.64 : -----------------------------------
+26-Mar-2019 14:03:49.65 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('2', '3/26/2019 2:03:49 PM', '{"MaterialNumber":2,"MaterialDescription":"STY 406 HER 3330D HF211 156CM","FinalWidthCm":156,"NumberOfEnds":1044,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":406,"BeamWidth":155.2,"YarnSupplier":"Unknown","YarnCode":"FHE00003330H6P0000","K1":"","WarpingTension":500,"K2":"","BeamingTension":6003,"Dtex":3330,"Revision":"1","Spec_Type":"warping","K":1.15}', '{"MaterialNumber":2,"MaterialDescription":"STY 406 HER 3330D HF211 156CM","FinalWidthCm":156,"NumberOfEnds":1044,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":406,"BeamWidth":155.2,"YarnSupplier":"Unknown","YarnCode":"FHE00003330H6P0000","K1":"","WarpingTension":500,"K2":"","BeamingTension":6003,"Dtex":3330,"Revision":"1","Spec_Type":"warping","K":1.15}', '1.0', 'warping')
+26-Mar-2019 14:03:49.67 : DataAccess returned : 0
+26-Mar-2019 14:03:49.68 : 22
+26-Mar-2019 14:03:49.70 : Column 1: Style, Row 4: 414
+26-Mar-2019 14:03:49.71 : Column 2: FinalWidthCm, Row 4: 164
+26-Mar-2019 14:03:49.73 : Column 3: MaterialNumber, Row 4: 3
+26-Mar-2019 14:03:49.75 : Column 4: YarnSupplier, Row 4: Unknown
+26-Mar-2019 14:03:49.76 : Column 5: YarnType, Row 4: 
+26-Mar-2019 14:03:49.78 : Column 6: Dtex, Row 4: 3330
+26-Mar-2019 14:03:49.79 : Column 7: K, Row 4: 0.15
+26-Mar-2019 14:03:49.81 : Column 8: NumberOfEnds, Row 4: 710
+26-Mar-2019 14:03:49.82 : Column 9: WarpingTension, Row 4: 500
+26-Mar-2019 14:03:49.84 : Column 10: SpringColor, Row 4: Yellow
+26-Mar-2019 14:03:49.86 : Column 11: IsSWrapped, Row 4: True
+26-Mar-2019 14:03:49.87 : Column 12: WarpingSpeed, Row 4: 300
+26-Mar-2019 14:03:49.89 : Column 13: K, Row 4: 1.15
+26-Mar-2019 14:03:49.90 : Column 14: BeamingTension, Row 4: 4082
+26-Mar-2019 14:03:49.92 : Column 15: BeamingSpeed, Row 4: 80
+26-Mar-2019 14:03:49.93 : Column 16: CrossWinding, Row 4: 10
+26-Mar-2019 14:03:49.95 : Column 17: BeamWidth, Row 4: 163.2
+26-Mar-2019 14:03:49.96 : Column 18: DentsPerCm, Row 4: 0
+26-Mar-2019 14:03:49.98 : Column 19: EndsPerDent, Row 4: 0
+26-Mar-2019 14:03:49.00 : Column 20: MaterialDescription, Row 4: STY 414 HER 3330D HF211 164CM
+26-Mar-2019 14:03:50.01 : Column 21: YarnCode, Row 4: FHE00003330H6P0000
+26-Mar-2019 14:03:50.03 : Column 22: , Row 4: 
+26-Mar-2019 14:03:50.04 : -----------------------------------
+26-Mar-2019 14:03:50.06 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('3', '3/26/2019 2:03:50 PM', '{"MaterialNumber":3,"MaterialDescription":"STY 414 HER 3330D HF211 164CM","FinalWidthCm":164,"NumberOfEnds":710,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":414,"BeamWidth":163.2,"YarnSupplier":"Unknown","YarnCode":"FHE00003330H6P0000","K1":"","WarpingTension":500,"K2":"","BeamingTension":4082,"Dtex":3330,"Revision":"1","Spec_Type":"warping","K":1.15}', '{"MaterialNumber":3,"MaterialDescription":"STY 414 HER 3330D HF211 164CM","FinalWidthCm":164,"NumberOfEnds":710,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":414,"BeamWidth":163.2,"YarnSupplier":"Unknown","YarnCode":"FHE00003330H6P0000","K1":"","WarpingTension":500,"K2":"","BeamingTension":4082,"Dtex":3330,"Revision":"1","Spec_Type":"warping","K":1.15}', '1.0', 'warping')
+26-Mar-2019 14:03:50.07 : DataAccess returned : 0
+26-Mar-2019 14:03:50.09 : 22
+26-Mar-2019 14:03:50.11 : Column 1: Style, Row 5: 101
+26-Mar-2019 14:03:50.12 : Column 2: FinalWidthCm, Row 5: 134
+26-Mar-2019 14:03:50.14 : Column 3: MaterialNumber, Row 5: 4
+26-Mar-2019 14:03:50.15 : Column 4: YarnSupplier, Row 5: Hyosung
+26-Mar-2019 14:03:50.17 : Column 5: YarnType, Row 5: 
+26-Mar-2019 14:03:50.18 : Column 6: Dtex, Row 5: 3300
+26-Mar-2019 14:03:50.20 : Column 7: K, Row 5: 0.15
+26-Mar-2019 14:03:50.21 : Column 8: NumberOfEnds, Row 5: 898
+26-Mar-2019 14:03:50.23 : Column 9: WarpingTension, Row 5: 495
+26-Mar-2019 14:03:50.24 : Column 10: SpringColor, Row 5: Yellow
+26-Mar-2019 14:03:50.25 : Column 11: IsSWrapped, Row 5: True
+26-Mar-2019 14:03:50.27 : Column 12: WarpingSpeed, Row 5: 300
+26-Mar-2019 14:03:50.29 : Column 13: K, Row 5: 1.15
+26-Mar-2019 14:03:50.30 : Column 14: BeamingTension, Row 5: 5112
+26-Mar-2019 14:03:50.32 : Column 15: BeamingSpeed, Row 5: 80
+26-Mar-2019 14:03:50.33 : Column 16: CrossWinding, Row 5: 10
+26-Mar-2019 14:03:50.35 : Column 17: BeamWidth, Row 5: 133.2
+26-Mar-2019 14:03:50.36 : Column 18: DentsPerCm, Row 5: 0
+26-Mar-2019 14:03:50.38 : Column 19: EndsPerDent, Row 5: 0
+26-Mar-2019 14:03:50.39 : Column 20: MaterialDescription, Row 5: STY 101 HYOSUNG AF1000 134CM
+26-Mar-2019 14:03:50.41 : Column 21: YarnCode, Row 5: FKE002933005NP0000
+26-Mar-2019 14:03:50.43 : Column 22: , Row 5: 
+26-Mar-2019 14:03:50.44 : -----------------------------------
+26-Mar-2019 14:03:50.46 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('4', '3/26/2019 2:03:50 PM', '{"MaterialNumber":4,"MaterialDescription":"STY 101 HYOSUNG AF1000 134CM","FinalWidthCm":134,"NumberOfEnds":898,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":101,"BeamWidth":133.2,"YarnSupplier":"Hyosung","YarnCode":"FKE002933005NP0000","K1":"","WarpingTension":495,"K2":"","BeamingTension":5112,"Dtex":3300,"Revision":"1","Spec_Type":"warping","K":1.15}', '{"MaterialNumber":4,"MaterialDescription":"STY 101 HYOSUNG AF1000 134CM","FinalWidthCm":134,"NumberOfEnds":898,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":101,"BeamWidth":133.2,"YarnSupplier":"Hyosung","YarnCode":"FKE002933005NP0000","K1":"","WarpingTension":495,"K2":"","BeamingTension":5112,"Dtex":3300,"Revision":"1","Spec_Type":"warping","K":1.15}', '1.0', 'warping')
+26-Mar-2019 14:03:50.47 : DataAccess returned : 0
+26-Mar-2019 14:03:50.49 : 22
+26-Mar-2019 14:03:50.50 : Column 1: Style, Row 6: 412
+26-Mar-2019 14:03:50.52 : Column 2: FinalWidthCm, Row 6: 164
+26-Mar-2019 14:03:50.54 : Column 3: MaterialNumber, Row 6: 5
+26-Mar-2019 14:03:50.55 : Column 4: YarnSupplier, Row 6: Hyosung
+26-Mar-2019 14:03:50.57 : Column 5: YarnType, Row 6: 
+26-Mar-2019 14:03:50.58 : Column 6: Dtex, Row 6: 3300
+26-Mar-2019 14:03:50.60 : Column 7: K, Row 6: 0.15
+26-Mar-2019 14:03:50.61 : Column 8: NumberOfEnds, Row 6: 776
+26-Mar-2019 14:03:50.63 : Column 9: WarpingTension, Row 6: 495
+26-Mar-2019 14:03:50.64 : Column 10: SpringColor, Row 6: Yellow
+26-Mar-2019 14:03:50.66 : Column 11: IsSWrapped, Row 6: True
+26-Mar-2019 14:03:50.68 : Column 12: WarpingSpeed, Row 6: 300
+26-Mar-2019 14:03:50.69 : Column 13: K, Row 6: 1.15
+26-Mar-2019 14:03:50.70 : Column 14: BeamingTension, Row 6: 4417
+26-Mar-2019 14:03:50.72 : Column 15: BeamingSpeed, Row 6: 80
+26-Mar-2019 14:03:50.73 : Column 16: CrossWinding, Row 6: 10
+26-Mar-2019 14:03:50.75 : Column 17: BeamWidth, Row 6: 163.2
+26-Mar-2019 14:03:50.77 : Column 18: DentsPerCm, Row 6: 0
+26-Mar-2019 14:03:50.78 : Column 19: EndsPerDent, Row 6: 0
+26-Mar-2019 14:03:50.80 : Column 20: MaterialDescription, Row 6: STY 412 HYOSUNG AF1000 164CM
+26-Mar-2019 14:03:50.81 : Column 21: YarnCode, Row 6: FHY0AF1334002P0000
+26-Mar-2019 14:03:50.83 : Column 22: , Row 6: 
+26-Mar-2019 14:03:50.84 : -----------------------------------
+26-Mar-2019 14:03:50.86 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('5', '3/26/2019 2:03:50 PM', '{"MaterialNumber":5,"MaterialDescription":"STY 412 HYOSUNG AF1000 164CM","FinalWidthCm":164,"NumberOfEnds":776,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":412,"BeamWidth":163.2,"YarnSupplier":"Hyosung","YarnCode":"FHY0AF1334002P0000","K1":"","WarpingTension":495,"K2":"","BeamingTension":4417,"Dtex":3300,"Revision":"1","Spec_Type":"warping","K":1.15}', '{"MaterialNumber":5,"MaterialDescription":"STY 412 HYOSUNG AF1000 164CM","FinalWidthCm":164,"NumberOfEnds":776,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":412,"BeamWidth":163.2,"YarnSupplier":"Hyosung","YarnCode":"FHY0AF1334002P0000","K1":"","WarpingTension":495,"K2":"","BeamingTension":4417,"Dtex":3300,"Revision":"1","Spec_Type":"warping","K":1.15}', '1.0', 'warping')
+26-Mar-2019 14:03:50.88 : DataAccess returned : 0
+26-Mar-2019 14:03:50.89 : 22
+26-Mar-2019 14:03:50.91 : Column 1: Style, Row 7: 101
+26-Mar-2019 14:03:50.92 : Column 2: FinalWidthCm, Row 7: 164
+26-Mar-2019 14:03:50.94 : Column 3: MaterialNumber, Row 7: 6
+26-Mar-2019 14:03:50.95 : Column 4: YarnSupplier, Row 7: Dupont
+26-Mar-2019 14:03:50.97 : Column 5: YarnType, Row 7: 
+26-Mar-2019 14:03:50.98 : Column 6: Dtex, Row 7: 3300
+26-Mar-2019 14:03:51.00 : Column 7: K, Row 7: 0.25
+26-Mar-2019 14:03:51.02 : Column 8: NumberOfEnds, Row 7: 1098
+26-Mar-2019 14:03:51.03 : Column 9: WarpingTension, Row 7: 825
+26-Mar-2019 14:03:51.05 : Column 10: SpringColor, Row 7: Yellow
+26-Mar-2019 14:03:51.06 : Column 11: IsSWrapped, Row 7: True
+26-Mar-2019 14:03:51.08 : Column 12: WarpingSpeed, Row 7: 300
+26-Mar-2019 14:03:51.09 : Column 13: K, Row 7: 1.25
+26-Mar-2019 14:03:51.11 : Column 14: BeamingTension, Row 7: 11323
+26-Mar-2019 14:03:51.13 : Column 15: BeamingSpeed, Row 7: 80
+26-Mar-2019 14:03:51.14 : Column 16: CrossWinding, Row 7: 10
+26-Mar-2019 14:03:51.16 : Column 17: BeamWidth, Row 7: 163.2
+26-Mar-2019 14:03:51.17 : Column 18: DentsPerCm, Row 7: 0
+26-Mar-2019 14:03:51.19 : Column 19: EndsPerDent, Row 7: 0
+26-Mar-2019 14:03:51.20 : Column 20: MaterialDescription, Row 7: STY 101 K29 1F998/- 164CM
+26-Mar-2019 14:03:51.22 : Column 21: YarnCode, Row 7: FKE002933005NP0000
+26-Mar-2019 14:03:51.23 : Column 22: , Row 7: 
+26-Mar-2019 14:03:51.25 : -----------------------------------
+26-Mar-2019 14:03:51.27 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('6', '3/26/2019 2:03:51 PM', '{"MaterialNumber":6,"MaterialDescription":"STY 101 K29 1F998/- 164CM","FinalWidthCm":164,"NumberOfEnds":1098,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":101,"BeamWidth":163.2,"YarnSupplier":"Dupont","YarnCode":"FKE002933005NP0000","K1":"","WarpingTension":825,"K2":"","BeamingTension":11323,"Dtex":3300,"Revision":"1","Spec_Type":"warping","K":1.25}', '{"MaterialNumber":6,"MaterialDescription":"STY 101 K29 1F998/- 164CM","FinalWidthCm":164,"NumberOfEnds":1098,"IsSWrapped":true,"SpringColor":"Yellow","WarpingSpeed":300,"BeamingSpeed":80,"CrossWinding":10,"DentsPerCm":0,"EndsPerDent":0,"Style":101,"BeamWidth":163.2,"YarnSupplier":"Dupont","YarnCode":"FKE002933005NP0000","K1":"","WarpingTension":825,"K2":"","BeamingTension":11323,"Dtex":3300,"Revision":"1","Spec_Type":"warping","K":1.25}', '1.0', 'warping')
+26-Mar-2019 14:03:51.28 : DataAccess returned : 0
+26-Mar-2019 14:03:51.30 : 22
+26-Mar-2019 14:03:51.31 : Column 1: Style, Row 8: 318
+26-Mar-2019 14:03:51.33 : Column 2: FinalWidthCm, Row 8: 168
+26-Mar-2019 14:03:51.34 : Column 3: MaterialNumber, Row 8: 7
+26-Mar-2019 14:03:51.36 : Column 4: YarnSupplier, Row 8: Dupont
+26-Mar-2019 14:03:51.38 : Column 5: YarnType, Row 8: 
+26-Mar-2019 14:03:51.39 : Column 6: Dtex, Row 8: 670
+26-Mar-2019 14:03:51.41 : Column 7: K, Row 8: 0.25
+26-Mar-2019 14:03:51.42 : Column 8: NumberOfEnds, Row 8: 1522
+26-Mar-2019 14:03:51.44 : Column 9: WarpingTension, Row 8: 168
+26-Mar-2019 14:03:51.45 : Column 10: SpringColor, Row 8: Black
+26-Mar-2019 14:03:51.46 : Column 11: IsSWrapped, Row 8: False
+26-Mar-2019 14:03:51.48 : Column 12: WarpingSpeed, Row 8: 300
+26-Mar-2019 14:03:51.49 : Column 13: K, Row 8: 1.25
+26-Mar-2019 14:03:51.51 : Column 14: BeamingTension, Row 8: 3196
+26-Mar-2019 14:03:51.52 : Column 15: BeamingSpeed, Row 8: 120
+26-Mar-2019 14:03:51.54 : Column 16: CrossWinding, Row 8: 5
+26-Mar-2019 14:03:51.55 : Column 17: BeamWidth, Row 8: 167.7
+26-Mar-2019 14:03:51.57 : Column 18: DentsPerCm, Row 8: 0
+26-Mar-2019 14:03:51.59 : Column 19: EndsPerDent, Row 8: 0
+26-Mar-2019 14:03:51.60 : Column 20: MaterialDescription, Row 8: STY 318 KM2+ 670D 1W036 168CM
+26-Mar-2019 14:03:51.62 : Column 21: YarnCode, Row 8: FKE0KMP06709CP0000
+26-Mar-2019 14:03:51.63 : Column 22: , Row 8: 
+26-Mar-2019 14:03:51.65 : -----------------------------------
+26-Mar-2019 14:03:51.66 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('7', '3/26/2019 2:03:51 PM', '{"MaterialNumber":7,"MaterialDescription":"STY 318 KM2+ 670D 1W036 168CM","FinalWidthCm":168,"NumberOfEnds":1522,"IsSWrapped":false,"SpringColor":"Black","WarpingSpeed":300,"BeamingSpeed":120,"CrossWinding":5,"DentsPerCm":0,"EndsPerDent":0,"Style":318,"BeamWidth":167.7,"YarnSupplier":"Dupont","YarnCode":"FKE0KMP06709CP0000","K1":"","WarpingTension":168,"K2":"","BeamingTension":3196,"Dtex":670,"Revision":"1","Spec_Type":"warping","K":1.25}', '{"MaterialNumber":7,"MaterialDescription":"STY 318 KM2+ 670D 1W036 168CM","FinalWidthCm":168,"NumberOfEnds":1522,"IsSWrapped":false,"SpringColor":"Black","WarpingSpeed":300,"BeamingSpeed":120,"CrossWinding":5,"DentsPerCm":0,"EndsPerDent":0,"Style":318,"BeamWidth":167.7,"YarnSupplier":"Dupont","YarnCode":"FKE0KMP06709CP0000","K1":"","WarpingTension":168,"K2":"","BeamingTension":3196,"Dtex":670,"Revision":"1","Spec_Type":"warping","K":1.25}', '1.0', 'warping')
+26-Mar-2019 14:03:51.68 : DataAccess returned : 0
+26-Mar-2019 14:03:51.70 : 22
+26-Mar-2019 14:03:51.71 : Column 1: Style, Row 9: 323
+26-Mar-2019 14:03:51.73 : Column 2: FinalWidthCm, Row 9: 164
+26-Mar-2019 14:03:51.74 : Column 3: MaterialNumber, Row 9: 8
+26-Mar-2019 14:03:51.76 : Column 4: YarnSupplier, Row 9: Dupont
+26-Mar-2019 14:03:51.77 : Column 5: YarnType, Row 9: 
+26-Mar-2019 14:03:51.79 : Column 6: Dtex, Row 9: 670
+26-Mar-2019 14:03:51.80 : Column 7: K, Row 9: 0.25
+26-Mar-2019 14:03:51.82 : Column 8: NumberOfEnds, Row 9: 1486
+26-Mar-2019 14:03:51.84 : Column 9: WarpingTension, Row 9: 168
+26-Mar-2019 14:03:51.85 : Column 10: SpringColor, Row 9: Black
+26-Mar-2019 14:03:51.87 : Column 11: IsSWrapped, Row 9: False
+26-Mar-2019 14:03:51.88 : Column 12: WarpingSpeed, Row 9: 300
+26-Mar-2019 14:03:51.90 : Column 13: K, Row 9: 1.25
+26-Mar-2019 14:03:51.91 : Column 14: BeamingTension, Row 9: 3121
+26-Mar-2019 14:03:51.93 : Column 15: BeamingSpeed, Row 9: 120
+26-Mar-2019 14:03:51.95 : Column 16: CrossWinding, Row 9: 5
+26-Mar-2019 14:03:51.96 : Column 17: BeamWidth, Row 9: 163.7
+26-Mar-2019 14:03:51.98 : Column 18: DentsPerCm, Row 9: 0
+26-Mar-2019 14:03:51.99 : Column 19: EndsPerDent, Row 9: 0
+26-Mar-2019 14:03:52.01 : Column 20: MaterialDescription, Row 9: STY 323 KM2+ 670D 1W036 164CM
+26-Mar-2019 14:03:52.02 : Column 21: YarnCode, Row 9: FKE0KMP06709CP0000
+26-Mar-2019 14:03:52.04 : Column 22: , Row 9: 
+26-Mar-2019 14:03:52.05 : -----------------------------------
+26-Mar-2019 14:03:52.07 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('8', '3/26/2019 2:03:52 PM', '{"MaterialNumber":8,"MaterialDescription":"STY 323 KM2+ 670D 1W036 164CM","FinalWidthCm":164,"NumberOfEnds":1486,"IsSWrapped":false,"SpringColor":"Black","WarpingSpeed":300,"BeamingSpeed":120,"CrossWinding":5,"DentsPerCm":0,"EndsPerDent":0,"Style":323,"BeamWidth":163.7,"YarnSupplier":"Dupont","YarnCode":"FKE0KMP06709CP0000","K1":"","WarpingTension":168,"K2":"","BeamingTension":3121,"Dtex":670,"Revision":"1","Spec_Type":"warping","K":1.25}', '{"MaterialNumber":8,"MaterialDescription":"STY 323 KM2+ 670D 1W036 164CM","FinalWidthCm":164,"NumberOfEnds":1486,"IsSWrapped":false,"SpringColor":"Black","WarpingSpeed":300,"BeamingSpeed":120,"CrossWinding":5,"DentsPerCm":0,"EndsPerDent":0,"Style":323,"BeamWidth":163.7,"YarnSupplier":"Dupont","YarnCode":"FKE0KMP06709CP0000","K1":"","WarpingTension":168,"K2":"","BeamingTension":3121,"Dtex":670,"Revision":"1","Spec_Type":"warping","K":1.25}', '1.0', 'warping')
+26-Mar-2019 14:03:52.09 : DataAccess returned : 0
+26-Mar-2019 14:03:52.10 : 22
+26-Mar-2019 14:03:52.12 : Column 1: Style, Row 10: 325
+26-Mar-2019 14:03:52.13 : Column 2: FinalWidthCm, Row 10: 164
+26-Mar-2019 14:03:52.15 : Column 3: MaterialNumber, Row 10: 9
+26-Mar-2019 14:03:52.16 : Column 4: YarnSupplier, Row 10: Dupont
+26-Mar-2019 14:03:52.18 : Column 5: YarnType, Row 10: 
+26-Mar-2019 14:03:52.20 : Column 6: Dtex, Row 10: 670
+26-Mar-2019 14:03:52.21 : Column 7: K, Row 10: 0.25
+26-Mar-2019 14:03:52.23 : Column 8: NumberOfEnds, Row 10: 1680
+26-Mar-2019 14:03:52.24 : Column 9: WarpingTension, Row 10: 168
+26-Mar-2019 14:03:52.26 : Column 10: SpringColor, Row 10: Black
+26-Mar-2019 14:03:52.27 : Column 11: IsSWrapped, Row 10: False
+26-Mar-2019 14:03:52.29 : Column 12: WarpingSpeed, Row 10: 300
+26-Mar-2019 14:03:52.30 : Column 13: K, Row 10: 1.25
+26-Mar-2019 14:03:52.32 : Column 14: BeamingTension, Row 10: 3528
+26-Mar-2019 14:03:52.34 : Column 15: BeamingSpeed, Row 10: 120
+26-Mar-2019 14:03:52.35 : Column 16: CrossWinding, Row 10: 5
+26-Mar-2019 14:03:52.37 : Column 17: BeamWidth, Row 10: 163.7
+26-Mar-2019 14:03:52.38 : Column 18: DentsPerCm, Row 10: 0
+26-Mar-2019 14:03:52.40 : Column 19: EndsPerDent, Row 10: 0
+26-Mar-2019 14:03:52.41 : Column 20: MaterialDescription, Row 10: STY 325 KM2+ 670D 1W036 164CM
+26-Mar-2019 14:03:52.43 : Column 21: YarnCode, Row 10: FKE0KMP06709CP0000
+26-Mar-2019 14:03:52.45 : Column 22: , Row 10: 
+26-Mar-2019 14:03:52.46 : -----------------------------------
+26-Mar-2019 14:03:52.48 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) 
+VALUES ('9', '3/26/2019 2:03:52 PM', '{"MaterialNumber":9,"MaterialDescription":"STY 325 KM2+ 670D 1W036 164CM","FinalWidthCm":164,"NumberOfEnds":1680,"IsSWrapped":false,"SpringColor":"Black","WarpingSpeed":300,"BeamingSpeed":120,"CrossWinding":5,"DentsPerCm":0,"EndsPerDent":0,"Style":325,"BeamWidth":163.7,"YarnSupplier":"Dupont","YarnCode":"FKE0KMP06709CP0000","K1":"","WarpingTension":168,"K2":"","BeamingTension":3528,"Dtex":670,"Revision":"1","Spec_Type":"warping","K":1.25}', '{"MaterialNumber":9,"MaterialDescription":"STY 325 KM2+ 670D 1W036 164CM","FinalWidthCm":164,"NumberOfEnds":1680,"IsSWrapped":false,"SpringColor":"Black","WarpingSpeed":300,"BeamingSpeed":120,"CrossWinding":5,"DentsPerCm":0,"EndsPerDent":0,"Style":325,"BeamWidth":163.7,"YarnSupplier":"Dupont","YarnCode":"FKE0KMP06709CP0000","K1":"","WarpingTension":168,"K2":"","BeamingTension":3528,"Dtex":670,"Revision":"1","Spec_Type":"warping","K":1.25}', '1.0', 'warping')
+26-Mar-2019 14:03:52.49 : DataAccess returned : 0
+26-Mar-2019 14:03:52.51 : ------------- Stopping Application -------------
+26-Mar-2019 14:03:52.52 : Saving : runtime.log

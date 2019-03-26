@@ -13,11 +13,15 @@ End Sub
 
 Function ConvertToCamelCase(s As String) As String
 ' Converts sentence case to Camel Case
+    On Error GoTo RegExError
     With CreateObject("VBScript.RegExp")
         .Pattern = "[^a-zA-Z]"
         .Global = True
         ConvertToCamelCase = replace(StrConv(.replace(s, " "), vbProperCase), " ", "")
     End With
+    Exit Function
+RegExError:
+    Logger.Log "RegEx Error: ConvertToCamelCase"
 End Function
 
 Function SplitCamelCase(sString As String, Optional sDelim As String = " ") As String
@@ -33,6 +37,7 @@ On Error GoTo Error_Handler
  
 Error_Handler_Exit:
     On Error Resume Next
+    Logger.Log "RegEx Error: SplitCamelCase"
     Set oRegEx = Nothing
     Exit Function
  
