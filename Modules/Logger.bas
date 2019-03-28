@@ -1,13 +1,13 @@
 Attribute VB_Name = "Logger"
 Option Explicit
-Private fso As FileSystemObject ' Declare a FileSystemObject.
-Private stream As TextStream ' Declare a TextStream.
-Private buffer As Dictionary
+Private fso As Object ' Declare a FileSystemObject.
+Private stream As Object ' Declare a TextStream.
+Private buffer As Object
 Private folder_path As String
 Private file_path As String
 
 Public Sub Log(text As String)
-    If buffer Is Nothing Then Set buffer = New Dictionary
+    If buffer Is Nothing Then Set buffer = CreateObject("Scripting.Dictionary")
     Do Until Not buffer.exists(TimeInMS)
         Application.Wait (Now + TimeValue("0:00:01") / 1000)
     Loop

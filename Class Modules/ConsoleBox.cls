@@ -39,6 +39,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet)
     Dim key As Variant
     Dim i As Integer
     With sht
+        .Cells.ClearContents
         i = 1
         For Each key In spec.Properties
             If Not spec.Properties(key) = vbNullString Then
@@ -53,14 +54,14 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet)
     End With
 End Sub
 
-Public Sub PrintObject(spec As Specification)
+Public Sub PrintObject(obj As Object)
 ' Print object to console
     Dim key As Variant
     ' Clear the console
     FormId.txtConsole.text = vbNullString
-    For Each key In spec.Properties
-        If Not spec.Properties(key) = vbNullString Then
-            PrintLine Utils.SplitCamelCase(CStr(key)), spec.Properties(CStr(key))
+    For Each key In obj.Properties
+        If Not obj.Properties(key) = vbNullString Then
+            PrintLine Utils.SplitCamelCase(CStr(key)), obj.Properties(CStr(key))
         Else
             PrintLine Utils.SplitCamelCase(CStr(key)), "-"
         End If

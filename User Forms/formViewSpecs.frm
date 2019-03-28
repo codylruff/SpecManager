@@ -17,6 +17,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -24,7 +26,8 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
-    SpecManager.MaterialInput txtMaterialId
+    SpecManager.RestartSpecManager
+    SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectRevision
     

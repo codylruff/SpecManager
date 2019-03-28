@@ -7,22 +7,35 @@ Public Sub StartSpecManager()
     Set manager = New App
 End Sub
 
+Public Sub RestartSpecManager()
+    Logger.Log "------------- Restarting Application -----------"
+    Set manager = New App
+
+End Sub
+
 Public Sub StopSpecManager()
     Logger.Log "------------- Stopping Application -------------"
     Logger.SaveLog
     Set manager = Nothing
 End Sub
 
-Function NewSpecificationInput(template_type As String, spec_name As String) As String
+Public Sub LoadExistingTemplate(template_type As String)
     With manager
         Set .current_template = SpecManager.GetTemplate(template_type)
         .current_template.SpecType = template_type
+    End With
+
+End Sub
+
+Function NewSpecificationInput(template_type As String, spec_name As String) As String
+    If template_type <> vbNullString Then
+        LoadExistingTemplate template_type
+        With manager
         Set .current_spec = New Specification
         .current_spec.SpecType = .current_template.SpecType
         .current_spec.Revision = "1.0"
         .current_spec.MaterialId = spec_name
-    End With
-    If template_type <> vbNullString Then
+        End With
         NewSpecificationInput = spec_name
     Else
         NewSpecificationInput = vbNullString
@@ -47,7 +60,7 @@ End Sub
 Function SearchForSpecifications(material_id As String) As Long
 ' Manages the search procedure
     Dim coll As Collection
-    Dim specs_dict As Dictionary
+    Dim specs_dict As Object
     Set specs_dict = SpecManager.GetSpecifications(material_id)
     If specs_dict Is Nothing Then
         Logger.Log "Could not find a standard for : " & material_id
@@ -80,7 +93,7 @@ End Function
 
 Function ListAllTemplateTypes() As Collection
     Dim record As DatabaseRecord
-    Dim dict As Dictionary
+    Dim dict As Object
     Dim coll As Collection
     Set coll = New Collection
     Set record = DataAccess.GetTemplateTypes
@@ -127,8 +140,8 @@ Sub UpdateTemplateChanges(specifications As Collection)
 End Sub
 
 Function GetSpecifications(material_id As String) As Object
-    Dim json_dict As Dictionary
-    Dim specs_dict As Dictionary
+    Dim json_dict As Object
+    Dim specs_dict As Object
     Dim json_coll As Collection
     Dim spec As Specification
     Dim rev As String
@@ -138,7 +151,7 @@ Function GetSpecifications(material_id As String) As Object
     Set record = DataAccess.GetSpecificationRecords(MaterialInputValidation(material_id))
     record.SetDictionary
     Set json_coll = record.records
-    Set specs_dict = New Dictionary
+    Set specs_dict = CreateObject("Scripting.Dictionary")
     
     If json_coll Is Nothing Then
         Set GetSpecifications = Nothing
@@ -175,6 +188,10 @@ End Function
 
 Function SaveSpecTemplate(template As SpecTemplate) As Long
     SaveSpecTemplate = IIf(DataAccess.PushTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+End Function
+
+Function UpdateSpecTemplate(template As SpecTemplate) As Long
+    UpdateSpecTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESC, DB_PUSH_FAILURE)
 End Function
 
 Private Function MaterialInputValidation(material_id As String) As String

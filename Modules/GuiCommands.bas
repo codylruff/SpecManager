@@ -31,11 +31,6 @@ Public Sub WarpingWsToDB()
     SpecManager.StopSpecManager
 End Sub
 
-Public Sub GoToWarpingMenu()
-    Application.Visible = False
-    formWarpingMainMenu.Show
-End Sub
-
 Public Sub ExportAll()
 ' Exports the codebase to a project folder as text files
     Const Module = 1

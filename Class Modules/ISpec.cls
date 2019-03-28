@@ -13,8 +13,8 @@ Option Explicit
 ' of standardized process
 ' specifications
 Public Property Get MaterialId() As String: End Property ' sap code, style # etc...
-Public Property Get Properties() As Dictionary: End Property ' Must contain MaterialId
-  Public Property Get Tolerances() As Dictionary: End Property
+Public Property Get Properties() As Object: End Property ' Must contain MaterialId
+  Public Property Get Tolerances() As Object: End Property
 Public Property Get SpecType() As String: End Property
 Public Property Get template() As SpecTemplate: End Property
 Public Sub JsonToObject(jsonText As String): End Sub ' Map json to the spec

@@ -13,7 +13,7 @@ Private m_header    As Variant
 Private m_data      As Variant
 Private rows_       As Long
 Private columns_    As Long
-Public Fields       As Dictionary
+Public Fields       As Object
 Public records      As Collection
 
 Public Property Get header() As Variant: header = m_header: End Property
@@ -27,7 +27,7 @@ Public Property Get columns() As Long: columns = columns_: End Property
 
 Public Function SetDictionary()
 ' Returns a dictionary representation of this object
-    Dim dict As Dictionary
+    Dim dict As Object
     Dim coll As Collection
     Set coll = New Collection
     Dim i, j As Long

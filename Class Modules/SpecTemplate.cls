@@ -11,7 +11,7 @@ Option Explicit
 '----------------
 'CLASS VARIABLES
 '----------------
-Public Properties         As Dictionary
+Public Properties         As Object
 Private SpecType_         As String
 Private Revision_         As String
 '----------------
@@ -27,6 +27,10 @@ Public Sub AddProperty(property As String)
     Me.Properties.Add property, vbNullString
 End Sub
 
+Public Sub RemoveProperty(property As String)
+    Me.Properties.Remove property
+End Sub
+
 Public Function PropertiesJson() As String
     PropertiesJson = JsonConverter.ConvertToJson(Me.Properties)
 End Function
@@ -35,13 +39,13 @@ Public Sub JsonToObject(properties_json As String, spec_type As String, Revision
     Set Properties = JsonConverter.ParseJson(properties_json)
     SpecType = spec_type
     Revision = Revision_
-    Properties.Item("Revision") = Revision_
-    Properties.Item("Spec_Type") = spec_type
+    ' Properties.Item("Revision") = Revision_
+    ' Properties.Item("Spec_Type") = spec_type
 End Sub
 
 ' Constructor
 Private Sub Class_Initialize()
-    Set Properties = New Dictionary
+    Set Properties = CreateObject("Scripting.Dictionary")
 End Sub
 ' Deconstructor
 Private Sub Class_Terminate()

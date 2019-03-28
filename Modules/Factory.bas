@@ -1,7 +1,7 @@
 Attribute VB_Name = "Factory"
 
-Function CreateDictionary() As Dictionary
-    Set CreateDictionary = New Dictionary
+Function CreateDictionary() As Object
+    Set CreateDictionary = CreateObject("Scripting.Dictionary")
 End Function
 
 Function CreateSpecification() As Specification
@@ -35,7 +35,7 @@ Function CreateSpecFromJson(spec As Specification, properties_json As String, to
     Set CreateSpecFromJson = spec
 End Function
 
-Function CreateSpecFromDict(dict As Dictionary) As Specification
+Function CreateSpecFromDict(dict As Object) As Specification
     Dim spec As Specification
     Set spec = New Specification
     With dict

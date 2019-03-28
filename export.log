@@ -1,32 +1,33 @@
-28-Mar-2019 09:48:10.24 : Exported Constants:              C:\Users\cruff\source\SM - Final\Modules\Constants.bas
-28-Mar-2019 09:48:10.26 : Exported DataAccess:             C:\Users\cruff\source\SM - Final\Modules\DataAccess.bas
-28-Mar-2019 09:48:10.27 : Exported Factory:                C:\Users\cruff\source\SM - Final\Modules\Factory.bas
-28-Mar-2019 09:48:10.32 : Exported GuiCommands:            C:\Users\cruff\source\SM - Final\Modules\GuiCommands.bas
-28-Mar-2019 09:48:10.34 : Exported JsonConverter:          C:\Users\cruff\source\SM - Final\Modules\JsonConverter.bas
-28-Mar-2019 09:48:10.35 : Exported Logger:                 C:\Users\cruff\source\SM - Final\Modules\Logger.bas
-28-Mar-2019 09:48:10.37 : Exported modProgress:            C:\Users\cruff\source\SM - Final\Modules\modProgress.bas
-28-Mar-2019 09:48:10.38 : Exported SpecManager:            C:\Users\cruff\source\SM - Final\Modules\SpecManager.bas
-28-Mar-2019 09:48:10.41 : Exported Utils:                  C:\Users\cruff\source\SM - Final\Modules\Utils.bas
-28-Mar-2019 09:48:10.43 : Exported formCreateGeneric:      C:\Users\cruff\source\SM - Final\User Forms\formCreateGeneric.frm
-28-Mar-2019 09:48:10.45 : Exported formCreateSpec:         C:\Users\cruff\source\SM - Final\User Forms\formCreateSpec.frm
-28-Mar-2019 09:48:10.46 : Exported formMainMenu:           C:\Users\cruff\source\SM - Final\User Forms\formMainMenu.frm
-28-Mar-2019 09:48:10.48 : Exported formNewSpecInput:       C:\Users\cruff\source\SM - Final\User Forms\formNewSpecInput.frm
-28-Mar-2019 09:48:10.49 : Exported formNewTemplateInput:   C:\Users\cruff\source\SM - Final\User Forms\formNewTemplateInput.frm
-28-Mar-2019 09:48:10.51 : Exported formPassword:           C:\Users\cruff\source\SM - Final\User Forms\formPassword.frm
-28-Mar-2019 09:48:10.52 : Exported formSpecConfig:         C:\Users\cruff\source\SM - Final\User Forms\formSpecConfig.frm
-28-Mar-2019 09:48:10.55 : Exported formViewSpecs:          C:\Users\cruff\source\SM - Final\User Forms\formViewSpecs.frm
-28-Mar-2019 09:48:10.75 : Exported formWarpDataSheet:      C:\Users\cruff\source\SM - Final\User Forms\formWarpDataSheet.frm
-28-Mar-2019 09:48:10.77 : Exported formWarpingMainMenu:    C:\Users\cruff\source\SM - Final\User Forms\formWarpingMainMenu.frm
-28-Mar-2019 09:48:10.79 : Exported formWarpingSearch:      C:\Users\cruff\source\SM - Final\User Forms\formWarpingSearch.frm
-28-Mar-2019 09:48:10.80 : Exported ufProgress:             C:\Users\cruff\source\SM - Final\User Forms\ufProgress.frm
-28-Mar-2019 09:48:10.82 : Exported App:                    C:\Users\cruff\source\SM - Final\Class Modules\App.cls
-28-Mar-2019 09:48:10.83 : Exported ConsoleBox:             C:\Users\cruff\source\SM - Final\Class Modules\ConsoleBox.cls
-28-Mar-2019 09:48:10.85 : Exported DatabaseRecord:         C:\Users\cruff\source\SM - Final\Class Modules\DatabaseRecord.cls
-28-Mar-2019 09:48:10.86 : Exported IDatabase:              C:\Users\cruff\source\SM - Final\Class Modules\IDatabase.cls
-28-Mar-2019 09:48:10.88 : Exported ISpec:                  C:\Users\cruff\source\SM - Final\Class Modules\ISpec.cls
-28-Mar-2019 09:48:10.89 : Exported Specification:          C:\Users\cruff\source\SM - Final\Class Modules\Specification.cls
-28-Mar-2019 09:48:10.91 : Exported SpecTemplate:           C:\Users\cruff\source\SM - Final\Class Modules\SpecTemplate.cls
-28-Mar-2019 09:48:10.94 : Exported SQLiteDatabase:         C:\Users\cruff\source\SM - Final\Class Modules\SQLiteDatabase.cls
-28-Mar-2019 09:48:10.95 : Exported Warp:                   C:\Users\cruff\source\SM - Final\Class Modules\Warp.cls
-28-Mar-2019 09:48:10.99 : Export Complete.
-28-Mar-2019 09:48:11.01 : Saving : export.log
+28-Mar-2019 16:58:01.83 : Exported Constants:              C:\Users\cruff\source\SM - Final\Modules\Constants.bas
+28-Mar-2019 16:58:01.85 : Exported DataAccess:             C:\Users\cruff\source\SM - Final\Modules\DataAccess.bas
+28-Mar-2019 16:58:01.87 : Exported Factory:                C:\Users\cruff\source\SM - Final\Modules\Factory.bas
+28-Mar-2019 16:58:01.89 : Exported GuiCommands:            C:\Users\cruff\source\SM - Final\Modules\GuiCommands.bas
+28-Mar-2019 16:58:01.90 : Exported JsonConverter:          C:\Users\cruff\source\SM - Final\Modules\JsonConverter.bas
+28-Mar-2019 16:58:01.91 : Exported Logger:                 C:\Users\cruff\source\SM - Final\Modules\Logger.bas
+28-Mar-2019 16:58:01.93 : Exported modProgress:            C:\Users\cruff\source\SM - Final\Modules\modProgress.bas
+28-Mar-2019 16:58:01.95 : Exported SpecManager:            C:\Users\cruff\source\SM - Final\Modules\SpecManager.bas
+28-Mar-2019 16:58:01.96 : Exported Utils:                  C:\Users\cruff\source\SM - Final\Modules\Utils.bas
+28-Mar-2019 16:58:01.99 : Exported formCreateGeneric:      C:\Users\cruff\source\SM - Final\User Forms\formCreateGeneric.frm
+28-Mar-2019 16:58:02.01 : Exported formCreateSpec:         C:\Users\cruff\source\SM - Final\User Forms\formCreateSpec.frm
+28-Mar-2019 16:58:02.03 : Exported formEditTemplate:       C:\Users\cruff\source\SM - Final\User Forms\formEditTemplate.frm
+28-Mar-2019 16:58:02.05 : Exported formMainMenu:           C:\Users\cruff\source\SM - Final\User Forms\formMainMenu.frm
+28-Mar-2019 16:58:02.07 : Exported formNewSpecInput:       C:\Users\cruff\source\SM - Final\User Forms\formNewSpecInput.frm
+28-Mar-2019 16:58:02.08 : Exported formNewTemplateInput:   C:\Users\cruff\source\SM - Final\User Forms\formNewTemplateInput.frm
+28-Mar-2019 16:58:02.10 : Exported formPassword:           C:\Users\cruff\source\SM - Final\User Forms\formPassword.frm
+28-Mar-2019 16:58:02.11 : Exported formSpecConfig:         C:\Users\cruff\source\SM - Final\User Forms\formSpecConfig.frm
+28-Mar-2019 16:58:02.13 : Exported formViewSpecs:          C:\Users\cruff\source\SM - Final\User Forms\formViewSpecs.frm
+28-Mar-2019 16:58:02.34 : Exported formWarpDataSheet:      C:\Users\cruff\source\SM - Final\User Forms\formWarpDataSheet.frm
+28-Mar-2019 16:58:02.36 : Exported formWarpingMainMenu:    C:\Users\cruff\source\SM - Final\User Forms\formWarpingMainMenu.frm
+28-Mar-2019 16:58:02.38 : Exported formWarpingSearch:      C:\Users\cruff\source\SM - Final\User Forms\formWarpingSearch.frm
+28-Mar-2019 16:58:02.39 : Exported ufProgress:             C:\Users\cruff\source\SM - Final\User Forms\ufProgress.frm
+28-Mar-2019 16:58:02.40 : Exported App:                    C:\Users\cruff\source\SM - Final\Class Modules\App.cls
+28-Mar-2019 16:58:02.42 : Exported ConsoleBox:             C:\Users\cruff\source\SM - Final\Class Modules\ConsoleBox.cls
+28-Mar-2019 16:58:02.43 : Exported DatabaseRecord:         C:\Users\cruff\source\SM - Final\Class Modules\DatabaseRecord.cls
+28-Mar-2019 16:58:02.44 : Exported IDatabase:              C:\Users\cruff\source\SM - Final\Class Modules\IDatabase.cls
+28-Mar-2019 16:58:02.45 : Exported ISpec:                  C:\Users\cruff\source\SM - Final\Class Modules\ISpec.cls
+28-Mar-2019 16:58:02.47 : Exported Specification:          C:\Users\cruff\source\SM - Final\Class Modules\Specification.cls
+28-Mar-2019 16:58:02.48 : Exported SpecTemplate:           C:\Users\cruff\source\SM - Final\Class Modules\SpecTemplate.cls
+28-Mar-2019 16:58:02.50 : Exported SQLiteDatabase:         C:\Users\cruff\source\SM - Final\Class Modules\SQLiteDatabase.cls
+28-Mar-2019 16:58:02.52 : Exported Warp:                   C:\Users\cruff\source\SM - Final\Class Modules\Warp.cls
+28-Mar-2019 16:58:02.54 : Export Complete.
+28-Mar-2019 16:58:02.55 : Saving : export.log

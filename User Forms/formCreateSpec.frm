@@ -13,6 +13,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
+
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -27,6 +33,8 @@ Private Sub UserForm_Initialize()
 '                cboSelectProperty.value)) = txtPropertyValue
         Set .current_spec.Properties = .current_template.Properties
         Set .current_spec.Tolerances = .current_template.Properties
+        lblSpecInfo = "Material ID : " & .current_spec.MaterialId & vbNewLine & _
+                      "Material Type : " & .current_template.SpecType
     End With
     PopulateCboSelectProperty
     SpecManager.PrintSpecification Me

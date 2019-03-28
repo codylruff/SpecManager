@@ -16,21 +16,6 @@ Attribute VB_Exposed = False
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdConfig_Click()
@@ -61,7 +46,9 @@ End Sub
 
 Private Sub cmdEditTemplates_Click()
 ' Form to edit an existing specification template. Admin required.
-    Logger.NotImplementedException
+    SpecManager.StartSpecManager
+    Unload Me
+    formEditTemplate.Show
 End Sub
 
 Private Sub cmdViewSpecifications_Click()
@@ -73,7 +60,6 @@ End Sub
 
 Private Sub cmdEditSpecifications_Click()
 ' Form to edit an existing specification. Admin required
-    'SpecManager.StopSpecManager
     SpecManager.StartSpecManager
     Unload Me
     formSpecConfig.Show

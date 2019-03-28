@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formSpecConfig 
    Caption         =   "Specification Control"
-   ClientHeight    =   11865
+   ClientHeight    =   11868
    ClientLeft      =   120
    ClientTop       =   468
    ClientWidth     =   9816
@@ -19,8 +19,6 @@ Attribute VB_Exposed = False
 
 
 
-
-
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -28,7 +26,7 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
-    SpecManager.MaterialInput txtMaterialId
+    SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectProperty
     PopulateCboSelectRevision
@@ -46,7 +44,7 @@ End Sub
 
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification incremented the revision by +0.1
-    manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 0.1)
+    manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 1) & ".0"
     If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: ", DB_PUSH_FAILURE
         MsgBox "New Specification Was Not Saved. Contact Admin."
@@ -62,7 +60,7 @@ Private Sub cmdSubmit_Click()
     With manager.current_spec
         .Properties.Item(Utils.ConvertToCamelCase( _
                 cboSelectProperty.value)) = txtPropertyValue
-        .Revision = .Properties.Item("Revision")
+        '.Revision = .Properties.Item("Revision")
     End With
     SpecManager.PrintSpecification Me
 End Sub

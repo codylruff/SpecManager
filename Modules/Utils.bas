@@ -11,6 +11,15 @@ Sub ToggleExcelGui(b As Boolean)
     Application.DisplayAlerts = b
 End Sub
 
+Public Function RemoveWhiteSpace(target As String) As String
+    With CreateObject("VBScript.RegExp")
+        .Pattern = "\s"
+        .MultiLine = True
+        .Global = True
+        RemoveWhiteSpace = .replace(target, vbNullString)
+    End With
+End Function
+
 Function ConvertToCamelCase(s As String) As String
 ' Converts sentence case to Camel Case
     On Error GoTo RegExError

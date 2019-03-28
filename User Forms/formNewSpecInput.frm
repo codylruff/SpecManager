@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboSelectSpecType
@@ -35,7 +36,7 @@ Private Sub PopulateCboSelectSpecType()
 End Sub
 
 Private Sub cmdContinue_Click()
-    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, txtSpecName.value) <> vbNullString Then
+    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
         Unload Me
         formCreateSpec.Show
     Else

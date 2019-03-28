@@ -9,8 +9,8 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 ' Properties dictionary
-Public Properties   As Dictionary
-Public Tolerances   As Dictionary
+Public Properties   As Object
+Public Tolerances   As Object
 ' FIELDS and PROPERTIES---
 Private SpecType_   As String
 Private Revision_   As String
@@ -26,7 +26,7 @@ Public Property Get Revision() As String: Revision = Revision_: End Property
 Public Property Let SpecType(value As String): SpecType_ = value: End Property
 Public Property Get SpecType() As String: SpecType = SpecType_: End Property
 Public Property Get MaterialId() As String: MaterialId = MaterialId_: End Property
-Public Property Let MaterialId(value As String): MaterialId_ = value: End Property
+Public Property Let MaterialId(value As String): MaterialId_ = UCase(value): End Property
 
 ' METHODS---
 Public Sub AddProperty(property As String, tolerance As Variant)
@@ -42,9 +42,9 @@ Public Sub JsonToObject(properties_json As String, tolerances_json As String, ma
     MaterialId = material_id
     SpecType = spec_type
     Revision = Revision_
-    Properties.Add key:="Material_Id", Item:=Me.MaterialId
-    Properties.Add key:="Spec_Type", Item:=Me.SpecType
-    Properties.Add key:="Revision", Item:=Me.Revision
+    ' Properties.Add key:="Material_Id", Item:=Me.MaterialId
+    ' Properties.Add key:="Spec_Type", Item:=Me.SpecType
+    ' Properties.Add key:="Revision", Item:=Me.Revision
 End Sub
 
 Public Function PropertiesJson() As String
@@ -58,8 +58,8 @@ End Function
 
 ' Constructor
 Private Sub Class_Initialize()
-    Set Properties = New Dictionary
-    Set Tolerances = New Dictionary
+    Set Properties = CreateObject("Scripting.Dictionary")
+    Set Tolerances = CreateObject("Scripting.Dictionary")
 End Sub
 ' Deconstructor
     Private Sub Class_Terminate()

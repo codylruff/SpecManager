@@ -45,6 +45,25 @@ DbPushFailException:
     PushTemplate = DB_PUSH_FAILURE
 End Function
 
+Function UpdateTemplate(ByRef template As SpecTemplate)
+' Push new template record
+    Dim SQLstmt As String
+    On Error GoTo DbPushFailException
+    ' Create SQL statement from objects
+    SQLstmt = "UPDATE template_specifications " & vbNewLine & _
+              "SET " & _
+              "Time_Stamp ='" & CStr(Now()) & "', " & _
+              "Properties_Json ='" & template.PropertiesJson & "', " & _
+              "Revision ='" & template.Revision & "'" & vbNewLine & _
+              "WHERE Spec_Type ='" & template.SpecType & "'"
+    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    UpdateTemplate = DB_PUSH_SUCCESS
+    Exit Function
+DbPushFailException:
+    Logger.Log "SQL UPDATE Error : DbPushFailException"
+    UpdateTemplate = DB_PUSH_FAILURE
+End Function
+
 Function PushSpec(ByRef spec As Specification) As Long
 ' Push a new records
     Dim SQLstmt As String
