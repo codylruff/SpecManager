@@ -34,19 +34,14 @@ On Error GoTo Error_Handler
         .Global = True
         SplitCamelCase = .replace(sString, "$1" & sDelim)
     End With
- 
+    
 Error_Handler_Exit:
     On Error Resume Next
-    Logger.Log "RegEx Error: SplitCamelCase"
     Set oRegEx = Nothing
     Exit Function
  
 Error_Handler:
-    MsgBox "The following error has occured." & vbCrLf & vbCrLf & _
-            "Error Number: " & Err.Number & vbCrLf & _
-            "Error Source: SplitCamelCase" & vbCrLf & _
-            "Error Description: " & Err.Description, _
-            vbCritical, "An Error has Occured!"
+    Logger.Log "RegEx Error: SplitCamelCase"
     Resume Error_Handler_Exit
 End Function
 

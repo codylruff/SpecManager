@@ -13,35 +13,23 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
 Option Explicit
 
-Private Sub cmdSelectSpecificationType_Click()
+Private Sub UserForm_Initialize()
+    Logger.Log "--------- " & Me.Name & " ----------"
     With manager
-        Set .current_template = SpecManager.GetTemplate(cboSelectSpecificationType.value)
-        .current_template.SpecType = cboSelectSpecificationType.value
-        Set manager.current_spec = New Specification
-        .current_spec.SpecType = .current_template.SpecType
-        .current_spec.Revision = 0#
-        .current_template.Properties.Item(Utils.ConvertToCamelCase( _
-                cboSelectProperty.value)) = txtPropertyValue
+        'Set .current_template = SpecManager.GetTemplate(cboSelectSpecificationType.value)
+        '.current_template.SpecType = cboSelectSpecificationType.value
+        ' Set manager.current_spec = New Specification
+        ' .current_spec.SpecType = .current_template.SpecType
+        ' .current_spec.Revision = 0#
+'        .current_template.Properties.Item(Utils.ConvertToCamelCase( _
+'                cboSelectProperty.value)) = txtPropertyValue
         Set .current_spec.Properties = .current_template.Properties
         Set .current_spec.Tolerances = .current_template.Properties
     End With
     PopulateCboSelectProperty
     SpecManager.PrintSpecification Me
-End Sub
-
-Private Sub UserForm_Initialize()
-    Logger.Log "--------- " & Me.Name & " ----------"
-    PopulateCboSelectSpecType
 End Sub
 
 Private Sub cmdBack_Click()
@@ -50,12 +38,11 @@ Private Sub cmdBack_Click()
 End Sub
 
 Private Sub cmdExportPdf_Click()
-    GuiCommands.ConsoleBoxToPdf
+    MsgBox "Functionality not implemented!"
 End Sub
 
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification revision x.0)
-    manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 1)
     If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
         MsgBox "New Specification Was Not Saved. Contact Admin."
@@ -74,17 +61,6 @@ Private Sub cmdSetProperty_Click()
     SpecManager.PrintSpecification Me
 End Sub
 
-Private Sub PopulateCboSelectSpecType()
-    Dim coll As Collection
-    Dim template_type As Variant
-    Set coll = SpecManager.ListAllTemplateTypes
-    With cboSelectSpecificationType
-        For Each template_type In coll
-            .AddItem CStr(template_type)
-        Next template_type
-    End With
-End Sub
-
 Private Sub PopulateCboSelectProperty()
     Dim prop As Variant
     Dim i As Integer
@@ -97,15 +73,6 @@ Private Sub PopulateCboSelectProperty()
         Next prop
     End With
     txtPropertyValue.value = vbNullString
-End Sub
-
-Private Sub cmdClear_Click()
-'Clears the form
-    Dim i As Integer
-    Do While cboSelectProperty.ListCount > 0
-        cboSelectProperty.RemoveItem 0
-    Loop
-    ClearForm Me
 End Sub
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)

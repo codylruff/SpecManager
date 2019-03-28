@@ -15,18 +15,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 Private Sub cmdCancel_Click()
     Unload Me
     GuiCommands.GoToMain

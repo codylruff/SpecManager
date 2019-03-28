@@ -28,6 +28,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub cmdConfig_Click()
@@ -41,7 +44,7 @@ Private Sub cmdCreateSpecification_Click()
 ' Form to create a new specification based on an existing template. Admin required
     SpecManager.StartSpecManager
     Unload Me
-    formCreateSpec.Show
+    formNewSpecInput.Show
 End Sub
 
 Private Sub cmdCreateTemplate_Click()

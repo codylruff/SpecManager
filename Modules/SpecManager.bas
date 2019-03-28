@@ -13,6 +13,22 @@ Public Sub StopSpecManager()
     Set manager = Nothing
 End Sub
 
+Function NewSpecificationInput(template_type As String, spec_name As String) As String
+    With manager
+        Set .current_template = SpecManager.GetTemplate(template_type)
+        .current_template.SpecType = template_type
+        Set .current_spec = New Specification
+        .current_spec.SpecType = .current_template.SpecType
+        .current_spec.Revision = "1.0"
+        .current_spec.MaterialId = spec_name
+    End With
+    If template_type <> vbNullString Then
+        NewSpecificationInput = spec_name
+    Else
+        NewSpecificationInput = vbNullString
+    End If
+End Function
+
 Function TemplateInput(template_type As String) As String
     Set manager.current_template = Factory.CreateNewTemplate(template_type)
     TemplateInput = template_type
