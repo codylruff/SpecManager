@@ -33,6 +33,21 @@ Private Sub cmdRemoveProperty_Click()
     PopulateCboSelectProperty
 End Sub
 
+Sub AddProperty()
+    ' This executes an add property command
+    With manager.current_template
+        .AddProperty Utils.ConvertToCamelCase(txtPropertyName.value)
+    End With
+    SpecManager.PrintTemplate Me
+    PopulateCboSelectProperty
+End Sub
+
+Sub RemoveProperty()
+    manager.current_template.RemoveProperty Utils.ConvertToCamelCase(cboSelectProperty.value)
+    SpecManager.PrintTemplate Me
+    PopulateCboSelectProperty
+End Sub
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
     PopulateCboSelectTemplate
@@ -106,4 +121,27 @@ End Sub
 
 Private Sub UserForm_Terminate()
     Logger.Log "--------- End " & Me.Name & " ----------"
+End Sub
+
+Sub SearchTemplates()
+    SpecManager.LoadExistingTemplate cboSelectTemplate
+    SpecManager.PrintTemplate Me
+    PopulateCboSelectProperty
+End Sub
+
+Sub Back()
+    Unload Me
+    GuiCommands.GoToMain
+End Sub
+
+Sub SaveChanges()
+' Calls method to save a new specification incremented the revision by +0.1
+    manager.current_template.Revision = CStr(CDbl(manager.current_template.Revision) + 1) & ".0"
+    If SpecManager.UpdateSpecTemplate(manager.current_template) <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+        Logger.Log "Edit Template Fail"
+    Else
+        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
+        Logger.Log "Edit Template Pass"
+    End If
 End Sub

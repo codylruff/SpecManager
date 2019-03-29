@@ -85,6 +85,36 @@ DbPushFailException:
     PushSpec = DB_PUSH_FAILURE
 End Function
 
+Function DeleteTemplate(ByRef template As SpecTemplate) As Long
+' Deletes a record
+    Dim SQLstmt As String
+    On Error GoTo DbDeleteFailException
+    ' Create SQL statement from objects
+    SQLstmt = "DELETE FROM template_specifications " & _
+              "WHERE Spec_Type ='" & template.SpecType & "' AND Revision ='" & template.Revision & "'"
+    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    DeleteTemplate = DB_DELETE_SUCCESS
+    Exit Function
+DbDeleteFailException:
+    Logger.Log "SQL DELETE Error : DbDeleteFailException"
+    PushSpec = DB_DELETE_FAILURE
+End Function
+
+Function DeleteSpec(ByRef spec As Specification) As Long
+' Push a new records
+    Dim SQLstmt As String
+    On Error GoTo DbDeleteFailException
+    ' Create SQL statement from objects
+    SQLstmt = "DELETE FROM standard_specifications " & _
+              "WHERE Material_Id ='" & spec.MaterialId & "' AND Revision ='" & spec.Revision & "'"
+    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    DeleteSpec = DB_DELETE_SUCCESS
+    Exit Function
+DbDeleteFailException:
+    Logger.Log "SQL DELETE Error : DbDeleteFailException"
+    PushSpec = DB_DELETE_FAILURE
+End Function
+
 Function GetTemplateTypes() As DatabaseRecord
     Dim SQLstmt As String
     ' build the sql query

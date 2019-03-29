@@ -215,3 +215,5 @@ VALUES ('TEST_SPECIFICATION', '3/29/2019 5:20:02 PM', '{"NewTestProperty":"Edit 
 29-Mar-2019 17:20:24.86 : SQLite returned : 2
 29-Mar-2019 17:20:24.87 : ------------- Stopping Application -------------
 29-Mar-2019 17:20:24.88 : Saving : runtime.log
+29-Mar-2019 17:20:24.89 : ------------- End View Specification Test(2) ---------
+29-Mar-2019 17:20:24.90 : Saving : Tests.log

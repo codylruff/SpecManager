@@ -17,8 +17,6 @@ Attribute VB_Exposed = False
 
 
 
-
-
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -80,6 +78,7 @@ Private Sub ClearThisForm()
     Loop
     ClearForm Me
 End Sub
+
 Private Sub PopulateCboSelectRevision()
     Dim rev As Variant
     Dim i As Integer
@@ -123,4 +122,49 @@ End Sub
 
 Private Sub UserForm_Terminate()
     Logger.Log "--------- End " & Me.Name & " ----------"
+End Sub
+
+Sub MaterialSearch()
+    SpecManager.MaterialInput UCase(txtMaterialId)
+    SpecManager.PrintSpecification Me
+    PopulateCboSelectProperty
+    PopulateCboSelectRevision
+    
+End Sub
+
+Sub Back()
+    Unload Me
+    GuiCommands.GoToMain
+End Sub
+
+Sub ExportPdf()
+    GuiCommands.ConsoleBoxToPdf
+End Sub
+
+Sub SaveChanges()
+' Calls method to save a new specification incremented the revision by +0.1
+    manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 1) & ".0"
+    If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+        Logger.Log "Edit Spec Fail"
+    Else
+        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
+        Logger.Log "Edit Spec Pass"
+    End If
+End Sub
+
+Sub Submit()
+' This executes a set property command
+' TODO: Change the name of this to cmdSetProperty
+    With manager.current_spec
+        .Properties.Item(Utils.ConvertToCamelCase( _
+                cboSelectProperty.value)) = txtPropertyValue
+        '.Revision = .Properties.Item("Revision")
+    End With
+    SpecManager.PrintSpecification Me
+End Sub
+
+Sub Search()
+    Set manager.current_spec = manager.specs.Item(cboSelectRevision.value)
+    SpecManager.PrintSpecification Me
 End Sub

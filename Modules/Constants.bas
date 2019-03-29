@@ -26,3 +26,5 @@ Public Const SM_SEARCH_FAILURE     As Long = 1
 ' DATABASE ERROR DESCRIPTIONS:
 Public Const DB_PUSH_SUCCESS       As Long = 0
 Public Const DB_PUSH_FAILURE       As Long = 1
+Public Const DB_DELETE_SUCCESS     As Long = 2
+Public Const DB_DELETE_FAILURE     As Long = 3

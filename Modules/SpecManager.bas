@@ -191,7 +191,15 @@ Function SaveSpecTemplate(template As SpecTemplate) As Long
 End Function
 
 Function UpdateSpecTemplate(template As SpecTemplate) As Long
-    UpdateSpecTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESC, DB_PUSH_FAILURE)
+    UpdateSpecTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+End Function
+
+Function DeleteSpecTemplate(template As SpecTemplate) As Long
+    DeleteSpecTemplate = IIf(DataAccess.DeleteTemplate(template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+End Function
+
+Function DeleteSpecification(spec As Specification) As Long
+    DeleteSpecification = IIf(DataAccess.DeleteSpec(spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
 End Function
 
 Private Function MaterialInputValidation(material_id As String) As String

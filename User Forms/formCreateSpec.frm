@@ -17,8 +17,6 @@ Attribute VB_Exposed = False
 
 
 
-
-
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -92,4 +90,33 @@ End Sub
 
 Private Sub UserForm_Terminate()
     Set manager = Nothing
+End Sub
+
+Sub Back()
+    Unload Me
+    GuiCommands.GoToMain
+End Sub
+
+Sub ExportPdf()
+    MsgBox "Functionality not implemented!"
+End Sub
+
+Sub SaveChanges()
+' Calls method to save a new specification revision x.0)
+    If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+        Logger.Log "Create Spec Fail"
+    Else
+        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
+        Logger.Log "Create Spec Pass"
+    End If
+End Sub
+
+Sub SetProperty()
+' This executes a set property command
+    With manager.current_spec
+        .Properties.Item(Utils.ConvertToCamelCase( _
+                cboSelectProperty.value)) = txtPropertyValue
+    End With
+    SpecManager.PrintSpecification Me
 End Sub

@@ -17,8 +17,6 @@ Attribute VB_Exposed = False
 
 
 
-
-
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -82,4 +80,26 @@ End Sub
 
 Private Sub UserForm_Terminate()
     Logger.Log "--------- End " & Me.Name & " ----------"
+End Sub
+
+Sub MaterialSearch()
+    SpecManager.RestartSpecManager
+    SpecManager.MaterialInput UCase(txtMaterialId)
+    SpecManager.PrintSpecification Me
+    PopulateCboSelectRevision
+    
+End Sub
+
+Sub Back()
+    Unload Me
+    GuiCommands.GoToMain
+End Sub
+
+Sub ExportPdf()
+    GuiCommands.ConsoleBoxToPdf_Test
+End Sub
+
+Sub Search()
+    Set manager.current_spec = manager.specs.Item(cboSelectRevision.value)
+    SpecManager.PrintSpecification Me
 End Sub

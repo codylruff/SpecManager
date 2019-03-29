@@ -16,13 +16,16 @@ Attribute VB_Exposed = False
 
 
 
-
-
 Option Explicit
 
 Private template_name As String
 
 Private Sub cmdBack_Click()
+    Unload Me
+    GuiCommands.GoToMain
+End Sub
+
+Sub Back()
     Unload Me
     GuiCommands.GoToMain
 End Sub
@@ -38,6 +41,11 @@ Private Sub cmdAddProperty_Click()
    manager.current_template.AddProperty Utils.ConvertToCamelCase(CStr(Me.txtPropertyName))
 End Sub
 
+Sub AddProperty()
+   manager.console.PrintLine Me.txtPropertyName
+   manager.current_template.AddProperty Utils.ConvertToCamelCase(CStr(Me.txtPropertyName))
+End Sub
+
 Private Sub cmdSubmitTemplate_Click()
    If SpecManager.SaveSpecTemplate(manager.current_template) <> DB_PUSH_SUCCESS Then
       Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
@@ -45,6 +53,16 @@ Private Sub cmdSubmitTemplate_Click()
     Else
         Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS & ", New Template Succesfully Saved."
         MsgBox "New Template Succesfully Saved."
+    End If
+End Sub
+
+Sub SubmitTemplate()
+   If SpecManager.SaveSpecTemplate(manager.current_template) <> DB_PUSH_SUCCESS Then
+      Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+        Logger.Log "Create Template Fail"
+    Else
+        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS & ", New Template Succesfully Saved."
+        Logger.Log "Create Template Pass"
     End If
 End Sub
 

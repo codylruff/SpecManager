@@ -224,3 +224,24 @@ Public Sub ConsoleBoxToPdf()
 SaveFileError:
     MsgBox "Failed to save file contact admin"
 End Sub
+
+Public Sub ConsoleBoxToPdf_Test()
+    Dim ws As Worksheet
+    Dim fileName As String
+    On Error GoTo SaveFileError
+    fileName = "C:\Users\" & Environ("Username") & "\Desktop\" & manager.current_spec.MaterialId & "_" & manager.current_spec.Revision
+    Set ws = Sheets("SpecificationForm")
+    manager.console.PrintObjectToSheet manager.current_spec, ws
+    ws.ExportAsFixedFormat _
+        Type:=xlTypePDF, _
+        fileName:=fileName, _
+        Quality:=xlQualityStandard, _
+        IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, _
+        OpenAfterPublish:=False
+    Logger.Log "PDF Saved"
+    Exit Sub
+    
+SaveFileError:
+    Logger.Log "Failed to save file PDF Fail"
+End Sub

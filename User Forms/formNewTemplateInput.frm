@@ -15,6 +15,10 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
+
+
 Private Sub cmdCancel_Click()
     Unload Me
     GuiCommands.GoToMain
@@ -27,5 +31,13 @@ Private Sub cmdContinue_Click()
     Else
         MsgBox "Please enter a template name !"
         Exit Sub
+    End If
+End Sub
+
+Sub Continue()
+    If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
+        Logger.Log "Template Input Pass"
+    Else
+        Logger.Log "Template Input Fail"
     End If
 End Sub
