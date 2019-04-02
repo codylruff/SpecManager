@@ -33,6 +33,7 @@ Public Function SetDictionary()
     Dim i, j As Long
     For j = 1 To rows
         Set dict = Factory.CreateDictionary()
+        Logger.Log "Checking Row " & j & " . . . "
         For i = 1 To columns
         Logger.Log "Column " & i & " : " & header(1, i) & ", Row " & j & " : " & data(j, i)
             dict.Add key:=header(1, i), Item:=data(j, i)

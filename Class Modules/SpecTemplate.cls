@@ -14,9 +14,12 @@ Option Explicit
 Public Properties         As Object
 Private SpecType_         As String
 Private Revision_         As String
+Private ProductLine_      As String
 '----------------
 ' AUTO-PROPERTIES
 '----------------
+Public Property Let ProductLine(value As String): ProductLine_ = value: End Property
+Public Property Get ProductLine() As String: ProductLine = ProductLine_: End Property
 Public Property Let Revision(value As String): Revision_ = value: End Property
 Public Property Get Revision() As String: Revision = Revision_: End Property
 Public Property Let SpecType(value As String): SpecType_ = value: End Property
@@ -35,10 +38,11 @@ Public Function PropertiesJson() As String
     PropertiesJson = JsonConverter.ConvertToJson(Me.Properties)
 End Function
 
-Public Sub JsonToObject(properties_json As String, spec_type As String, Revision_ As String)
+Public Sub JsonToObject(properties_json As String, spec_type As String, Revision_ As String, product_line As String)
     Set Properties = JsonConverter.ParseJson(properties_json)
     SpecType = spec_type
     Revision = Revision_
+    ProductLine = product_line
     ' Properties.Item("Revision") = Revision_
     ' Properties.Item("Spec_Type") = spec_type
 End Sub

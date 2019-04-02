@@ -42,12 +42,14 @@ End Sub
 
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification incremented the revision by +0.1
+    Dim ret_val Long
     manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 1) & ".0"
-    If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: ", DB_PUSH_FAILURE
+    ret_val = SpecManager.SaveSpecification(manager.current_spec)
+    If ret_val <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Was Not Saved. Contact Admin."
     Else
-        Logger.Log "Data Access returned: ", DB_PUSH_SUCCESS
+        Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Succesfully Saved."
     End If
 End Sub
@@ -143,13 +145,15 @@ End Sub
 
 Sub SaveChanges()
 ' Calls method to save a new specification incremented the revision by +0.1
+    Dim ret_val As Long
     manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 1) & ".0"
-    If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
-        Logger.Log "Edit Spec Fail"
+    ret_val = SpecManager.SaveSpecification(manager.current_spec)
+    If ret_val <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & ret_val
+        Logger.Log "New Specification Was Not Saved. Contact Admin."
     Else
-        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
-        Logger.Log "Edit Spec Pass"
+        Logger.Log "Data Access returned: " & ret_val
+        Logger.Log "New Specification Succesfully Saved."
     End If
 End Sub
 

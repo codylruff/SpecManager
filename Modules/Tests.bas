@@ -22,6 +22,7 @@ Sub CreateTemplate_Test()
     'GuiCommands.GoToMain
     SpecManager.StartSpecManager
     ' 2. Enter a template name "test_template"
+    formNewTemplateInput.cboProductLine.value = "Protection"
     formNewTemplateInput.txtTemplateName.value = "test_template"
     ' 3. Click the Submit button
     formNewTemplateInput.Continue
@@ -154,4 +155,11 @@ Sub ViewSpecification_AfterEdit_Test()
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecTemplate(manager.current_template)
     SpecManager.StopSpecManager
     Logger.Log "------------- End View Specification Test(2) ---------"
+End Sub
+
+Sub AccessControl_Test()
+    Logger.Log "------------- Start Access Control Test --------------"
+    SpecManager.StartSpecManager
+    SpecManager.StopSpecManager
+    Logger.Log "------------- End Access Control Test ----------------"
 End Sub

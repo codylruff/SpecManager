@@ -5,6 +5,31 @@ Option Explicit
 'DESCRIPTION: Data Access Module
 '===================================
 
+Function GetUser(ByVal Name As String) As DatabaseRecord
+' Get a user from the database
+    Dim SQLstmt As String
+    ' build the sql query
+    Logger.Log "Searching for user name . . . "
+    SQLstmt = "SELECT * FROM user_privledges " & _
+              "WHERE Name ='" & Name & "'"
+    Set GetUser = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
+End Function
+
+Function PushNewUser(new_user As Account) As Long
+    Dim SQLstmt As String
+    On Error GoTo DbPushFailException
+    SQLstmt = "INSERT INTO user_privledges " & _
+              "(Name, Privledge_Level) " & _
+              "VALUES ('" & new_user.Name & "', " & _
+                      "'" & new_user.PrivledgeLevel & "')"
+    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    PushNewUser = DB_PUSH_SUCCESS
+    Exit Function
+DbPushFailException:
+    Logger.Log "SQL INSERT Error : DbPushFailException"
+    PushNewUser = DB_PUSH_FAILURE
+End Function
+
 Function GetTemplateRecord(ByRef spec_type As String) As DatabaseRecord
     Dim SQLstmt As String
     ' build the sql query
@@ -32,11 +57,12 @@ Function PushTemplate(ByRef template As SpecTemplate)
     On Error GoTo DbPushFailException
     ' Create SQL statement from objects
     SQLstmt = "INSERT INTO template_specifications " & _
-              "(Time_Stamp, Properties_Json, Revision, Spec_Type) " & vbNewLine & _
+              "(Time_Stamp, Properties_Json, Revision, Spec_Type, Product_Line) " & _
               "VALUES ('" & CStr(Now()) & "'," & _
                       "'" & template.PropertiesJson & "', " & _
                       "'" & template.Revision & "', " & _
-                      "'" & template.SpecType & "')"
+                      "'" & template.SpecType & "', " & _
+                      "'" & template.ProductLine & "')"
     ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
     PushTemplate = DB_PUSH_SUCCESS
     Exit Function
@@ -50,11 +76,11 @@ Function UpdateTemplate(ByRef template As SpecTemplate)
     Dim SQLstmt As String
     On Error GoTo DbPushFailException
     ' Create SQL statement from objects
-    SQLstmt = "UPDATE template_specifications " & vbNewLine & _
+    SQLstmt = "UPDATE template_specifications " & _
               "SET " & _
               "Time_Stamp ='" & CStr(Now()) & "', " & _
               "Properties_Json ='" & template.PropertiesJson & "', " & _
-              "Revision ='" & template.Revision & "'" & vbNewLine & _
+              "Revision ='" & template.Revision & "' " & _
               "WHERE Spec_Type ='" & template.SpecType & "'"
     ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
     UpdateTemplate = DB_PUSH_SUCCESS
@@ -70,7 +96,7 @@ Function PushSpec(ByRef spec As Specification) As Long
     On Error GoTo DbPushFailException
     ' Create SQL statement from objects
     SQLstmt = "INSERT INTO standard_specifications " & _
-              "(Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) " & vbNewLine & _
+              "(Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) " & _
               "VALUES ('" & spec.MaterialId & "', " & _
                       "'" & CStr(Now()) & "', " & _
                       "'" & spec.PropertiesJson & "', " & _
@@ -97,7 +123,7 @@ Function DeleteTemplate(ByRef template As SpecTemplate) As Long
     Exit Function
 DbDeleteFailException:
     Logger.Log "SQL DELETE Error : DbDeleteFailException"
-    PushSpec = DB_DELETE_FAILURE
+    DeleteTemplate = DB_DELETE_FAILURE
 End Function
 
 Function DeleteSpec(ByRef spec As Specification) As Long
@@ -112,7 +138,7 @@ Function DeleteSpec(ByRef spec As Specification) As Long
     Exit Function
 DbDeleteFailException:
     Logger.Log "SQL DELETE Error : DbDeleteFailException"
-    PushSpec = DB_DELETE_FAILURE
+    DeleteSpec = DB_DELETE_FAILURE
 End Function
 
 Function GetTemplateTypes() As DatabaseRecord

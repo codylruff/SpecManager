@@ -4,7 +4,7 @@ Public manager As App
 
 Public Sub StartSpecManager()
     Logger.Log "------------- Starting Application -------------"
-    Set manager = New App
+        Set manager = New App
 End Sub
 
 Public Sub RestartSpecManager()
@@ -183,23 +183,43 @@ Sub PrintTemplate(frm As MSForms.UserForm)
 End Sub
 
 Function SaveSpecification(spec As Specification) As Long
-     SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    If manager.current_user.ProductLine = manager.current_template.ProductLine Or manager.current_user.ProductLine = "Admin" Then
+        SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    Else
+        SaveSpecification = DB_PUSH_DENIED
+    End If
 End Function
 
 Function SaveSpecTemplate(template As SpecTemplate) As Long
-    SaveSpecTemplate = IIf(DataAccess.PushTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    If manager.current_user.ProductLine = manager.current_template.ProductLine Or manager.current_user.ProductLine = "Admin" Then
+        SaveSpecTemplate = IIf(DataAccess.PushTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    Else
+        SaveSpecTemplate = DB_PUSH_DENIED
+    End If
 End Function
 
 Function UpdateSpecTemplate(template As SpecTemplate) As Long
-    UpdateSpecTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    If manager.current_user.ProductLine = manager.current_template.ProductLine Or manager.current_user.ProductLine = "Admin" Then
+        UpdateSpecTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    Else
+        UpdateSpecTemplate = DB_PUSH_DENIED
+    End If
 End Function
 
 Function DeleteSpecTemplate(template As SpecTemplate) As Long
-    DeleteSpecTemplate = IIf(DataAccess.DeleteTemplate(template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+    If manager.current_user.PrivledgeLevel = USER_ADMIN Then
+        DeleteSpecTemplate = IIf(DataAccess.DeleteTemplate(template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+    Else
+        DeleteSpecTemplate = DB_DELETE_DENIED
+    End If
 End Function
 
 Function DeleteSpecification(spec As Specification) As Long
-    DeleteSpecification = IIf(DataAccess.DeleteSpec(spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+    If manager.current_user.PrivledgeLevel = USER_ADMIN Then
+        DeleteSpecification = IIf(DataAccess.DeleteSpec(spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+    Else
+        DeleteSpecification = DB_DELETE_DENIED
+    End If
 End Function
 
 Private Function MaterialInputValidation(material_id As String) As String

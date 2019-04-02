@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public current_user As String
+Public current_user As Account
 Public standard As Specification
 Public current_spec As Specification
 Public specs As Object
@@ -18,7 +18,7 @@ Public current_template As SpecTemplate
 Public warp_order As Warp
 
 Private Sub Class_Initialize()
-    current_user = VBA.Environ("Username")
+    Set current_user = AccessControl.Account_Initialize
     Set current_spec = New Specification
     Set standard = New Specification
     Set specs = CreateObject("Scripting.Dictionary")
@@ -28,6 +28,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Private Sub Class_Terminate()
+    Set current_user = Nothing
     Set current_spec = Nothing
     Set standard = Nothing
     Set specs = Nothing

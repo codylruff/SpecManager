@@ -31,6 +31,11 @@ End Sub
 Private Sub cmdCreateSpecification_Click()
 ' Form to create a new specification based on an existing template. Admin required
     SpecManager.StartSpecManager
+    If manager.current_user.PrivledgeLevel < USER_MANAGER Then
+        Logger.Log manager.current_user.Name & " attempted access to a restricted function."
+        MsgBox "This function is not availble to you"
+        Exit Sub
+    End If
     Unload Me
     formNewSpecInput.Show
 End Sub
@@ -38,6 +43,13 @@ End Sub
 Private Sub cmdCreateTemplate_Click()
 ' Form to create a new template specification. Admin required.
     SpecManager.StartSpecManager
+    Logger.Log manager.current_user.Name
+    Logger.Log manager.current_user.PrivledgeLevel
+    If SpecManager.manager.current_user.PrivledgeLevel < USER_MANAGER Then
+        Logger.Log manager.current_user.Name & " attempted access to a restricted function."
+        MsgBox "This function is not availble to you"
+        Exit Sub
+    End If
     Unload Me
     formNewTemplateInput.Show
 End Sub
@@ -50,6 +62,11 @@ End Sub
 Private Sub cmdEditTemplates_Click()
 ' Form to edit an existing specification template. Admin required.
     SpecManager.StartSpecManager
+    If manager.current_user.PrivledgeLevel < USER_MANAGER Then
+        Logger.Log manager.current_user.Name & " attempted access to a restricted function."
+        MsgBox "This function is not availble to you"
+        Exit Sub
+    End If
     Unload Me
     formEditTemplate.Show
 End Sub
@@ -64,6 +81,11 @@ End Sub
 Private Sub cmdEditSpecifications_Click()
 ' Form to edit an existing specification. Admin required
     SpecManager.StartSpecManager
+    If manager.current_user.PrivledgeLevel < USER_MANAGER Then
+        Logger.Log manager.current_user.Name & " attempted access to a restricted function."
+        MsgBox "This function is not availble to you"
+        Exit Sub
+    End If
     Unload Me
     formSpecConfig.Show
 End Sub

@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formNewTemplateInput 
    Caption         =   "Create New Template"
-   ClientHeight    =   1680
+   ClientHeight    =   2952
    ClientLeft      =   120
    ClientTop       =   468
    ClientWidth     =   4476
@@ -18,6 +18,10 @@ Attribute VB_Exposed = False
 
 
 
+Private Sub UserForm_Initialize()
+    Logger.Log "--------- " & Me.Name & " ----------"
+    PopulateCboProductLine
+End Sub
 
 Private Sub cmdCancel_Click()
     Unload Me
@@ -26,6 +30,12 @@ End Sub
 
 Private Sub cmdContinue_Click()
     If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
+        If cboProductLine.value <> vbNullString Then
+            manager.current_template.ProductLine = cboProductLine.value
+        Else
+            MsgBox "Please select a product line!"
+            Exit Sub
+        End If
         Unload Me
         formCreateGeneric.Show
     Else
@@ -39,5 +49,25 @@ Sub Continue()
         Logger.Log "Template Input Pass"
     Else
         Logger.Log "Template Input Fail"
+    End If
+End Sub
+
+Private Sub PopulateCboProductLine()
+    Dim prop As Variant
+    Dim i As Integer
+    Do While cboProductLine.ListCount > 0
+        cboProductLine.RemoveItem 0
+    Loop
+    With cboProductLine
+        .AddItem ("Protection")
+        .AddItem ("Filtration")
+        .AddItem ("Chemical")
+    End With
+End Sub
+
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+' This
+    If CloseMode = 0 Then
+        Cancel = True
     End If
 End Sub

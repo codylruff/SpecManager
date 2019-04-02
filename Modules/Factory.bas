@@ -21,7 +21,7 @@ Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecTemplate
     Set template = New SpecTemplate
     record.SetDictionary
     With record.Fields
-        template.JsonToObject .Item("Properties_Json"), .Item("Spec_Type"), .Item("Revision")
+        template.JsonToObject .Item("Properties_Json"), .Item("Spec_Type"), .Item("Revision"), .Item("Product_Line")
     End With
     Set CreateTemplateFromRecord = template
 End Function

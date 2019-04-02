@@ -49,11 +49,13 @@ End Sub
 
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification revision x.0)
-    If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+    Dim ret_val As Long
+    ret_val = SpecManager.SaveSpecification(manager.current_spec)
+    If ret_val <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Was Not Saved. Contact Admin."
     Else
-        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
+        Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Succesfully Saved."
     End If
 End Sub
@@ -103,11 +105,13 @@ End Sub
 
 Sub SaveChanges()
 ' Calls method to save a new specification revision x.0)
-    If SpecManager.SaveSpecification(manager.current_spec) <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+    Dim ret_val As Long
+    ret_val = SpecManager.SaveSpecification(manager.current_spec)
+    If ret_val <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Create Spec Fail"
     Else
-        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
+        Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Create Spec Pass"
     End If
 End Sub

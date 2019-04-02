@@ -16,6 +16,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
 
 Private template_name As String
@@ -47,21 +48,25 @@ Sub AddProperty()
 End Sub
 
 Private Sub cmdSubmitTemplate_Click()
-   If SpecManager.SaveSpecTemplate(manager.current_template) <> DB_PUSH_SUCCESS Then
-      Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+    Dim ret_val As Long
+    ret_val = SpecManager.SaveSpecTemplate(manager.current_template)
+   If ret_val <> DB_PUSH_SUCCESS Then
+      Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Was Not Saved. Contact Admin."
     Else
-        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS & ", New Template Succesfully Saved."
+        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved."
         MsgBox "New Template Succesfully Saved."
     End If
 End Sub
 
 Sub SubmitTemplate()
-   If SpecManager.SaveSpecTemplate(manager.current_template) <> DB_PUSH_SUCCESS Then
-      Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+    Dim ret_val As Long
+    ret_val = SpecManager.SaveSpecTemplate(manager.current_template)
+   If ret_val <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Create Template Fail"
     Else
-        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS & ", New Template Succesfully Saved."
+        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved."
         Logger.Log "Create Template Pass"
     End If
 End Sub

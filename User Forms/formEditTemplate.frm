@@ -16,6 +16,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
 
 Private Sub cmdAddProperty_Click()
@@ -25,6 +26,10 @@ Private Sub cmdAddProperty_Click()
     End With
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
+End Sub
+
+Private Sub cmdClear_Click()
+    ClearThisForm
 End Sub
 
 Private Sub cmdRemoveProperty_Click()
@@ -67,20 +72,24 @@ End Sub
 
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification incremented the revision by +0.1
+    Dim ret_val As Long
     manager.current_template.Revision = CStr(CDbl(manager.current_template.Revision) + 1) & ".0"
-    If SpecManager.UpdateSpecTemplate(manager.current_template) <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+    ret_val = SpecManager.UpdateSpecTemplate(manager.current_template)
+    If ret_val <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & ret_val
         MsgBox "Template Was Not Saved. Contact Admin."
     Else
-        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
+        Logger.Log "Data Access returned: " & ret_val
         MsgBox "Template Saved Succesfully Saved."
     End If
 End Sub
 
 Private Sub ClearThisForm()
-    Dim i As Integer
     Do While cboSelectProperty.ListCount > 0
         cboSelectProperty.RemoveItem 0
+    Loop
+    Do While cboSelectTemplate.ListCount > 0
+        cboSelectTemplate.RemoveItem 0
     Loop
     ClearForm Me
 End Sub
@@ -120,6 +129,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
+    
     Logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
@@ -136,12 +146,14 @@ End Sub
 
 Sub SaveChanges()
 ' Calls method to save a new specification incremented the revision by +0.1
+    Dim ret_val As Long
     manager.current_template.Revision = CStr(CDbl(manager.current_template.Revision) + 1) & ".0"
-    If SpecManager.UpdateSpecTemplate(manager.current_template) <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & DB_PUSH_FAILURE
+    ret_val = SpecManager.UpdateSpecTemplate(manager.current_template)
+    If ret_val <> DB_PUSH_SUCCESS Then
+        Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Edit Template Fail"
     Else
-        Logger.Log "Data Access returned: " & DB_PUSH_SUCCESS
+        Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Edit Template Pass"
     End If
 End Sub
