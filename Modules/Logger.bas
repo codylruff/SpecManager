@@ -3,8 +3,14 @@ Option Explicit
 Private fso As Object ' Declare a FileSystemObject.
 Private stream As Object ' Declare a TextStream.
 Private buffer As Object
+Private log_level As Long
 Private folder_path As String
 Private file_path As String
+
+Public Sub SetLogLevel(level As Long)
+' Sets the log level to more or less verbose output
+    log_level = level  
+End Sub
 
 Public Sub Log(text As String)
     If buffer Is Nothing Then Set buffer = CreateObject("Scripting.Dictionary")
@@ -22,7 +28,11 @@ End Sub
 Public Sub SaveLog(Optional file_name As String = "runtime")
     Dim key As Variant
     If buffer Is Nothing Then Exit Sub
-    folder_path = Constants.GitRepo
+    If VBA.Environ("Username") = "CRuff" Then
+        folder_path = Constants.GitRepo
+    Else
+        folder_path = SM_PATH & VBA.Environ("Username") & "\Spec Manager\"
+    End If
     file_path = folder_path & "\" & file_name & ".log"
     Set fso = CreateObject("Scripting.FileSystemObject")
     If Not fso.FolderExists(folder_path) Then fso.CreateFolder folder_path

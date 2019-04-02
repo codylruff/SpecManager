@@ -19,9 +19,10 @@ Function PushNewUser(new_user As Account) As Long
     Dim SQLstmt As String
     On Error GoTo DbPushFailException
     SQLstmt = "INSERT INTO user_privledges " & _
-              "(Name, Privledge_Level) " & _
+              "(Name, Privledge_Level, Product_Line) " & _
               "VALUES ('" & new_user.Name & "', " & _
-                      "'" & new_user.PrivledgeLevel & "')"
+                      "'" & new_user.PrivledgeLevel & "', " & _
+                      "'" & new_user.ProductLine & "')"
     ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
     PushNewUser = DB_PUSH_SUCCESS
     Exit Function

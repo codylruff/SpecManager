@@ -15,17 +15,13 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
 Option Explicit
 
 Private Sub cmdConfig_Click()
 ' Initialze developer configuration mode
     SpecManager.StopSpecManager
     Unload Me
-    ConfigControl
+    AccessControl.ConfigControl
 End Sub
 
 Private Sub cmdCreateSpecification_Click()

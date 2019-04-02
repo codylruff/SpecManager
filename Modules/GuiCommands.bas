@@ -7,11 +7,17 @@ Option Explicit
 ' through the GUI with exception
 ' of the import function.
 '=================================
+Public Sub InitializeApplication()
+    Logger.NotImplementedException
+End Sub
 
 Public Sub GoToMain()
 'Opens the main menu form.
     SpecManager.StopSpecManager
-    Application.Visible = False
+    Dim w As Window
+    For Each w In Windows
+        If w.Parent.Name = WORKBOOK_NAME Then w.Visible = False
+    Next w
     formMainMenu.Show
 End Sub
 
@@ -132,34 +138,6 @@ Public Sub ExportAll()
     Logger.SaveLog "export"
 End Sub
 
-Public Sub ConfigControl()
-'Initializes the password form for config access.
-    If Environ("UserName") <> "CRuff" Then
-        formPassword.Show
-    Else
-        Application.DisplayAlerts = True
-        shtDeveloper.Visible = xlSheetVisible
-        Application.Visible = True
-        Application.VBE.MainWindow.Visible = True
-        Application.SendKeys ("^r")
-    End If
-End Sub
-
-Public Sub Open_Config(Password As String)
-'Performs a password check and opens config.
-    If Password = "@Wmp9296bm4ddw" Then
-        Application.DisplayAlerts = True
-        shtDeveloper.Visible = xlSheetVisible
-        Application.Visible = True
-        Application.VBE.MainWindow.Visible = True
-        Application.SendKeys ("^r")
-        Unload formPassword
-    Else
-        MsgBox "Access Denied", vbExclamation
-        Exit Sub
-    End If
-End Sub
-
 Public Sub CloseConfig()
 'Performs actions needed to close config.
     ThisWorkbook.Save
@@ -171,8 +149,13 @@ End Sub
 
 Public Sub ExitApp()
 'This exits the application after saving the thisworkbook.
-    ThisWorkbook.Save
-    Application.Quit
+    Dim w As Window
+    For Each w In Windows
+        If w.Parent.Name = WORKBOOK_NAME Then
+            w.Parent.Save
+            w.Parent.Close
+        End If
+    Next w
 End Sub
 
 Public Sub ClearForm(frm)
@@ -202,34 +185,31 @@ Public Sub DB2W_tblStyleSpecs()
 End Sub
 
 Public Sub ConsoleBoxToPdf()
-    Dim ws As Worksheet, initFileName As String, fileName As String
+    Dim ws As Worksheet
+    Dim fileName As String
     On Error GoTo SaveFileError
-    initFileName = PublicDir & "\" & manager.current_spec.MaterialId & "_" & manager.current_spec.Revision
-    fileName = Application.GetSaveAsFilename(InitialFileName:=initFileName, _
-                                     FileFilter:="PDF Files (*.pdf), *.pdf", _
-                                     Title:="Select Path and Filename to save")
+    fileName = PublicDir & "\Specifications\" & manager.current_spec.MaterialId & "_" & manager.current_spec.Revision
     Set ws = Sheets("SpecificationForm")
     manager.console.PrintObjectToSheet manager.current_spec, ws
-    If fileName <> "False" Then
-        ws.ExportAsFixedFormat _
-            Type:=xlTypePDF, _
-            fileName:=fileName, _
-            Quality:=xlQualityStandard, _
-            IncludeDocProperties:=True, _
-            IgnorePrintAreas:=False, _
-            OpenAfterPublish:=True
-    End If
+    ws.ExportAsFixedFormat _
+        Type:=xlTypePDF, _
+        fileName:=fileName, _
+        Quality:=xlQualityStandard, _
+        IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, _
+        OpenAfterPublish:=False
+    Logger.Log "PDF Saved"
     Exit Sub
     
 SaveFileError:
-    MsgBox "Failed to save file contact admin"
+    Logger.Log "Failed to save file PDF Fail"
 End Sub
 
 Public Sub ConsoleBoxToPdf_Test()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError
-    fileName = "C:\Users\" & Environ("Username") & "\Desktop\" & manager.current_spec.MaterialId & "_" & manager.current_spec.Revision
+    fileName = PublicDir & "\Specifications\" & manager.current_spec.MaterialId & "_" & manager.current_spec.Revision
     Set ws = Sheets("SpecificationForm")
     manager.console.PrintObjectToSheet manager.current_spec, ws
     ws.ExportAsFixedFormat _

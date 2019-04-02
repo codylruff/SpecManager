@@ -15,50 +15,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 '---------------------------------
@@ -66,14 +22,10 @@ Option Explicit
 're-designed
 '---------------------------------
 Private Sub cmdClose_Click()
-
     Unload Me
     formMainMenu.Show
-    
 End Sub
 
 Private Sub cmdEnter_Click()
-
-    Open_Config txtPassword.value
-    
+    AccessControl.Open_Config txtPassword.value
 End Sub

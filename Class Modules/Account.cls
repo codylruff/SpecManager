@@ -15,6 +15,8 @@ Public Protection       As Long
 Public Filtration       As Long
 Public Chemical         As Long
 Private Name_           As String
+Public LogLevel         As Long
+Public DefaultPrinter   As String
 
 Public Property Let Name(value As String)
     Name_ = UCase(value)
@@ -29,3 +31,28 @@ Public Function ToString() As String
              ", Privledge Level : " & Me.PrivledgeLevel & _
              ", Product Line : " & Me.ProductLine
 End Function
+
+Public Sub LoadUserJson()
+' Advanced example: Read .json file and load into sheet (Windows-only)
+' (add reference to Microsoft Scripting Runtime)
+
+  Dim FSO As New Object
+  Dim JsonTS As Object
+  Dim JsonText As String
+  Dim Parsed As Object
+  Set fso = CreateObject("Scripting.FileSystemObject")
+  ' Read .json file
+  Set JsonTS = fso.OpenTextFile("user.json", ForReading)
+  JsonText = JsonTS.ReadAll
+  JsonTS.Close
+  ' Parse json to Dictionary
+  Set Parsed = JsonConverter.ParseJson(JsonText)
+  LogLevel = Parsed.Item("log_level")
+  DefaultPrinter = Parsed.Item("default_printer")
+End Sub
+
+Public Sub SaveUserJson()
+' Saves user configuration settings to user.json saved in the Spec Manager installation folder
+
+
+End Sub
