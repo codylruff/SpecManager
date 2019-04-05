@@ -143,3 +143,10 @@ Public Function printf(mask As String, ParamArray tokens()) As String
     Next
     printf = mask
 End Function
+
+Public Sub PrintSheet(sheet_name As String)
+' Prints the sheet of the given name in the spec manager workbook
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets(sheet_name)
+End Sub
+    
