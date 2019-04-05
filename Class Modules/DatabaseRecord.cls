@@ -16,8 +16,8 @@ Private columns_    As Long
 Public Fields       As Object
 Public records      As Collection
 
-Public Property Get header() As Variant: header = m_header: End Property
-Public Property Let header(ByVal value As Variant): m_header = value: End Property
+Public Property Get Header() As Variant: Header = m_header: End Property
+Public Property Let Header(ByVal value As Variant): m_header = value: End Property
 Public Property Get data() As Variant: data = m_data: End Property
 Public Property Let data(ByVal value As Variant): m_data = value: End Property
 Public Property Let rows(value As Long): rows_ = value: End Property
@@ -35,8 +35,8 @@ Public Function SetDictionary()
         Set dict = Factory.CreateDictionary()
         Logger.Log "Checking Row " & j & " . . . "
         For i = 1 To columns
-        Logger.Log "Column " & i & " : " & header(1, i) & ", Row " & j & " : " & data(j, i)
-            dict.Add key:=header(1, i), Item:=data(j, i)
+        Logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & data(j, i)
+            dict.Add key:=Header(1, i), Item:=data(j, i)
         Next i
         coll.Add dict
     Next j

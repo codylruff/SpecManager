@@ -17,9 +17,6 @@ Attribute VB_Exposed = False
 
 
 
-
-
-
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboProductLine
@@ -39,7 +36,7 @@ Private Sub cmdContinue_Click()
             Exit Sub
         End If
         Unload Me
-        formCreateGeneric.Show
+        formCreateGeneric.Show vbModeless
     Else
         MsgBox "Please enter a template name !"
         Exit Sub

@@ -9,8 +9,11 @@ End Sub
 
 Public Sub RestartSpecManager()
     Logger.Log "------------- Restarting Application -----------"
-    Set manager = New App
-
+    If manager Is Nothing Then
+        Set manager = New App
+    Else
+        manager.ResetInteractiveObject
+    End If
 End Sub
 
 Public Sub StopSpecManager()
@@ -289,4 +292,27 @@ Sub WorksheetToDatabase()
         Set .current_spec = Nothing
     Next i
     End With
+End Sub
+
+Public Sub DumpAllSpecsToWorksheet(spec_type As String)
+    Dim ws As Worksheet
+    Dim dicts As Collection
+    Dim dict As Object
+    Dim props As Variant
+    RestartSpecManager
+    Logger.LogEnabled False
+    Application.ScreenUpdating = False
+    Set dict = CreateObject("Scripting.Dictionary")
+    Set ws = Utils.CreateNewSheet(spec_type)
+    Set dicts = DataAccess.SelectAllSpecifications(spec_type)
+    i = 2
+    For Each dict In dicts
+        Set manager.current_spec = Factory.CreateSpecFromDict(dict)
+        props = manager.current_spec.ToArray
+        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).value = manager.current_spec.Header
+        ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).value = props
+        i = i + 1
+    Next dict
+    ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).columns.AutoFit
+    Application.ScreenUpdating = True
 End Sub

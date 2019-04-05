@@ -31,6 +31,7 @@ Public Sub AddProperty(property As String)
 End Sub
 
 Public Sub RemoveProperty(property As String)
+    On Error Resume Next
     Me.Properties.Remove property
 End Sub
 

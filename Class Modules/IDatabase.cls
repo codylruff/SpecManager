@@ -14,7 +14,7 @@ Option Explicit
 ' Interface for databases
 '====================================
 ' public properties
-Public Property Get header() As Variant: End Property ' Array representing column headers
+Public Property Get Header() As Variant: End Property ' Array representing column headers
 Public Property Get data() As Variant: End Property ' Array representing data from table
 Public Property Get NumRows() As Long: End Property
 Public Property Get NumColumns() As Long: End Property

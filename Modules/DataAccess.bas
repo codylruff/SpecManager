@@ -150,6 +150,17 @@ Function GetTemplateTypes() As DatabaseRecord
     Set GetTemplateTypes = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
 End Function
 
+Function SelectAllSpecifications(spec_type As String) As Collection
+    Dim SQLstmt As String
+    Dim record As DatabaseRecord
+    ' build the sql query
+    Logger.Log "Selecting all specifications . . . "
+    SQLstmt = "SELECT * FROM standard_specifications WHERE Spec_Type ='" & spec_type & "'"
+    Set record = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
+    record.SetDictionary
+    Set SelectAllSpecifications = record.records
+End Function
+
 Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As String) As DatabaseRecord
 ' Returns an table like array
     Dim record As DatabaseRecord
@@ -160,7 +171,7 @@ Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As St
     db.openDb path
     db.selectQry SQLstmt
     record.data = db.data
-    record.header = db.header
+    record.Header = db.Header
     record.rows = db.NumRows
     record.columns = db.NumColumns
     Set ExecuteSQLSelect = record
@@ -184,16 +195,15 @@ Private Sub ExecuteSQL(db As IDatabase, path As String, SQLstmt As String)
 End Sub
 
 Public Sub exampleSelect()
-  '----------------------------------------------'
-  Dim qry As Variant
-  Dim db As IDatabase
-  '----------------------------------------------'
-  Set db = Factory.CreateSQLiteDatabase
-  db.openDb SQLITE_PATH
-  db.selectQry "select * from standard_specifications " 'limit 100"  'faz o select na base de dados e printa as colunas do print'
-  '----------------------------------------------'
-  DbTest.Range(Cells(1, 1), Cells(1, db.NumColumns)).value = db.header 'cola cabecalho
-  DbTest.Range(Cells(2, 1), Cells(db.NumRows + 1, db.NumColumns)).value = db.data 'cola os dados
+    '----------------------------------------------'
+    Dim qry As Variant
+    Dim db As IDatabase
+    '----------------------------------------------'
+    Set db = Factory.CreateSQLiteDatabase
+    db.openDb SQLITE_PATH
+    db.selectQry "select * from standard_specifications " 'limit 100"  'faz o select na base de dados e printa as colunas do print'
+    '----------------------------------------------'
+    DbTest.Range(Cells(1, 1), Cells(1, db.NumColumns)).value = db.Header 'cola cabecalho
+    DbTest.Range(Cells(2, 1), Cells(db.NumRows + 1, db.NumColumns)).value = db.data 'cola os dados
   '----------------------------------------------'
 End Sub
-

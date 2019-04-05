@@ -3,7 +3,9 @@ Attribute VB_Name = "Tests"
 Sub AllTests()
     Logger.Log "----------- Starting Test Suite -----------------"
     Utils.UnloadAllForms
-    SpecManager.StopSpecManager
+    SpecManager.StartSpecManager
+    manager.InitializeTestSuite
+    Logger.LogEnabled True
     CreateTemplate_Test
     CreateSpecification_Test
     ViewSpecification_AfterCreate_Test
@@ -12,7 +14,9 @@ Sub AllTests()
     ViewSpecification_AfterEdit_Test
     ' Account Control
     ' TODO: This feature has not been implemented yet.
-    Logger.SaveLog "Tests"
+    manager.DeinitializeTestSuite
+    Utils.UnloadAllForms
+    Logger.SaveLog "tests"
     Logger.Log "----------- Test Suite Complete ------------------"
 End Sub
 
@@ -20,9 +24,9 @@ Sub CreateTemplate_Test()
     Logger.Log "------------- Start Create Template Test ---------"
     ' 1. Main menu button to create template
     'GuiCommands.GoToMain
-    SpecManager.StartSpecManager
+    SpecManager.RestartSpecManager
     ' 2. Enter a template name "test_template"
-    formNewTemplateInput.cboProductLine.value = "Protection"
+    formNewTemplateInput.cboProductLine.value = "Test"
     formNewTemplateInput.txtTemplateName.value = "test_template"
     ' 3. Click the Submit button
     formNewTemplateInput.Continue
@@ -35,14 +39,13 @@ Sub CreateTemplate_Test()
     ' 7. Report pass / fail
     ' TODO: I am not sure how to report on this other than a crash.
     ' 8. Go to main menu
-    SpecManager.StopSpecManager
     Logger.Log "------------- End Create Template Test ------------"
 End Sub
 
 Sub CreateSpecification_Test()
     Logger.Log "------------- Start Create Specification Test ---------"
     ' 1. Main menu button to  create specification
-    SpecManager.StartSpecManager
+    SpecManager.RestartSpecManager
     ' 2. Select a template type from the combo box "test_template"
     formNewSpecInput.cboSelectSpecificationType = "test_template"
     ' 3. Enter a material ID "test_specification"
@@ -60,14 +63,13 @@ Sub CreateSpecification_Test()
     ' 9. Report pass / fail
     ' TODO: No idea how to do this yet
     ' 10. Go to main menu
-    SpecManager.StopSpecManager
     Logger.Log "------------- End Create Specification Test ---------"
 End Sub
 
 Sub ViewSpecification_AfterCreate_Test()
     Logger.Log "------------- Start View Specification Test ---------"
     ' 1. Main menu button to view specifications
-    SpecManager.StartSpecManager
+    SpecManager.RestartSpecManager
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
     formViewSpecs.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -79,14 +81,13 @@ Sub ViewSpecification_AfterCreate_Test()
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
-    SpecManager.StopSpecManager
     Logger.Log "------------- End View Specification Test(1) --------"
 End Sub
 
 Sub EditTemplate_Test()
     Logger.Log "------------- Start Edit Template Test --------------"
     ' 1. Main menu button to edit template
-    SpecManager.StartSpecManager
+    SpecManager.RestartSpecManager
     ' 2. Select a template name from the combo box
     formEditTemplate.cboSelectTemplate = "test_template"
     ' 3. Click submit
@@ -108,14 +109,13 @@ Sub EditTemplate_Test()
     ' 11. Report pass / fail
     ' TODO:
     ' 12. Go to main menu
-    SpecManager.StopSpecManager
     Logger.Log "------------- End Edit Template Test ----------------"
 End Sub
 
 Sub EditSpecification_Test()
     Logger.Log "------------- Start Edit Specification Test ---------"
     ' 1. Main menu button to edit specification
-    SpecManager.StartSpecManager
+    SpecManager.RestartSpecManager
     ' 2. Enter a material ID txtSAPcode(?) = "test_specification"
     formSpecConfig.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -131,14 +131,13 @@ Sub EditSpecification_Test()
     ' 8. Report pass / fail
     ' TODO:
     ' 9. Go to main menu
-    SpecManager.StopSpecManager
     Logger.Log "------------- End Edit Specification Test -----------"
 End Sub
 
 Sub ViewSpecification_AfterEdit_Test()
     Logger.Log "------------- Start View Specification Test ---------"
     ' 1. Main menu button to view specifications
-    SpecManager.StartSpecManager
+    SpecManager.RestartSpecManager
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
     formViewSpecs.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -153,13 +152,11 @@ Sub ViewSpecification_AfterEdit_Test()
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(manager.current_spec)
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(manager.specs.Item("1.0"))
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecTemplate(manager.current_template)
-    SpecManager.StopSpecManager
     Logger.Log "------------- End View Specification Test(2) ---------"
 End Sub
 
 Sub AccessControl_Test()
     Logger.Log "------------- Start Access Control Test --------------"
-    SpecManager.StartSpecManager
-    SpecManager.StopSpecManager
+    SpecManager.RestartSpecManager
     Logger.Log "------------- End Access Control Test ----------------"
 End Sub

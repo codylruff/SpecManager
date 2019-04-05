@@ -27,6 +27,16 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboSelectSpecType
@@ -51,7 +61,7 @@ End Sub
 Private Sub cmdContinue_Click()
     If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
         Unload Me
-        formCreateSpec.Show
+        formCreateSpec.Show vbModeless
     Else
         MsgBox "Please enter a template type and specification name !"
         Exit Sub

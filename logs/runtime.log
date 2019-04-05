@@ -1,0 +1,91 @@
+03-Apr-2019 09:36:39.06 : ------------- Stopping Application -------------
+03-Apr-2019 09:36:39.07 : Saving : runtime.log
+03-Apr-2019 09:36:48.97 : ------------- Starting Application -------------
+03-Apr-2019 09:36:48.98 : Searching for user name . . . 
+03-Apr-2019 09:36:48.00 : -----------------------------------
+03-Apr-2019 09:36:49.02 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+03-Apr-2019 09:36:49.16 : Checking Row 1 . . . 
+03-Apr-2019 09:36:49.17 : Column 1 : Name, Row 1 : CRUFF
+03-Apr-2019 09:36:49.19 : Column 2 : Protection, Row 1 : 25
+03-Apr-2019 09:36:49.20 : Column 3 : Filtration, Row 1 : 25
+03-Apr-2019 09:36:49.22 : Column 4 : Chemical, Row 1 : 25
+03-Apr-2019 09:36:49.23 : Column 5 : Privledge_Level, Row 1 : 25
+03-Apr-2019 09:36:49.25 : Column 6 : Product_Line, Row 1 : Admin
+03-Apr-2019 09:36:49.27 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+03-Apr-2019 09:36:49.31 : --------- Start formEditTemplate ----------
+03-Apr-2019 09:36:49.33 : Get all template types . . . 
+03-Apr-2019 09:36:49.34 : -----------------------------------
+03-Apr-2019 09:36:49.35 : SELECT * FROM template_specifications
+03-Apr-2019 09:36:49.37 : Checking Row 1 . . . 
+03-Apr-2019 09:36:49.38 : Column 1 : Id, Row 1 : 1
+03-Apr-2019 09:36:49.40 : Column 2 : Spec_Type, Row 1 : style
+03-Apr-2019 09:36:49.41 : Column 3 : Time_Stamp, Row 1 : 
+03-Apr-2019 09:36:49.43 : Column 4 : Properties_Json, Row 1 : {"Dtex":"","Style":"","WeaveType":"","YarnType":"","Denier":"","MeanWarpCount":"","MinWarpCount":"","MaxWarpCount":"","MeanFillCount":"","MinFillCount":"","MaxFillCount":"","MeanDryWeight":"","MinDryWeight":"","MaxDryWeight":"","MeanConditionedWeight":"","MinConditionedWeight":"","MaxConditionedWeight":"","YarnFinish":"","YarnCode":"","MoistureRegain":"","Twisting":"","YarnColor":"","Notes":"","YarnMerge":""}
+03-Apr-2019 09:36:49.45 : Column 5 : Revision, Row 1 : 1
+03-Apr-2019 09:36:49.46 : Column 6 : Product_Line, Row 1 : Protection
+03-Apr-2019 09:36:49.48 : Checking Row 2 . . . 
+03-Apr-2019 09:36:49.49 : Column 1 : Id, Row 2 : 2
+03-Apr-2019 09:36:49.51 : Column 2 : Spec_Type, Row 2 : warping
+03-Apr-2019 09:36:49.52 : Column 3 : Time_Stamp, Row 2 : 
+03-Apr-2019 09:36:49.54 : Column 4 : Properties_Json, Row 2 : {"MaterialNumber":"","MaterialDescription":"","FinalWidthCm":"","NumberOfEnds":"","IsSWrapped":"","SpringColor":"","WarpingSpeed":"","BeamingSpeed":"","CrossWinding":"","DentsPerCm":"","EndsPerDent":"","Style":"","BeamWidth":"","YarnSupplier":"","YarnCode":"","K1":"","WarpingTension":"","K2":"","BeamingTension":"","Dtex":""}
+03-Apr-2019 09:36:49.55 : Column 5 : Revision, Row 2 : 1
+03-Apr-2019 09:36:49.57 : Column 6 : Product_Line, Row 2 : Protection
+03-Apr-2019 09:36:49.59 : Listing all template types (spec Types) . . . 
+03-Apr-2019 09:36:58.91 : --------- End formEditTemplate ----------
+03-Apr-2019 09:36:58.93 : ------------- Stopping Application -------------
+03-Apr-2019 09:36:58.94 : Saving : runtime.log
+03-Apr-2019 09:37:00.60 : ------------- Starting Application -------------
+03-Apr-2019 09:37:00.61 : Searching for user name . . . 
+03-Apr-2019 09:37:00.63 : -----------------------------------
+03-Apr-2019 09:37:00.64 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+03-Apr-2019 09:37:00.66 : Checking Row 1 . . . 
+03-Apr-2019 09:37:00.68 : Column 1 : Name, Row 1 : CRUFF
+03-Apr-2019 09:37:00.69 : Column 2 : Protection, Row 1 : 25
+03-Apr-2019 09:37:00.71 : Column 3 : Filtration, Row 1 : 25
+03-Apr-2019 09:37:00.72 : Column 4 : Chemical, Row 1 : 25
+03-Apr-2019 09:37:00.74 : Column 5 : Privledge_Level, Row 1 : 25
+03-Apr-2019 09:37:00.75 : Column 6 : Product_Line, Row 1 : Admin
+03-Apr-2019 09:37:00.77 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+03-Apr-2019 09:37:00.82 : --------- Start formViewSpecs ----------
+03-Apr-2019 09:37:10.97 : ------------- Restarting Application -----------
+03-Apr-2019 09:37:10.99 : Searching for user name . . . 
+03-Apr-2019 09:37:11.00 : -----------------------------------
+03-Apr-2019 09:37:11.02 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+03-Apr-2019 09:37:11.04 : Checking Row 1 . . . 
+03-Apr-2019 09:37:11.05 : Column 1 : Name, Row 1 : CRUFF
+03-Apr-2019 09:37:11.07 : Column 2 : Protection, Row 1 : 25
+03-Apr-2019 09:37:11.08 : Column 3 : Filtration, Row 1 : 25
+03-Apr-2019 09:37:11.10 : Column 4 : Chemical, Row 1 : 25
+03-Apr-2019 09:37:11.11 : Column 5 : Privledge_Level, Row 1 : 25
+03-Apr-2019 09:37:11.13 : Column 6 : Product_Line, Row 1 : Admin
+03-Apr-2019 09:37:11.14 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+03-Apr-2019 09:37:11.16 : Searching for 101HY specifications . . . 
+03-Apr-2019 09:37:11.18 : -----------------------------------
+03-Apr-2019 09:37:11.19 : SELECT * FROM  standard_specifications WHERE Material_Id= '101HY'
+03-Apr-2019 09:37:11.27 : Checking Row 1 . . . 
+03-Apr-2019 09:37:11.29 : Column 1 : Id, Row 1 : 91
+03-Apr-2019 09:37:11.30 : Column 2 : Material_Id, Row 1 : 101HY
+03-Apr-2019 09:37:11.32 : Column 3 : Time_Stamp, Row 1 : 2/8/2019 15:20
+03-Apr-2019 09:37:11.33 : Column 4 : Properties_Json, Row 1 : {"Dtex":3300,"Style":101,"WeaveType":"","YarnType":"Hyosung","Denier":3000,"MeanWarpCount":17,"MinWarpCount":16.24,"MaxWarpCount":17.76,"MeanFillCount":17,"MinFillCount":16.24,"MaxFillCount":17.76,"MeanDryWeight":13.16,"MinDryWeight":12.63,"MaxDryWeight":13.68,"MeanConditionedWeight":14.21,"MinConditionedWeight":13.64,"MaxConditionedWeight":14.78,"YarnFinish":"0.01","YarnCode":"FHY0AF1334002P0000","MoistureRegain":0.08,"Twisting":0,"YarnColor":"","Notes":"","YarnMerge":" AF1000"}
+03-Apr-2019 09:37:11.35 : Column 5 : Spec_Type, Row 1 : style
+03-Apr-2019 09:37:11.36 : Column 6 : Revision, Row 1 : 1.0
+03-Apr-2019 09:37:11.38 : Column 7 : Tolerances_Json, Row 1 : {"Dtex":"","Style":"","WeaveType":"","YarnType":"","Denier":"","MeanWarpCount":"","MinWarpCount":"","MaxWarpCount":"","MeanFillCount":"","MinFillCount":"","MaxFillCount":"","MeanDryWeight":"","MinDryWeight":"","MaxDryWeight":"","MeanConditionedWeight":"","MinConditionedWeight":"","MaxConditionedWeight":"","YarnFinish":"","YarnCode":"","MoistureRegain":"","Twisting":"","YarnColor":"","Notes":"","YarnMerge":""}
+03-Apr-2019 09:37:11.39 : Succesfully retrieved specifications for : 101HY
+03-Apr-2019 09:37:11.41 : Applying specifications for any template changes . . .
+03-Apr-2019 09:37:11.43 : Searching for style template . . . 
+03-Apr-2019 09:37:11.44 : -----------------------------------
+03-Apr-2019 09:37:11.46 : SELECT * FROM template_specifications WHERE Spec_Type= 'style'
+03-Apr-2019 09:37:11.47 : Succesfully retrieved template for : style
+03-Apr-2019 09:37:11.49 : Checking Row 1 . . . 
+03-Apr-2019 09:37:11.50 : Column 1 : Id, Row 1 : 1
+03-Apr-2019 09:37:11.52 : Column 2 : Spec_Type, Row 1 : style
+03-Apr-2019 09:37:11.54 : Column 3 : Time_Stamp, Row 1 : 
+03-Apr-2019 09:37:11.55 : Column 4 : Properties_Json, Row 1 : {"Dtex":"","Style":"","WeaveType":"","YarnType":"","Denier":"","MeanWarpCount":"","MinWarpCount":"","MaxWarpCount":"","MeanFillCount":"","MinFillCount":"","MaxFillCount":"","MeanDryWeight":"","MinDryWeight":"","MaxDryWeight":"","MeanConditionedWeight":"","MinConditionedWeight":"","MaxConditionedWeight":"","YarnFinish":"","YarnCode":"","MoistureRegain":"","Twisting":"","YarnColor":"","Notes":"","YarnMerge":""}
+03-Apr-2019 09:37:11.57 : Column 5 : Revision, Row 1 : 1
+03-Apr-2019 09:37:11.58 : Column 6 : Product_Line, Row 1 : Protection
+03-Apr-2019 09:37:11.60 : Printing Specification . . . 
+03-Apr-2019 09:37:17.56 : --------- End formViewSpecs ----------
+03-Apr-2019 09:37:17.57 : ------------- Stopping Application -------------
+03-Apr-2019 09:37:17.59 : Saving : runtime.log
+03-Apr-2019 09:37:22.54 : ------------- Stopping Application -------------
+03-Apr-2019 09:37:22.56 : Saving : runtime.log

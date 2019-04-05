@@ -19,12 +19,34 @@ Public warp_order As Warp
 
 Private Sub Class_Initialize()
     Set current_user = AccessControl.Account_Initialize
+    current_user.LoadUserJson
     Set current_spec = New Specification
     Set standard = New Specification
     Set specs = CreateObject("Scripting.Dictionary")
     Set console = New ConsoleBox
     Set current_template = New SpecTemplate
     Set warp_order = New Warp
+End Sub
+
+Public Sub ResetInteractiveObject()
+    Set current_spec = New Specification
+    Set standard = New Specification
+    Set specs = CreateObject("Scripting.Dictionary")
+    Set console = New ConsoleBox
+    Set current_template = New SpecTemplate
+    Set warp_order = New Warp
+End Sub
+
+Public Sub InitializeTestSuite()
+    Set current_user = New Account
+    current_user.Name = "TestSuite"
+    current_user.PrivledgeLevel = 25
+    current_user.ProductLine = "Admin"
+End Sub
+
+Public Sub DeinitializeTestSuite()
+    Me.ResetInteractiveObject
+    Set current_user = AccessControl.Account_Initialize
 End Sub
 
 Private Sub Class_Terminate()

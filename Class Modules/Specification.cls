@@ -56,6 +56,40 @@ Public Function TolerancesJson() As String
     TolerancesJson = JsonConverter.ConvertToJson(Me.Tolerances)
 End Function
 
+Public Function Header() As Variant
+    Dim arr() As String
+    Dim i As Long
+    Dim prop As Variant
+    Dim number_of_props As Long
+    number_of_props = Me.Properties.count + 2
+    ReDim arr(number_of_props)
+    arr(0) = "Material Id"
+    arr(2) = "Revision"
+    i = 2
+    For Each prop In Me.Properties
+        arr(i) = Utils.SplitCamelCase(CStr(prop))
+        i = i + 1
+    Next prop
+    Header = arr
+End Function
+
+Public Function ToArray() As Variant
+    Dim arr() As String
+    Dim i As Long
+    Dim prop As Variant
+    Dim number_of_props As Long
+    number_of_props = Me.Properties.count + 2
+    ReDim arr(number_of_props)
+    arr(0) = Me.MaterialId
+    arr(2) = Me.Revision
+    i = 2
+    For Each prop In Me.Properties
+        arr(i) = Properties.Item(prop)
+        i = i + 1
+    Next prop
+    ToArray = arr
+End Function
+
 ' Constructor
 Private Sub Class_Initialize()
     Set Properties = CreateObject("Scripting.Dictionary")

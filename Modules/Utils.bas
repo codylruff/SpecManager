@@ -70,7 +70,7 @@ Function GetLine(ParamArray var() As Variant) As String
     GetLine = s & vbNewLine
 End Function
 
-Function CreateNewSheet(shtName As String) As String
+Function CreateNewSheet(shtName As String) As Worksheet
 ' Creates a new worksheet with the given name
     Dim exists As Boolean, i As Integer
     With ThisWorkbook
@@ -84,7 +84,7 @@ Function CreateNewSheet(shtName As String) As String
         End If
         .Sheets.Add(After:=.Sheets(.Sheets.count)).Name = shtName
     End With
-    CreateNewSheet = shtName
+    Set CreateNewSheet = Sheets(shtName)
 End Function
 
 Function CheckForEmpties(frm) As Boolean
@@ -119,10 +119,10 @@ Sub UnloadAllForms(Optional dummyVariable As Byte)
     Next
 End Sub
 
-Sub UpdateTable(shtName As String, tblName As String, header As String, val)
+Sub UpdateTable(shtName As String, tblName As String, Header As String, val)
 'Adds an entry at the bottom of specified column header.
     Dim rng As Range
-    Set rng = Sheets(shtName).Range(tblName & "[" & header & "]")
+    Set rng = Sheets(shtName).Range(tblName & "[" & Header & "]")
     rng.End(xlDown).Offset(1, 0).value = val
 End Sub
 
@@ -148,5 +148,24 @@ Public Sub PrintSheet(sheet_name As String)
 ' Prints the sheet of the given name in the spec manager workbook
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Sheets(sheet_name)
+    SpecManager.StartSpecManager
+    If manager.current_user.Settings.Item("default_printer") = vbNullString Then
+        manager.current_user.Settings.Item("default_printer") = Module1.ChangeActivePrinter
+        manager.current_user.SaveUserJson
+    End If
+    ws.PrintOut ActivePrinter:=manager.current_user.Settings.Item("default_printer")
 End Sub
-    
+
+Public Function ArrayLength(arr As Variant) As Long
+    ArrayLength = UBound(arr) - LBound(arr) + 1
+End Function
+
+Sub ChangeActivePrinter()
+'
+' ChangeActivePrinter Macro
+'
+    Application.Dialogs(xlDialogPrinterSetup).Show
+    Logger.Log "Setting default printer for Spec Manager : " & Application.ActivePrinter
+    ChangeActivePrinter = Application.ActivePrinter
+'
+End Sub

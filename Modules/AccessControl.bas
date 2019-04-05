@@ -46,11 +46,15 @@ Public Sub ConfigControl()
         formPassword.Show
     Else
         Application.DisplayAlerts = True
-        shtDeveloper.Visible = xlSheetVisible
-        For Each w In Windows
-            If w.Parent.Name = WORKBOOK_NAME Then w.Visible = True
-        Next w
+        If Windows.count <> 1 Then
+            For Each w In Windows
+                If w.Parent.Name = WORKBOOK_NAME Then w.Visible = True
+            Next w
+        Else
+            Application.Visible = True
+        End If
         Application.VBE.MainWindow.Visible = True
+        shtDeveloper.Visible = xlSheetVisible
         Application.SendKeys ("^r")
     End If
 End Sub
@@ -60,11 +64,15 @@ Public Sub Open_Config(Password As String)
     Dim w As Window
     If Password = "@Wmp9296bm4ddw" Then
         Application.DisplayAlerts = True
-        shtDeveloper.Visible = xlSheetVisible
-        For Each w In Windows
-            If w.Parent.Name = WORKBOOK_NAME Then w.Visible = True
-        Next w
+        If Windows.count <> 1 Then
+            For Each w In Windows
+                If w.Parent.Name = WORKBOOK_NAME Then w.Visible = True
+            Next w
+        Else
+            Application.Visible = True
+        End If
         Application.VBE.MainWindow.Visible = True
+        shtDeveloper.Visible = xlSheetVisible
         Application.SendKeys ("^r")
         Unload formPassword
     Else

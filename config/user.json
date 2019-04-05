@@ -1,7 +1,8 @@
 {
     "name" : "CRuff",
-    "default_printer" : "U4A1",
+    "default_printer" : "",
     "app_version" : "1.0",
-    "last_spec_open" : "",
-    "log_level" : 2
+    "default_log_level" : 2,
+    "privledge_level" : "25",
+    "product_line" : "Admin"
 }

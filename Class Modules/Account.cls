@@ -11,12 +11,8 @@ Option Explicit
 
 Public PrivledgeLevel   As Long
 Public ProductLine      As String
-Public Protection       As Long
-Public Filtration       As Long
-Public Chemical         As Long
 Private Name_           As String
-Public LogLevel         As Long
-Public DefaultPrinter   As String
+Public Settings         As Object
 
 Public Property Let Name(value As String)
     Name_ = UCase(value)
@@ -36,23 +32,51 @@ Public Sub LoadUserJson()
 ' Advanced example: Read .json file and load into sheet (Windows-only)
 ' (add reference to Microsoft Scripting Runtime)
 
-  Dim FSO As New Object
+  Dim FSO As Object
   Dim JsonTS As Object
-  Dim JsonText As String
+  Dim jsonText As String
   Dim Parsed As Object
-  Set fso = CreateObject("Scripting.FileSystemObject")
+  Set FSO = CreateObject("Scripting.FileSystemObject")
   ' Read .json file
-  Set JsonTS = fso.OpenTextFile("user.json", ForReading)
-  JsonText = JsonTS.ReadAll
+  Set JsonTS = FSO.OpenTextFile(ThisWorkbook.path & "\config\user.json", 1)
+  jsonText = JsonTS.ReadAll
   JsonTS.Close
   ' Parse json to Dictionary
-  Set Parsed = JsonConverter.ParseJson(JsonText)
-  LogLevel = Parsed.Item("log_level")
-  DefaultPrinter = Parsed.Item("default_printer")
+  Set Parsed = JsonConverter.ParseJson(jsonText)
+  Set Settings = Parsed
 End Sub
 
 Public Sub SaveUserJson()
 ' Saves user configuration settings to user.json saved in the Spec Manager installation folder
+  Dim FSO As Object
+  Dim JsonTS As Object
+  Dim jsonText As String
 
+  Set FSO = CreateObject("Scripting.FileSystemObject")
 
+  Set JsonTS = FSO.OpenTextFile(ThisWorkbook.path & "\config\user.json", 2, True)
+  JsonTS.Write JsonConverter.ConvertToJson(Me.Settings, 2)
+  JsonTS.Close
+
+End Sub
+
+Private Sub CreateSettingsJson()
+    With Settings
+        .Add("name", Environ("Username"))
+        .Add("default_printer", vbNullString)
+        .Add("app_version", vbNullString)
+        .Add("default_log_level", vbNullString)
+        .Add("privledge_level", vbNullString)
+        .Add("product_line", vbNullString)
+    End With
+End Sub
+
+' Constructor
+Private Sub Class_Initialize()
+    Set Settings = CreateObject("Scripting.Dictionary")
+End Sub
+
+' Deconstructor
+    Private Sub Class_Terminate()
+    Set Settings = Nothing
 End Sub

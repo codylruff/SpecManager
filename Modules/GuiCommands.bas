@@ -7,18 +7,26 @@ Option Explicit
 ' through the GUI with exception
 ' of the import function.
 '=================================
-Public Sub InitializeApplication()
-    Logger.NotImplementedException
+Public Sub DeinitializeApplication()
+    SpecManager.StopSpecManager
+    If Application.VBE.MainWindow.Visible = True Then
+        Application.VBE.MainWindow.Visible = False
+    End If
+    If Application.DisplayAlerts = False Then
+        Application.DisplayAlerts = True
+    End If
 End Sub
+
+Public Sub InitializeApplication()
+    SpecManager.StartSpecManager
+    shtDeveloper.Visible = xlSheetVeryHidden
+    GoToMain
+End Sub
+
 
 Public Sub GoToMain()
 'Opens the main menu form.
-    SpecManager.StopSpecManager
-    Dim w As Window
-    For Each w In Windows
-        If w.Parent.Name = WORKBOOK_NAME Then w.Visible = False
-    Next w
-    formMainMenu.Show
+    formMainMenu.Show vbModeless
 End Sub
 
 Sub UnloadAllForms()
@@ -27,14 +35,13 @@ Sub UnloadAllForms()
     For Each objLoop In VBA.UserForms
         If TypeOf objLoop Is UserForm Then Unload objLoop
     Next objLoop
-    GoToMain
+
 End Sub
 
 Public Sub WarpingWsToDB()
-    SpecManager.StartSpecManager
+    SpecManager.RestartSpecManager
     Set manager.current_template = SpecManager.GetTemplate("warping")
     SpecManager.WorksheetToDatabase
-    SpecManager.StopSpecManager
 End Sub
 
 Public Sub ExportAll()
@@ -150,12 +157,21 @@ End Sub
 Public Sub ExitApp()
 'This exits the application after saving the thisworkbook.
     Dim w As Window
-    For Each w In Windows
-        If w.Parent.Name = WORKBOOK_NAME Then
-            w.Parent.Save
-            w.Parent.Close
+    SpecManager.StopSpecManager
+    If Windows.count > 1 Then
+        For Each w In Windows
+            If w.Parent.Name = WORKBOOK_NAME Then
+                w.Parent.Save
+                w.Parent.Close
+            End If
+        Next w
+        If Application.DisplayAlerts = False Then
+            Application.DisplayAlerts = True
         End If
-    Next w
+    Else
+        ThisWorkbook.Save
+        Application.Quit
+    End If
 End Sub
 
 Public Sub ClearForm(frm)
