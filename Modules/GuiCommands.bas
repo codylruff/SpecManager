@@ -214,7 +214,7 @@ Public Sub ConsoleBoxToPdf()
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=False
-    Logger.Log "PDF Saved"
+    Logger.Log "PDF Saved : " & fileName
     Exit Sub
     
 SaveFileError:
@@ -235,7 +235,7 @@ Public Sub ConsoleBoxToPdf_Test()
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=False
-    Logger.Log "PDF Saved"
+    Logger.Log "PDF Saved : " fileName
     Exit Sub
     
 SaveFileError:

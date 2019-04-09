@@ -1,8 +1,6 @@
-{
-    "name" : "CRuff",
+{"name" : "CRuff",
     "default_printer" : "",
     "app_version" : "1.0",
     "default_log_level" : 2,
     "privledge_level" : "25",
-    "product_line" : "Admin"
-}
+    "product_line" : "Admin"}
