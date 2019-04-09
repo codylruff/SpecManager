@@ -4,7 +4,7 @@ Public manager As App
 
 Public Sub StartSpecManager()
     Logger.Log "------------- Starting Application -------------"
-        Set manager = New App
+    Set manager = New App
 End Sub
 
 Public Sub RestartSpecManager()
@@ -20,6 +20,16 @@ Public Sub StopSpecManager()
     Logger.Log "------------- Stopping Application -------------"
     Logger.SaveLog
     Set manager = Nothing
+End Sub
+
+Public Sub CreateNewUpdateAlert()
+    Dim btn As Object
+    Updater.update_available = "True"
+    For Each btn In shtStart.Buttons
+        If btn.Name = "Button 4" Then
+            btn.Text = "Update Available"
+        End If
+    Next btn
 End Sub
 
 Public Sub LoadExistingTemplate(template_type As String)

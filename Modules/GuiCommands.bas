@@ -19,8 +19,20 @@ End Sub
 
 Public Sub InitializeApplication()
     SpecManager.StartSpecManager
+    If Updater.CheckForUpdates(current_user.Settings.Item("app_version")) <> APP_UP_TO_DATE Then
+        On Error Goto UpdateFailure
+        ' TODO: Find a way to force user confirmation of the update
+        ' calling Updater.InitializeUpdater directly from the excel gui.
+        ' Format create update notification.
+        SpecManager.CreateNewUpdateAlert
+        SpecManager.StartSpecManager
+    End If
     shtDeveloper.Visible = xlSheetVeryHidden
     GoToMain
+    Exit Sub
+UpdateFailure:
+    Logger.Log "Update failed"
+    MsgBox "Update Failed Contact Administrator!"
 End Sub
 
 
@@ -70,8 +82,11 @@ Public Sub ExportAll()
         lngNumberOfTasks, _
         "Creating a New Version...", _
         False)
-        
-    directory = GitRepo & "\"
+    If manager.current_user.Settings.Item("repo_path") = vbNullString Then    
+        directory = ThisWorkbook.Path & "\"
+    Else
+        directory = manager.current_user.Settings.Item("repo_path") & "\"
+    End If
     
     lngCounter = lngCounter + 1
     Call modProgress.ShowProgress( _
