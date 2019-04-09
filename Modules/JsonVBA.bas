@@ -1,4 +1,4 @@
-Attribute VB_Name = "JsonConverter"
+Attribute VB_Name = "JsonVBA"
 ''
 ' VBA-JSON v2.3.0
 ' (c) Tim Hall - https://github.com/VBA-tools/VBA-JSON
@@ -8,7 +8,7 @@ Attribute VB_Name = "JsonConverter"
 ' Errors:
 ' 10001 - JSON parse error
 '
-' @class JsonConverter
+' @class JsonVBA
 ' @author tim.hall.engr@gmail.com
 ' @license MIT (http://www.opensource.org/licenses/mit-license.php)
 '' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
@@ -147,7 +147,7 @@ Private Type json_Options
     ' See: http://support.microsoft.com/kb/269370
     '
     ' By default, VBA-JSON will use String for numbers longer than 15 characters that contain only digits
-    ' to override set `JsonConverter.JsonOptions.UseDoubleForLargeNumbers = True`
+    ' to override set `JsonVBA.JsonOptions.UseDoubleForLargeNumbers = True`
     UseDoubleForLargeNumbers As Boolean
 
     ' The JSON standard requires object keys to be quoted (" or '), use this option to allow unquoted keys
@@ -156,12 +156,54 @@ Private Type json_Options
     ' The solidus (/) is not required to be escaped, use this option to escape them as \/ in ConvertToJson
     EscapeSolidus As Boolean
 End Type
+
 Public JsonOptions As json_Options
 
 ' ============================================= '
 ' Public Methods
 ' ============================================= '
-
+''
+' Given a JSON file path and key, return the associated value (Variant)
+' this method is simplier if you only need a single value.
+'
+' @method GetJsonValue
+' @param {String} file_path
+' @param {String} key (points to a particular property in a JSON array)
+' @return {Variant} String or Number
+' @throws TODO: Add Error Description/Constant
+''
+Function GetJsonValue(ByVal file_path As String, ByVal key As String) As Variant
+    ' Extract the json object represented by the file and select a single value
+    GetJsonValue = JsonVBA.GetJsonObject(file_path).Item(key)
+    Exit Function
+ExceptionHandler:
+    GetJsonValue = vbNullString
+End Function
+''
+' Given a JSON file path, return a "JSON object" (Dictionary or Collection)
+' 
+' @method GetJsonObject
+' @param  {String} file_path
+' @return {JsonObject} (Dictionary or Collection)
+' @throws TODO: Add Error Description/Constant
+''
+Function GetJsonObject(ByVal file_path As String) As Object
+    Dim FSO As Object
+    Dim JsonTS As Object
+    Dim jsonText As String
+    Dim Parsed As Object
+    On Error Goto ExceptionHandler
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    ' Read .json file
+    Set JsonTS = FSO.OpenTextFile(file_path, 1)
+    jsonText = JsonTS.ReadAll
+    JsonTS.Close
+    ' Parse json to Dictionary
+    Set JsonVBA.GetJsonObject = JsonVBA.ParseJson(jsonText)
+    Exit Function
+ExceptionHandler:
+    Set JsonVBA.GetJsonObject = Nothing
+End Function
 ''
 ' Convert JSON string to object (Dictionary/Collection)
 '
@@ -185,7 +227,7 @@ Public Function ParseJson(ByVal JsonString As String) As Object
         Set ParseJson = json_ParseArray(JsonString, json_Index)
     Case Else
         ' Error: Invalid JSON string
-        Err.Raise 10001, "JSONConverter", json_ParseErrorMessage(JsonString, json_Index, "Expecting '{' or '['")
+        Err.Raise 10001, "JsonVBA", json_ParseErrorMessage(JsonString, json_Index, "Expecting '{' or '['")
     End Select
 End Function
 ''
@@ -465,7 +507,7 @@ Private Function json_ParseObject(json_String As String, ByRef json_Index As Lon
     Set json_ParseObject = CreateObject("Scripting.Dictionary")
     json_SkipSpaces json_String, json_Index
     If VBA.Mid$(json_String, json_Index, 1) <> "{" Then
-        Err.Raise 10001, "JSONConverter", json_ParseErrorMessage(json_String, json_Index, "Expecting '{'")
+        Err.Raise 10001, "JsonVBA", json_ParseErrorMessage(json_String, json_Index, "Expecting '{'")
     Else
         json_Index = json_Index + 1
 
@@ -495,7 +537,7 @@ Private Function json_ParseArray(json_String As String, ByRef json_Index As Long
 
     json_SkipSpaces json_String, json_Index
     If VBA.Mid$(json_String, json_Index, 1) <> "[" Then
-        Err.Raise 10001, "JSONConverter", json_ParseErrorMessage(json_String, json_Index, "Expecting '['")
+        Err.Raise 10001, "JsonVBA", json_ParseErrorMessage(json_String, json_Index, "Expecting '['")
     Else
         json_Index = json_Index + 1
 
@@ -536,7 +578,7 @@ Private Function json_ParseValue(json_String As String, ByRef json_Index As Long
         ElseIf VBA.InStr("+-0123456789", VBA.Mid$(json_String, json_Index, 1)) Then
             json_ParseValue = json_ParseNumber(json_String, json_Index)
         Else
-            Err.Raise 10001, "JSONConverter", json_ParseErrorMessage(json_String, json_Index, "Expecting 'STRING', 'NUMBER', null, true, false, '{', or '['")
+            Err.Raise 10001, "JsonVBA", json_ParseErrorMessage(json_String, json_Index, "Expecting 'STRING', 'NUMBER', null, true, false, '{', or '['")
         End If
     End Select
 End Function
@@ -650,13 +692,13 @@ Private Function json_ParseKey(json_String As String, ByRef json_Index As Long) 
             End If
         Loop
     Else
-        Err.Raise 10001, "JSONConverter", json_ParseErrorMessage(json_String, json_Index, "Expecting '""' or '''")
+        Err.Raise 10001, "JsonVBA", json_ParseErrorMessage(json_String, json_Index, "Expecting '""' or '''")
     End If
 
     ' Check for colon and skip if present or throw if not present
     json_SkipSpaces json_String, json_Index
     If VBA.Mid$(json_String, json_Index, 1) <> ":" Then
-        Err.Raise 10001, "JSONConverter", json_ParseErrorMessage(json_String, json_Index, "Expecting ':'")
+        Err.Raise 10001, "JsonVBA", json_ParseErrorMessage(json_String, json_Index, "Expecting ':'")
     Else
         json_Index = json_Index + 1
     End If

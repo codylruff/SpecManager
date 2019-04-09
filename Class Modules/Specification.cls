@@ -37,8 +37,8 @@ End Sub
 
 Public Sub JsonToObject(properties_json As String, tolerances_json As String, material_id As String, spec_type As String, Revision_ As String)
 ' Map json to the spec
-    Set Properties = JsonConverter.ParseJson(properties_json)
-    Set Tolerances = JsonConverter.ParseJson(tolerances_json)
+    Set Properties = JsonVBA.ParseJson(properties_json)
+    Set Tolerances = JsonVBA.ParseJson(tolerances_json)
     MaterialId = material_id
     SpecType = spec_type
     Revision = Revision_
@@ -49,11 +49,11 @@ End Sub
 
 Public Function PropertiesJson() As String
 ' Store spec Properties dictionary as json
-    PropertiesJson = JsonConverter.ConvertToJson(Properties)
+    PropertiesJson = JsonVBA.ConvertToJson(Properties)
 End Function
 
 Public Function TolerancesJson() As String
-    TolerancesJson = JsonConverter.ConvertToJson(Me.Tolerances)
+    TolerancesJson = JsonVBA.ConvertToJson(Me.Tolerances)
 End Function
 
 Public Function Header() As Variant

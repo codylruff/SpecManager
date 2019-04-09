@@ -42,7 +42,7 @@ Public Sub LoadUserJson()
   jsonText = JsonTS.ReadAll
   JsonTS.Close
   ' Parse json to Dictionary
-  Set Parsed = JsonConverter.ParseJson(jsonText)
+  Set Parsed = JsonVBA.ParseJson(jsonText)
   Set Settings = Parsed
 End Sub
 
@@ -55,7 +55,7 @@ Public Sub SaveUserJson()
   Set FSO = CreateObject("Scripting.FileSystemObject")
 
   Set JsonTS = FSO.OpenTextFile(ThisWorkbook.path & "\config\user.json", 2, True)
-  JsonTS.Write JsonConverter.ConvertToJson(Me.Settings, 2)
+  JsonTS.Write JsonVBA.ConvertToJson(Me.Settings, 2)
   JsonTS.Close
 
 End Sub

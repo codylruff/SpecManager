@@ -36,11 +36,11 @@ Public Sub RemoveProperty(property As String)
 End Sub
 
 Public Function PropertiesJson() As String
-    PropertiesJson = JsonConverter.ConvertToJson(Me.Properties)
+    PropertiesJson = JsonVBA.ConvertToJson(Me.Properties)
 End Function
 
 Public Sub JsonToObject(properties_json As String, spec_type As String, Revision_ As String, product_line As String)
-    Set Properties = JsonConverter.ParseJson(properties_json)
+    Set Properties = JsonVBA.ParseJson(properties_json)
     SpecType = spec_type
     Revision = Revision_
     ProductLine = product_line

@@ -7,13 +7,8 @@ Public Const LocalDir              As String = "W:\App Development\Spec Manager"
 Public Const SM_PATH               As String = "C:\Users\"
 Public Const SQLITE_PATH           As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
 Public Const GitBashExe            As String = "C:\Users\cruff\AppData\Local\Programs\Git\git-bash.exe"
-Public Const GitRepo               As String = "C:\Users\cruff\source\SM - Final"
 Public Const SlitterPath           As String = "S:\Public\04 Division - Filtration\Slitter set up parameters"
-Public Const WORKBOOK_NAME         As String = "Spec Manager (Test).xlsm"
 
-' APP SETUP DESCRIPTIONS:
-Public Const APP_UPDATE_AVAILABLE  As Long = 101
-Public Const APP_UP_TO_DATE        As Long = 100
 
 ' SPEC MANAGER ERROR DESCRIPTIONS:
 Public Const SM_SEARCH_SUCCESS     As Long = 0
