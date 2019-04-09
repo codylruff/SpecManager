@@ -68,6 +68,7 @@ Private Sub CreateSettingsJson()
         .Add("default_log_level", vbNullString)
         .Add("privledge_level", vbNullString)
         .Add("product_line", vbNullString)
+        .Add("repo_path", vbNullString)
     End With
 End Sub
 
