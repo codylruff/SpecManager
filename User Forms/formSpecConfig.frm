@@ -29,6 +29,17 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -55,8 +66,8 @@ End Sub
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification incremented the revision by +0.1
     Dim ret_val Long
-    manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 1) & ".0"
-    ret_val = SpecManager.SaveSpecification(manager.current_spec)
+    App.current_spec.Revision = CStr(CDbl(App.current_spec.Revision) + 1) & ".0"
+    ret_val = SpecManager.SaveSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Was Not Saved. Contact Admin."
@@ -69,7 +80,7 @@ End Sub
 Private Sub cmdSubmit_Click()
 ' This executes a set property command
 ' TODO: Change the name of this to cmdSetProperty
-    With manager.current_spec
+    With App.current_spec
         .Properties.Item(Utils.ConvertToCamelCase( _
                 cboSelectProperty.value)) = txtPropertyValue
         '.Revision = .Properties.Item("Revision")
@@ -78,7 +89,7 @@ Private Sub cmdSubmit_Click()
 End Sub
 
 Private Sub cmdSearch_Click()
-    Set manager.current_spec = manager.specs.Item(cboSelectRevision.value)
+    Set App.current_spec = App.specs.Item(cboSelectRevision.value)
     SpecManager.PrintSpecification Me
 End Sub
 
@@ -100,7 +111,7 @@ Private Sub PopulateCboSelectRevision()
         cboSelectRevision.RemoveItem 0
     Loop
     With cboSelectRevision
-        For Each rev In manager.specs
+        For Each rev In App.specs
             .AddItem rev
             .value = rev
         Next rev
@@ -115,7 +126,7 @@ Private Sub PopulateCboSelectProperty()
     Loop
     
     With cboSelectProperty
-        For Each prop In manager.current_spec.Properties
+        For Each prop In App.current_spec.Properties
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
@@ -158,8 +169,8 @@ End Sub
 Sub SaveChanges()
 ' Calls method to save a new specification incremented the revision by +0.1
     Dim ret_val As Long
-    manager.current_spec.Revision = CStr(CDbl(manager.current_spec.Revision) + 1) & ".0"
-    ret_val = SpecManager.SaveSpecification(manager.current_spec)
+    App.current_spec.Revision = CStr(CDbl(App.current_spec.Revision) + 1) & ".0"
+    ret_val = SpecManager.SaveSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         Logger.Log "New Specification Was Not Saved. Contact Admin."
@@ -172,7 +183,7 @@ End Sub
 Sub Submit()
 ' This executes a set property command
 ' TODO: Change the name of this to cmdSetProperty
-    With manager.current_spec
+    With App.current_spec
         .Properties.Item(Utils.ConvertToCamelCase( _
                 cboSelectProperty.value)) = txtPropertyValue
         '.Revision = .Properties.Item("Revision")
@@ -181,6 +192,6 @@ Sub Submit()
 End Sub
 
 Sub Search()
-    Set manager.current_spec = manager.specs.Item(cboSelectRevision.value)
+    Set App.current_spec = App.specs.Item(cboSelectRevision.value)
     SpecManager.PrintSpecification Me
 End Sub

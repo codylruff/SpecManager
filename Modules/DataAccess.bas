@@ -52,7 +52,7 @@ Function GetSpecificationRecords(ByRef MaterialId As String) As DatabaseRecord
                      Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
 End Function
 
-Function PushTemplate(ByRef template As SpecTemplate)
+Function PushTemplate(ByRef template As SpecificationTemplate)
 ' Push new template record
     Dim SQLstmt As String
     On Error GoTo DbPushFailException
@@ -72,7 +72,7 @@ DbPushFailException:
     PushTemplate = DB_PUSH_FAILURE
 End Function
 
-Function UpdateTemplate(ByRef template As SpecTemplate)
+Function UpdateTemplate(ByRef template As SpecificationTemplate)
 ' Push new template record
     Dim SQLstmt As String
     On Error GoTo DbPushFailException
@@ -112,7 +112,7 @@ DbPushFailException:
     PushSpec = DB_PUSH_FAILURE
 End Function
 
-Function DeleteTemplate(ByRef template As SpecTemplate) As Long
+Function DeleteTemplate(ByRef template As SpecificationTemplate) As Long
 ' Deletes a record
     Dim SQLstmt As String
     On Error GoTo DbDeleteFailException
@@ -150,7 +150,7 @@ Function GetTemplateTypes() As DatabaseRecord
     Set GetTemplateTypes = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
 End Function
 
-Function SelectAllSpecifications(spec_type As String) As Collection
+Function SelectAllSpecifications(spec_type As String) As VBA.Collection
     Dim SQLstmt As String
     Dim record As DatabaseRecord
     ' build the sql query

@@ -29,11 +29,22 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private Sub cmdAddProperty_Click()
     ' This executes an add property command
-    With manager.current_template
+    With App.current_template
         .AddProperty Utils.ConvertToCamelCase(txtPropertyName.value)
     End With
     SpecManager.PrintTemplate Me
@@ -45,14 +56,14 @@ Private Sub cmdClear_Click()
 End Sub
 
 Private Sub cmdRemoveProperty_Click()
-    manager.current_template.RemoveProperty Utils.ConvertToCamelCase(cboSelectProperty.value)
+    App.current_template.RemoveProperty Utils.ConvertToCamelCase(cboSelectProperty.value)
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
 
 Sub AddProperty()
     ' This executes an add property command
-    With manager.current_template
+    With App.current_template
         .AddProperty Utils.ConvertToCamelCase(txtPropertyName.value)
     End With
     SpecManager.PrintTemplate Me
@@ -60,7 +71,7 @@ Sub AddProperty()
 End Sub
 
 Sub RemoveProperty()
-    manager.current_template.RemoveProperty Utils.ConvertToCamelCase(cboSelectProperty.value)
+    App.current_template.RemoveProperty Utils.ConvertToCamelCase(cboSelectProperty.value)
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
@@ -68,7 +79,7 @@ End Sub
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
     PopulateCboSelectTemplate
-    Set manager.console = Factory.CreateConsoleBox(Me)
+    Set App.console = Factory.CreateConsoleBox(Me)
 End Sub
 
 Private Sub cmdSearchTemplates_Click()
@@ -85,8 +96,8 @@ End Sub
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification incremented the revision by +0.1
     Dim ret_val As Long
-    manager.current_template.Revision = CStr(CDbl(manager.current_template.Revision) + 1) & ".0"
-    ret_val = SpecManager.UpdateSpecTemplate(manager.current_template)
+    App.current_template.Revision = CStr(CDbl(App.current_template.Revision) + 1) & ".0"
+    ret_val = SpecManager.UpdateSpecificationTemplate(App.current_template)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         MsgBox "Template Was Not Saved. Contact Admin."
@@ -114,7 +125,7 @@ Private Sub PopulateCboSelectProperty()
     Loop
     
     With cboSelectProperty
-        For Each prop In manager.current_template.Properties
+        For Each prop In App.current_template.Properties
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
@@ -123,7 +134,7 @@ Private Sub PopulateCboSelectProperty()
 End Sub
 
 Private Sub PopulateCboSelectTemplate()
-    Dim coll As Collection
+    Dim coll As VBA.Collection
     Dim template_type As Variant
     Set coll = SpecManager.ListAllTemplateTypes
     With cboSelectTemplate
@@ -159,8 +170,8 @@ End Sub
 Sub SaveChanges()
 ' Calls method to save a new specification incremented the revision by +0.1
     Dim ret_val As Long
-    manager.current_template.Revision = CStr(CDbl(manager.current_template.Revision) + 1) & ".0"
-    ret_val = SpecManager.UpdateSpecTemplate(manager.current_template)
+    App.current_template.Revision = CStr(CDbl(App.current_template.Revision) + 1) & ".0"
+    ret_val = SpecManager.UpdateSpecificationTemplate(App.current_template)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Edit Template Fail"

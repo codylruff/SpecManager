@@ -29,6 +29,17 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private template_name As String
@@ -45,23 +56,23 @@ End Sub
 
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
-    lblTemplateName = manager.current_template.SpecType
-    Set manager.console = Factory.CreateConsoleBox(Me)
+    lblTemplateName = App.current_template.SpecType
+    Set App.console = Factory.CreateConsoleBox(Me)
 End Sub
 
 Private Sub cmdAddProperty_Click()
-   manager.console.PrintLine Me.txtPropertyName
-   manager.current_template.AddProperty Utils.ConvertToCamelCase(CStr(Me.txtPropertyName))
+   App.console.PrintLine Me.txtPropertyName
+   App.current_template.AddProperty Utils.ConvertToCamelCase(CStr(Me.txtPropertyName))
 End Sub
 
 Sub AddProperty()
-   manager.console.PrintLine Me.txtPropertyName
-   manager.current_template.AddProperty Utils.ConvertToCamelCase(CStr(Me.txtPropertyName))
+   App.console.PrintLine Me.txtPropertyName
+   App.current_template.AddProperty Utils.ConvertToCamelCase(CStr(Me.txtPropertyName))
 End Sub
 
 Private Sub cmdSubmitTemplate_Click()
     Dim ret_val As Long
-    ret_val = SpecManager.SaveSpecTemplate(manager.current_template)
+    ret_val = SpecManager.SaveSpecificationTemplate(App.current_template)
    If ret_val <> DB_PUSH_SUCCESS Then
       Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Was Not Saved. Contact Admin."
@@ -73,7 +84,7 @@ End Sub
 
 Sub SubmitTemplate()
     Dim ret_val As Long
-    ret_val = SpecManager.SaveSpecTemplate(manager.current_template)
+    ret_val = SpecManager.SaveSpecificationTemplate(App.current_template)
    If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Create Template Fail"

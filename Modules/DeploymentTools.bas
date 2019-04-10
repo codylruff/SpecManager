@@ -1,3 +1,6 @@
+Attribute VB_Name = "DeploymentTools"
+Option Explicit
+
 Public Sub DeployNewProductionVersion()
 ' Runs through all the steps necessary to properly deploy a new version of an app
 ' to a the AutoUpdater (AU) directory where files can be imported into all production
@@ -18,7 +21,7 @@ Private Function CreateInclude_Json() As Long
     Set vb_components = ActiveWorkbook.VBProject.VBComponents
     Set include_dict = CreateObject("Scripting.Dictionary")
     For Each component In vb_components
-        include_dict.Add component.Name, component.Name & "." & Type(component) '<--- Is this how to get the file extension???
+        include_dict.Add component.Name, component.Name & ToFileExtension(component.Type)
     Next component
     ' No Errors
     CreateInclude_Json = 0

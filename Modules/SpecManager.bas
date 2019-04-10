@@ -1,39 +1,25 @@
 Attribute VB_Name = "SpecManager"
-' This object allows information to persist throughout the Application lifecycle
-Public manager As App
 
-Public Sub StartSpecManager()
-    Logger.Log "------------- Starting Application -------------"
-    Set manager = New App
+Public Sub StartApp()
+    Logger.Trace "Starting Application"
+    App.Start
 End Sub
 
-Public Sub RestartSpecManager()
-    Logger.Log "------------- Restarting Application -----------"
-    If manager Is Nothing Then
-        Set manager = New App
-    Else
-        manager.ResetInteractiveObject
-    End If
+Public Sub RestartApp()
+    Logger.Trace "Restarting Application"
+    App.ResetInteractiveObject
 End Sub
 
-Public Sub StopSpecManager()
-    Logger.Log "------------- Stopping Application -------------"
+Public Sub StopApp()
+    Logger.Trace "Stopping Application"
     Logger.SaveLog
-    Set manager = Nothing
+    App.Shutdown
 End Sub
 
-Public Sub CreateNewUpdateAlert()
-    Dim btn As Object
-    Updater.update_available = "True"
-    For Each btn In shtStart.Buttons
-        If btn.Name = "Button 4" Then
-            btn.Text = "Update Available"
-        End If
-    Next btn
-End Sub
+
 
 Public Sub LoadExistingTemplate(template_type As String)
-    With manager
+    With App
         Set .current_template = SpecManager.GetTemplate(template_type)
         .current_template.SpecType = template_type
     End With
@@ -43,7 +29,7 @@ End Sub
 Function NewSpecificationInput(template_type As String, spec_name As String) As String
     If template_type <> vbNullString Then
         LoadExistingTemplate template_type
-        With manager
+        With App
         Set .current_spec = New Specification
         .current_spec.SpecType = .current_template.SpecType
         .current_spec.Revision = "1.0"
@@ -56,7 +42,7 @@ Function NewSpecificationInput(template_type As String, spec_name As String) As 
 End Function
 
 Function TemplateInput(template_type As String) As String
-    Set manager.current_template = Factory.CreateNewTemplate(template_type)
+    Set App.current_template = Factory.CreateNewTemplate(template_type)
     TemplateInput = template_type
 End Function
 
@@ -79,11 +65,11 @@ Function SearchForSpecifications(material_id As String) As Long
         Logger.Log "Could not find a standard for : " & material_id
         SearchForSpecifications = SM_SEARCH_FAILURE
     Else
-        Set manager.specs = specs_dict
-        Set manager.current_spec = SelectLatestSpec()
+        Set App.specs = specs_dict
+        Set App.current_spec = SelectLatestSpec()
         Set coll = New Collection
-        For Each key In manager.specs
-            coll.Add manager.specs.Item(key)
+        For Each key In App.specs
+            coll.Add App.specs.Item(key)
         Next key
         Logger.Log "Succesfully retrieved specifications for : " & material_id
         SpecManager.UpdateTemplateChanges coll
@@ -91,7 +77,7 @@ Function SearchForSpecifications(material_id As String) As Long
     End If
 End Function
 
-Function GetTemplate(template_type As String) As SpecTemplate
+Function GetTemplate(template_type As String) As SpecificationTemplate
     Dim record As DatabaseRecord
     Set record = DataAccess.GetTemplateRecord(template_type)
     If Not record Is Nothing Then
@@ -124,29 +110,29 @@ Sub UpdateTemplateChanges(specifications As Collection)
     ' happened since the previous template was changed.
     Dim key As Variant
     Dim spec As Specification
-    Dim template As SpecTemplate
+    Dim template As SpecificationTemplate
     Logger.Log "Applying specifications for any template changes . . ."
-    Set manager.current_template = GetTemplate(manager.current_spec.SpecType)
-    For Each key In manager.current_template.Properties
-        If Not manager.current_spec.Properties.exists(key) Then
+    Set App.current_template = GetTemplate(App.current_spec.SpecType)
+    For Each key In App.current_template.Properties
+        If Not App.current_spec.Properties.exists(key) Then
             Logger.Log "Adding : " & key & " to specification properties list."
             For Each spec In specifications
                 spec.Properties.Add key:=key, Item:=vbNullString
             Next spec
         End If
     Next key
-    For Each key In manager.current_spec.Properties
-        If Not manager.current_template.Properties.exists(key) Then
+    For Each key In App.current_spec.Properties
+        If Not App.current_template.Properties.exists(key) Then
             For Each spec In specifications
             Logger.Log "Removing : " & key & " from specification properties list."
                 spec.Properties.Remove key
             Next spec
         End If
     Next key
-    For Each key In manager.specs
+    For Each key In App.specs
         For Each spec In specifications
             If spec.Revision = key Then
-                Set manager.specs.Item(key) = spec
+                Set App.specs.Item(key) = spec
             End If
         Next spec
     Next key
@@ -185,50 +171,50 @@ End Function
 
 Sub PrintSpecification(frm As MSForms.UserForm)
     Logger.Log "Printing Specification . . . "
-    Set manager.console = Factory.CreateConsoleBox(frm)
-    manager.console.PrintObject manager.current_spec
+    Set App.console = Factory.CreateConsoleBox(frm)
+    App.console.PrintObject App.current_spec
 End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
     Logger.Log "Printing Template . . . "
-    Set manager.console = Factory.CreateConsoleBox(frm)
-    manager.console.PrintObject manager.current_template
+    Set App.console = Factory.CreateConsoleBox(frm)
+    App.console.PrintObject App.current_template
 End Sub
 
 Function SaveSpecification(spec As Specification) As Long
-    If manager.current_user.ProductLine = manager.current_template.ProductLine Or manager.current_user.ProductLine = "Admin" Then
+    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
         SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
         SaveSpecification = DB_PUSH_DENIED
     End If
 End Function
 
-Function SaveSpecTemplate(template As SpecTemplate) As Long
-    If manager.current_user.ProductLine = manager.current_template.ProductLine Or manager.current_user.ProductLine = "Admin" Then
-        SaveSpecTemplate = IIf(DataAccess.PushTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+Function SaveSpecificationTemplate(template As SpecificationTemplate) As Long
+    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
+        SaveSpecificationTemplate = IIf(DataAccess.PushTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
-        SaveSpecTemplate = DB_PUSH_DENIED
+        SaveSpecificationTemplate = DB_PUSH_DENIED
     End If
 End Function
 
-Function UpdateSpecTemplate(template As SpecTemplate) As Long
-    If manager.current_user.ProductLine = manager.current_template.ProductLine Or manager.current_user.ProductLine = "Admin" Then
-        UpdateSpecTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+Function UpdateSpecificationTemplate(template As SpecificationTemplate) As Long
+    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
+        UpdateSpecificationTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
-        UpdateSpecTemplate = DB_PUSH_DENIED
+        UpdateSpecificationTemplate = DB_PUSH_DENIED
     End If
 End Function
 
-Function DeleteSpecTemplate(template As SpecTemplate) As Long
-    If manager.current_user.PrivledgeLevel = USER_ADMIN Then
-        DeleteSpecTemplate = IIf(DataAccess.DeleteTemplate(template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+Function DeleteSpecificationTemplate(template As SpecificationTemplate) As Long
+    If App.current_user.PrivledgeLevel = USER_ADMIN Then
+        DeleteSpecificationTemplate = IIf(DataAccess.DeleteTemplate(template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
     Else
-        DeleteSpecTemplate = DB_DELETE_DENIED
+        DeleteSpecificationTemplate = DB_DELETE_DENIED
     End If
 End Function
 
 Function DeleteSpecification(spec As Specification) As Long
-    If manager.current_user.PrivledgeLevel = USER_ADMIN Then
+    If App.current_user.PrivledgeLevel = USER_ADMIN Then
         DeleteSpecification = IIf(DataAccess.DeleteSpec(spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
     Else
         DeleteSpecification = DB_DELETE_DENIED
@@ -259,16 +245,16 @@ End Function
 
 Function SelectLatestSpec() As Specification
     Dim key As Variant
-    For Each key In manager.specs
-        If manager.specs.Item(key).IsLatest = True Then
-            Set SelectLatestSpec = manager.specs.Item(key)
+    For Each key In App.specs
+        If App.specs.Item(key).IsLatest = True Then
+            Set SelectLatestSpec = App.specs.Item(key)
         End If
     Next key
 End Function
 
 Function InitializeNewSpecification()
-    With manager
-        Set manager.current_spec = New Specification
+    With App
+        Set App.current_spec = New Specification
         .current_spec.SpecType = .current_template.SpecType
         .current_spec.Revision = "1.0"
         Set .current_spec.Properties = .current_template.Properties
@@ -283,24 +269,24 @@ Sub WorksheetToDatabase()
     Dim number_props As Integer
     Dim property As String
     
-    With manager
-    Set ws = ActiveWorkbook.Sheets(.current_template.SpecType & " Upload")
-    last_row = ws.Range("A1").End(xlDown).Row
-    number_props = .current_template.Properties.count
-    For i = 2 To last_row
-        InitializeNewSpecification
-        Logger.Log CStr(number_props)
-        For j = 1 To number_props
-        property = Utils.ConvertToCamelCase(CStr(ws.Cells(1, j).value))
-        Logger.Log "Column " & j & ": " & property & ", Row " & i & ": " & CStr(ws.Cells(i, j).value)
-        .current_spec.Properties.Item(property) = ws.Cells(i, j).value
-        If property = "MaterialNumber" Then
-            .current_spec.MaterialId = ws.Cells(i, j).value
-        End If
-        Next j
-        Logger.Log "DataAccess returned : " & SaveSpecification(.current_spec)
-        Set .current_spec = Nothing
-    Next i
+    With App
+        Set ws = ActiveWorkbook.Sheets(.current_template.SpecType & " Upload")
+        last_row = ws.Range("A1").End(xlDown).Row
+        number_props = .current_template.Properties.count
+        For i = 2 To last_row
+            InitializeNewSpecification
+            Logger.Log CStr(number_props)
+            For j = 1 To number_props
+            property = Utils.ConvertToCamelCase(CStr(ws.Cells(1, j).value))
+            Logger.Log "Column " & j & ": " & property & ", Row " & i & ": " & CStr(ws.Cells(i, j).value)
+            .current_spec.Properties.Item(property) = ws.Cells(i, j).value
+            If property = "MaterialNumber" Then
+                .current_spec.MaterialId = ws.Cells(i, j).value
+            End If
+            Next j
+            Logger.Log "DataAccess returned : " & SaveSpecification(.current_spec)
+            Set .current_spec = Nothing
+        Next i
     End With
 End Sub
 
@@ -317,9 +303,9 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Set dicts = DataAccess.SelectAllSpecifications(spec_type)
     i = 2
     For Each dict In dicts
-        Set manager.current_spec = Factory.CreateSpecFromDict(dict)
-        props = manager.current_spec.ToArray
-        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).value = manager.current_spec.Header
+        Set App.current_spec = Factory.CreateSpecFromDict(dict)
+        props = App.current_spec.ToArray
+        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).value = App.current_spec.Header
         ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).value = props
         i = i + 1
     Next dict

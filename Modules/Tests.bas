@@ -3,8 +3,8 @@ Attribute VB_Name = "Tests"
 Sub AllTests()
     Logger.Log "----------- Starting Test Suite -----------------"
     Utils.UnloadAllForms
-    SpecManager.StartSpecManager
-    manager.InitializeTestSuite
+    SpecManager.StartApp
+    App.InitializeTestSuite
     Logger.LogEnabled True
     CreateTemplate_Test
     CreateSpecification_Test
@@ -14,7 +14,7 @@ Sub AllTests()
     ViewSpecification_AfterEdit_Test
     ' Account Control
     ' TODO: This feature has not been implemented yet.
-    manager.DeinitializeTestSuite
+    App.DeinitializeTestSuite
     Utils.UnloadAllForms
     Logger.SaveLog "tests"
     Logger.Log "----------- Test Suite Complete ------------------"
@@ -24,7 +24,7 @@ Sub CreateTemplate_Test()
     Logger.Log "------------- Start Create Template Test ---------"
     ' 1. Main menu button to create template
     'GuiCommands.GoToMain
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     ' 2. Enter a template name "test_template"
     formNewTemplateInput.cboProductLine.value = "Test"
     formNewTemplateInput.txtTemplateName.value = "test_template"
@@ -45,7 +45,7 @@ End Sub
 Sub CreateSpecification_Test()
     Logger.Log "------------- Start Create Specification Test ---------"
     ' 1. Main menu button to  create specification
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     ' 2. Select a template type from the combo box "test_template"
     formNewSpecInput.cboSelectSpecificationType = "test_template"
     ' 3. Enter a material ID "test_specification"
@@ -69,7 +69,7 @@ End Sub
 Sub ViewSpecification_AfterCreate_Test()
     Logger.Log "------------- Start View Specification Test ---------"
     ' 1. Main menu button to view specifications
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
     formViewSpecs.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -87,7 +87,7 @@ End Sub
 Sub EditTemplate_Test()
     Logger.Log "------------- Start Edit Template Test --------------"
     ' 1. Main menu button to edit template
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     ' 2. Select a template name from the combo box
     formEditTemplate.cboSelectTemplate = "test_template"
     ' 3. Click submit
@@ -115,7 +115,7 @@ End Sub
 Sub EditSpecification_Test()
     Logger.Log "------------- Start Edit Specification Test ---------"
     ' 1. Main menu button to edit specification
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     ' 2. Enter a material ID txtSAPcode(?) = "test_specification"
     formSpecConfig.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -137,7 +137,7 @@ End Sub
 Sub ViewSpecification_AfterEdit_Test()
     Logger.Log "------------- Start View Specification Test ---------"
     ' 1. Main menu button to view specifications
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
     formViewSpecs.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -149,14 +149,14 @@ Sub ViewSpecification_AfterEdit_Test()
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(manager.current_spec)
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(manager.specs.Item("1.0"))
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecTemplate(manager.current_template)
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec)
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.Item("1.0"))
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_template)
     Logger.Log "------------- End View Specification Test(2) ---------"
 End Sub
 
 Sub AccessControl_Test()
     Logger.Log "------------- Start Access Control Test --------------"
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     Logger.Log "------------- End Access Control Test ----------------"
 End Sub

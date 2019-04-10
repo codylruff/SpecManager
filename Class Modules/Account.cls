@@ -29,35 +29,19 @@ Public Function ToString() As String
 End Function
 
 Public Sub LoadUserJson()
-' Advanced example: Read .json file and load into sheet (Windows-only)
-' (add reference to Microsoft Scripting Runtime)
+' Advanced example: Read .json file and load into a dictionary
+  Set Settings = JsonVBA.GetJsonObject(ThisWorkbook.path & "\config\user.json")
+  App.version = Settings.Item("app_version")
+End Sub
 
-  Dim FSO As Object
-  Dim JsonTS As Object
-  Dim jsonText As String
-  Dim Parsed As Object
-  Set FSO = CreateObject("Scripting.FileSystemObject")
-  ' Read .json file
-  Set JsonTS = FSO.OpenTextFile(ThisWorkbook.path & "\config\user.json", 1)
-  jsonText = JsonTS.ReadAll
-  JsonTS.Close
-  ' Parse json to Dictionary
-  Set Parsed = JsonVBA.ParseJson(jsonText)
-  Set Settings = Parsed
+Public Sub ChangeSetting(setting As String, new_value As Variant)
+    Settings.Item(setting) = new_value
+    SaveUserJson
 End Sub
 
 Public Sub SaveUserJson()
 ' Saves user configuration settings to user.json saved in the Spec Manager installation folder
-  Dim FSO As Object
-  Dim JsonTS As Object
-  Dim jsonText As String
-
-  Set FSO = CreateObject("Scripting.FileSystemObject")
-
-  Set JsonTS = FSO.OpenTextFile(ThisWorkbook.path & "\config\user.json", 2, True)
-  JsonTS.Write JsonVBA.ConvertToJson(Me.Settings, 2)
-  JsonTS.Close
-
+    JsonVBA.WriteJsonObject(ThisWorkbook.path & "\config\user.json", Me.Settings)
 End Sub
 
 Private Sub CreateSettingsJson()

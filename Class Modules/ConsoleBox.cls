@@ -20,12 +20,12 @@ Option Explicit
 'CLASS VARIABLES
 '----------------
 Private FormId_         As MSForms.UserForm
-Private OutputHistory_  As Collection
+Private OutputHistory_  As VBA.Collection
 '------------
 ' AUTO-PROPERTIES
 '------------
-Public Property Set OutputHistory(value As Collection): Set OutputHistory_ = value: End Property
-Public Property Get OutputHistory() As Collection: Set OutputHistory = OutputHistory_: End Property
+Public Property Set OutputHistory(value As VBA.Collection): Set OutputHistory_ = value: End Property
+Public Property Get OutputHistory() As VBA.Collection: Set OutputHistory = OutputHistory_: End Property
 Public Property Set FormId(value As MSForms.UserForm): Set FormId_ = value: End Property
 Public Property Get FormId() As MSForms.UserForm: Set FormId = FormId_: End Property
 Public Property Get CurrentText() As String
@@ -86,7 +86,7 @@ End Sub
 
 Private Sub Class_Initialize()
 ' Constructor
-    Set OutputHistory = New Collection
+    Set OutputHistory = New VBA.Collection
 End Sub
 
 

@@ -28,6 +28,11 @@ Public Sub Log(text As String)
     End If
 End Sub
 
+Public Sub Trace(text As String)
+' Used to signify a transition point in the application log
+    Log "------------- " & text
+End Sub
+
 Public Sub NotImplementedException()
     Logger.Log "Not Implemented Exception!"
 End Sub
@@ -55,3 +60,5 @@ Private Function TimeInMS() As String
     TimeInMS = Strings.Format(Now, "dd-MMM-yyyy HH:nn:ss") & "." & _
                Strings.Right(Strings.Format(Timer, "#0.00"), 2)
 End Function
+
+

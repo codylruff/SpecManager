@@ -29,14 +29,25 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
-    With manager
+    With App
         'Set .current_template = SpecManager.GetTemplate(cboSelectSpecificationType.value)
         '.current_template.SpecType = cboSelectSpecificationType.value
-        ' Set manager.current_spec = New Specification
+        ' Set App.current_spec = New Specification
         ' .current_spec.SpecType = .current_template.SpecType
         ' .current_spec.Revision = 0#
 '        .current_template.Properties.Item(Utils.ConvertToCamelCase( _
@@ -62,7 +73,7 @@ End Sub
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification revision x.0)
     Dim ret_val As Long
-    ret_val = SpecManager.SaveSpecification(manager.current_spec)
+    ret_val = SpecManager.SaveSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Was Not Saved. Contact Admin."
@@ -74,7 +85,7 @@ End Sub
 
 Private Sub cmdSetProperty_Click()
 ' This executes a set property command
-    With manager.current_spec
+    With App.current_spec
         .Properties.Item(Utils.ConvertToCamelCase( _
                 cboSelectProperty.value)) = txtPropertyValue
     End With
@@ -88,7 +99,7 @@ Private Sub PopulateCboSelectProperty()
         cboSelectProperty.RemoveItem 0
     Loop
     With cboSelectProperty
-        For Each prop In manager.current_spec.Properties
+        For Each prop In App.current_spec.Properties
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
@@ -100,10 +111,6 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
     If CloseMode = 0 Then
         Cancel = True
     End If
-End Sub
-
-Private Sub UserForm_Terminate()
-    Set manager = Nothing
 End Sub
 
 Sub Back()
@@ -118,7 +125,7 @@ End Sub
 Sub SaveChanges()
 ' Calls method to save a new specification revision x.0)
     Dim ret_val As Long
-    ret_val = SpecManager.SaveSpecification(manager.current_spec)
+    ret_val = SpecManager.SaveSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Create Spec Fail"
@@ -130,7 +137,7 @@ End Sub
 
 Sub SetProperty()
 ' This executes a set property command
-    With manager.current_spec
+    With App.current_spec
         .Properties.Item(Utils.ConvertToCamelCase( _
                 cboSelectProperty.value)) = txtPropertyValue
     End With

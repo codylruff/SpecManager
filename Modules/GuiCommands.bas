@@ -8,7 +8,7 @@ Option Explicit
 ' of the import function.
 '=================================
 Public Sub DeinitializeApplication()
-    SpecManager.StopSpecManager
+    SpecManager.StopApp
     If Application.VBE.MainWindow.Visible = True Then
         Application.VBE.MainWindow.Visible = False
     End If
@@ -18,15 +18,24 @@ Public Sub DeinitializeApplication()
 End Sub
 
 Public Sub InitializeApplication()
-    SpecManager.StartSpecManager
-    If Updater.CheckForUpdates(current_user.Settings.Item("app_version")) <> APP_UP_TO_DATE Then
-        On Error Goto UpdateFailure
-        ' TODO: Find a way to force user confirmation of the update
-        ' calling Updater.InitializeUpdater directly from the excel gui.
-        ' Format create update notification.
-        SpecManager.CreateNewUpdateAlert
-        SpecManager.StartSpecManager
+    SpecManager.StartApp
+    ' No need to check for updates multiple times in a single session.
+    If Updater.checked_for_updates = False Then
+        ' Check for updates and start up the app if it is up to date
+        If Updater.CheckForUpdates(App.current_user.Settings.Item("app_version")) = APP_UP_TO_DATE Then
+            SpecManager.StartApp
+            shtDeveloper.Visible = xlSheetVeryHidden
+            GoToMain
+            Exit Sub
+        End If
     End If
+    If Updater.update_available Then
+        ' Force the user to call the updater from the excel GUI
+        MsgBox "Please apply the latest update by clicking the Update button."
+        Exit Sub
+    End If
+    ' If the app is updated and you have already checked for updates the app will start.
+    SpecManager.StartApp
     shtDeveloper.Visible = xlSheetVeryHidden
     GoToMain
     Exit Sub
@@ -51,8 +60,8 @@ Sub UnloadAllForms()
 End Sub
 
 Public Sub WarpingWsToDB()
-    SpecManager.RestartSpecManager
-    Set manager.current_template = SpecManager.GetTemplate("warping")
+    SpecManager.RestartApp
+    Set App.current_template = SpecManager.GetTemplate("warping")
     SpecManager.WorksheetToDatabase
 End Sub
 
@@ -82,11 +91,11 @@ Public Sub ExportAll()
         lngNumberOfTasks, _
         "Creating a New Version...", _
         False)
-    If manager.current_user.Settings.Item("repo_path") = vbNullString Then    
-        directory = ThisWorkbook.Path & "\"
-    Else
-        directory = manager.current_user.Settings.Item("repo_path") & "\"
-    End If
+    'If App.current_user.Settings.Item("repo_path") = vbNullString Then
+        directory = ThisWorkbook.path & "\"
+    'Else
+    '    directory = App.current_user.Settings.Item("repo_path") & "\"
+    'End If
     
     lngCounter = lngCounter + 1
     Call modProgress.ShowProgress( _
@@ -172,7 +181,7 @@ End Sub
 Public Sub ExitApp()
 'This exits the application after saving the thisworkbook.
     Dim w As Window
-    SpecManager.StopSpecManager
+    SpecManager.StopApp
     If Windows.count > 1 Then
         For Each w In Windows
             If w.Parent.Name = WORKBOOK_NAME Then
@@ -219,9 +228,9 @@ Public Sub ConsoleBoxToPdf()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError
-    fileName = PublicDir & "\Specifications\" & manager.current_spec.MaterialId & "_" & manager.current_spec.Revision
+    fileName = PublicDir & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
     Set ws = Sheets("SpecificationForm")
-    manager.console.PrintObjectToSheet manager.current_spec, ws
+    App.console.PrintObjectToSheet App.current_spec, ws
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
         fileName:=fileName, _
@@ -240,9 +249,9 @@ Public Sub ConsoleBoxToPdf_Test()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError
-    fileName = PublicDir & "\Specifications\" & manager.current_spec.MaterialId & "_" & manager.current_spec.Revision
+    fileName = PublicDir & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
     Set ws = Sheets("SpecificationForm")
-    manager.console.PrintObjectToSheet manager.current_spec, ws
+    App.console.PrintObjectToSheet App.current_spec, ws
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
         fileName:=fileName, _
@@ -250,7 +259,7 @@ Public Sub ConsoleBoxToPdf_Test()
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=False
-    Logger.Log "PDF Saved : " fileName
+    Logger.Log "PDF Saved : " & fileName
     Exit Sub
     
 SaveFileError:

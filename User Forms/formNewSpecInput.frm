@@ -37,6 +37,17 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboSelectSpecType
@@ -48,7 +59,7 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub PopulateCboSelectSpecType()
-    Dim coll As Collection
+    Dim coll As VBA.Collection
     Dim template_type As Variant
     Set coll = SpecManager.ListAllTemplateTypes
     With cboSelectSpecificationType

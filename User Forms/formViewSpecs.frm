@@ -23,6 +23,17 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -30,7 +41,7 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectRevision
@@ -46,7 +57,7 @@ Private Sub cmdExportPdf_Click()
 End Sub
 
 Private Sub cmdSearch_Click()
-    Set manager.current_spec = manager.specs.Item(cboSelectRevision.value)
+    Set App.current_spec = App.specs.Item(cboSelectRevision.value)
     SpecManager.PrintSpecification Me
 End Sub
 
@@ -64,7 +75,7 @@ Private Sub PopulateCboSelectRevision()
         cboSelectRevision.RemoveItem 0
     Loop
     With cboSelectRevision
-        For Each rev In manager.specs
+        For Each rev In App.specs
             .AddItem rev
             .value = rev
         Next rev
@@ -88,7 +99,7 @@ Private Sub UserForm_Terminate()
 End Sub
 
 Sub MaterialSearch()
-    SpecManager.RestartSpecManager
+    SpecManager.RestartApp
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectRevision
@@ -104,6 +115,6 @@ Sub ExportPdf()
 End Sub
 
 Sub Search()
-    Set manager.current_spec = manager.specs.Item(cboSelectRevision.value)
+    Set App.current_spec = App.specs.Item(cboSelectRevision.value)
     SpecManager.PrintSpecification Me
 End Sub

@@ -181,7 +181,7 @@ ExceptionHandler:
 End Function
 ''
 ' Given a JSON file path, return a "JSON object" (Dictionary or Collection)
-' 
+'
 ' @method GetJsonObject
 ' @param  {String} file_path
 ' @return {JsonObject} (Dictionary or Collection)
@@ -192,17 +192,41 @@ Function GetJsonObject(ByVal file_path As String) As Object
     Dim JsonTS As Object
     Dim jsonText As String
     Dim Parsed As Object
-    On Error Goto ExceptionHandler
+    On Error GoTo ExceptionHandler
     Set FSO = CreateObject("Scripting.FileSystemObject")
     ' Read .json file
     Set JsonTS = FSO.OpenTextFile(file_path, 1)
     jsonText = JsonTS.ReadAll
     JsonTS.Close
     ' Parse json to Dictionary
-    Set JsonVBA.GetJsonObject = JsonVBA.ParseJson(jsonText)
+    Set GetJsonObject = JsonVBA.ParseJson(jsonText)
     Exit Function
 ExceptionHandler:
-    Set JsonVBA.GetJsonObject = Nothing
+    Set GetJsonObject = Nothing
+End Function
+''
+' Given a JSON file path and object create a .json file
+'
+' @method WriteJsonObject
+' @param  {String} file_path
+' @param {JsonObject} (Dictionary or Collection)
+' @throws TODO: Add Error Description/Constant
+''
+Function WriteJsonObject(ByVal file_path As String, ByRef json_object As Object) As Long
+    Dim FSO As Object
+    Dim JsonTS As Object
+    
+    On Error GoTo ExceptionHandler
+
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    Set JsonTS = FSO.OpenTextFile(file_path, 2, True)
+    JsonTS.Write JsonVBA.ConvertToJson(json_object, 2)
+    JsonTS.Close
+    WriteJsonObject = 0
+    Exit Function
+
+ExceptionHandler:
+    WriteJsonObject = -1
 End Function
 ''
 ' Convert JSON string to object (Dictionary/Collection)
@@ -532,8 +556,8 @@ Private Function json_ParseObject(json_String As String, ByRef json_Index As Lon
     End If
 End Function
 
-Private Function json_ParseArray(json_String As String, ByRef json_Index As Long) As Collection
-    Set json_ParseArray = New Collection
+Private Function json_ParseArray(json_String As String, ByRef json_Index As Long) As VBA.Collection
+    Set json_ParseArray = New VBA.Collection
 
     json_SkipSpaces json_String, json_Index
     If VBA.Mid$(json_String, json_Index, 1) <> "[" Then

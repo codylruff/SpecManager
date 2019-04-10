@@ -148,12 +148,12 @@ Public Sub PrintSheet(sheet_name As String)
 ' Prints the sheet of the given name in the spec manager workbook
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Sheets(sheet_name)
-    SpecManager.StartSpecManager
-    If manager.current_user.Settings.Item("default_printer") = vbNullString Then
-        manager.current_user.Settings.Item("default_printer") = Module1.ChangeActivePrinter
-        manager.current_user.SaveUserJson
+    SpecManager.StartApp
+    If App.current_user.Settings.Item("default_printer") = vbNullString Then
+        App.current_user.Settings.Item("default_printer") = ChangeActivePrinter
+        App.current_user.SaveUserJson
     End If
-    ws.PrintOut ActivePrinter:=manager.current_user.Settings.Item("default_printer")
+    ws.PrintOut ActivePrinter:=App.current_user.Settings.Item("default_printer")
 End Sub
 
 Public Function ArrayLength(arr As Variant) As Long

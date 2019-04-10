@@ -8,17 +8,17 @@ Function CreateSpecification() As Specification
     Set CreateSpecification = New Specification
 End Function
 
-Function CreateNewTemplate(Optional template_name As String = vbNullString) As SpecTemplate
-    Dim template As SpecTemplate
-    Set template = New SpecTemplate
+Function CreateNewTemplate(Optional template_name As String = vbNullString) As SpecificationTemplate
+    Dim template As SpecificationTemplate
+    Set template = New SpecificationTemplate
     template.SpecType = template_name
     template.Revision = 1
     Set CreateNewTemplate = template
 End Function
 
-Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecTemplate
-    Dim template As SpecTemplate
-    Set template = New SpecTemplate
+Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecificationTemplate
+    Dim template As SpecificationTemplate
+    Set template = New SpecificationTemplate
     record.SetDictionary
     With record.Fields
         template.JsonToObject .Item("Properties_Json"), .Item("Spec_Type"), .Item("Revision"), .Item("Product_Line")
@@ -26,7 +26,7 @@ Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecTemplate
     Set CreateTemplateFromRecord = template
 End Function
 
-Function CreateTemplateFromJson(template As SpecTemplate, json_text As String) As SpecTemplate
+Function CreateTemplateFromJson(template As SpecificationTemplate, json_text As String) As SpecificationTemplate
     template.JsonToObject json_text
 End Function
 

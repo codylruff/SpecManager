@@ -1,2 +1,3 @@
-@echo off
-move SpecManager.lnk, %userprofile%\desktop
+@ECHO OFF
+PowerShell.exe -ExecutionPolicy Bypass -Command "& '%~dpn0.ps1'"
+PAUSE

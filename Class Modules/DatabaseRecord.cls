@@ -14,7 +14,7 @@ Private m_data      As Variant
 Private rows_       As Long
 Private columns_    As Long
 Public Fields       As Object
-Public records      As Collection
+Public records      As VBA.Collection
 
 Public Property Get Header() As Variant: Header = m_header: End Property
 Public Property Let Header(ByVal value As Variant): m_header = value: End Property
@@ -28,8 +28,8 @@ Public Property Get columns() As Long: columns = columns_: End Property
 Public Function SetDictionary()
 ' Returns a dictionary representation of this object
     Dim dict As Object
-    Dim coll As Collection
-    Set coll = New Collection
+    Dim coll As VBA.Collection
+    Set coll = New VBA.Collection
     Dim i, j As Long
     For j = 1 To rows
         Set dict = Factory.CreateDictionary()
