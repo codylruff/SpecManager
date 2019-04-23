@@ -16,8 +16,6 @@ Public Sub StopApp()
     App.Shutdown
 End Sub
 
-
-
 Public Sub LoadExistingTemplate(template_type As String)
     With App
         Set .current_template = SpecManager.GetTemplate(template_type)
@@ -295,8 +293,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Dim dicts As Collection
     Dim dict As Object
     Dim props As Variant
-    RestartSpecManager
-    Logger.LogEnabled False
+    RestartApp
     Application.ScreenUpdating = False
     Set dict = CreateObject("Scripting.Dictionary")
     Set ws = Utils.CreateNewSheet(spec_type)

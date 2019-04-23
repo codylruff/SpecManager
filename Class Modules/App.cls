@@ -17,20 +17,28 @@ Public specs As Object
 Public console As ConsoleBox
 Public current_template As SpecificationTemplate
 
-' Private Sub Class_Initialize()
-'     Set current_user = AccessControl.Account_Initialize
-'     current_user.LoadUserJson
-'     Set current_spec = New Specification
-'     Set standard = New Specification
-'     Set specs = CreateObject("Scripting.Dictionary")
-'     Set console = New ConsoleBox
-'     Set current_template = New SpecificationTemplate
-'     Set warp_order = New Warp
-' End Sub
+Function GetVersion() As String
+' Retreieves the current app version from the version.json file
+    Dim version_json As Object
+    Set version_json = JsonVBA.GetJsonObject(ThisWorkbook.path & "\config\local_version.json")
+    GetVersion = version_json.Item("app_version")
+End Function
+
+Public Sub ChangeVersion(version_type As String, new_value As String)
+    Dim version_json As Object
+    Set version_json = JsonVBA.GetJsonObject(ThisWorkbook.path & "\config\local_version.json")
+    version_json.Item(version_type) = new_value
+    JsonVBA.WriteJsonObject ThisWorkbook.path & "\config\local_version.json", version_json
+End Sub
 
 Sub Start()
+    ' Get the current app version
+    version = GetVersion
+    ' Log in with environ(username)
     Set current_user = AccessControl.Account_Initialize
+    ' Load user settings
     current_user.LoadUserJson
+    ' Create global object instances for specs and templates
     Set current_spec = New Specification
     Set standard = New Specification
     Set specs = CreateObject("Scripting.Dictionary")
@@ -66,15 +74,5 @@ Public Sub Shutdown()
     Set console = Nothing
     Set current_template = Nothing
 End Sub
-
-' Private Sub Class_Terminate()
-'     Set current_user = Nothing
-'     Set current_spec = Nothing
-'     Set standard = Nothing
-'     Set specs = Nothing
-'     Set console = Nothing
-'     Set current_template = Nothing
-'     Set warp_order = Nothing
-' End Sub
 
 

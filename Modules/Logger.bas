@@ -1,4 +1,5 @@
 Attribute VB_Name = "Logger"
+'@exclude.json
 Option Explicit
 Private FSO As Object ' Declare a FileSystemObject.
 Private stream As Object ' Declare a TextStream.
@@ -13,24 +14,23 @@ Public Sub SetLogLevel(level As Long)
     log_level = level
 End Sub
 
-Public Sub LogEnabled(b As Boolean)
-    log_enabled = b
-End Sub
-
 Public Sub Log(text As String)
-    If log_enabled = True Then
-        If buffer Is Nothing Then Set buffer = CreateObject("Scripting.Dictionary")
-        Do Until Not buffer.exists(TimeInMS)
-            Application.Wait (Now + TimeValue("0:00:01") / 1000)
-        Loop
-        buffer.Add key:=TimeInMS, Item:=text
-        Debug.Print Utils.printf("{0} : {1}", TimeInMS, text)
-    End If
+    If buffer Is Nothing Then Set buffer = CreateObject("Scripting.Dictionary")
+    Do Until Not buffer.exists(TimeInMS)
+        Application.Wait (Now + TimeValue("0:00:01") / 1000)
+    Loop
+    buffer.Add key:=TimeInMS, Item:=text
+    Debug.Print Logger.printf("{0} : {1}", TimeInMS, text)
 End Sub
 
 Public Sub Trace(text As String)
 ' Used to signify a transition point in the application log
     Log "------------- " & text
+End Sub
+
+Public Sub ResetLog(Optional log_type As String = "runtime")
+    Logger.SaveLog log_type
+    Logger.ClearBuffer
 End Sub
 
 Public Sub NotImplementedException()
@@ -47,7 +47,7 @@ Public Sub SaveLog(Optional file_name As String = "runtime")
     Logger.Log "Saving : " & file_name & ".log"
     Set stream = FSO.CreateTextFile(file_path, True)
     For Each key In buffer
-      stream.WriteLine Utils.printf("{0} : {1}", key, buffer.Item(key))
+      stream.WriteLine Logger.printf("{0} : {1}", key, buffer.Item(key))
     Next key
     stream.Close
 End Sub
@@ -61,4 +61,11 @@ Private Function TimeInMS() As String
                Strings.Right(Strings.Format(Timer, "#0.00"), 2)
 End Function
 
+Private Function printf(mask As String, ParamArray tokens()) As String
+    Dim i As Long
+    For i = 0 To UBound(tokens)
+        mask = replace$(mask, "{" & i & "}", tokens(i))
+    Next
+    printf = mask
+End Function
 

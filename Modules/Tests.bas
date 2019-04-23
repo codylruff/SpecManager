@@ -1,11 +1,12 @@
 Attribute VB_Name = "Tests"
 
 Sub AllTests()
+    On Error GoTo TestFailedException
+    Logger.ResetLog
     Logger.Log "----------- Starting Test Suite -----------------"
     Utils.UnloadAllForms
     SpecManager.StartApp
     App.InitializeTestSuite
-    Logger.LogEnabled True
     CreateTemplate_Test
     CreateSpecification_Test
     ViewSpecification_AfterCreate_Test
@@ -16,8 +17,14 @@ Sub AllTests()
     ' TODO: This feature has not been implemented yet.
     App.DeinitializeTestSuite
     Utils.UnloadAllForms
-    Logger.SaveLog "tests"
     Logger.Log "----------- Test Suite Complete ------------------"
+    Logger.ResetLog "tests"
+    End
+    Exit Sub
+TestFailedException:
+    Logger.ResetLog "tests"
+    MsgBox "The update did not apply correctly, please contact the administrator."
+    End
 End Sub
 
 Sub CreateTemplate_Test()

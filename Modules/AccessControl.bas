@@ -11,6 +11,7 @@ Function Account_Initialize() As Account
         Logger.Log "Selected User : {" & user.ToString & "}"
         Set Account_Initialize = user
     End If
+    
 End Function
 
 Function GetPrivledges(Name As String) As Long
@@ -48,14 +49,14 @@ Public Sub ConfigControl()
         Application.DisplayAlerts = True
         If Windows.count <> 1 Then
             For Each w In Windows
-                If w.Parent.Name = WORKBOOK_NAME Then w.Visible = True
+                If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
             Next w
         Else
             Application.Visible = True
         End If
         Application.VBE.MainWindow.Visible = True
         shtDeveloper.Visible = xlSheetVisible
-        Application.SendKeys ("^r")
+        'Application.SendKeys ("^r")
     End If
 End Sub
 
@@ -66,14 +67,14 @@ Public Sub Open_Config(Password As String)
         Application.DisplayAlerts = True
         If Windows.count <> 1 Then
             For Each w In Windows
-                If w.Parent.Name = WORKBOOK_NAME Then w.Visible = True
+                If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
             Next w
         Else
             Application.Visible = True
         End If
         Application.VBE.MainWindow.Visible = True
         shtDeveloper.Visible = xlSheetVisible
-        Application.SendKeys ("^r")
+        'Application.SendKeys ("^r")
         Unload formPassword
     Else
         MsgBox "Access Denied", vbExclamation

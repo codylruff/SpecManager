@@ -26,15 +26,6 @@ Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecificationTemp
     Set CreateTemplateFromRecord = template
 End Function
 
-Function CreateTemplateFromJson(template As SpecificationTemplate, json_text As String) As SpecificationTemplate
-    template.JsonToObject json_text
-End Function
-
-Function CreateSpecFromJson(spec As Specification, properties_json As String, tolerances_json As String) As Specification
-    spec.JsonToObject properties_json, tolerances_json
-    Set CreateSpecFromJson = spec
-End Function
-
 Function CreateSpecFromDict(dict As Object) As Specification
     Dim spec As Specification
     Set spec = New Specification

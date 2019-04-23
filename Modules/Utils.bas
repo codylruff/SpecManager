@@ -1,6 +1,5 @@
 Attribute VB_Name = "Utils"
 Option Explicit
-'@Folder("Modules")
 '=================================
 ' DESCRIPTION: Util Module holds
 ' miscellenous helper functions.
@@ -150,8 +149,7 @@ Public Sub PrintSheet(sheet_name As String)
     Set ws = ThisWorkbook.Sheets(sheet_name)
     SpecManager.StartApp
     If App.current_user.Settings.Item("default_printer") = vbNullString Then
-        App.current_user.Settings.Item("default_printer") = ChangeActivePrinter
-        App.current_user.SaveUserJson
+        ChangeActivePrinter
     End If
     ws.PrintOut ActivePrinter:=App.current_user.Settings.Item("default_printer")
 End Sub
@@ -163,9 +161,25 @@ End Function
 Sub ChangeActivePrinter()
 '
 ' ChangeActivePrinter Macro
-'
+
     Application.Dialogs(xlDialogPrinterSetup).Show
     Logger.Log "Setting default printer for Spec Manager : " & Application.ActivePrinter
-    ChangeActivePrinter = Application.ActivePrinter
+    App.current_user.Settings.Item("default_printer") = Application.ActivePrinter
+    App.current_user.SaveUserJson
 '
 End Sub
+
+Public Function ToFileExtension(extension_type As Long) As String
+' Given an enum converts to the file extension string for vba files
+    Select Case extension_type
+        Case 1
+            ToFileExtension = ".bas"
+        Case 2
+            ToFileExtension = ".cls"
+        Case 3
+            ToFileExtension = ".frm"
+        Case Else
+            ToFileExtension = ".txt"
+    End Select
+End Function
+

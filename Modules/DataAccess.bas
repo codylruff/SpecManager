@@ -193,17 +193,3 @@ Private Sub ExecuteSQL(db As IDatabase, path As String, SQLstmt As String)
         db.execute (SQLstmt)
     End If
 End Sub
-
-Public Sub exampleSelect()
-    '----------------------------------------------'
-    Dim qry As Variant
-    Dim db As IDatabase
-    '----------------------------------------------'
-    Set db = Factory.CreateSQLiteDatabase
-    db.openDb SQLITE_PATH
-    db.selectQry "select * from standard_specifications " 'limit 100"  'faz o select na base de dados e printa as colunas do print'
-    '----------------------------------------------'
-    DbTest.Range(Cells(1, 1), Cells(1, db.NumColumns)).value = db.Header 'cola cabecalho
-    DbTest.Range(Cells(2, 1), Cells(db.NumRows + 1, db.NumColumns)).value = db.data 'cola os dados
-  '----------------------------------------------'
-End Sub

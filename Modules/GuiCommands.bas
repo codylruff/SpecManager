@@ -19,18 +19,22 @@ End Sub
 
 Public Sub InitializeApplication()
     SpecManager.StartApp
-    ' No need to check for updates multiple times in a single session.
-    If Updater.checked_for_updates = False Then
-        ' Check for updates and start up the app if it is up to date
-        If Updater.CheckForUpdates(App.current_user.Settings.Item("app_version")) = APP_UP_TO_DATE Then
-            SpecManager.StartApp
-            shtDeveloper.Visible = xlSheetVeryHidden
-            GoToMain
+    On Error GoTo UpdateFailure
+    ' Check for updates and start up the app if it is up to date
+    If Updater.CheckForUpdates(App.version) = APP_UP_TO_DATE Then
+        If Updater.ready_to_test And (Updater.VerifyUpdateIntegrity <> 0) Then
+            MsgBox "Update failed. Please contact the administrator."
             Exit Sub
         End If
+        SpecManager.StartApp
+        shtDeveloper.Visible = xlSheetVeryHidden
+        GoToMain
+        Exit Sub
     End If
+    On Error GoTo 0
     If Updater.update_available Then
         ' Force the user to call the updater from the excel GUI
+        SpecManager.StopApp
         MsgBox "Please apply the latest update by clicking the Update button."
         Exit Sub
     End If
@@ -84,7 +88,7 @@ Public Sub ExportAll()
     lngNumberOfTasks = 4
     lngCounter = 0
 
-    Logger.ClearBuffer
+    Logger.ResetLog
 
     Call modProgress.ShowProgress( _
         lngCounter, _
@@ -92,9 +96,9 @@ Public Sub ExportAll()
         "Creating a New Version...", _
         False)
     'If App.current_user.Settings.Item("repo_path") = vbNullString Then
-        directory = ThisWorkbook.path & "\"
+        directory = "C:\Users\cruff\source\SM - Final\"
     'Else
-    '    directory = App.current_user.Settings.Item("repo_path") & "\"
+        'directory = "S:\Data Manager\updates\"
     'End If
     
     lngCounter = lngCounter + 1
@@ -166,7 +170,7 @@ Public Sub ExportAll()
         True)
         
     Logger.Log "Export Complete."
-    Logger.SaveLog "export"
+    Logger.ResetLog "export"
 End Sub
 
 Public Sub CloseConfig()
@@ -184,7 +188,7 @@ Public Sub ExitApp()
     SpecManager.StopApp
     If Windows.count > 1 Then
         For Each w In Windows
-            If w.Parent.Name = WORKBOOK_NAME Then
+            If w.Parent.Name = ThisWorkbook.Name Then
                 w.Parent.Save
                 w.Parent.Close
             End If

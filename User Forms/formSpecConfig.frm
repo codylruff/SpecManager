@@ -40,6 +40,19 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -65,7 +78,7 @@ End Sub
 
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification incremented the revision by +0.1
-    Dim ret_val Long
+    Dim ret_val As Long
     App.current_spec.Revision = CStr(CDbl(App.current_spec.Revision) + 1) & ".0"
     ret_val = SpecManager.SaveSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then

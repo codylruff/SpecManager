@@ -31,7 +31,6 @@ End Function
 Public Sub LoadUserJson()
 ' Advanced example: Read .json file and load into a dictionary
   Set Settings = JsonVBA.GetJsonObject(ThisWorkbook.path & "\config\user.json")
-  App.version = Settings.Item("app_version")
 End Sub
 
 Public Sub ChangeSetting(setting As String, new_value As Variant)
@@ -41,18 +40,17 @@ End Sub
 
 Public Sub SaveUserJson()
 ' Saves user configuration settings to user.json saved in the Spec Manager installation folder
-    JsonVBA.WriteJsonObject(ThisWorkbook.path & "\config\user.json", Me.Settings)
+    JsonVBA.WriteJsonObject ThisWorkbook.path & "\config\user.json", Me.Settings
 End Sub
 
 Private Sub CreateSettingsJson()
     With Settings
-        .Add("name", Environ("Username"))
-        .Add("default_printer", vbNullString)
-        .Add("app_version", vbNullString)
-        .Add("default_log_level", vbNullString)
-        .Add("privledge_level", vbNullString)
-        .Add("product_line", vbNullString)
-        .Add("repo_path", vbNullString)
+        .Add "name", Environ("Username")
+        .Add "default_printer", vbNullString
+        .Add "default_log_level", vbNullString
+        .Add "privledge_level", vbNullString
+        .Add "product_line", vbNullString
+        .Add "repo_path", vbNullString
     End With
 End Sub
 

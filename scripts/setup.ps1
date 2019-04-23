@@ -5,23 +5,27 @@ $ErrorActionPreference = 'Stop'
 $SpecManagerDir = "$env:APPDATA\Spec-Manager"
 $LibsDir = "$SpecManagerDir\libs"
 $ConfigDir = "$SpecManagerDir\config"
+$LogsDir = "$SpecManagerDir\logs"
 $ZipFile = "$SpecManagerDir\spec-manager.zip"
 
-$ShortCut = $Shell.CreateShortcut($env:USERPROFILE + "\Desktop\Spec-Manager.lnk")
-$ShortCut.TargetPath=".\Spec Manager (Test).xlsm"
-$ShortCut.WorkingDirectory = $SpecManagerDir;
-$ShortCut.Description = "Your Custom Shortcut Description";
-$shortcut.IconLocation=".\Spec-Manager.ico"
-$ShortCut.Save()
-
 if ($args.Length -gt 0) {
-    $Version = $args.Get(0)
-  }
+  $Version = $args.Get(0)
+} else {
+  $Version = "v0.0.3"
+}
+
+function SpecManagerShortcut() {
+    $ShortCut = $Shell.CreateShortcut($env:USERPROFILE + "\Desktop\Spec-Manager.lnk")
+    $ShortCut.TargetPath="$SpecManagerDir\Spec Manager" + $Version + ".xlsm"
+    $ShortCut.Description = "Spec-Manager Shortcut";
+    $shortcut.IconLocation="$SpecManagerDir\Spec-Manager.ico"
+    $ShortCut.Save()
+}
 
 $ReleaseUri = if (!$Version) {
-    "https://github.com/codylruff/DataManager/releases/download/$Version/dm_v0.0.1.zip";
+    "https://github.com/codylruff/SpecManager/releases/download/$Version/spec-manager-v" + $Version + ".zip";
 }else {
-    "https://github.com/codylruff/DataManager/releases/download/v0.0.1/dm_v0.0.1.zip"
+    "https://github.com/codylruff/SpecManager/releases/download/v0.0.3/spec-manager-v0.0.3.zip"
 }
 
 if (!(Test-Path $SpecManagerDir)) {
@@ -30,11 +34,15 @@ New-Item $SpecManagerDir -ItemType Directory | Out-Null
   
 Write-Output "Downloading spec-manager..."
 Write-Output "($ReleaseUri)"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest $ReleaseUri -Out $ZipFile
 
 Write-Output "Extracting spec-manager..."
 Expand-Archive $ZipFile -Destination $SpecManagerDir -Force
 Remove-Item $ZipFile
+
+Write-Output "Creating Shortcut"
+SpecManagerShortcut
 
 function Enable-VBOM ($App) {
     Try {

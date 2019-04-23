@@ -71,20 +71,20 @@ Attribute VB_Exposed = False
 
 
 
-Option Explicit
 
-Private Sub UserForm_Initialize()
-    Dim ret_val As String
-    Logger.Log "--------- " & Me.Name & " ----------"
-    ret_val = SpecManager.MaterialInput
-    If ret_val = vbNullString Then
-        GuiCommands.UnloadAllForms
-    Else
-        SpecManager.PrintSpecification Me
-        PopulateCboSelectRevision
-        cboSelectRevision.value = App.current_spec.Revision
-    End If
-End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+Option Explicit
 
 Private Sub PopulateCboSelectRevision()
     Dim rev As Variant

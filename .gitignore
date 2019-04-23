@@ -9,3 +9,4 @@ logs/
 config/
 templates/
 Database/
+bin/

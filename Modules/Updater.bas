@@ -1,13 +1,15 @@
 Attribute VB_Name = "Updater"
+'@exclude.json
 ' ----------------------------------------------- '
 ' Dependencies include : JsonVBA, LoggerVBA
-' * These modules should be noted in exclude.json
+' * These modules must be noted in exclude.json
+'   and marked by the '@exclude.json decorator.
 ' ----------------------------------------------- '
 Option Explicit
 ' IMPORT PATHS (Change these to the proper file paths)
 Public Const GITREPO               As String = "C:\Users\cruff\source\SM - Final"
-Public Const GLOBAL_PATH           As String = "S:\Data Manager\"
-Public Const WORKBOOK_NAME         As String = "Spec Manager (Test).xlsm"
+Public Const GLOBAL_PATH           As String = "S:\Data Manager"
+
 ' APP SETUP DESCRIPTIONS:
 Public Const APP_UPDATE_AVAILABLE  As Long = 101
 Public Const APP_UP_TO_DATE        As Long = 100
@@ -17,6 +19,8 @@ Public Const TEST_FAILED           As Long = 2
 
 Public update_available            As Boolean
 Public checked_for_updates         As Boolean
+Public ready_to_test               As Boolean
+
 Private update_dir                 As String
 Private modules_dir                As String
 Private classes_dir                As String
@@ -26,12 +30,11 @@ Function CheckForUpdates(ByVal current_version As String) As Long
     ' Compare current app_version to the global app_version on the network global.json file.
     Dim global_version As String
     Dim local_version As String
-    Logger.Log "Checking for updates . . . "
-    local_version = current_version
+    Debug.Print "Checking for updates . . . "
+    local_version = GetLocalVersion
     global_version = GetGlobalVersion
-    If CDbl(global_version) > CDbl(local_version) Then
-        Updater.update_available = "True"
-        CreateNewUpdateAlert
+    If global_version <> local_version Then
+        update_available = "True"
         checked_for_updates = True
         CheckForUpdates = APP_UPDATE_AVAILABLE
     Else
@@ -40,18 +43,15 @@ Function CheckForUpdates(ByVal current_version As String) As Long
     End If
 End Function
 
-Public Sub CreateNewUpdateAlert()
-    Dim btn As Object
-    For Each btn In shtStart.Buttons
-        If btn.Name = "Button 4" Then
-            btn.text = "Update Available"
-        End If
-    Next btn
-End Sub
-
 Function GetGlobalVersion() As String
 ' Retrieve the global app version from the network version.json file
-    GetGlobalVersion = GetJsonValue(GLOBAL_PATH & "\updates\version.json", "app_version")
+    GetGlobalVersion = GetJsonValue(GLOBAL_PATH & "\updates\global_version.json", "app_version")
+End Function
+
+Private Function GetLocalVersion() As String
+' Retreieves the current app version from the version.json file
+    Dim local_version_json As Object
+    GetLocalVersion = JsonVBA.GetJsonValue(ThisWorkbook.path & "\config\local_version.json", "app_version")
 End Function
 
 Sub InitializeUpdater()
@@ -67,26 +67,28 @@ Private Function RemovePreviousVersion() As String
     Dim log_buffer       As String
     Dim source_file      As Object
     Dim exclude_json     As Object
+    Dim message          As String
+    Debug.Print "Removing previous version"
     log_buffer = "Removing previous version" & vbNewLine
     On Error Resume Next
     Set exclude_json = JsonVBA.GetJsonObject(update_dir & "\exclude.json")
-    For Each source_file In ActiveWorkbook.VBProject.VBComponents
+    For Each source_file In ThisWorkbook.VBProject.VBComponents
     ' This process ignores third-party libraries listed in the exclude.json file
         If exclude_json.exists(source_file.Name) Then
+            Debug.Print "(excluded)" & source_file.Name
             log_buffer = log_buffer & "(excluded)" & source_file.Name & vbNewLine
          Else
-            ActiveWorkbook.VBProject.VBComponents.Remove source_file
-            Debug.Print source_file.Name
-            log_buffer = log_buffer & source_file.Name & vbNewLine
+            message = "Removed : " & source_file.Name
+            If source_file.Type <> 100 Then
+                source_file.Name = source_file.Name & "_OLD"
+            End If
+            ThisWorkbook.VBProject.VBComponents.Remove source_file
+            Debug.Print message
+            log_buffer = log_buffer & message & vbNewLine
         End If
     Next source_file
     RemovePreviousVersion = log_buffer
 End Function
-
-Sub ApplyUpdate()
-' Imports files associated with the new version from the network drive
-    ImportSourceCode update_dir
-End Sub
 
 Sub ImportFromLocalGitRepo()
 ' Imports files from local git repo on CRUFF
@@ -100,54 +102,27 @@ End Sub
 
 Public Sub UpdateSpecManager()
 ' Must be called from the excel GUI to prevent issues. This particular sub is specific to this application.
-    SpecManager.StartApp
-    If checked_for_updates = False Then
-        CheckForUpdates App.version
-    End If
+    CheckForUpdates current_version:=GetLocalVersion
     If update_available Then
-        On Error GoTo UpdateFailedException
         ' If not up to date this sub will be called from within the initialize app procedure
         InitializeUpdater
-        ' Remove old version and import new source code files
-        ' Destroy all objects except Updater.bas to prevent errors
-        SpecManager.StopApp
-        ApplyUpdate
-        ' Verify that the update was applied succesfully
-        If VerifyUpdateIntegrity <> MISSING_FILES Then
+        ' Imports files associated with the new version from the network drive
+        If ImportSourceCode(update_dir) = 0 Then
+            ' Verify that the update was applied succesfully
             update_available = False
-            App.current_user.ChangeSetting "app_version", GetGlobalVersion
-            SpecManager.StartApp
-            Tests.AllTests
+            UpdateLocalVersion_Json GetGlobalVersion
+            ready_to_test = True
+        Else
+            MsgBox "The application failed to update. Contact the administrator."
+            'AbortUpdateProcess
         End If
     Else
         ' Let the user know that the app is up to date.
         MsgBox "This is the newest version available."
     End If
-    
-    Exit Sub
-UpdateFailedException:
-    MsgBox "The application failed to update. Contact the administrator."
-    AbortUpdateProcess
 End Sub
 
-Private Sub AbortUpdateProcess()
-' Aborts the update process in order to preserve the application upon update failure
-    Dim w As Window
-    If Windows.count > 1 Then
-        Application.DisplayAlerts = False
-        For Each w In Windows
-            If w.Parent.Name = WORKBOOK_NAME Then
-                w.Parent.Close
-            End If
-        Next w
-        Application.DisplayAlerts = True
-    Else
-        Application.DisplayAlerts = False
-        Application.Quit
-    End If
-End Sub
-
-Private Sub ImportSourceCode(ByVal import_directory As String)
+Private Function ImportSourceCode(ByVal import_directory As String) As Long
 
     Dim path As String
     Dim VerNum As String
@@ -166,11 +141,11 @@ Private Sub ImportSourceCode(ByVal import_directory As String)
     strFile = Dir(path & "*.bas*")
     
     Do While Len(strFile) > 0
-        Debug.Print strFile
-        Debug.Print Left(strFile, Len(strFile) - 4)
+        ' Check to see if the code module should be exclude from import
         If Not exclude_json.exists(Left(strFile, Len(strFile) - 4)) Then
             log_buffer = log_buffer & path & strFile & vbNewLine
             wb.VBProject.VBComponents.Import path & strFile
+            Debug.Print "Imported : " & path & strFile
         End If
         strFile = Dir
     Loop
@@ -179,9 +154,9 @@ Private Sub ImportSourceCode(ByVal import_directory As String)
     strFile = Dir(path & "*.frm*") ' frx files must be in the same dir as the frm files
     
     Do While Len(strFile) > 0
-        Debug.Print strFile
         log_buffer = log_buffer & path & strFile & vbNewLine
         wb.VBProject.VBComponents.Import path & strFile
+        Debug.Print "Imported : " & path & strFile
         strFile = Dir
     Loop
     
@@ -189,20 +164,22 @@ Private Sub ImportSourceCode(ByVal import_directory As String)
     strFile = Dir(path & "*.cls*") ' This folder must not contain sheet files or errors will occur
     
     Do While Len(strFile) > 0
-        Debug.Print strFile
         log_buffer = log_buffer & path & strFile & vbNewLine
         wb.VBProject.VBComponents.Import path & strFile
+        Debug.Print "Imported : " & path & strFile
         strFile = Dir
     Loop
-    'Logger.Log log_buffer & "Import Successful!"
-    'Logger.SaveLog "import"
-    Exit Sub
+    Debug.Print "Source Code Import Successful!"
+    log_buffer = log_buffer & "Import Successful!"
+    ImportSourceCode = 0
+    Exit Function
 
 ImportFail:
-    MsgBox "Import Failed"
-End Sub
+    Debug.Print "Import Failed"
+    ImportSourceCode = -1
+End Function
 
-Private Function VerifyUpdateIntegrity() As Long
+Public Function VerifyUpdateIntegrity() As Long
 ' Checks that all source code files were imported successfully
 ' before attempting to intialize the test suite
     Dim source_file     As Variant
@@ -210,10 +187,10 @@ Private Function VerifyUpdateIntegrity() As Long
     Dim vb_components   As Object
     On Error GoTo SourceFileNotFoundException
     ' Test `Logger.bas` first to ensure results are recorded
-    source_file = "Logger.bas"
+    'source_file = "Logger.bas"
     Logger.Log "Verifying the integrity imported source code"
     ' Load include.json and use it to check for the modules which should be present.
-    Set source_files = JsonVBA.GetJsonObject(update_dir & "\include.json")
+    Set source_files = JsonVBA.GetJsonObject("S:\Data Manager\updates\include.json")
     Set vb_components = ActiveWorkbook.VBProject.VBComponents
     ' Any error will raise a SourceFileNotFoundException and fail the test
     For Each source_file In source_files
@@ -227,4 +204,11 @@ SourceFileNotFoundException:
     Debug.Print source_file & " not found. Import failed"
     VerifyUpdateIntegrity = MISSING_FILES
 End Function
+
+Public Sub UpdateLocalVersion_Json(new_value As String)
+    Dim local_version_json As Object
+    Set local_version_json = JsonVBA.GetJsonObject(ThisWorkbook.path & "\config\local_version.json")
+    local_version_json.Item("app_version") = new_value
+    JsonVBA.WriteJsonObject ThisWorkbook.path & "\config\local_version.json", local_version_json
+End Sub
 

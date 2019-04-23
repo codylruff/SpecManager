@@ -1,9 +1,9 @@
 {
     "name" : "CRuff",
     "default_printer" : "",
-    "app_version" : "1.0",
+    "app_version" : "0.0.1",
     "default_log_level" : 2,
     "privledge_level" : "25",
     "product_line" : "Admin",
-    "repo_path" : "C:\\Users\\codyl\\source\\repos\\SpecManager"
+    "repo_path" : "C:\\Users\\cruff\\source\\SM - Final"
 }

@@ -1,4 +1,5 @@
 Attribute VB_Name = "JsonVBA"
+'@exclude.json
 ''
 ' VBA-JSON v2.3.0
 ' (c) Tim Hall - https://github.com/VBA-tools/VBA-JSON

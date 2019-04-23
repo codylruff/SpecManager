@@ -29,6 +29,19 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private Sub cmdConfig_Click()
@@ -54,7 +67,7 @@ Private Sub cmdCreateTemplate_Click()
     SpecManager.RestartApp
     Logger.Log App.current_user.Name
     Logger.Log App.current_user.PrivledgeLevel
-    If SpecManager.App.current_user.PrivledgeLevel < USER_MANAGER Then
+    If App.current_user.PrivledgeLevel < USER_MANAGER Then
         Logger.Log App.current_user.Name & " attempted access to a restricted function."
         MsgBox "This function is not availble to you"
         Exit Sub
