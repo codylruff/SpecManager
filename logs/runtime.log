@@ -1,24 +1,2 @@
-22-Apr-2019 12:56:15.15 : ------------- Starting Application
-22-Apr-2019 12:56:15.16 : Searching for user name . . . 
-22-Apr-2019 12:56:15.18 : -----------------------------------
-22-Apr-2019 12:56:15.19 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
-22-Apr-2019 12:56:15.21 : SQL Select Error : NullRecordException!
-22-Apr-2019 12:56:15.22 : Creating new user CRuff
-22-Apr-2019 12:56:15.24 : -----------------------------------
-22-Apr-2019 12:56:15.25 : INSERT INTO user_privledges (Name, Privledge_Level, Product_Line) VALUES ('CRUFF', '20', 'User')
-22-Apr-2019 12:56:15.27 : SQL INSERT Error : DbPushFailException
-22-Apr-2019 12:56:15.29 : 1
-22-Apr-2019 12:56:15.30 : ------------- Starting Application
-22-Apr-2019 12:56:15.32 : Searching for user name . . . 
-22-Apr-2019 12:56:15.33 : -----------------------------------
-22-Apr-2019 12:56:15.35 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
-22-Apr-2019 12:56:15.36 : SQL Select Error : NullRecordException!
-22-Apr-2019 12:56:15.38 : Creating new user CRuff
-22-Apr-2019 12:56:15.39 : -----------------------------------
-22-Apr-2019 12:56:15.41 : INSERT INTO user_privledges (Name, Privledge_Level, Product_Line) VALUES ('CRUFF', '20', 'User')
-22-Apr-2019 12:56:15.43 : SQL INSERT Error : DbPushFailException
-22-Apr-2019 12:56:15.44 : 1
-22-Apr-2019 12:56:17.09 : ------------- Stopping Application
-22-Apr-2019 12:56:17.11 : Saving : runtime.log
-22-Apr-2019 13:57:34.38 : ------------- Stopping Application
-22-Apr-2019 13:57:34.40 : Saving : runtime.log
+24-Apr-2019 16:46:21.36 : ------------- Stopping Application
+24-Apr-2019 16:46:21.37 : Saving : runtime.log

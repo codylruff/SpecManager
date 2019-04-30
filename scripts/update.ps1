@@ -1,17 +1,30 @@
+# This script is called from within a vba code module.
+# Upon user prompt the current spec-manager version will be removed
+# and the newest release will be downloaded from github
+
 $Shell = New-Object -ComObject ("WScript.Shell")
 
 $ErrorActionPreference = 'Stop'
 
-if ($args.Length -gt 0) {
-  $Version = $args.Get(0)
-} else {
-  $Version = "v0.0.3"
-}
+# Kill the spec-manager workbook so that the $SpecManagerDir can be overwritten.
+$excel = Get-Process excel -ea 0 | Where-Object { $_.MainWindowTitle -like '*Spec Manager*' }; 
+Stop-Process $excel
 
+# Download latest dotnet/codeformatter release from github
+$repo = "codylruff/SpecManager"
+$releases = "https://api.github.com/repos/$repo/releases"
+
+Write-Host Determining latest release
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
+Write-Output "Current release is : $tag"
+
+# Initialize variables
+$Version = $tag
 $SpecManagerDir = "$env:APPDATA\Spec-Manager-$Version"
-$LibsDir = "$SpecManagerDir\libs"
+#$LibsDir = "$SpecManagerDir\libs"
 $ConfigDir = "$SpecManagerDir\config"
-$LogsDir = "$SpecManagerDir\logs"
+#$LogsDir = "$SpecManagerDir\logs"
 $ZipFile = "$SpecManagerDir\spec-manager.zip"
 
 function SpecManagerShortcut() {
@@ -22,11 +35,7 @@ function SpecManagerShortcut() {
     $ShortCut.Save()
 }
 
-$ReleaseUri = if (!$Version) {
-    "https://github.com/codylruff/SpecManager/releases/download/$Version/spec-manager-$Version.zip";
-}else {
-    "https://github.com/codylruff/SpecManager/releases/download/v0.0.3/spec-manager-v0.0.3.zip"
-}
+$ReleaseUri = "https://github.com/codylruff/SpecManager/releases/download/$Version/spec-manager-$Version.zip";
 
 if (!(Test-Path $SpecManagerDir)) {
 New-Item $SpecManagerDir -ItemType Directory | Out-Null

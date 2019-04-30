@@ -33,9 +33,13 @@ Function AutoAddNewUser() As Account
     Dim new_user As Account
     Set new_user = New Account
     new_user.Name = Environ("Username")
+    new_user.ChangeSetting "name", Environ("Username")
     ' Users have read only access by default
     new_user.PrivledgeLevel = USER_READONLY
+    new_user.ChangeSetting "privledge_level", USER_READONLY
     new_user.ProductLine = "User"
+    new_user.ChangeSetting "product_line", "User"
+    new_user.SaveUserJson	
     Logger.Log DataAccess.PushNewUser(new_user)
     Set AutoAddNewUser = new_user
 End Function

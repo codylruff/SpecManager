@@ -30,7 +30,7 @@ End Function
 
 Public Sub LoadUserJson()
 ' Advanced example: Read .json file and load into a dictionary
-  Set Settings = JsonVBA.GetJsonObject(ThisWorkbook.path & "\config\user.json")
+    Set Settings = JsonVBA.GetJsonObject(ThisWorkbook.path & "\config\user.json")
 End Sub
 
 Public Sub ChangeSetting(setting As String, new_value As Variant)

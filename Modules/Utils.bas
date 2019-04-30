@@ -183,3 +183,17 @@ Public Function ToFileExtension(extension_type As Long) As String
     End Select
 End Function
 
+Sub SaveAll()
+    Dim xWb As Workbook
+    For Each xWb In Application.Workbooks
+        If Not xWb.ReadOnly And Windows(xWb.Name).Visible Then
+            xWb.Save
+        End If
+    Next
+End Sub
+
+Function TestForUnsavedChanges() As Boolean
+    If ActiveWorkbook.Saved = False Then
+        MsgBox "This workbook contains unsaved changes."
+    End If
+End Function

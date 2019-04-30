@@ -212,3 +212,7 @@ Public Sub UpdateLocalVersion_Json(new_value As String)
     JsonVBA.WriteJsonObject ThisWorkbook.path & "\config\local_version.json", local_version_json
 End Sub
 
+Public Sub UpdateAvailablePrompt()
+	' If update.ps1 script is executed the all excel workbooks will be closed.
+    ' This means we must allow the user the chance to save their work 
+End Sub

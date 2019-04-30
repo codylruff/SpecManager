@@ -67,6 +67,7 @@ Public Sub DeinitializeTestSuite()
 End Sub
 
 Public Sub Shutdown()
+    If Not current_user Is Nothing Then current_user.SaveUserJson
     Set current_user = Nothing
     Set current_spec = Nothing
     Set standard = Nothing
