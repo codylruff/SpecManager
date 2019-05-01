@@ -100,22 +100,34 @@ Sub ImportFromLocalGitRepo()
     End If
 End Sub
 
+' Public Sub UpdateSpecManager()
+' ' Must be called from the excel GUI to prevent issues. This particular sub is specific to this application.
+'     CheckForUpdates current_version:=GetLocalVersion
+'     If update_available Then
+'         ' If not up to date this sub will be called from within the initialize app procedure
+'         InitializeUpdater
+'         ' Imports files associated with the new version from the network drive
+'         If ImportSourceCode(update_dir) = 0 Then
+'             ' Verify that the update was applied succesfully
+'             update_available = False
+'             UpdateLocalVersion_Json GetGlobalVersion
+'             ready_to_test = True
+'         Else
+'             MsgBox "The application failed to update. Contact the administrator."
+'             'AbortUpdateProcess
+'         End If
+'     Else
+'         ' Let the user know that the app is up to date.
+'         MsgBox "This is the newest version available."
+'     End If
+' End Sub
+
 Public Sub UpdateSpecManager()
 ' Must be called from the excel GUI to prevent issues. This particular sub is specific to this application.
     CheckForUpdates current_version:=GetLocalVersion
     If update_available Then
         ' If not up to date this sub will be called from within the initialize app procedure
-        InitializeUpdater
-        ' Imports files associated with the new version from the network drive
-        If ImportSourceCode(update_dir) = 0 Then
-            ' Verify that the update was applied succesfully
-            update_available = False
-            UpdateLocalVersion_Json GetGlobalVersion
-            ready_to_test = True
-        Else
-            MsgBox "The application failed to update. Contact the administrator."
-            'AbortUpdateProcess
-        End If
+        UpdateAvailablePrompt
     Else
         ' Let the user know that the app is up to date.
         MsgBox "This is the newest version available."
@@ -213,6 +225,59 @@ Public Sub UpdateLocalVersion_Json(new_value As String)
 End Sub
 
 Public Sub UpdateAvailablePrompt()
-	' If update.ps1 script is executed the all excel workbooks will be closed.
-    ' This means we must allow the user the chance to save their work 
+' If update.ps1 script is executed the all excel workbooks will be closed.
+
+    Dim question As String
+    ' This means we must allow the user the chance to save their work
+    question = "In order complete the update Excel must restart, would you like to proceed?"
+    If AskUser(question) = True Then
+        CheckForUnsavedFiles
+        ExecuteUpdateScript
+    Else
+        Exit Sub
+    End If
+
+End Sub
+
+Sub CheckForUnsavedFiles()
+    Dim wb As Workbook
+    Dim question As String
+
+    For Each wb In Application.Workbooks
+        If wb.Saved = False Then
+            question = "You have unsaved workbooks open, would you like to save them before restarting?"
+            If AskUser(question) = True Then
+                Utils.SaveAll
+            End If
+        End If
+    Next wb
+
+End Sub
+
+Sub ExecuteUpdateScript()
+' This sub will attempt to run an update script in powershell
+' Be warned this will shutdown all excel workbooks with no prompt
+    Dim x As Variant
+    x = Shell(Thisworkbook.Path & "\scripts\update.bat", 1) 
+End Sub
+
+Sub CheckForNewRelease()
+' Check github for a new release
+    Dim repo As String
+    Dim releases As String
+    Dim tag As String
+    Dim github As New WebClient
+    Dim Response As WebResponse
+    Dim json As Collection
+    
+    repo = "repos/codylruff/SpecManager/releases"
+    releases = "https://api.github.com/"
+    github.BaseUrl = releases
+    Set Response = github.GetJson(repo)
+    Set json = Response.Data
+    tag = json.Item(1).Item("tag_name")
+    
+    ' Check release tag agaisnt current version
+    
+
 End Sub

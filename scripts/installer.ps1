@@ -6,11 +6,6 @@ $Shell = New-Object -ComObject ("WScript.Shell")
 
 $ErrorActionPreference = 'Stop'
 # ----------------------------------------------------------------------------------------------------
-# SHUTDOWN : Kill the spec-manager workbook so that the $SpecManagerDir can be overwritten.
-# ----------------------------------------------------------------------------------------------------
-$excel = Get-Process excel -ea 0 | Where-Object { $_.MainWindowTitle -like '*Spec Manager*' }; 
-Stop-Process $excel
-# ----------------------------------------------------------------------------------------------------
 # UPDATE :
 # ----------------------------------------------------------------------------------------------------
 # Download latest dotnet/codeformatter release from github
@@ -73,7 +68,7 @@ function Enable-VBOM ($App) {
   Write-Output "Enabling access to VBA project object model..."
   Enable-VBOM "Excel"
 # -----------------------------------------------------------------------------------------------------------
-# RESTART : This powershell code will restart the application with the updated version.
+# STARTUP : This powershell code will start the application for the first time.
 # -----------------------------------------------------------------------------------------------------------
 $Excel = New-Object -comobject Excel.Application
 $FilePath = "C:\Users\cruff\AppData\Roaming\Spec-Manager-$tag\Spec Manager $tag.xlsm"
