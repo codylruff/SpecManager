@@ -10,8 +10,9 @@ $tls12 = [Net.ServicePointManager]::SecurityProtocol =  [Enum]::ToObject([Net.Se
 # ----------------------------------------------------------------------------------------------------
 # SHUTDOWN : Kill the spec-manager workbook so that the $SpecManagerDir can be overwritten.
 # ----------------------------------------------------------------------------------------------------
-$excel = Get-Process excel -ea 0 | Where-Object { $_.MainWindowTitle -like '*Spec Manager*' }; 
-Stop-Process $excel
+#$excel = Get-Process excel -ea 0 | Where-Object { $_.MainWindowTitle -like '*Spec Manager*' }; 
+#Stop-Process $excel
+
 # ----------------------------------------------------------------------------------------------------
 # UPDATE :
 # ----------------------------------------------------------------------------------------------------
@@ -75,7 +76,7 @@ function Enable-VBOM ($App) {
   Write-Output "Enabling access to VBA project object model..."
   Enable-VBOM "Excel"
 # -----------------------------------------------------------------------------------------------------------
-# RESTART : This powershell code will restart the application with the updated version.
+# RESTART : This powershell code will start the application with the updated version.
 # -----------------------------------------------------------------------------------------------------------
 $Excel = New-Object -comobject Excel.Application
 $FilePath = "C:\Users\cruff\AppData\Roaming\Spec-Manager-$tag\Spec Manager $tag.xlsm"

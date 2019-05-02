@@ -206,3 +206,8 @@ Public Function AskUser(question As String) As Boolean
         AskUser = False
     End If
 End Function
+
+Public Sub ToggleAutoRecover()
+' This sub will switch the auto recover function on and off.
+
+End Sub
