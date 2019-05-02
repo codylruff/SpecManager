@@ -163,7 +163,7 @@ Public QuerystringParams As Collection
 ' @property UrlSegments
 ' @type Dictionary
 ''
-Public UrlSegments As Dictionary
+Public UrlSegments As Object
 
 ''
 ' _Note_ To add cookies, use [`AddCookie`](#/WebRequest/AddCookie).
@@ -712,8 +712,8 @@ End Sub
 ''
 Public Sub AddBodyParameter(Key As Variant, Value As Variant)
     If VBA.IsEmpty(web_pBody) Then
-        Set web_pBody = New Dictionary
-    ElseIf Not TypeOf web_pBody Is Dictionary Then
+        Set web_pBody = CreateObject("Scripting.Dictionary")
+    ElseIf Not TypeName(web_pBody) = "Scripting.Dictionary" Then
         Dim web_ErrorDescription As String
         web_ErrorDescription = "Cannot add body parameter to non-Dictionary Body (existing Body must be of type Dictionary)"
 
@@ -791,7 +791,7 @@ End Function
 ' @param {Collection} [Options.QuerystringParams] Collection of `KeyValue`
 ' @param {Dictionary} [Options.UrlSegments]
 ''
-Public Sub CreateFromOptions(Options As Dictionary)
+Public Sub CreateFromOptions(Options As Object)
     If Not Options Is Nothing Then
         If Options.Exists("Headers") Then
             Set Me.Headers = Options("Headers")
@@ -869,7 +869,7 @@ Private Sub Class_Initialize()
 
     Set Me.Headers = New Collection
     Set Me.QuerystringParams = New Collection
-    Set Me.UrlSegments = New Dictionary
+    Set Me.UrlSegments = CreateObject("Scripting.Dictionary")
     Set Me.Cookies = New Collection
     Me.ContentLength = -1
 End Sub

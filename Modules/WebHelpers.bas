@@ -278,7 +278,7 @@ End Type
 
 Private web_pDocumentHelper As Object
 Private web_pElHelper As Object
-Private web_pConverters As Dictionary
+Private web_pConverters As Object
 
 ' --------------------------------------------- '
 ' Types and Properties
@@ -425,7 +425,7 @@ Public EnableLogging As Boolean
 ' @property AsyncRequests
 ' @type Dictionary
 ''
-Public AsyncRequests As Dictionary
+Public AsyncRequests As Object
 
 ' ============================================= '
 ' 1. Logging
@@ -526,7 +526,7 @@ Public Sub LogRequest(Client As WebClient, Request As WebRequest)
         Debug.Print "--> Request - " & Format(Now, "Long Time")
         Debug.Print MethodToName(Request.Method) & " " & Client.GetFullUrl(Request)
 
-        Dim web_KeyValue As Dictionary
+        Dim web_KeyValue As Object
         For Each web_KeyValue In Request.Headers
             Debug.Print web_KeyValue("Key") & ": " & web_KeyValue("Value")
         Next web_KeyValue
@@ -553,7 +553,7 @@ End Sub
 ''
 Public Sub LogResponse(Client As WebClient, Request As WebRequest, Response As WebResponse)
     If EnableLogging Then
-        Dim web_KeyValue As Dictionary
+        Dim web_KeyValue As Object
 
         Debug.Print "<-- Response - " & Format(Now, "Long Time")
         Debug.Print Response.StatusCode & " " & Response.StatusDescription
@@ -619,13 +619,15 @@ End Function
 ' @param {String} UrlEncoded Url-Encoded value to parse
 ' @return {Dictionary} Parsed
 ''
-Public Function ParseUrlEncoded(Encoded As String) As Dictionary
+Public Function ParseUrlEncoded(Encoded As String) As Object
     Dim web_Items As Variant
     Dim web_i As Integer
     Dim web_Parts As Variant
     Dim web_Key As String
     Dim web_Value As Variant
-    Dim web_Parsed As New Dictionary
+    Dim web_Parsed As Object
+
+    Set web_Parsed = CreateObject("Scripting.Dictionary")
 
     web_Items = VBA.Split(Encoded, "&")
     For web_i = LBound(web_Items) To UBound(web_Items)
@@ -654,7 +656,7 @@ Public Function ConvertToUrlEncoded(Obj As Variant, Optional EncodingMode As Url
     Dim web_Encoded As String
 
     If TypeOf Obj Is Collection Then
-        Dim web_KeyValue As Dictionary
+        Dim web_KeyValue As Object
 
         For Each web_KeyValue In Obj
             If VBA.Len(web_Encoded) > 0 Then: web_Encoded = web_Encoded & "&"
@@ -753,7 +755,7 @@ Public Function ParseByFormat(Value As String, Format As WebFormat, _
         Set ParseByFormat = ParseXml(Value)
     Case WebFormat.Custom
 #If EnableCustomFormatting Then
-        Dim web_Converter As Dictionary
+        Dim web_Converter As Object
         Dim web_Callback As String
 
         Set web_Converter = web_GetConverter(CustomFormat)
@@ -815,7 +817,7 @@ Public Function ConvertToFormat(Obj As Variant, Format As WebFormat, Optional Cu
         ConvertToFormat = ConvertToXml(Obj)
     Case WebFormat.Custom
 #If EnableCustomFormatting Then
-        Dim web_Converter As Dictionary
+        Dim web_Converter As Object
         Dim web_Callback As String
 
         Set web_Converter = web_GetConverter(CustomFormat)
@@ -1176,7 +1178,9 @@ Public Sub RegisterConverter( _
     Name As String, MediaType As String, ConvertCallback As String, ParseCallback As String, _
     Optional Instance As Object, Optional ParseType As String = "String")
 
-    Dim web_Converter As New Dictionary
+    Dim web_Converter As Object
+    Set web_Converter = CreateObject("Scripting.Dictionary")
+
     web_Converter("MediaType") = MediaType
     web_Converter("ConvertCallback") = ConvertCallback
     web_Converter("ParseCallback") = ParseCallback
@@ -1186,13 +1190,13 @@ Public Sub RegisterConverter( _
         Set web_Converter("Instance") = Instance
     End If
 
-    If web_pConverters Is Nothing Then: Set web_pConverters = New Dictionary
+    If web_pConverters Is Nothing Then: Set web_pConverters = CreateObject("Scripting.Dictionary")
     Set web_pConverters(Name) = web_Converter
 End Sub
 
 ' Helper for getting custom converter
 ' @throws 11002 - No matching converter has been registered
-Private Function web_GetConverter(web_CustomFormat As String) As Dictionary
+Private Function web_GetConverter(web_CustomFormat As String) As Object
     If web_pConverters.Exists(web_CustomFormat) Then
         Set web_GetConverter = web_pConverters(web_CustomFormat)
     Else
@@ -1267,8 +1271,9 @@ End Function
 '   Protocol, Host, Port, Path, Querystring, Hash
 ' @throws 11003 - Error while getting url parts
 ''
-Public Function GetUrlParts(Url As String) As Dictionary
-    Dim web_Parts As New Dictionary
+Public Function GetUrlParts(Url As String) As Object
+    Dim web_Parts As Object
+    Set web_Parts = CreateObject("Scripting.Dictionary")
 
     On Error GoTo web_ErrorHandling
 
@@ -1384,10 +1389,10 @@ End Function
 ' @param {Dictionary} Original
 ' @return {Dictionary} Clone
 ''
-Public Function CloneDictionary(Original As Dictionary) As Dictionary
+Public Function CloneDictionary(Original As Object) As Object
     Dim web_Key As Variant
 
-    Set CloneDictionary = New Dictionary
+    Set CloneDictionary = CreateObject("Scripting.Dictionary")
     For Each web_Key In Original.Keys
         CloneDictionary.Add VBA.CStr(web_Key), Original(web_Key)
     Next web_Key
@@ -1427,8 +1432,9 @@ End Function
 ' @param {Variant} Value
 ' @return {Dictionary}
 ''
-Public Function CreateKeyValue(Key As String, Value As Variant) As Dictionary
-    Dim web_KeyValue As New Dictionary
+Public Function CreateKeyValue(Key As String, Value As Variant) As Object
+    Dim web_KeyValue As Object
+    Set web_KeyValue = CreateObject("Scripting.Dictionary")
 
     web_KeyValue("Key") = Key
     web_KeyValue("Value") = Value
@@ -1456,7 +1462,7 @@ End Function
 ' @return {Variant}
 ''
 Public Function FindInKeyValues(KeyValues As Collection, Key As Variant) As Variant
-    Dim web_KeyValue As Dictionary
+    Dim web_KeyValue As Object
 
     For Each web_KeyValue In KeyValues
         If web_KeyValue("Key") = Key Then
@@ -1496,9 +1502,9 @@ End Function
 ' @return {Variant}
 ''
 Public Sub AddOrReplaceInKeyValues(KeyValues As Collection, Key As Variant, Value As Variant)
-    Dim web_KeyValue As Dictionary
+    Dim web_KeyValue As Object
     Dim web_Index As Long
-    Dim web_NewKeyValue As Dictionary
+    Dim web_NewKeyValue As Object
 
     Set web_NewKeyValue = CreateKeyValue(CStr(Key), Value)
 
@@ -2324,11 +2330,11 @@ End Function
 ' Private Functions
 ' ============================================= '
 
-Private Function json_ParseObject(json_String As String, ByRef json_Index As Long) As Dictionary
+Private Function json_ParseObject(json_String As String, ByRef json_Index As Long) As Object
     Dim json_Key As String
     Dim json_NextChar As String
 
-    Set json_ParseObject = New Dictionary
+    Set json_ParseObject = CreateObject("Scripting.Dictionary")
     json_SkipSpaces json_String, json_Index
     If VBA.Mid$(json_String, json_Index, 1) <> "{" Then
         Err.Raise 10001, "JSONConverter", json_ParseErrorMessage(json_String, json_Index, "Expecting '{'")

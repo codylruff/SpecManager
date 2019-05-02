@@ -184,9 +184,9 @@ Public Function ToFileExtension(extension_type As Long) As String
 End Function
 
 Sub SaveAll()
-    Dim xWb As Workbook
-    For Each xWb In Application.Workbooks
-        If Not xWb.ReadOnly And Windows(xWb.Name).Visible Then
+    Dim xWb As Workbook
+    For Each xWb In Application.Workbooks
+        If Not xWb.ReadOnly And Windows(xWb.Name).Visible Then
             xWb.Save
         End If
     Next
@@ -198,7 +198,7 @@ Function TestForUnsavedChanges() As Boolean
     End If
 End Function
 
-Public AskUser(question As String) As Boolean
+Public Function AskUser(question As String) As Boolean
     Dim answer As String
     If MsgBox(question, vbQuestion + vbYesNo, "???") = vbYes Then
         AskUser = True

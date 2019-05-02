@@ -5,6 +5,7 @@
 $Shell = New-Object -ComObject ("WScript.Shell")
 
 $ErrorActionPreference = 'Stop'
+$tls12 = [Net.ServicePointManager]::SecurityProtocol =  [Enum]::ToObject([Net.SecurityProtocolType], 3072)
 # ----------------------------------------------------------------------------------------------------
 # UPDATE :
 # ----------------------------------------------------------------------------------------------------
@@ -13,7 +14,7 @@ $repo = "codylruff/SpecManager"
 $releases = "https://api.github.com/repos/$repo/releases"
 
 Write-Host Determining latest release
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+[Net.ServicePointManager]::SecurityProtocol = $tls12
 $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
 Write-Output "Current release is : $tag"
 
@@ -40,7 +41,7 @@ New-Item $SpecManagerDir -ItemType Directory | Out-Null
 }
   
 Write-Output ("Downloading spec-manager-$Version. . .")
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+[Net.ServicePointManager]::SecurityProtocol = $tls12
 Invoke-WebRequest $ReleaseUri -Out $ZipFile
 
 Write-Output ("Extracting spec-manager-$Version. . .")

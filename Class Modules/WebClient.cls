@@ -391,7 +391,7 @@ End Function
 ' @param {Dictionary} [Options.UrlSegments]
 ' @return {WebResponse} Response
 ''
-Public Function GetJson(Url As String, Optional Options As Dictionary) As WebResponse
+Public Function GetJson(Url As String, Optional Options As Object) As WebResponse
     Dim web_Request As New WebRequest
     web_Request.CreateFromOptions Options
     web_Request.Resource = Url
@@ -438,7 +438,7 @@ End Function
 ' @param {Dictionary} [Options.UrlSegments]
 ' @return {WebResponse} Response
 ''
-Public Function PostJson(Url As String, Body As Variant, Optional Options As Dictionary) As WebResponse
+Public Function PostJson(Url As String, Body As Variant, Optional Options As Object) As WebResponse
     Dim web_Request As New WebRequest
     web_Request.CreateFromOptions Options
     web_Request.Resource = Url
@@ -507,7 +507,7 @@ End Function
 ''
 Public Function PrepareHttpRequest(Request As WebRequest, Optional Async As Boolean = True) As Object
     Dim web_Http As Object
-    Dim web_KeyValue As Dictionary
+    Dim web_KeyValue As Object
 
     On Error GoTo web_ErrorHandling
 
@@ -606,7 +606,7 @@ End Function
 ''
 Public Function PrepareCurlRequest(Request As WebRequest) As String
     Dim web_Curl As String
-    Dim web_KeyValue As Dictionary
+    Dim web_KeyValue As Object
     Dim web_CookieString As String
 
     On Error GoTo web_ErrorHandling
@@ -715,7 +715,7 @@ Private Sub web_LoadAutoProxy(web_Request As WebRequest)
 #If Win32 Or Win64 Then
     On Error GoTo web_ErrorHandling
 
-    Dim web_Parts As Dictionary
+    Dim web_Parts As Object
     Dim web_Domain As String
     Dim web_ProxyServer As String
     Dim web_ProxyBypassList As String

@@ -206,7 +206,7 @@ Public Function ExtractHeaders(ResponseHeaders As String) As Collection
     Dim web_Lines As Variant
     Dim web_i As Integer
     Dim web_Headers As New Collection
-    Dim web_Header As Dictionary
+    Dim web_Header As Object
     Dim web_ColonPosition As Long
     Dim web_Multiline As Boolean
 
@@ -262,7 +262,7 @@ End Function
 ' @return {Collection} Cookies
 ''
 Public Function ExtractCookies(Headers As Collection) As Collection
-    Dim web_Header As Dictionary
+    Dim web_Header As Object
     Dim web_Cookie As String
     Dim web_Key As String
     Dim web_Value As String

@@ -124,7 +124,7 @@ End Sub
 
 Public Sub UpdateSpecManager()
 ' Must be called from the excel GUI to prevent issues. This particular sub is specific to this application.
-    CheckForUpdates current_version:=GetLocalVersion
+    CheckForNewRelease current_version:=GetLocalVersion
     If update_available Then
         ' If not up to date this sub will be called from within the initialize app procedure
         UpdateAvailablePrompt
@@ -261,7 +261,7 @@ Sub ExecuteUpdateScript()
     x = Shell(Thisworkbook.Path & "\scripts\update.bat", 1) 
 End Sub
 
-Sub CheckForNewRelease()
+Sub CheckForNewRelease(current_version As String)
 ' Check github for a new release
     Dim repo As String
     Dim releases As String
@@ -269,6 +269,7 @@ Sub CheckForNewRelease()
     Dim github As New WebClient
     Dim Response As WebResponse
     Dim json As Collection
+    Dim local_version As String
     
     repo = "repos/codylruff/SpecManager/releases"
     releases = "https://api.github.com/"
@@ -277,7 +278,12 @@ Sub CheckForNewRelease()
     Set json = Response.Data
     tag = json.Item(1).Item("tag_name")
     
+    local_version = "v" & current_version
     ' Check release tag agaisnt current version
-    
+    If local_version <> tag Then
+        update_available = True
+    Else
+        update_available = False
+    End If
 
 End Sub
