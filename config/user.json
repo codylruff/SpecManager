@@ -1,9 +1,9 @@
 {
-    "name" : "CRuff",
-    "default_printer" : "",
-    "app_version" : "0.0.1",
-    "default_log_level" : 2,
-    "privledge_level" : "25",
-    "product_line" : "Admin",
-    "repo_path" : "C:\\Users\\cruff\\source\\SM - Final"
+  "name": "CRuff",
+  "default_printer": "",
+  "app_version": "0.0.1",
+  "default_log_level": 2,
+  "privledge_level": "25",
+  "product_line": "Admin",
+  "repo_path": "C:\\Users\\cruff\\source\\SM - Final"
 }

@@ -1,6 +1,32 @@
 # This script is called from within a vba code module.
 # Upon user prompt the current spec-manager version will be removed
 # and the newest release will be downloaded from github
+# ----------------------------------------------------------------------------
+# GUI Script w/ progress bar for user to see
+# ----------------------------------------------------------------------------
+# Load Assemblies
+[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+[System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+
+# Init Form Object
+$Form = New-Object System.Windows.Forms.Form
+$Form.width = 450
+$Form.height = 150
+$Form.Text = "Spec-Manager Launcher"
+$Form.StartPosition = "CenterScreen"
+
+# Init Status Text label
+$StatusText                      = New-Object system.Windows.Forms.Label
+$StatusText.text                 = "Initializing . . ."
+$StatusText.AutoSize             = $true
+$StatusText.width                = 25
+$StatusText.height               = 10
+$StatusText.location             = New-Object System.Drawing.Point(75,30)
+$StatusText.Font                 = 'Microsoft Sans Serif,15'
+$Form.Controls.Add($StatusText)
+
+# Show Form
+$Form.Show()
 
 $Shell = New-Object -ComObject ("WScript.Shell")
 
@@ -13,10 +39,9 @@ $tls12 = [Net.ServicePointManager]::SecurityProtocol =  [Enum]::ToObject([Net.Se
 $repo = "codylruff/SpecManager"
 $releases = "https://api.github.com/repos/$repo/releases"
 
-Write-Host Determining latest release
+$StatusText.Text = "Determining latest release . . ."
 [Net.ServicePointManager]::SecurityProtocol = $tls12
 $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
-Write-Output "Current release is : $tag"
 
 # Initialize variables
 $Version = $tag
@@ -31,6 +56,7 @@ function SpecManagerShortcut() {
     $ShortCut.TargetPath="$SpecManagerDir\Spec Manager $Version.xlsm"
     $ShortCut.Description = "Spec-Manager Shortcut";
     $shortcut.IconLocation="$SpecManagerDir\Spec-Manager.ico"
+    $ShortCut.WindowStyle = 7
     $ShortCut.Save()
 }
 
@@ -40,19 +66,15 @@ if (!(Test-Path $SpecManagerDir)) {
 New-Item $SpecManagerDir -ItemType Directory | Out-Null
 }
   
-Write-Output ("Downloading spec-manager-$Version. . .")
+$StatusText.Text = "Downloading Spec-Manager. . ."
 [Net.ServicePointManager]::SecurityProtocol = $tls12
 Invoke-WebRequest $ReleaseUri -Out $ZipFile
 
-Write-Output ("Extracting spec-manager-$Version. . .")
+$StatusText.Text = "Installing Spec-Manager. . ."
 Expand-Archive $ZipFile -Destination $SpecManagerDir -Force
 Remove-Item $ZipFile
 
-if (Test-Path ($ConfigDir + "\user.json")) {
-	Remove-Item ($ConfigDir + "\user.json")
-}
-
-Write-Output "Creating Shortcut"
+$StatusText.Text = "Creating Shortcut . . ."
 SpecManagerShortcut
 
 function Enable-VBOM ($App) {
@@ -62,15 +84,15 @@ function Enable-VBOM ($App) {
   
       Set-ItemProperty -Path HKCU:\Software\Microsoft\Office\$Version\$App\Security -Name AccessVBOM -Value 1 -ErrorAction Stop
     } Catch {
-      Write-Output "Failed to enable access to VBA project object model for $App."
+      $StatusText.Text = "Failed to enable access to VBA project object model for $App."
     }
   }
   
-  Write-Output "Enabling access to VBA project object model..."
   Enable-VBOM "Excel"
 # -----------------------------------------------------------------------------------------------------------
 # STARTUP : This powershell code will start the application for the first time.
 # -----------------------------------------------------------------------------------------------------------
+$StatusText.Text = "Loading Spec-Manager . . ."
 $Excel = New-Object -comobject Excel.Application
 $FilePath = "C:\Users\cruff\AppData\Roaming\Spec-Manager-$tag\Spec Manager $tag.xlsm"
 $Excel.Workbooks.Open($FilePath)

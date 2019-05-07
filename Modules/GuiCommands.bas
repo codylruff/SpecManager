@@ -18,24 +18,24 @@ Public Sub DeinitializeApplication()
 End Sub
 
 Public Sub InitializeApplication()
-    If update_available Then
-        MsgBox "Please update the application to the current version."
-        Exit Sub
-    End If
+    ' If update_available Then
+    '     MsgBox "Please update the application to the current version."
+    '     Exit Sub
+    ' End If
     SpecManager.StartApp
-    On Error GoTo UpdateFailure
+    'On Error GoTo UpdateFailure
     ' Check for updates and start up the app if it is up to date
-    Updater.UpdateSpecManager
-    If update_available Then Exit Sub
-    On Error GoTo 0
+    'Updater.UpdateSpecManager
+    'If update_available Then Exit Sub
+    'On Error GoTo 0
     ' If the app is updated and you have already checked for updates the app will start.
-    SpecManager.StartApp
+    'SpecManager.StartApp
     shtDeveloper.Visible = xlSheetVeryHidden
     GoToMain
-    Exit Sub
-UpdateFailure:
-    Logger.Log "Update failed"
-    MsgBox "Update Failed Contact Administrator!"
+    'Exit Sub
+'UpdateFailure:
+'    Logger.Log "Update failed"
+'    MsgBox "Update Failed Contact Administrator!"
 End Sub
 
 
