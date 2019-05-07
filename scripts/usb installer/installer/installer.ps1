@@ -31,7 +31,7 @@ $Form.Show()
 $Shell = New-Object -ComObject ("WScript.Shell")
 
 $ErrorActionPreference = 'Stop'
-$tls12 = [Net.ServicePointManager]::SecurityProtocol =  [Enum]::ToObject([Net.SecurityProtocolType], 3072)
+$tls12 = [Enum]::ToObject([Net.SecurityProtocolType], 3072)
 # ----------------------------------------------------------------------------------------------------
 # UPDATE :
 # ----------------------------------------------------------------------------------------------------
@@ -40,8 +40,12 @@ $repo = "codylruff/SpecManager"
 $releases = "https://api.github.com/repos/$repo/releases"
 
 $StatusText.Text = "Determining latest release . . ."
+# Create a web client object
+$webClient = New-Object System.Net.WebClient
+$json = $webclient.DownloadString($releases)
 [Net.ServicePointManager]::SecurityProtocol = $tls12
-$tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
+#$tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
+$tag = ($json | ConvertFrom-Json)[0].tag_name
 
 # Initialize variables
 $Version = $tag
@@ -68,7 +72,9 @@ New-Item $SpecManagerDir -ItemType Directory | Out-Null
   
 $StatusText.Text = "Downloading Spec-Manager. . ."
 [Net.ServicePointManager]::SecurityProtocol = $tls12
-Invoke-WebRequest $ReleaseUri -Out $ZipFile
+$client = New-Object System.Net.WebClient
+$client.DownloadFile($ReleaseUri, $ZipFile)
+#Invoke-WebRequest $ReleaseUri -Out $ZipFile
 
 $StatusText.Text = "Installing Spec-Manager. . ."
 Expand-Archive $ZipFile -Destination $SpecManagerDir -Force
