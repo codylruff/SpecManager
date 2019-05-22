@@ -170,7 +170,7 @@ Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As St
     Logger.Log SQLstmt
     db.openDb path
     db.selectQry SQLstmt
-    record.data = db.data
+    record.Data = db.Data
     record.Header = db.Header
     record.rows = db.NumRows
     record.columns = db.NumColumns
@@ -190,6 +190,6 @@ Private Sub ExecuteSQL(db As IDatabase, path As String, SQLstmt As String)
         Exit Sub
     Else
         db.openDb (path)
-        db.execute (SQLstmt)
+        db.Execute (SQLstmt)
     End If
 End Sub

@@ -524,7 +524,7 @@ Public Property Get FormattedResource() As String
     Next web_Segment
 
     ' Add querystring
-    If Me.QuerystringParams.Count > 0 Then
+    If Me.QuerystringParams.count > 0 Then
         If VBA.InStr(FormattedResource, "?") <= 0 Then
             FormattedResource = FormattedResource & "?"
         Else
@@ -793,16 +793,16 @@ End Function
 ''
 Public Sub CreateFromOptions(Options As Object)
     If Not Options Is Nothing Then
-        If Options.Exists("Headers") Then
+        If Options.exists("Headers") Then
             Set Me.Headers = Options("Headers")
         End If
-        If Options.Exists("Cookies") Then
+        If Options.exists("Cookies") Then
             Set Me.Cookies = Options("Cookies")
         End If
-        If Options.Exists("QuerystringParams") Then
+        If Options.exists("QuerystringParams") Then
             Set Me.QuerystringParams = Options("QuerystringParams")
         End If
-        If Options.Exists("UrlSegments") Then
+        If Options.exists("UrlSegments") Then
             Set Me.UrlSegments = Options("UrlSegments")
         End If
     End If

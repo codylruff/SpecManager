@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formViewSpecs 
    Caption         =   "Specification Control"
-   ClientHeight    =   11868
+   ClientHeight    =   11865
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9816
+   ClientTop       =   465
+   ClientWidth     =   9810
    OleObjectBlob   =   "formViewSpecs.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -15,63 +15,30 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
+
+Private Sub cmdPrint_Click()
+    PrintConsole
+End Sub
 
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
-    SpecManager.RestartApp
-    SpecManager.MaterialInput UCase(txtMaterialId)
-    SpecManager.PrintSpecification Me
-    PopulateCboSelectRevision
+    MaterialSearch
 End Sub
 
 Private Sub cmdBack_Click()
-    Unload Me
-    GuiCommands.GoToMain
+    Back
 End Sub
 
 Private Sub cmdExportPdf_Click()
-    GuiCommands.ConsoleBoxToPdf
+    ExportPdf
 End Sub
 
 Private Sub cmdSearch_Click()
-    Set App.current_spec = App.specs.Item(cboSelectRevision.value)
-    SpecManager.PrintSpecification Me
+    Search
 End Sub
 
 Private Sub ClearThisForm()
@@ -90,7 +57,7 @@ Private Sub PopulateCboSelectRevision()
     With cboSelectRevision
         For Each rev In App.specs
             .AddItem rev
-            .value = rev
+            .Value = rev
         Next rev
     End With
 End Sub
@@ -123,11 +90,22 @@ Sub Back()
     GuiCommands.GoToMain
 End Sub
 
-Sub ExportPdf()
-    GuiCommands.ConsoleBoxToPdf_Test
+Sub PrintConsole()
+' This subroutine prints the contents of the console box using the default printer assign in user settings.
+    App.console.PrintObjectToSheet App.current_spec, shtSpecificationForm
+    Utils.PrintSheet shtSpecificationForm
+End Sub
+
+Sub ExportPdf(Optional isTest As Boolean = False)
+    App.console.PrintObjectToSheet App.current_spec, shtSpecificationForm
+    If isTest Then
+        GuiCommands.ConsoleBoxToPdf_Test
+    Else
+        GuiCommands.ConsoleBoxToPdf
+    End If
 End Sub
 
 Sub Search()
-    Set App.current_spec = App.specs.Item(cboSelectRevision.value)
+    Set App.current_spec = App.specs.Item(cboSelectRevision.Value)
     SpecManager.PrintSpecification Me
 End Sub

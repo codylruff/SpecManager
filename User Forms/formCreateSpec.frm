@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formCreateSpec
    Caption         =   "Specification Control"
    ClientHeight    =   10548
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9732
+   ClientTop       =   465
+   ClientWidth     =   9735
    OleObjectBlob   =   "formCreateSpec.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,44 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Option Explicit
@@ -98,11 +60,7 @@ End Sub
 
 Private Sub cmdSetProperty_Click()
 ' This executes a set property command
-    With App.current_spec
-        .Properties.Item(Utils.ConvertToCamelCase( _
-                cboSelectProperty.value)) = txtPropertyValue
-    End With
-    SpecManager.PrintSpecification Me
+    SetProperty
 End Sub
 
 Private Sub PopulateCboSelectProperty()
@@ -113,10 +71,10 @@ Private Sub PopulateCboSelectProperty()
     Loop
     With cboSelectProperty
         For Each prop In App.current_spec.Properties
-          .AddItem Utils.SplitCamelCase(CStr(prop))
+          .AddItem prop
         Next prop
     End With
-    txtPropertyValue.value = vbNullString
+    txtPropertyValue.Value = vbNullString
 End Sub
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
@@ -151,8 +109,7 @@ End Sub
 Sub SetProperty()
 ' This executes a set property command
     With App.current_spec
-        .Properties.Item(Utils.ConvertToCamelCase( _
-                cboSelectProperty.value)) = txtPropertyValue
+        .Properties.Item(cboSelectProperty.Value) = txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub

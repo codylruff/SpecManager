@@ -67,7 +67,7 @@ Private Function RemovePreviousVersion() As String
     Dim log_buffer       As String
     Dim source_file      As Object
     Dim exclude_json     As Object
-    Dim message          As String
+    Dim Message          As String
     Debug.Print "Removing previous version"
     log_buffer = "Removing previous version" & vbNewLine
     On Error Resume Next
@@ -78,13 +78,13 @@ Private Function RemovePreviousVersion() As String
             Debug.Print "(excluded)" & source_file.Name
             log_buffer = log_buffer & "(excluded)" & source_file.Name & vbNewLine
          Else
-            message = "Removed : " & source_file.Name
+            Message = "Removed : " & source_file.Name
             If source_file.Type <> 100 Then
                 source_file.Name = source_file.Name & "_OLD"
             End If
             ThisWorkbook.VBProject.VBComponents.Remove source_file
-            Debug.Print message
-            log_buffer = log_buffer & message & vbNewLine
+            Debug.Print Message
+            log_buffer = log_buffer & Message & vbNewLine
         End If
     Next source_file
     RemovePreviousVersion = log_buffer
@@ -258,7 +258,7 @@ Sub ExecuteUpdateScript()
 ' This sub will attempt to run an update script in powershell
 ' Be warned this will shutdown all excel workbooks with no prompt
     Dim x As Variant
-    x = Shell(Thisworkbook.Path & "\scripts\update.bat", 1) 
+    x = Shell(ThisWorkbook.path & "\scripts\update.bat", 1)
 End Sub
 
 Sub CheckForNewRelease(current_version As String)

@@ -33,8 +33,8 @@ Sub CreateTemplate_Test()
     'GuiCommands.GoToMain
     SpecManager.RestartApp
     ' 2. Enter a template name "test_template"
-    formNewTemplateInput.cboProductLine.value = "Test"
-    formNewTemplateInput.txtTemplateName.value = "test_template"
+    formNewTemplateInput.cboProductLine.Value = "Test"
+    formNewTemplateInput.txtTemplateName.Value = "test_template"
     ' 3. Click the Submit button
     formNewTemplateInput.Continue
     ' 4. Change txtPropertyName = "test_property"
@@ -152,7 +152,7 @@ Sub ViewSpecification_AfterEdit_Test()
     ' 4. Click the save pdf button but make sure it does not display a file input box and the file is save in a predetermined place that subsequently
     '    noted in the tests.log file. This pdf should not display but it must be check after the tests are complete as a final step to validate
     '    the process. (save as test_specification_rev1.pdf)
-    formViewSpecs.ExportPdf
+    formViewSpecs.ExportPdf True
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
@@ -166,4 +166,8 @@ Sub AccessControl_Test()
     Logger.Log "------------- Start Access Control Test --------------"
     SpecManager.RestartApp
     Logger.Log "------------- End Access Control Test ----------------"
+End Sub
+
+Public Sub TestTableToJson()
+
 End Sub

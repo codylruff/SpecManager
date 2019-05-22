@@ -25,6 +25,35 @@ $Form.Controls.Add($StatusText)
 
 # Show Form
 $Form.Show()
+###################
+#    FUNCTIONS    #
+###################
+function ConvertFrom-Json20([object] $item){ 
+    add-type -assembly system.web.extensions 
+    $ps_js=new-object system.web.script.serialization.javascriptSerializer 
+    return $ps_js.DeserializeObject($item) 
+}
+
+function Expand-ZipFile($file, $destination)
+{
+    $shell_ = new-object -com shell.application
+    $zip = $shell_.NameSpace($file)
+
+    foreach($item in $zip.items())
+    {
+        $shell_.Namespace($destination).copyhere($item)
+    }
+}
+
+function SpecManagerShortcut() {
+    $Shell = New-Object -ComObject ("WScript.Shell")
+    $ShortCut = $Shell.CreateShortcut("$env:USERPROFILE\Desktop\Spec-Manager.lnk")
+    $ShortCut.TargetPath="$SpecManagerDir\Spec Manager $Version.xlsm"
+    $ShortCut.Description = "Spec-Manager Shortcut";
+    $shortcut.IconLocation="$SpecManagerDir\Spec-Manager.ico"
+    $ShortCut.WindowStyle = 7
+    $ShortCut.Save()
+}
 
 # Initialize variables
 $ErrorActionPreference = 'Stop'
@@ -37,53 +66,76 @@ $releases = "https://api.github.com/repos/codylruff/SpecManager/releases"
 # CHECK FOR UPDATE :
 # ----------------------------------------------------------------------------------------------------
 $StatusText.Text = "Checking for updates . . ."
-# Create a web client object
-$webClient = New-Object System.Net.WebClient
-$json = $webclient.DownloadString($releases)
-[Net.ServicePointManager]::SecurityProtocol = $tls12
-#$tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
-$tag = ($json | ConvertFrom-Json)[0].tag_name
+$StatusText.Refresh()
+Start-Sleep -Seconds 1
 
+# Create a web client object and check for new releases
+[Net.ServicePointManager]::SecurityProtocol = $tls12
+$webClient = New-Object System.Net.WebClient
+$webClient.Headers.Add("user-agent", "Only a test!")
+$release_json = $webclient.DownloadString($releases)
+$tag = (ConvertFrom-Json20($release_json))[0].tag_name
+$Version = $tag
+
+# Get current version number for local_version.json
 $json_file = "$ConfigDir\local_version.json"
-$JSON = Get-Content $json_file | Out-String | ConvertFrom-Json
-$local_version = $JSON.app_version
+$version_json = Get-Content $json_file | Out-String
+$version_string = ConvertFrom-Json20($version_json)
+$local_version = $version_string.app_version
 
 if ($tag -ne $local_version) {
-    $StatusText.Text = "Updating Spec-Manager . . ."   
-    # Initialize variables
-    $NewSpecManagerDir = "$env:APPDATA\Spec-Manager-$tag"
-    $ZipFile = "$NewSpecManagerDir\spec-manager.zip"
+    $StatusText.Text = "Removing Previous Version . . ."
+    $StatusText.Refresh()
+    Start-Sleep -Seconds 1
+    # Remove old installation
+    #Remove-Item -LiteralPath $SpecManagerDir -Force -Recurse
+    #New-Item $SpecManagerDir -ItemType Directory | Out-Null
     
+    # Initialize variables
+    $ZipFile = "$SpecManagerDir\spec-manager.zip"
     $ReleaseUri = "https://github.com/codylruff/SpecManager/releases/download/$tag/spec-manager-$tag.zip";
     
-    if (!(Test-Path $NewSpecManagerDir)) {
-    New-Item $NewSpecManagerDir -ItemType Directory | Out-Null
+    # Check version to speed up program if PSVersion 3.0 or higher.
+    if($PSVersionTable.PSVersion.Major -gt 2){
+        $StatusText.Text = "Downloading Latest Version . . ."
+        $StatusText.Refresh()
+        [Net.ServicePointManager]::SecurityProtocol = $tls12
+        Invoke-WebRequest $ReleaseUri -Out $ZipFile
+        $StatusText.Text = "Installing Latest Version . . ."
+        $StatusText.Refresh()  
+        Expand-Archive $ZipFile -Destination $SpecManagerDir -Force
+    }else {
+        $StatusText.Text = "Downloading Latest Version (w/ PSv2) . . ."
+        $StatusText.Refresh()
+        [Net.ServicePointManager]::SecurityProtocol = $tls12
+        $client = New-Object System.Net.WebClient
+        $client.Headers.Add("user-agent", "Only a test!")
+        $client.DownloadFile($ReleaseUri, $ZipFile)
+        StatusText.Text = "Installing Latest Version . . ."
+        $StatusText.Refresh()
+        Start-Sleep -Seconds 1
+        Expand-ZipFile $ZipFile -destination $SpecManagerDir 
     }
-      
-    [Net.ServicePointManager]::SecurityProtocol = $tls12
-    Invoke-WebRequest $ReleaseUri -Out $ZipFile
     
-    Expand-Archive $ZipFile -Destination $NewSpecManagerDir -Force
-    #Remove-Item $ZipFile
-    $Shell = New-Object -ComObject ("WScript.Shell")
-    $ShortCut = $Shell.CreateShortcut("$env:USERPROFILE\Desktop\Spec-Manager.lnk")
-    $ShortCut.TargetPath="$NewSpecManagerDir\scripts\start.bat"
-    $ShortCut.Description = "Spec-Manager Launcher";
-    $ShortCut.IconLocation="$NewSpecManagerDir\Spec-Manager.ico"
-    $ShortCut.WindowStyle = 7
-    $ShortCut.Save()
+    $StatusText.Text = "Cleaning Up . . ."
+    $StatusText.Refresh()
+    Start-Sleep -Seconds 1
+    Remove-Item $ZipFile  
+    SpecManagerShortcut
 
 }
 
 # -------------------------------------------------------------------------------------------------
 # START : This powershell code will start the application.
 # -------------------------------------------------------------------------------------------------
-$StatusText.Text = "Loading Spec-Manager . . ."
+$StatusText.Text = "Launching Spec-Manager . . ."
+$StatusText.Refresh()
+Start-Sleep -Seconds 1
 $Excel = New-Object -comobject Excel.Application
-$FilePath = "C:\Users\cruff\AppData\Roaming\Spec-Manager-$tag\Spec Manager $tag.xlsm"
+$FilePath = "C:\Users\cruff\AppData\Roaming\Spec-Manager\Spec Manager $tag.xlsm"
 $Excel.Workbooks.Open($FilePath)
 $Excel.visible = $true
-
+# Close the form
 $Form.Hide
 
 

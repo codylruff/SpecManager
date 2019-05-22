@@ -31,16 +31,16 @@ Private WarpLengthYds_          As Double
 ' AUTO-PROPERTIES
 '----------------
 ' WarpLengthYds
-Public Property Let WarpLengthYds(value As Double): WarpLengthYds_ = value: End Property
+Public Property Let WarpLengthYds(Value As Double): WarpLengthYds_ = Value: End Property
 Public Property Get WarpLengthYds() As Double: WarpLengthYds = WarpLengthYds_: End Property
 ' PackageWeightlbs
-Public Property Let PackageWeightlbs(value As Double): PackageWeightlbs_ = value: End Property
+Public Property Let PackageWeightlbs(Value As Double): PackageWeightlbs_ = Value: End Property
 Public Property Get PackageWeightlbs() As Double: PackageWeightlbs = PackageWeightlbs_: End Property
 ' NumberOfBobbins
-Public Property Let NumberOfBobbins(value As Double): NumberOfBobbins_ = value: End Property
+Public Property Let NumberOfBobbins(Value As Double): NumberOfBobbins_ = Value: End Property
 Public Property Get NumberOfBobbins() As Double: NumberOfBobbins = NumberOfBobbins_: End Property
 ' Specification
-Public Property Set Specification(value As Specification): Set Specification_ = value: End Property
+Public Property Set Specification(Value As Specification): Set Specification_ = Value: End Property
 Public Property Get Specification() As Specification: Set Specification = Specification_: End Property
 '----------------
 ' PROPERTIES

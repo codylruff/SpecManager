@@ -36,7 +36,7 @@ Option Compare Text
 
 
 
-Public Function ArrayToCollection(Arr As Variant, ByRef Coll As VBA.Collection) As Object
+Public Function ArrayToCollection(arr As Variant, ByRef coll As VBA.Collection) As Object
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Set ArrayToCollection
 ' This function converts an array to a Collection. Arr may be either a 1-dimensional
@@ -54,7 +54,7 @@ Dim KeyVal As String
 ''''''''''''''''''''''''''
 ' Ensure Arr is an array.
 '''''''''''''''''''''''''
-If IsArray(Arr) = False Then
+If IsArray(arr) = False Then
     Set ArrayToCollection = Nothing
     Exit Function
 End If
@@ -68,7 +68,7 @@ End If
 ' duplicate key error).
 '''''''''''''''''''''''''''''''''''
 On Error GoTo ErrH:
-Select Case NumberOfArrayDimensions(Arr:=Arr)
+Select Case NumberOfArrayDimensions(arr:=arr)
     Case 0
         '''''''''''''''''''''''''''''''
         ' Unallocated array. Exit with
@@ -83,8 +83,8 @@ Select Case NumberOfArrayDimensions(Arr:=Arr)
         ' array. Load the elements of
         ' the array without keys.
         ''''''''''''''''''''''''''''''
-        For Ndx = LBound(Arr) To UBound(Arr)
-            Coll.Add Item:=Arr(Ndx)
+        For Ndx = LBound(arr) To UBound(arr)
+            coll.Add Item:=arr(Ndx)
         Next Ndx
     
     Case 2
@@ -94,19 +94,19 @@ Select Case NumberOfArrayDimensions(Arr:=Arr)
         ' is the Item and the second
         ' column is the Key.
         '''''''''''''''''''''''''''''
-        For Ndx = LBound(Arr, 1) To UBound(Arr, 1)
-            KeyVal = Arr(Ndx, 1)
+        For Ndx = LBound(arr, 1) To UBound(arr, 1)
+            KeyVal = arr(Ndx, 1)
             If Trim(KeyVal) = vbNullString Then
                 '''''''''''''''''''''''''''''''''
                 ' Key is empty. Add to collection
                 ' without a key.
                 '''''''''''''''''''''''''''''''''
-                Coll.Add Item:=Arr(Ndx, 1)
+                coll.Add Item:=arr(Ndx, 1)
             Else
                 '''''''''''''''''''''''''''''''''
                 ' Key is not empty. Add with key.
                 '''''''''''''''''''''''''''''''''
-                Coll.Add Item:=Arr(Ndx, 0), Key:=KeyVal
+                coll.Add Item:=arr(Ndx, 0), Key:=KeyVal
             End If
         Next Ndx
     
@@ -121,7 +121,7 @@ Select Case NumberOfArrayDimensions(Arr:=Arr)
 
 End Select
 
-Set ArrayToCollection = Coll
+Set ArrayToCollection = coll
 Exit Function
 
 ErrH:
@@ -135,7 +135,7 @@ ErrH:
 
 End Function
 
-Public Function ArrayToDictionary(Arr As Variant, Dict As Object) As Object
+Public Function ArrayToDictionary(arr As Variant, dict As Object) As Object
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' ArrayToDictionary
 ' This function loads the contents of a two dimensional array into the Dict dictionary
@@ -152,7 +152,7 @@ Dim KeyVal As String
 '''''''''''''''''''''''''
 ' Ensure Arr is an array.
 '''''''''''''''''''''''''
-If IsArray(Arr) = False Then
+If IsArray(arr) = False Then
     Set ArrayToDictionary = Nothing
     Exit Function
 End If
@@ -160,7 +160,7 @@ End If
 '''''''''''''''''''''''''''''''
 ' Ensure Arr is two dimensional
 '''''''''''''''''''''''''''''''
-If NumberOfArrayDimensions(Arr:=Arr) <> 2 Then
+If NumberOfArrayDimensions(arr:=arr) <> 2 Then
     Set ArrayToDictionary = Nothing
     Exit Function
 End If
@@ -170,14 +170,14 @@ End If
 ' add the items to the Dictionary.
 '''''''''''''''''''''''''''''''''''
 On Error GoTo ErrH:
-For Ndx = LBound(Arr, 1) To UBound(Arr, 1)
-    Dict.Add Key:=Arr(Ndx, LBound(Arr, 2) + 1), Item:=Arr(Ndx, LBound(Arr, 2))
+For Ndx = LBound(arr, 1) To UBound(arr, 1)
+    dict.Add Key:=arr(Ndx, LBound(arr, 2) + 1), Item:=arr(Ndx, LBound(arr, 2))
 Next Ndx
     
 '''''''''''''''''
 ' Return Success.
 '''''''''''''''''
-Set ArrayToDictionary = Dict
+Set ArrayToDictionary = dict
 Exit Function
 
 ErrH:
@@ -185,7 +185,7 @@ Set ArrayToDictionary = Nothing
 
 End Function
 
-Public Function CollectionToArray(Coll As VBA.Collection, Arr As Variant) As Variant
+Public Function CollectionToArray(coll As VBA.Collection, arr As Variant) As Variant
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' CollectionToArray
 ' This function converts a collection object to a single dimensional array.
@@ -202,7 +202,7 @@ Dim Ndx As Long
 ''''''''''''''''''''''''''''''
 ' Ensure Coll is not Nothing.
 ''''''''''''''''''''''''''''''
-If Coll Is Nothing Then
+If coll Is Nothing Then
     CollectionToArray = Null
     Exit Function
 End If
@@ -211,11 +211,11 @@ End If
 ' Ensure Arr is an array and
 ' is dynamic.
 ''''''''''''''''''''''''''''''
-If IsArray(Arr) = False Then
+If IsArray(arr) = False Then
     CollectionToArray = Null
     Exit Function
 End If
-If IsArrayDynamic(Arr:=Arr) = False Then
+If IsArrayDynamic(arr:=arr) = False Then
     CollectionToArray = Null
     Exit Function
 End If
@@ -224,7 +224,7 @@ End If
 ' Ensure Coll has at least
 ' one item.
 ''''''''''''''''''''''''''''
-If Coll.Count < 1 Then
+If coll.count < 1 Then
     CollectionToArray = Null
     Exit Function
 End If
@@ -233,27 +233,27 @@ End If
 ' Redim Arr to the number of
 ' elements in the collection.
 '''''''''''''''''''''''''''''
-ReDim Arr(1 To Coll.Count)
+ReDim arr(1 To coll.count)
 '''''''''''''''''''''''''''''
 ' Loop through the colletcion
 ' and add the elements of
 ' Collection to Arr.
 '''''''''''''''''''''''''''''
-For Ndx = 1 To Coll.Count
-    If IsObject(Coll(Ndx)) = True Then
-        Set Arr(Ndx) = Coll(Ndx)
+For Ndx = 1 To coll.count
+    If IsObject(coll(Ndx)) = True Then
+        Set arr(Ndx) = coll(Ndx)
     Else
-        Arr(Ndx) = Coll(Ndx)
+        arr(Ndx) = coll(Ndx)
     End If
 Next Ndx
 
-CollectionToArray = Arr
+CollectionToArray = arr
 
 End Function
 
 
-Public Function CollectionToDictionary(Coll As VBA.Collection, _
-    Dict As Object) As Object
+Public Function CollectionToDictionary(coll As VBA.Collection, _
+    dict As Object) As Object
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' CollectionToDictionary
 '
@@ -286,21 +286,21 @@ Dim ItemVar As Variant
 ''''''''''''''''''''''''''''''''''''''''''''
 ' Ensure Coll is not Nothing.
 ''''''''''''''''''''''''''''''''''''''''''''
-If (Coll Is Nothing) Then
+If (coll Is Nothing) Then
     Set CollectionToDictionary = Nothing
     Exit Function
 End If
 ''''''''''''''''''''''''''''''''''''''''''''
 ' Reset Dict to a new, empty Dictionary
 ''''''''''''''''''''''''''''''''''''''''''''
-Set Dict = Nothing
-Set Dict = CreateObject("Scripting.Dictionary")
+Set dict = Nothing
+Set dict = CreateObject("Scripting.Dictionary")
 '''''''''''''''''''''''''''''''''''''''''''
 ' Ensure we have at least one element in
 ' the collection object.
 '''''''''''''''''''''''''''''''''''''''''''
-If Coll.Count = 0 Then
-    Set Dict = Nothing
+If coll.count = 0 Then
+    Set dict = Nothing
     Set CollectionToDictionary = Nothing
     Exit Function
 End If
@@ -313,22 +313,22 @@ End If
 ' to get the Key to be used in the Dictionary
 ' item.
 '''''''''''''''''''''''''''''''''''''''''''
-For Ndx = 1 To Coll.Count
+For Ndx = 1 To coll.count
     '''''''''''''''''''''''''''''''''''''''
     ' Coll may contain object variables.
     ' Test for this condition and set
     ' ItemVar appropriately.
     '''''''''''''''''''''''''''''''''''''''
-    If IsObject(Coll(Ndx)) = True Then
-        Set ItemVar = Coll(Ndx)
+    If IsObject(coll(Ndx)) = True Then
+        Set ItemVar = coll(Ndx)
     Else
-        ItemVar = Coll(Ndx)
+        ItemVar = coll(Ndx)
     End If
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' Call the user-supplied CreateDictionaryKeyFromCollectionItem
     ' function to get the Key to be used in the Dictionary.
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ItemKey = CreateDictionaryKeyFromCollectionItem(Dict:=Dict, Item:=ItemVar)
+    ItemKey = CreateDictionaryKeyFromCollectionItem(dict:=dict, Item:=ItemVar)
     ''''''''''''''''''''''''''''''''
     ' ItemKey must not be spaces or
     ' an empty string.
@@ -342,8 +342,8 @@ For Ndx = 1 To Coll.Count
     ' See if ItemKey already exists in the Dictionary.
     ' If so, return False. You can't have duplicate keys.
     '''''''''''''''''''''''''''''''''''''''''''''''''''''
-    If Dict.Exists(Key:=ItemKey) = True Then
-        Set Dict = Nothing
+    If dict.exists(Key:=ItemKey) = True Then
+        Set dict = Nothing
         Set CollectionToDictionary = Nothing
         Exit Function
     End If
@@ -351,14 +351,14 @@ For Ndx = 1 To Coll.Count
     ' ItemKey does not exist in Dict, so add ItemVar to
     ' Dict with a key of ItemKey.
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    Dict.Add Key:=ItemKey, Item:=ItemVar
+    dict.Add Key:=ItemKey, Item:=ItemVar
 Next Ndx
-Set CollectionToDictionary = Dict
+Set CollectionToDictionary = dict
 
 End Function
 
 Private Function CreateDictionaryKeyFromCollectionItem( _
-    Dict As Object, _
+    dict As Object, _
     Item As Variant) As String
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' CreateDictionaryKeyFromCollectionItem
@@ -382,7 +382,7 @@ CreateDictionaryKeyFromCollectionItem = ItemKey
 End Function
 
 
-Public Function CollectionToRange(Coll As VBA.Collection, StartCells As Range) As Boolean
+Public Function CollectionToRange(coll As VBA.Collection, StartCells As Range) As Boolean
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' CollectionToRange
 ' This procedure writes the contents of a Collection Coll to a range of cells starting
@@ -405,7 +405,7 @@ Dim Ndx As Long
 '''''''''''''''''''''''''''''''''''''
 ' Ensure parameters are not Nothing.
 '''''''''''''''''''''''''''''''''''''
-If (Coll Is Nothing) Or (StartCells Is Nothing) Then
+If (coll Is Nothing) Or (StartCells Is Nothing) Then
     CollectionToRange = False
     Exit Function
 End If
@@ -413,21 +413,21 @@ End If
 '''''''''''''''''''''''''''''''''''''
 ' Ensure StartCells is a single area.
 '''''''''''''''''''''''''''''''''''''
-If StartCells.Areas.Count > 1 Then
+If StartCells.Areas.count > 1 Then
     CollectionToRange = False
     Exit Function
 End If
 
-If StartCells.Cells.Count = 1 Then
+If StartCells.Cells.count = 1 Then
     '''''''''''''''''''''''''''''''''''''
     ' StartCells is one cell. Write out
     ' the collection moving downwards.
     '''''''''''''''''''''''''''''''''''''
     Set DestRng = StartCells
-    For Each V In Coll
+    For Each V In coll
         If IsObject(V) = False Then
             DestRng.Value = V
-            If DestRng.Row < DestRng.Parent.Rows.Count Then
+            If DestRng.Row < DestRng.Parent.rows.count Then
                 Set DestRng = DestRng(2, 1)
             Else
                 CollectionToRange = False
@@ -440,21 +440,21 @@ If StartCells.Cells.Count = 1 Then
     Exit Function
 End If
 
-If StartCells.Cells.Count = 2 Then
+If StartCells.Cells.count = 2 Then
     ''''''''''''''''''''''''''''''''''
     ' Test the orientation of the two
     ' cells in StartCells.
     ''''''''''''''''''''''''''''''''''
-    If StartCells.Rows.Count = 1 Then
+    If StartCells.rows.count = 1 Then
         '''''''''''''''''''''''''''''''''
         ' Write out the Colleciton moving
         ' across the row.
         '''''''''''''''''''''''''''''''''
         Set DestRng = StartCells.Cells(1, 1)
-        For Each V In Coll
+        For Each V In coll
             If IsObject(V) = False Then
                 DestRng.Value = V
-                If DestRng.Column < StartCells.Parent.Columns.Count Then
+                If DestRng.Column < StartCells.Parent.columns.count Then
                     Set DestRng = DestRng(1, 2)
                 Else
                     CollectionToRange = False
@@ -470,10 +470,10 @@ If StartCells.Cells.Count = 2 Then
         ' down the column.
         '''''''''''''''''''''''''''''''''
         Set DestRng = StartCells.Cells(1, 1)
-        For Each V In Coll
+        For Each V In coll
             If IsObject(V) = False Then
                 DestRng.Value = V
-                If DestRng.Row < StartCells.Parent.Rows.Count Then
+                If DestRng.Row < StartCells.Parent.rows.count Then
                     Set DestRng = DestRng(2, 1)
                 Else
                     CollectionToRange = False
@@ -489,9 +489,9 @@ End If
 ' Write the collection only into
 ' Cells of StartCells.
 '''''''''''''''''''''''''''''''''''''
-For Ndx = 1 To StartCells.Cells.Count
-    If Ndx <= Coll.Count Then
-        V = Coll(Ndx)
+For Ndx = 1 To StartCells.Cells.count
+    If Ndx <= coll.count Then
+        V = coll(Ndx)
         If IsObject(V) = False Then
             StartCells.Cells(Ndx).Value = V
         End If
@@ -504,7 +504,7 @@ CollectionToRange = True
 End Function
 
 
-Public Function DictionaryToRange(Dict As Object, StartCells As Range) As Boolean
+Public Function DictionaryToRange(dict As Object, StartCells As Range) As Boolean
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' DictionaryToRange
 ' This procedure writes the contents of a Dictionary Dict to a range of cells starting
@@ -527,7 +527,7 @@ Dim Ndx As Long
 '''''''''''''''''''''''''''''''''''''
 ' Ensure parameters are not Nothing.
 '''''''''''''''''''''''''''''''''''''
-If (Dict Is Nothing) Or (StartCells Is Nothing) Then
+If (dict Is Nothing) Or (StartCells Is Nothing) Then
     DictionaryToRange = False
     Exit Function
 End If
@@ -535,21 +535,21 @@ End If
 '''''''''''''''''''''''''''''''''''''
 ' Ensure StartCells is a single area.
 '''''''''''''''''''''''''''''''''''''
-If StartCells.Areas.Count > 1 Then
+If StartCells.Areas.count > 1 Then
     DictionaryToRange = False
     Exit Function
 End If
 
-If StartCells.Cells.Count = 1 Then
+If StartCells.Cells.count = 1 Then
     '''''''''''''''''''''''''''''''''''''
     ' StartCells is one cell. Write out
     ' the collection moving downwards.
     '''''''''''''''''''''''''''''''''''''
     Set DestRng = StartCells
-    For Each V In Dict.Items
+    For Each V In dict.Items
         If IsObject(V) = False Then
             DestRng.Value = V
-            If DestRng.Row < DestRng.Parent.Rows.Count Then
+            If DestRng.Row < DestRng.Parent.rows.count Then
                 Set DestRng = DestRng(2, 1)
             Else
                 DictionaryToRange = False
@@ -562,21 +562,21 @@ If StartCells.Cells.Count = 1 Then
     Exit Function
 End If
 
-If StartCells.Cells.Count = 2 Then
+If StartCells.Cells.count = 2 Then
     ''''''''''''''''''''''''''''''''''
     ' Test the orientation of the two
     ' cells in StartCells.
     ''''''''''''''''''''''''''''''''''
-    If StartCells.Rows.Count = 1 Then
+    If StartCells.rows.count = 1 Then
         '''''''''''''''''''''''''''''''''
         ' Write out the Colleciton moving
         ' across the row.
         '''''''''''''''''''''''''''''''''
         Set DestRng = StartCells.Cells(1, 1)
-        For Each V In Dict.Items
+        For Each V In dict.Items
             If IsObject(V) = False Then
                 DestRng.Value = V
-                If DestRng.Column < StartCells.Parent.Columns.Count Then
+                If DestRng.Column < StartCells.Parent.columns.count Then
                     Set DestRng = DestRng(1, 2)
                 Else
                     DictionaryToRange = False
@@ -592,10 +592,10 @@ If StartCells.Cells.Count = 2 Then
         ' down the column.
         '''''''''''''''''''''''''''''''''
         Set DestRng = StartCells.Cells(1, 1)
-        For Each V In Dict.Items
+        For Each V In dict.Items
             If IsObject(V) = False Then
                 DestRng.Value = V
-                If DestRng.Row < StartCells.Parent.Rows.Count Then
+                If DestRng.Row < StartCells.Parent.rows.count Then
                     Set DestRng = DestRng(2, 1)
                 Else
                     DictionaryToRange = False
@@ -611,9 +611,9 @@ End If
 ' Write the Dictionary only into
 ' Cells of StartCells.
 '''''''''''''''''''''''''''''''''''''
-For Ndx = 1 To StartCells.Cells.Count
-    If Ndx <= Dict.Count Then
-        V = Dict.Items(Ndx - 1)
+For Ndx = 1 To StartCells.Cells.count
+    If Ndx <= dict.count Then
+        V = dict.Items(Ndx - 1)
         If IsObject(V) = False Then
             StartCells.Cells(Ndx).Value = V
         End If
@@ -625,7 +625,7 @@ DictionaryToRange = True
 
 End Function
 
-Public Function DictionaryToArray(Dict As Object, Arr As Variant) As Boolean
+Public Function DictionaryToArray(dict As Object, arr As Variant) As Boolean
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' DictionaryToArray
 ' This creates a 0-based, 2-dimensional array Arr from a Dictionary object.  Each
@@ -645,7 +645,7 @@ Dim Ndx As Long
 ' Ensure that Arr is an array
 ' of Variants.
 '''''''''''''''''''''''''''''
-If VarType(Arr) <> (vbArray + vbVariant) Then
+If VarType(arr) <> (vbArray + vbVariant) Then
     DictionaryToArray = False
     Exit Function
 End If
@@ -653,7 +653,7 @@ End If
 ''''''''''''''''''''''''''''''''
 ' Ensure Arr is a dynamic array.
 ''''''''''''''''''''''''''''''''
-If IsArrayDynamic(Arr:=Arr) = False Then
+If IsArrayDynamic(arr:=arr) = False Then
     DictionaryToArray = False
     Exit Function
 End If
@@ -661,7 +661,7 @@ End If
 '''''''''''''''''''''''''''''
 ' Ensure Dict is not nothing.
 '''''''''''''''''''''''''''''
-If Dict Is Nothing Then
+If dict Is Nothing Then
     DictionaryToArray = False
     Exit Function
 End If
@@ -670,7 +670,7 @@ End If
 ' Ensure that Dict contains
 ' at least one entry.
 '''''''''''''''''''''''''''
-If Dict.Count = 0 Then
+If dict.count = 0 Then
     DictionaryToArray = False
     Exit Function
 End If
@@ -678,18 +678,18 @@ End If
 '''''''''''''''''''''''''''''
 ' Redim the Arr variable.
 '''''''''''''''''''''''''''''
-ReDim Arr(0 To Dict.Count - 1, 0 To 1)
+ReDim arr(0 To dict.count - 1, 0 To 1)
 
-For Ndx = 0 To Dict.Count - 1
-    Arr(Ndx, 0) = Dict.Keys(Ndx)
+For Ndx = 0 To dict.count - 1
+    arr(Ndx, 0) = dict.Keys(Ndx)
     '''''''''''''''''''''''''''''''''''''''''
     ' Test to see if the item in the Dict is
     ' an object. If so, use Set.
     '''''''''''''''''''''''''''''''''''''''''
-    If IsObject(Dict.Items(Ndx)) = True Then
-        Set Arr(Ndx, 1) = Dict.Items(Ndx)
+    If IsObject(dict.Items(Ndx)) = True Then
+        Set arr(Ndx, 1) = dict.Items(Ndx)
     Else
-        Arr(Ndx, 1) = Dict.Items(Ndx)
+        arr(Ndx, 1) = dict.Items(Ndx)
     End If
 
 Next Ndx
@@ -701,7 +701,7 @@ DictionaryToArray = True
 
 End Function
 
-Public Function DictionaryToCollection(Dict As Object, Coll As VBA.Collection, _
+Public Function DictionaryToCollection(dict As Object, coll As VBA.Collection, _
     Optional PreserveColl As Boolean = False, _
     Optional StopOnDuplicateKey As Boolean = False) As Boolean
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -725,7 +725,7 @@ Dim KeyVal As String
 ''''''''''''''''''''''''''''''''
 ' Ensure Dict is not Nothing
 ''''''''''''''''''''''''''''''''
-If Dict Is Nothing Then
+If dict Is Nothing Then
     DictionaryToCollection = False
     Exit Function
 End If
@@ -736,8 +736,8 @@ End If
 ' Coll Collection.
 '''''''''''''''''''''''''''''''''
 If PreserveColl = False Then
-    Set Coll = Nothing
-    Set Coll = New VBA.Collection
+    Set coll = Nothing
+    Set coll = New VBA.Collection
 End If
 
 '''''''''''''''''''''''''''''''''
@@ -746,15 +746,15 @@ End If
 ' the Collection.
 '''''''''''''''''''''''''''''''''
 On Error Resume Next
-For Ndx = 0 To Dict.Count - 1
-    If IsObject(Dict.Items(Ndx)) = True Then
-        Set ItemVar = Dict.Items(Ndx)
+For Ndx = 0 To dict.count - 1
+    If IsObject(dict.Items(Ndx)) = True Then
+        Set ItemVar = dict.Items(Ndx)
     Else
-        ItemVar = Dict.Items(Ndx)
+        ItemVar = dict.Items(Ndx)
     End If
-    KeyVal = Dict.Keys(Ndx)
+    KeyVal = dict.Keys(Ndx)
     Err.Clear
-    Coll.Add Item:=ItemVar, Key:=KeyVal
+    coll.Add Item:=ItemVar, Key:=KeyVal
     If Err.Number <> 0 Then
         If StopOnDuplicateKey = True Then
             DictionaryToCollection = False
@@ -765,7 +765,7 @@ Next Ndx
 DictionaryToCollection = True
 End Function
 
-Public Function KeyExistsInCollection(Coll As VBA.Collection, KeyName As String) As Boolean
+Public Function KeyExistsInCollection(coll As VBA.Collection, KeyName As String) As Boolean
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' KeyExistsInCollection
 ' This function determines if the key KeyName exists in the collection Coll. The
@@ -774,13 +774,13 @@ Public Function KeyExistsInCollection(Coll As VBA.Collection, KeyName As String)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     Dim V As Variant
     
-    If Coll Is Nothing Then
+    If coll Is Nothing Then
         KeyExistsInCollection = False
         Exit Function
     End If
     
     On Error Resume Next
-    V = Coll(KeyName)
+    V = coll(KeyName)
     Select Case Err.Number
         Case 0
             KeyExistsInCollection = True
@@ -792,7 +792,7 @@ Public Function KeyExistsInCollection(Coll As VBA.Collection, KeyName As String)
             ' error code.
             ''''''''''''''''''''''''''''''''''''''
             Err.Clear
-            Set V = Coll(KeyName)
+            Set V = coll(KeyName)
             Select Case Err.Number
                 Case 0
                     KeyExistsInCollection = True
@@ -811,7 +811,7 @@ End Function
 
 
 
-Public Sub SortCollection(ByRef Coll As VBA.Collection, _
+Public Sub SortCollection(ByRef coll As VBA.Collection, _
     Optional Descending As Boolean = False, _
     Optional CompareMode As VbCompareMethod = vbTextCompare)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -842,13 +842,13 @@ Public Sub SortCollection(ByRef Coll As VBA.Collection, _
 ' download at www.cpearson.com/excel/qsort.htm .
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Dim Arr() As Variant
+Dim arr() As Variant
 Dim Ndx As Long
 
 '''''''''''''''''''''''''''''''''''''
 ' Ensure that Coll is not Nothing.
 '''''''''''''''''''''''''''''''''''''
-If Coll Is Nothing Then
+If coll Is Nothing Then
     Exit Sub
 End If
 
@@ -867,16 +867,16 @@ End Select
 ' is 0 or 1, no sorting is required.
 ' Get out.
 ''''''''''''''''''''''''''''''''''''''
-If Coll.Count <= 1 Then
+If coll.count <= 1 Then
     Exit Sub
 End If
-ReDim Arr(1 To Coll.Count)
-For Ndx = 1 To Coll.Count
-    If IsObject(Arr(Ndx)) = True Or IsArray(Arr(Ndx)) = True Then
+ReDim arr(1 To coll.count)
+For Ndx = 1 To coll.count
+    If IsObject(arr(Ndx)) = True Or IsArray(arr(Ndx)) = True Then
         Debug.Print "The items of the Collection cannot be arrays or objects."
         Exit Sub
     End If
-    Arr(Ndx) = Coll(Ndx)
+    arr(Ndx) = coll(Ndx)
 Next Ndx
 ''''''''''''''''''''''''''''''''''''''''''
 ' Sort the elements in the array. The
@@ -884,24 +884,24 @@ Next Ndx
 ' and downloadable from:
 ' http://www.cpearson.com/excel/qsort.htm
 ''''''''''''''''''''''''''''''''''''''''''
-QSortInPlace InputArray:=Arr, LB:=-1, UB:=-1, _
+QSortInPlace InputArray:=arr, LB:=-1, UB:=-1, _
     Descending:=Descending, CompareMode:=vbTextCompare
 ''''''''''''''''''''''''''''''''''''''''''
 ' Now reset Coll to a new, empty colletion.
 ''''''''''''''''''''''''''''''''''''''''''
-Set Coll = Nothing
-Set Coll = New VBA.Collection
+Set coll = Nothing
+Set coll = New VBA.Collection
 ''''''''''''''''''''''''''''''''''''''''''
 ' Load the array back into the new
 ' collection.
 '''''''''''''''''''''''''''''''''''''''''
-For Ndx = LBound(Arr) To UBound(Arr)
-    Coll.Add Item:=Arr(Ndx)
+For Ndx = LBound(arr) To UBound(arr)
+    coll.Add Item:=arr(Ndx)
 Next Ndx
 
 End Sub
 
-Function RangeToDictionary(KeyRange As Range, ItemRange As Range, Dict As Object, _
+Function RangeToDictionary(KeyRange As Range, ItemRange As Range, dict As Object, _
     Optional RangeAsObject As Boolean = False, _
     Optional StopOnDuplicateKey As Boolean = True, _
     Optional ReplaceOnDuplicateKey As Boolean = False) As Boolean
@@ -948,8 +948,8 @@ End If
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Ensure KeyRange and ItemRange as the same size.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If (KeyRange.Rows.Count <> ItemRange.Rows.Count) Or _
-    (KeyRange.Columns.Count <> ItemRange.Columns.Count) Then
+If (KeyRange.rows.count <> ItemRange.rows.count) Or _
+    (KeyRange.columns.count <> ItemRange.columns.count) Then
     RangeToDictionary = False
     Exit Function
 End If
@@ -958,7 +958,7 @@ End If
 ' Ensure both KeyRange and ItemRange are single area
 ' ranges.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If (KeyRange.Areas.Count > 1) Or (ItemRange.Areas.Count > 1) Then
+If (KeyRange.Areas.count > 1) Or (ItemRange.Areas.count > 1) Then
     RangeToDictionary = False
     Exit Function
 End If
@@ -967,8 +967,8 @@ End If
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' If Dict is Nothing, create a new dictionary.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If Dict Is Nothing Then
-    Set Dict = CreateObject("Scripting.Dictionary")
+If dict Is Nothing Then
+    Set dict = CreateObject("Scripting.Dictionary")
 End If
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -977,7 +977,7 @@ End If
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 For Each KRng In KeyRange.Cells
     ItemNdx = ItemNdx + 1
-    KeyExists = Dict.Exists(Key:=KRng.Text)
+    KeyExists = dict.exists(Key:=KRng.Text)
     If KeyExists = True Then
         '''''''''''''''''''''''''''''''''''''''''''
         ' The key already exists in the Dictionary.
@@ -998,7 +998,7 @@ For Each KRng In KeyRange.Cells
         ' exit the function.
         '''''''''''''''''''''''''''''''''''''''''
         If ReplaceOnDuplicateKey = True Then
-            Dict.Remove Key:=KRng.Text
+            dict.Remove Key:=KRng.Text
             KeyExists = False
         Else
             If StopOnDuplicateKey = True Then
@@ -1009,9 +1009,9 @@ For Each KRng In KeyRange.Cells
     End If
     If KeyExists = False Then
         If RangeAsObject = True Then
-            Dict.Add Key:=KRng.Text, Item:=ItemRange.Cells(ItemNdx)
+            dict.Add Key:=KRng.Text, Item:=ItemRange.Cells(ItemNdx)
         Else
-            Dict.Add Key:=KRng.Text, Item:=ItemRange.Cells(ItemNdx).Text
+            dict.Add Key:=KRng.Text, Item:=ItemRange.Cells(ItemNdx).Text
         End If
     End If
 Next KRng
@@ -1023,7 +1023,7 @@ RangeToDictionary = True
 
 End Function
 
-Function RangeToCollection(KeyRange As Range, ItemRange As Range, Coll As VBA.Collection, _
+Function RangeToCollection(KeyRange As Range, ItemRange As Range, coll As VBA.Collection, _
     Optional RangeAsObject As Boolean = False, _
     Optional StopOnDuplicateKey As Boolean = True, _
     Optional ReplaceOnDuplicateKey As Boolean = False) As Boolean
@@ -1075,8 +1075,8 @@ End If
 ' Ensure KeyRange and ItemRange as the same size.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If Not KeyRange Is Nothing Then
-    If (KeyRange.Rows.Count <> ItemRange.Rows.Count) Or _
-        (KeyRange.Columns.Count <> ItemRange.Columns.Count) Then
+    If (KeyRange.rows.count <> ItemRange.rows.count) Or _
+        (KeyRange.columns.count <> ItemRange.columns.count) Then
         RangeToCollection = False
         Exit Function
     End If
@@ -1086,13 +1086,13 @@ End If
 ' Ensure both KeyRange and ItemRange are single area
 ' ranges.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If ItemRange.Areas.Count > 1 Then
+If ItemRange.Areas.count > 1 Then
     RangeToCollection = False
     Exit Function
 End If
 
 If Not KeyRange Is Nothing Then
-    If KeyRange.Areas.Count > 1 Then
+    If KeyRange.Areas.count > 1 Then
         RangeToCollection = False
         Exit Function
     End If
@@ -1101,8 +1101,8 @@ End If
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' If Coll is Nothing, create a new Collection.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If Coll Is Nothing Then
-    Set Coll = New VBA.Collection
+If coll Is Nothing Then
+    Set coll = New VBA.Collection
 End If
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1114,7 +1114,7 @@ For Each IRng In ItemRange.Cells
     If KeyRange Is Nothing Then
         KeyExists = False
     Else
-        KeyExists = KeyExistsInCollection(Coll:=Coll, KeyName:=KeyRange.Cells(KeyNdx))
+        KeyExists = KeyExistsInCollection(coll:=coll, KeyName:=KeyRange.Cells(KeyNdx))
     End If
     
     If KeyExists = True Then
@@ -1137,7 +1137,7 @@ For Each IRng In ItemRange.Cells
         ' exit the function.
         '''''''''''''''''''''''''''''''''''''''''
         If ReplaceOnDuplicateKey = True Then
-            Coll.Remove KeyRange.Cells(KeyNdx)
+            coll.Remove KeyRange.Cells(KeyNdx)
             KeyExists = False
         Else
             If StopOnDuplicateKey = True Then
@@ -1156,17 +1156,17 @@ For Each IRng In ItemRange.Cells
             ' Add with key.
             '''''''''''''''''''''''''
             If RangeAsObject = True Then
-                Coll.Add Item:=IRng, Key:=KeyRange.Cells(KeyNdx)
+                coll.Add Item:=IRng, Key:=KeyRange.Cells(KeyNdx)
             Else
-                Coll.Add Item:=IRng.Text, Key:=KeyRange.Cells(KeyNdx)
+                coll.Add Item:=IRng.Text, Key:=KeyRange.Cells(KeyNdx)
             End If
         Else
             '''''''''''''''''''''
             ' Add without key.
             If RangeAsObject = True Then
-                Coll.Add Item:=IRng
+                coll.Add Item:=IRng
             Else
-                Coll.Add Item:=IRng.Text
+                coll.Add Item:=IRng.Text
             End If
             '''''''''''''''''''''
             
@@ -1182,7 +1182,7 @@ RangeToCollection = True
 End Function
 
 
-Public Sub SortDictionary(Dict As Object, _
+Public Sub SortDictionary(dict As Object, _
     SortByKey As Boolean, _
     Optional Descending As Boolean = False, _
     Optional CompareMode As VbCompareMethod = vbTextCompare)
@@ -1216,7 +1216,7 @@ Public Sub SortDictionary(Dict As Object, _
 Dim Ndx As Long
 Dim KeyValue As String
 Dim ItemValue As Variant
-Dim Arr() As Variant
+Dim arr() As Variant
 Dim KeyArr() As String
 Dim VTypes() As VbVarType
 
@@ -1228,7 +1228,7 @@ Dim TempDict As Object
 '''''''''''''''''''''''''''''
 ' Ensure Dict is not Nothing.
 '''''''''''''''''''''''''''''
-If Dict Is Nothing Then
+If dict Is Nothing Then
     Exit Sub
 End If
 ''''''''''''''''''''''''''''
@@ -1236,7 +1236,7 @@ End If
 ' in Dict is 0 or 1, no
 ' sorting is required.
 ''''''''''''''''''''''''''''
-If (Dict.Count = 0) Or (Dict.Count = 1) Then
+If (dict.count = 0) Or (dict.count = 1) Then
     Exit Sub
 End If
 
@@ -1252,30 +1252,30 @@ If SortByKey = True Then
     ' Dict object, and load that array
     ' with the key names.
     ''''''''''''''''''''''''''''''''''''''''
-    ReDim Arr(0 To Dict.Count - 1)
+    ReDim arr(0 To dict.count - 1)
     
-    For Ndx = 0 To Dict.Count - 1
-        Arr(Ndx) = Dict.Keys(Ndx)
+    For Ndx = 0 To dict.count - 1
+        arr(Ndx) = dict.Keys(Ndx)
     Next Ndx
     
     ''''''''''''''''''''''''''''''''''''''
     ' Sort the key names.
     ''''''''''''''''''''''''''''''''''''''
-    QSortInPlace InputArray:=Arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=CompareMode
+    QSortInPlace InputArray:=arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=CompareMode
     ''''''''''''''''''''''''''''''''''''''''''''
     ' Load TempDict. The key value come from
     ' our sorted array of keys Arr, and the
     ' Item comes from the original Dict object.
     ''''''''''''''''''''''''''''''''''''''''''''
-    For Ndx = 0 To Dict.Count - 1
-        KeyValue = Arr(Ndx)
-        TempDict.Add Key:=KeyValue, Item:=Dict.Item(KeyValue)
+    For Ndx = 0 To dict.count - 1
+        KeyValue = arr(Ndx)
+        TempDict.Add Key:=KeyValue, Item:=dict.Item(KeyValue)
     Next Ndx
     '''''''''''''''''''''''''''''''''
     ' Set the passed in Dict object
     ' to our TempDict object.
     '''''''''''''''''''''''''''''''''
-    Set Dict = TempDict
+    Set dict = TempDict
     ''''''''''''''''''''''''''''''''
     ' This is the end of processing.
     ''''''''''''''''''''''''''''''''
@@ -1291,13 +1291,13 @@ Else
     ' This keeps the association between the
     ' item and its key.
     '''''''''''''''''''''''''''''''''''''''''''''''
-    ReDim Arr(0 To Dict.Count - 1)
-    ReDim VTypes(0 To Dict.Count - 1)
+    ReDim arr(0 To dict.count - 1)
+    ReDim VTypes(0 To dict.count - 1)
 
-    For Ndx = 0 To Dict.Count - 1
-        If (IsObject(Dict.Items(Ndx)) = True) Or _
-            (IsArray(Dict.Items(Ndx)) = True) Or _
-            VarType(Dict.Items(Ndx)) = vbUserDefinedType Then
+    For Ndx = 0 To dict.count - 1
+        If (IsObject(dict.Items(Ndx)) = True) Or _
+            (IsArray(dict.Items(Ndx)) = True) Or _
+            VarType(dict.Items(Ndx)) = vbUserDefinedType Then
             Debug.Print "***** ITEM IN DICTIONARY WAS OBJECT OR ARRAY OR UDT"
             Exit Sub
         End If
@@ -1309,8 +1309,8 @@ Else
         ' array. We'll use these values later to convert
         ' back to the proper data type for Item.
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            Arr(Ndx) = Dict.Items(Ndx) & vbNullChar & Dict.Keys(Ndx)
-            VTypes(Ndx) = VarType(Dict.Items(Ndx))
+            arr(Ndx) = dict.Items(Ndx) & vbNullChar & dict.Keys(Ndx)
+            VTypes(Ndx) = VarType(dict.Items(Ndx))
             
     Next Ndx
     ''''''''''''''''''''''''''''''''''
@@ -1318,15 +1318,15 @@ Else
     ' items of the Dictionary along
     ' with their associated keys
     ''''''''''''''''''''''''''''''''''
-    QSortInPlace InputArray:=Arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=vbTextCompare
+    QSortInPlace InputArray:=arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=vbTextCompare
     
-    For Ndx = LBound(Arr) To UBound(Arr)
+    For Ndx = LBound(arr) To UBound(arr)
         '''''''''''''''''''''''''''''''''''''
         ' Loop trhogh the array of sorted
         ' Items, Split based on vbNullChar
         ' to get the Key from the element
         ' of the array Arr.
-        SplitArr = Split(Arr(Ndx), vbNullChar)
+        SplitArr = Split(arr(Ndx), vbNullChar)
         ''''''''''''''''''''''''''''''''''''''''''
         ' It may have been possible that item in
         ' the dictionary contains a vbNullChar.
@@ -1386,7 +1386,7 @@ End If
 ' Set the passed in Dict object
 ' to our TempDict object.
 '''''''''''''''''''''''''''''''''
-Set Dict = TempDict
+Set dict = TempDict
 
 End Sub
 

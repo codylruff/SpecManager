@@ -17,12 +17,12 @@ Public Fields       As Object
 Public records      As VBA.Collection
 
 Public Property Get Header() As Variant: Header = m_header: End Property
-Public Property Let Header(ByVal value As Variant): m_header = value: End Property
-Public Property Get data() As Variant: data = m_data: End Property
-Public Property Let data(ByVal value As Variant): m_data = value: End Property
-Public Property Let rows(value As Long): rows_ = value: End Property
+Public Property Let Header(ByVal Value As Variant): m_header = Value: End Property
+Public Property Get Data() As Variant: Data = m_data: End Property
+Public Property Let Data(ByVal Value As Variant): m_data = Value: End Property
+Public Property Let rows(Value As Long): rows_ = Value: End Property
 Public Property Get rows() As Long: rows = rows_: End Property
-Public Property Let columns(value As Long): columns_ = value: End Property
+Public Property Let columns(Value As Long): columns_ = Value: End Property
 Public Property Get columns() As Long: columns = columns_: End Property
 
 Public Function SetDictionary()
@@ -35,8 +35,8 @@ Public Function SetDictionary()
         Set dict = Factory.CreateDictionary()
         Logger.Log "Checking Row " & j & " . . . "
         For i = 1 To columns
-        Logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & data(j, i)
-            dict.Add key:=Header(1, i), Item:=data(j, i)
+        Logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & Data(j, i)
+            dict.Add Key:=Header(1, i), Item:=Data(j, i)
         Next i
         coll.Add dict
     Next j

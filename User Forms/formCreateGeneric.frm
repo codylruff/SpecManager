@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formCreateGeneric
    Caption         =   "Create New Spec Type"
    ClientHeight    =   7272
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9288
+   ClientTop       =   465
+   ClientWidth     =   9285
    OleObjectBlob   =   "formCreateGeneric.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,44 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Option Explicit
@@ -74,13 +36,12 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub cmdAddProperty_Click()
-   App.console.PrintLine Me.txtPropertyName
-   App.current_template.AddProperty Utils.ConvertToCamelCase(CStr(Me.txtPropertyName))
+   AddProperty
 End Sub
 
 Sub AddProperty()
    App.console.PrintLine Me.txtPropertyName
-   App.current_template.AddProperty Utils.ConvertToCamelCase(CStr(Me.txtPropertyName))
+   App.current_template.AddProperty Me.txtPropertyName
 End Sub
 
 Private Sub cmdSubmitTemplate_Click()

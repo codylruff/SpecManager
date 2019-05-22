@@ -17,16 +17,16 @@ Private Revision_   As String
 Private MaterialId_ As String
 Private IsStandard_ As Boolean
 Private IsLatest_   As Boolean
-Public Property Let IsStandard(value As Boolean): IsStandard_ = value: End Property
+Public Property Let IsStandard(Value As Boolean): IsStandard_ = Value: End Property
 Public Property Get IsStandard() As Boolean: IsStandard = IIf(IsStandard_ = Null, False, IsStandard_): End Property
-Public Property Let IsLatest(value As Boolean): IsLatest_ = value: End Property
+Public Property Let IsLatest(Value As Boolean): IsLatest_ = Value: End Property
 Public Property Get IsLatest() As Boolean: IsLatest = IIf(IsLatest_ = Null, False, IsLatest_): End Property
-Public Property Let Revision(value As String): Revision_ = value: End Property
+Public Property Let Revision(Value As String): Revision_ = Value: End Property
 Public Property Get Revision() As String: Revision = Revision_: End Property
-Public Property Let SpecType(value As String): SpecType_ = value: End Property
+Public Property Let SpecType(Value As String): SpecType_ = Value: End Property
 Public Property Get SpecType() As String: SpecType = SpecType_: End Property
 Public Property Get MaterialId() As String: MaterialId = MaterialId_: End Property
-Public Property Let MaterialId(value As String): MaterialId_ = UCase(value): End Property
+Public Property Let MaterialId(Value As String): MaterialId_ = UCase(Value): End Property
 
 ' METHODS---
 Public Sub AddProperty(property As String, tolerance As Variant)
@@ -67,7 +67,7 @@ Public Function Header() As Variant
     arr(2) = "Revision"
     i = 2
     For Each prop In Me.Properties
-        arr(i) = Utils.SplitCamelCase(CStr(prop))
+        arr(i) = CStr(prop)
         i = i + 1
     Next prop
     Header = arr
@@ -96,7 +96,7 @@ Private Sub Class_Initialize()
     Set Tolerances = CreateObject("Scripting.Dictionary")
 End Sub
 ' Deconstructor
-    Private Sub Class_Terminate()
+Private Sub Class_Terminate()
     Set Properties = Nothing
     Set Tolerances = Nothing
 End Sub

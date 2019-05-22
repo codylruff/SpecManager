@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formSpecConfig
    Caption         =   "Specification Control"
    ClientHeight    =   11868
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9816
+   ClientTop       =   465
+   ClientWidth     =   9810
    OleObjectBlob   =   "formSpecConfig.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -15,44 +15,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -60,50 +22,29 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
-    SpecManager.MaterialInput UCase(txtMaterialId)
-    SpecManager.PrintSpecification Me
-    PopulateCboSelectProperty
-    PopulateCboSelectRevision
-    
+    MaterialSearch
 End Sub
 
 Private Sub cmdBack_Click()
-    Unload Me
-    GuiCommands.GoToMain
+    Back
 End Sub
 
 Private Sub cmdExportPdf_Click()
-    GuiCommands.ConsoleBoxToPdf
+    ExportPdf
 End Sub
 
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification incremented the revision by +0.1
-    Dim ret_val As Long
-    App.current_spec.Revision = CStr(CDbl(App.current_spec.Revision) + 1) & ".0"
-    ret_val = SpecManager.SaveSpecification(App.current_spec)
-    If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val
-        MsgBox "New Specification Was Not Saved. Contact Admin."
-    Else
-        Logger.Log "Data Access returned: " & ret_val
-        MsgBox "New Specification Succesfully Saved."
-    End If
+    SaveChanges
 End Sub
 
 Private Sub cmdSubmit_Click()
 ' This executes a set property command
-' TODO: Change the name of this to cmdSetProperty
-    With App.current_spec
-        .Properties.Item(Utils.ConvertToCamelCase( _
-                cboSelectProperty.value)) = txtPropertyValue
-        '.Revision = .Properties.Item("Revision")
-    End With
-    SpecManager.PrintSpecification Me
+    Submit
 End Sub
 
 Private Sub cmdSearch_Click()
-    Set App.current_spec = App.specs.Item(cboSelectRevision.value)
-    SpecManager.PrintSpecification Me
+    Search
 End Sub
 
 Private Sub ClearThisForm()
@@ -126,7 +67,7 @@ Private Sub PopulateCboSelectRevision()
     With cboSelectRevision
         For Each rev In App.specs
             .AddItem rev
-            .value = rev
+            .Value = rev
         Next rev
     End With
 End Sub
@@ -143,7 +84,7 @@ Private Sub PopulateCboSelectProperty()
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
-    txtPropertyValue.value = vbNullString
+    txtPropertyValue.Value = vbNullString
 End Sub
 
 Private Sub cmdClear_Click()
@@ -195,16 +136,14 @@ End Sub
 
 Sub Submit()
 ' This executes a set property command
-' TODO: Change the name of this to cmdSetProperty
     With App.current_spec
-        .Properties.Item(Utils.ConvertToCamelCase( _
-                cboSelectProperty.value)) = txtPropertyValue
+        .Properties.Item(cboSelectProperty.Value) = txtPropertyValue
         '.Revision = .Properties.Item("Revision")
     End With
     SpecManager.PrintSpecification Me
 End Sub
 
 Sub Search()
-    Set App.current_spec = App.specs.Item(cboSelectRevision.value)
+    Set App.current_spec = App.specs.Item(cboSelectRevision.Value)
     SpecManager.PrintSpecification Me
 End Sub

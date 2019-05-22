@@ -39,7 +39,7 @@ Function AutoAddNewUser() As Account
     new_user.ChangeSetting "privledge_level", USER_READONLY
     new_user.ProductLine = "User"
     new_user.ChangeSetting "product_line", "User"
-    new_user.SaveUserJson	
+    new_user.SaveUserJson
     Logger.Log DataAccess.PushNewUser(new_user)
     Set AutoAddNewUser = new_user
 End Function

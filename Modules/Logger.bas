@@ -14,18 +14,18 @@ Public Sub SetLogLevel(level As Long)
     log_level = level
 End Sub
 
-Public Sub Log(text As String)
+Public Sub Log(Text As String)
     If buffer Is Nothing Then Set buffer = CreateObject("Scripting.Dictionary")
     Do Until Not buffer.exists(TimeInMS)
         Application.Wait (Now + TimeValue("0:00:01") / 1000)
     Loop
-    buffer.Add key:=TimeInMS, Item:=text
-    Debug.Print Logger.printf("{0} : {1}", TimeInMS, text)
+    buffer.Add Key:=TimeInMS, Item:=Text
+    Debug.Print Logger.printf("{0} : {1}", TimeInMS, Text)
 End Sub
 
-Public Sub Trace(text As String)
+Public Sub Trace(Text As String)
 ' Used to signify a transition point in the application log
-    Log "------------- " & text
+    Log "------------- " & Text
 End Sub
 
 Public Sub ResetLog(Optional log_type As String = "runtime")
@@ -38,7 +38,7 @@ Public Sub NotImplementedException()
 End Sub
 
 Public Sub SaveLog(Optional file_name As String = "runtime")
-    Dim key As Variant
+    Dim Key As Variant
     If buffer Is Nothing Then Exit Sub
     folder_path = ThisWorkbook.path & "\logs"
     file_path = folder_path & "\" & file_name & ".log"
@@ -46,9 +46,9 @@ Public Sub SaveLog(Optional file_name As String = "runtime")
     If Not FSO.FolderExists(folder_path) Then FSO.CreateFolder folder_path
     Logger.Log "Saving : " & file_name & ".log"
     Set stream = FSO.CreateTextFile(file_path, True)
-    For Each key In buffer
-      stream.WriteLine Logger.printf("{0} : {1}", key, buffer.Item(key))
-    Next key
+    For Each Key In buffer
+      stream.WriteLine Logger.printf("{0} : {1}", Key, buffer.Item(Key))
+    Next Key
     stream.Close
 End Sub
 
@@ -64,7 +64,7 @@ End Function
 Private Function printf(mask As String, ParamArray tokens()) As String
     Dim i As Long
     For i = 0 To UBound(tokens)
-        mask = replace$(mask, "{" & i & "}", tokens(i))
+        mask = Replace$(mask, "{" & i & "}", tokens(i))
     Next
     printf = mask
 End Function

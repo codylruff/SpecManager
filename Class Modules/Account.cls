@@ -14,8 +14,8 @@ Public ProductLine      As String
 Private Name_           As String
 Public Settings         As Object
 
-Public Property Let Name(value As String)
-    Name_ = UCase(value)
+Public Property Let Name(Value As String)
+    Name_ = UCase(Value)
 End Property
 
 Public Property Get Name() As String
@@ -31,6 +31,7 @@ End Function
 Public Sub LoadUserJson()
 ' Advanced example: Read .json file and load into a dictionary
     Set Settings = JsonVBA.GetJsonObject(ThisWorkbook.path & "\config\user.json")
+    If Me.Settings Is Nothing Then CreateSettingsJson
 End Sub
 
 Public Sub ChangeSetting(setting As String, new_value As Variant)
@@ -44,6 +45,9 @@ Public Sub SaveUserJson()
 End Sub
 
 Private Sub CreateSettingsJson()
+    If Settings Is Nothing Then
+        Set Settings = CreateObject("Scripting.Dictionary")
+    End If
     With Settings
         .Add "name", Environ("Username")
         .Add "default_printer", vbNullString

@@ -173,9 +173,9 @@ Public JsonOptions As json_Options
 ' @return {Variant} String or Number
 ' @throws TODO: Add Error Description/Constant
 ''
-Function GetJsonValue(ByVal file_path As String, ByVal key As String) As Variant
+Function GetJsonValue(ByVal file_path As String, ByVal Key As String) As Variant
     ' Extract the json object represented by the file and select a single value
-    GetJsonValue = JsonVBA.GetJsonObject(file_path).Item(key)
+    GetJsonValue = JsonVBA.GetJsonObject(file_path).Item(Key)
     Exit Function
 ExceptionHandler:
     GetJsonValue = vbNullString
@@ -242,7 +242,7 @@ Public Function ParseJson(ByVal JsonString As String) As Object
     json_Index = 1
 
     ' Remove vbCr, vbLf, and vbTab from json_String
-    JsonString = VBA.replace(VBA.replace(VBA.replace(JsonString, VBA.vbCr, vbNullString), VBA.vbLf, vbNullString), VBA.vbTab, vbNullString)
+    JsonString = VBA.Replace(VBA.Replace(VBA.Replace(JsonString, VBA.vbCr, vbNullString), VBA.vbLf, vbNullString), VBA.vbTab, vbNullString)
 
     json_SkipSpaces JsonString, json_Index
     Select Case VBA.Mid$(JsonString, json_Index, 1)
@@ -430,7 +430,7 @@ Public Function ConvertToJson(ByVal JsonValue As Variant, Optional ByVal Whitesp
         ' Dictionary
         If VBA.TypeName(JsonValue) = "Dictionary" Then
             json_BufferAppend json_Buffer, "{", json_BufferPosition, json_BufferLength
-            For Each json_Key In JsonValue.keys
+            For Each json_Key In JsonValue.Keys
                 ' For Objects, undefined (Empty/Nothing) is not added to object
                 json_Converted = ConvertToJson(JsonValue(json_Key), Whitespace, json_CurrentIndentation + 1)
                 If json_Converted = vbNullString Then
@@ -511,7 +511,7 @@ Public Function ConvertToJson(ByVal JsonValue As Variant, Optional ByVal Whitesp
         ConvertToJson = json_BufferToString(json_Buffer, json_BufferPosition)
     Case VBA.vbInteger, VBA.vbLong, VBA.vbSingle, VBA.vbDouble, VBA.vbCurrency, VBA.vbDecimal
         ' Number (use decimals for numbers)
-        ConvertToJson = VBA.replace(JsonValue, ",", ".")
+        ConvertToJson = VBA.Replace(JsonValue, ",", ".")
     Case Else
         ' vbEmpty, vbError, vbDataObject, vbByte, vbUserDefinedType
         ' Use VBA's built-in to-string
@@ -742,7 +742,7 @@ Private Function json_IsUndefined(ByVal json_Value As Variant) As Boolean
     End Select
 End Function
 
-Private Function json_Encode(ByVal json_text As Variant) As String
+Private Function json_Encode(ByVal json_Text As Variant) As String
     ' Reference: http://www.ietf.org/rfc/rfc4627.txt
     ' Escape: ", \, /, backspace, form feed, line feed, carriage return, tab
     Dim json_Index As Long
@@ -752,8 +752,8 @@ Private Function json_Encode(ByVal json_text As Variant) As String
     Dim json_BufferPosition As Long
     Dim json_BufferLength As Long
 
-    For json_Index = 1 To VBA.Len(json_text)
-        json_Char = VBA.Mid$(json_text, json_Index, 1)
+    For json_Index = 1 To VBA.Len(json_Text)
+        json_Char = VBA.Mid$(json_Text, json_Index, 1)
         json_AscCode = VBA.AscW(json_Char)
 
         ' When AscW returns a negative number, it returns the twos complement form of that number.
@@ -1033,7 +1033,7 @@ Public Function ParseIso(utc_IsoString As String) As Date
 
     If UBound(utc_Parts) > 0 Then
         If VBA.InStr(utc_Parts(1), "Z") Then
-            utc_TimeParts = VBA.Split(VBA.replace(utc_Parts(1), "Z", vbNullString), ":")
+            utc_TimeParts = VBA.Split(VBA.Replace(utc_Parts(1), "Z", vbNullString), ":")
         Else
             utc_OffsetIndex = VBA.InStr(1, utc_Parts(1), "+")
             If utc_OffsetIndex = 0 Then

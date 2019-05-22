@@ -53,12 +53,6 @@ Sub UnloadAllForms()
 
 End Sub
 
-Public Sub WarpingWsToDB()
-    SpecManager.RestartApp
-    Set App.current_template = SpecManager.GetTemplate("warping")
-    SpecManager.WorksheetToDatabase
-End Sub
-
 Public Sub ExportAll()
 ' Exports the codebase to a project folder as text files
     Const Module = 1
@@ -198,24 +192,14 @@ Public Sub ClearForm(frm)
     For Each ctl In frm.Controls
         Select Case VBA.TypeName(ctl)
             Case "TextBox"
-                ctl.text = vbNullString
+                ctl.Text = vbNullString
             Case "CheckBox", "OptionButton", "ToggleButton"
-                ctl.value = False
+                ctl.Value = False
             Case "ComboBox", "ListBox"
                 ctl.ListIndex = -1
             Case Else
                 End Select
     Next ctl
-End Sub
-
-Public Sub DB2W_tblWarpingSpecs()
-' Dumps warping specs to a new worksheet
-    
-End Sub
-
-Public Sub DB2W_tblStyleSpecs()
-' Dumps style specs to a new worksheet
-    
 End Sub
 
 Public Sub ConsoleBoxToPdf()
@@ -224,7 +208,6 @@ Public Sub ConsoleBoxToPdf()
     On Error GoTo SaveFileError
     fileName = PublicDir & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
     Set ws = Sheets("SpecificationForm")
-    App.console.PrintObjectToSheet App.current_spec, ws
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
         fileName:=fileName, _
@@ -245,7 +228,6 @@ Public Sub ConsoleBoxToPdf_Test()
     On Error GoTo SaveFileError
     fileName = PublicDir & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
     Set ws = Sheets("SpecificationForm")
-    App.console.PrintObjectToSheet App.current_spec, ws
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
         fileName:=fileName, _

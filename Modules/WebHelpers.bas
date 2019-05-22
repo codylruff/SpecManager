@@ -56,7 +56,7 @@ Option Explicit
 
 Private Declare PtrSafe Sub AutoProxy_CopyMemory Lib "kernel32" Alias "RtlMoveMemory" _
     (ByVal AutoProxy_lpDest As LongPtr, ByVal AutoProxy_lpSource As LongPtr, ByVal AutoProxy_cbCopy As Long)
-Private Declare PtrSafe Function AutoProxy_SysAllocString Lib "oleaut32" Alias "SysAllocString" _
+Private Declare PtrSafe Function AutoProxy_SysAllocString Lib "OleAut32" Alias "SysAllocString" _
     (ByVal AutoProxy_pwsz As LongPtr) As LongPtr
 Private Declare PtrSafe Function AutoProxy_GlobalFree Lib "kernel32" Alias "GlobalFree" _
     (ByVal AutoProxy_p As LongPtr) As LongPtr
@@ -93,7 +93,7 @@ End Type
 
 Private Declare Sub AutoProxy_CopyMemory Lib "kernel32" Alias "RtlMoveMemory" _
     (ByVal AutoProxy_lpDest As Long, ByVal AutoProxy_lpSource As Long, ByVal AutoProxy_cbCopy As Long)
-Private Declare Function AutoProxy_SysAllocString Lib "oleaut32" Alias "SysAllocString" _
+Private Declare Function AutoProxy_SysAllocString Lib "OleAut32" Alias "SysAllocString" _
     (ByVal AutoProxy_pwsz As Long) As Long
 Private Declare Function AutoProxy_GlobalFree Lib "kernel32" Alias "GlobalFree" _
     (ByVal AutoProxy_p As Long) As Long
@@ -652,22 +652,22 @@ End Function
 ' @param {Dictionary|Collection|Variant} Obj Value to convert to Url-Encoded string
 ' @return {String} UrlEncoded string (e.g. a=123&b=456&...)
 ''
-Public Function ConvertToUrlEncoded(Obj As Variant, Optional EncodingMode As UrlEncodingMode = UrlEncodingMode.FormUrlEncoding) As String
+Public Function ConvertToUrlEncoded(obj As Variant, Optional EncodingMode As UrlEncodingMode = UrlEncodingMode.FormUrlEncoding) As String
     Dim web_Encoded As String
 
-    If TypeOf Obj Is Collection Then
+    If TypeOf obj Is Collection Then
         Dim web_KeyValue As Object
 
-        For Each web_KeyValue In Obj
+        For Each web_KeyValue In obj
             If VBA.Len(web_Encoded) > 0 Then: web_Encoded = web_Encoded & "&"
             web_Encoded = web_Encoded & web_GetUrlEncodedKeyValue(web_KeyValue("Key"), web_KeyValue("Value"), EncodingMode)
         Next web_KeyValue
     Else
         Dim web_Key As Variant
 
-        For Each web_Key In Obj.Keys()
+        For Each web_Key In obj.Keys()
             If Len(web_Encoded) > 0 Then: web_Encoded = web_Encoded & "&"
-            web_Encoded = web_Encoded & web_GetUrlEncodedKeyValue(web_Key, Obj(web_Key), EncodingMode)
+            web_Encoded = web_Encoded & web_GetUrlEncodedKeyValue(web_Key, obj(web_Key), EncodingMode)
         Next web_Key
     End If
 
@@ -712,7 +712,7 @@ End Function
 ' @return {String} XML string
 ' @throws 11099 / 80042b5b / -2147210405 - XML format is not currently supported
 ''
-Public Function ConvertToXml(Obj As Variant) As String
+Public Function ConvertToXml(obj As Variant) As String
     Dim web_ErrorMsg As String
 
     web_ErrorMsg = "XML is not currently supported (An updated parser is being created that supports Mac and Windows)." & vbNewLine & _
@@ -761,7 +761,7 @@ Public Function ParseByFormat(Value As String, Format As WebFormat, _
         Set web_Converter = web_GetConverter(CustomFormat)
         web_Callback = web_Converter("ParseCallback")
 
-        If web_Converter.Exists("Instance") Then
+        If web_Converter.exists("Instance") Then
             Dim web_Instance As Object
             Set web_Instance = web_Converter("Instance")
 
@@ -805,16 +805,16 @@ End Function
 ' @return {Variant}
 ' @throws 11001 - Error during conversion
 ''
-Public Function ConvertToFormat(Obj As Variant, Format As WebFormat, Optional CustomFormat As String = "") As Variant
+Public Function ConvertToFormat(obj As Variant, Format As WebFormat, Optional CustomFormat As String = "") As Variant
     On Error GoTo web_ErrorHandling
 
     Select Case Format
     Case WebFormat.json
-        ConvertToFormat = ConvertToJson(Obj)
+        ConvertToFormat = ConvertToJson(obj)
     Case WebFormat.FormUrlEncoded
-        ConvertToFormat = ConvertToUrlEncoded(Obj)
+        ConvertToFormat = ConvertToUrlEncoded(obj)
     Case WebFormat.Xml
-        ConvertToFormat = ConvertToXml(Obj)
+        ConvertToFormat = ConvertToXml(obj)
     Case WebFormat.Custom
 #If EnableCustomFormatting Then
         Dim web_Converter As Object
@@ -823,20 +823,20 @@ Public Function ConvertToFormat(Obj As Variant, Format As WebFormat, Optional Cu
         Set web_Converter = web_GetConverter(CustomFormat)
         web_Callback = web_Converter("ConvertCallback")
 
-        If web_Converter.Exists("Instance") Then
+        If web_Converter.exists("Instance") Then
             Dim web_Instance As Object
             Set web_Instance = web_Converter("Instance")
-            ConvertToFormat = VBA.CallByName(web_Instance, web_Callback, VBA.vbMethod, Obj)
+            ConvertToFormat = VBA.CallByName(web_Instance, web_Callback, VBA.vbMethod, obj)
         Else
-            ConvertToFormat = Application.Run(web_Callback, Obj)
+            ConvertToFormat = Application.Run(web_Callback, obj)
         End If
 #Else
     LogWarning "Custom formatting is disabled. To use WebFormat.Custom, enable custom formatting with the EnableCustomFormatting flag in WebHelpers"
 #End If
     Case Else
-        If VBA.VarType(Obj) = vbString Then
+        If VBA.VarType(obj) = vbString Then
             ' Plain text
-            ConvertToFormat = Obj
+            ConvertToFormat = obj
         End If
     End Select
     Exit Function
@@ -1197,7 +1197,7 @@ End Sub
 ' Helper for getting custom converter
 ' @throws 11002 - No matching converter has been registered
 Private Function web_GetConverter(web_CustomFormat As String) As Object
-    If web_pConverters.Exists(web_CustomFormat) Then
+    If web_pConverters.exists(web_CustomFormat) Then
         Set web_GetConverter = web_pConverters(web_CustomFormat)
     Else
         LogError "No matching converter has been registered for custom format: " & web_CustomFormat, _
@@ -1331,7 +1331,7 @@ Public Function GetUrlParts(Url As String) As Object
         End If
     Next web_ResultPart
 
-    If web_AddedProtocol And web_Parts.Exists("Protocol") Then
+    If web_AddedProtocol And web_Parts.exists("Protocol") Then
         web_Parts("Protocol") = ""
     End If
 #Else
@@ -1342,12 +1342,12 @@ Public Function GetUrlParts(Url As String) As Object
     End If
 
     web_pElHelper.href = Url
-    web_Parts.Add "Protocol", Replace(web_pElHelper.Protocol, ":", "", Count:=1)
+    web_Parts.Add "Protocol", Replace(web_pElHelper.Protocol, ":", "", count:=1)
     web_Parts.Add "Host", web_pElHelper.hostname
     web_Parts.Add "Port", web_pElHelper.port
     web_Parts.Add "Path", web_pElHelper.pathname
-    web_Parts.Add "Querystring", Replace(web_pElHelper.Search, "?", "", Count:=1)
-    web_Parts.Add "Hash", Replace(web_pElHelper.Hash, "#", "", Count:=1)
+    web_Parts.Add "Querystring", Replace(web_pElHelper.Search, "?", "", count:=1)
+    web_Parts.Add "Hash", Replace(web_pElHelper.Hash, "#", "", count:=1)
 #End If
 
     If web_Parts("Protocol") = "localhost" Then
@@ -1358,7 +1358,7 @@ Public Function GetUrlParts(Url As String) As Object
         web_Parts("Port") = PathParts(0)
         web_Parts("Protocol") = ""
         web_Parts("Host") = "localhost"
-        web_Parts("Path") = Replace(web_Parts("Path"), web_Parts("Port"), "", Count:=1)
+        web_Parts("Path") = Replace(web_Parts("Path"), web_Parts("Port"), "", count:=1)
     End If
     If Left(web_Parts("Path"), 1) <> "/" Then
         web_Parts("Path") = "/" & web_Parts("Path")
@@ -1514,9 +1514,9 @@ Public Sub AddOrReplaceInKeyValues(KeyValues As Collection, Key As Variant, Valu
             ' Replace existing
             KeyValues.Remove web_Index
 
-            If KeyValues.Count = 0 Then
+            If KeyValues.count = 0 Then
                 KeyValues.Add web_NewKeyValue
-            ElseIf web_Index > KeyValues.Count Then
+            ElseIf web_Index > KeyValues.count Then
                 KeyValues.Add web_NewKeyValue, After:=web_Index - 1
             Else
                 KeyValues.Add web_NewKeyValue, Before:=web_Index
@@ -1601,7 +1601,7 @@ End Function
 ''
 Public Sub OnTimeoutTimerExpired(web_RequestId As String)
     If Not AsyncRequests Is Nothing Then
-        If AsyncRequests.Exists(web_RequestId) Then
+        If AsyncRequests.exists(web_RequestId) Then
             Dim web_AsyncWrapper As Object
             Set web_AsyncWrapper = AsyncRequests(web_RequestId)
             web_AsyncWrapper.TimedOut
@@ -2459,7 +2459,7 @@ Private Function json_ParseString(json_String As String, ByRef json_Index As Lon
                 ' Unicode character escape (e.g. \u00a9 = Copyright)
                 json_Index = json_Index + 1
                 json_Code = VBA.Mid$(json_String, json_Index, 4)
-                json_BufferAppend json_Buffer, VBA.ChrW(VBA.Val("&h" + json_Code)), json_BufferPosition, json_BufferLength
+                json_BufferAppend json_Buffer, VBA.ChrW(VBA.val("&h" + json_Code)), json_BufferPosition, json_BufferLength
                 json_Index = json_Index + 4
             End Select
         Case json_Quote
@@ -2499,7 +2499,7 @@ Private Function json_ParseNumber(json_String As String, ByRef json_Index As Lon
                 json_ParseNumber = json_Value
             Else
                 ' VBA.Val does not use regional settings, so guard for comma is not needed
-                json_ParseNumber = VBA.Val(json_Value)
+                json_ParseNumber = VBA.val(json_Value)
             End If
             Exit Function
         End If
@@ -2858,7 +2858,7 @@ Public Function ParseIso(utc_IsoString As String) As Date
                     utc_Offset = TimeSerial(VBA.CInt(utc_OffsetParts(0)), VBA.CInt(utc_OffsetParts(1)), 0)
                 Case 2
                     ' VBA.Val does not use regional settings, use for seconds to avoid decimal/comma issues
-                    utc_Offset = TimeSerial(VBA.CInt(utc_OffsetParts(0)), VBA.CInt(utc_OffsetParts(1)), Int(VBA.Val(utc_OffsetParts(2))))
+                    utc_Offset = TimeSerial(VBA.CInt(utc_OffsetParts(0)), VBA.CInt(utc_OffsetParts(1)), Int(VBA.val(utc_OffsetParts(2))))
                 End Select
 
                 If utc_NegativeOffset Then: utc_Offset = -utc_Offset
@@ -2874,7 +2874,7 @@ Public Function ParseIso(utc_IsoString As String) As Date
             ParseIso = ParseIso + VBA.TimeSerial(VBA.CInt(utc_TimeParts(0)), VBA.CInt(utc_TimeParts(1)), 0)
         Case 2
             ' VBA.Val does not use regional settings, use for seconds to avoid decimal/comma issues
-            ParseIso = ParseIso + VBA.TimeSerial(VBA.CInt(utc_TimeParts(0)), VBA.CInt(utc_TimeParts(1)), Int(VBA.Val(utc_TimeParts(2))))
+            ParseIso = ParseIso + VBA.TimeSerial(VBA.CInt(utc_TimeParts(0)), VBA.CInt(utc_TimeParts(1)), Int(VBA.val(utc_TimeParts(2))))
         End Select
 
         ParseIso = ParseUtc(ParseIso)

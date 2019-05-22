@@ -15,7 +15,7 @@ Option Explicit
 '====================================
 ' public properties
 Public Property Get Header() As Variant: End Property ' Array representing column headers
-Public Property Get data() As Variant: End Property ' Array representing data from table
+Public Property Get Data() As Variant: End Property ' Array representing data from table
 Public Property Get NumRows() As Long: End Property
 Public Property Get NumColumns() As Long: End Property
 
@@ -23,7 +23,7 @@ Public Sub openDb(sqliPath As String)
 ' opens a database
 End Sub
 
-Public Sub execute(ssql As String)
+Public Sub Execute(ssql As String)
 ' Execute sql statement
 End Sub
 
