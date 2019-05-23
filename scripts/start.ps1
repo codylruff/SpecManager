@@ -48,7 +48,7 @@ function Expand-ZipFile($file, $destination)
 function SpecManagerShortcut() {
     $Shell = New-Object -ComObject ("WScript.Shell")
     $ShortCut = $Shell.CreateShortcut("$env:USERPROFILE\Desktop\Spec-Manager.lnk")
-    $ShortCut.TargetPath="$SpecManagerDir\Spec Manager $Version.xlsm"
+    $ShortCut.TargetPath="$SpecManagerDir\scripts\start.bat"
     $ShortCut.Description = "Spec-Manager Shortcut";
     $shortcut.IconLocation="$SpecManagerDir\Spec-Manager.ico"
     $ShortCut.WindowStyle = 7
@@ -58,7 +58,7 @@ function SpecManagerShortcut() {
 # Initialize variables
 $ErrorActionPreference = 'Stop'
 $tls12 = [Enum]::ToObject([Net.SecurityProtocolType], 3072)
-$SpecManagerDir = (Get-Item .\).Parent.FullName
+$SpecManagerDir = (Get-Item .\).Parent.FullName + "\AppData\Roaming\Spec-Manager"
 $ConfigDir = "$SpecManagerDir\config"
 $releases = "https://api.github.com/repos/codylruff/SpecManager/releases"
 
@@ -81,7 +81,7 @@ $Version = $tag
 $json_file = "$ConfigDir\local_version.json"
 $version_json = Get-Content $json_file | Out-String
 $version_string = ConvertFrom-Json20($version_json)
-$local_version = $version_string.app_version
+$local_version = "v" + $version_string.app_version
 
 if ($tag -ne $local_version) {
     $StatusText.Text = "Removing Previous Version . . ."
@@ -132,7 +132,7 @@ $StatusText.Text = "Launching Spec-Manager . . ."
 $StatusText.Refresh()
 Start-Sleep -Seconds 1
 $Excel = New-Object -comobject Excel.Application
-$FilePath = "C:\Users\cruff\AppData\Roaming\Spec-Manager\Spec Manager $tag.xlsm"
+$FilePath = "$SpecManagerDir\Spec Manager $tag.xlsm"
 $Excel.Workbooks.Open($FilePath)
 $Excel.visible = $true
 # Close the form

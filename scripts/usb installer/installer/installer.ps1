@@ -110,7 +110,7 @@ $StatusText.Refresh()
 Start-Sleep -Seconds 2
 
 # Check version to speed up program if PSVersion 3.0 or higher.
-if($PSVersionTable.PSVersion.Major -gt 2){
+if($PSVersionTable.PSVersion.Major -gt 4){
     [Net.ServicePointManager]::SecurityProtocol = $tls12
     Invoke-WebRequest $ReleaseUri -Out $ZipFile
     $StatusText.Text = "Installing Spec-Manager. . ."
@@ -143,7 +143,7 @@ $StatusText.Text = "Loading Spec-Manager . . ."
 $StatusText.Refresh()
 Start-Sleep -Seconds 2
 $Excel = New-Object -comobject Excel.Application
-$FilePath = "C:\Users\cruff\AppData\Roaming\Spec-Manager\Spec Manager $tag.xlsm"
+$FilePath = "$SpecManagerDir\Spec Manager $tag.xlsm"
 $Excel.Workbooks.Open($FilePath)
 $Excel.visible = $true
 $Form.Hide

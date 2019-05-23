@@ -1,0 +1,12 @@
+# MS Excel files
+*.xlsm
+~*.xlsm
+
+# MISC
+*.lnk
+libs/
+logs/
+config/
+templates/
+Database/
+bin/
