@@ -12,7 +12,7 @@ Function GetUser(ByVal Name As String) As DatabaseRecord
     Logger.Log "Searching for user name . . . "
     SQLstmt = "SELECT * FROM user_privledges " & _
               "WHERE Name ='" & Name & "'"
-    Set GetUser = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
+    Set GetUser = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
 End Function
 
 Function PushNewUser(new_user As Account) As Long
@@ -23,7 +23,7 @@ Function PushNewUser(new_user As Account) As Long
               "VALUES ('" & new_user.Name & "', " & _
                       "'" & new_user.PrivledgeLevel & "', " & _
                       "'" & new_user.ProductLine & "')"
-    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     PushNewUser = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -38,7 +38,7 @@ Function GetTemplateRecord(ByRef spec_type As String) As DatabaseRecord
     SQLstmt = "SELECT * FROM template_specifications" & _
               " WHERE Spec_Type= '" & spec_type & "'"
     Set GetTemplateRecord = ExecuteSQLSelect( _
-                     Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
+                     Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
 End Function
 
 Function GetSpecificationRecords(ByRef MaterialId As String) As DatabaseRecord
@@ -49,7 +49,7 @@ Function GetSpecificationRecords(ByRef MaterialId As String) As DatabaseRecord
     SQLstmt = "SELECT * FROM  standard_specifications" & _
               " WHERE Material_Id= '" & MaterialId & "'"
     Set GetSpecificationRecords = ExecuteSQLSelect( _
-                     Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
+                     Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
 End Function
 
 Function PushTemplate(ByRef template As SpecificationTemplate)
@@ -64,7 +64,7 @@ Function PushTemplate(ByRef template As SpecificationTemplate)
                       "'" & template.Revision & "', " & _
                       "'" & template.SpecType & "', " & _
                       "'" & template.ProductLine & "')"
-    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     PushTemplate = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -83,7 +83,7 @@ Function UpdateTemplate(ByRef template As SpecificationTemplate)
               "Properties_Json ='" & template.PropertiesJson & "', " & _
               "Revision ='" & template.Revision & "' " & _
               "WHERE Spec_Type ='" & template.SpecType & "'"
-    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     UpdateTemplate = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -91,12 +91,12 @@ DbPushFailException:
     UpdateTemplate = DB_PUSH_FAILURE
 End Function
 
-Function PushSpec(ByRef spec As Specification) As Long
+Function PushSpec(ByRef spec As Specification, Optional tbl As String = "standard_specifications") As Long
 ' Push a new records
     Dim SQLstmt As String
     On Error GoTo DbPushFailException
     ' Create SQL statement from objects
-    SQLstmt = "INSERT INTO standard_specifications " & _
+    SQLstmt = "INSERT INTO " & tbl & " " & _
               "(Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) " & _
               "VALUES ('" & spec.MaterialId & "', " & _
                       "'" & CStr(Now()) & "', " & _
@@ -104,7 +104,7 @@ Function PushSpec(ByRef spec As Specification) As Long
                       "'" & spec.TolerancesJson & "', " & _
                       "'" & spec.Revision & "', " & _
                       "'" & spec.SpecType & "')"
-    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     PushSpec = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -119,7 +119,7 @@ Function DeleteTemplate(ByRef template As SpecificationTemplate) As Long
     ' Create SQL statement from objects
     SQLstmt = "DELETE FROM template_specifications " & _
               "WHERE Spec_Type ='" & template.SpecType & "' AND Revision ='" & template.Revision & "'"
-    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     DeleteTemplate = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
@@ -127,14 +127,14 @@ DbDeleteFailException:
     DeleteTemplate = DB_DELETE_FAILURE
 End Function
 
-Function DeleteSpec(ByRef spec As Specification) As Long
+Function DeleteSpec(ByRef spec As Specification, Optional tbl As String = "standard_specifications") As Long
 ' Push a new records
     Dim SQLstmt As String
     On Error GoTo DbDeleteFailException
     ' Create SQL statement from objects
-    SQLstmt = "DELETE FROM standard_specifications " & _
+    SQLstmt = "DELETE FROM " & tbl & " " & _
               "WHERE Material_Id ='" & spec.MaterialId & "' AND Revision ='" & spec.Revision & "'"
-    ExecuteSQL Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt
+    ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     DeleteSpec = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
@@ -147,7 +147,7 @@ Function GetTemplateTypes() As DatabaseRecord
     ' build the sql query
     Logger.Log "Get all template types . . . "
     SQLstmt = "SELECT * FROM template_specifications"
-    Set GetTemplateTypes = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
+    Set GetTemplateTypes = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
 End Function
 
 Function SelectAllSpecifications(spec_type As String) As VBA.Collection
@@ -156,7 +156,7 @@ Function SelectAllSpecifications(spec_type As String) As VBA.Collection
     ' build the sql query
     Logger.Log "Selecting all specifications . . . "
     SQLstmt = "SELECT * FROM standard_specifications WHERE Spec_Type ='" & spec_type & "'"
-    Set record = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, SQLITE_PATH, SQLstmt)
+    Set record = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
     record.SetDictionary
     Set SelectAllSpecifications = record.records
 End Function

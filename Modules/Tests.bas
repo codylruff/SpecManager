@@ -19,12 +19,10 @@ Sub AllTests()
     Utils.UnloadAllForms
     Logger.Log "----------- Test Suite Complete ------------------"
     Logger.ResetLog "tests"
-    End
     Exit Sub
 TestFailedException:
     Logger.ResetLog "tests"
-    MsgBox "The update did not apply correctly, please contact the administrator."
-    End
+    MsgBox "Somethings wrong, please contact the administrator."
 End Sub
 
 Sub CreateTemplate_Test()
@@ -84,7 +82,7 @@ Sub ViewSpecification_AfterCreate_Test()
     ' 4. Click the save pdf button but make sure it does not display a file input box and the file is save in a predetermined place that subsequently
     '    noted in the tests.log file. This pdf should not display but it must be check after the tests are complete as a final step to validate
     '    the process. (save as test_specification_rev1.pdf)
-    formViewSpecs.ExportPdf
+    'formViewSpecs.ExportPdf
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
@@ -113,9 +111,11 @@ Sub EditTemplate_Test()
     formEditTemplate.RemoveProperty
     ' 10. Save Changes
     formEditTemplate.SaveChanges
-    ' 11. Report pass / fail
+    ' 11. Remove Spec Template
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_template)
+    ' 12. Report pass / fail
     ' TODO:
-    ' 12. Go to main menu
+    ' 13. Go to main menu
     Logger.Log "------------- End Edit Template Test ----------------"
 End Sub
 
@@ -135,9 +135,11 @@ Sub EditSpecification_Test()
     formSpecConfig.Submit
     ' 7. Save changes
     formSpecConfig.SaveChanges
-    ' 8. Report pass / fail
+    ' 8. Remove old specification from the archive
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.Item("to_archive"), "archived_specifications")
+    ' 9. Report pass / fail
     ' TODO:
-    ' 9. Go to main menu
+    ' 10. Go to main menu
     Logger.Log "------------- End Edit Specification Test -----------"
 End Sub
 
@@ -152,13 +154,11 @@ Sub ViewSpecification_AfterEdit_Test()
     ' 4. Click the save pdf button but make sure it does not display a file input box and the file is save in a predetermined place that subsequently
     '    noted in the tests.log file. This pdf should not display but it must be check after the tests are complete as a final step to validate
     '    the process. (save as test_specification_rev1.pdf)
-    formViewSpecs.ExportPdf True
+    'formViewSpecs.ExportPdf True
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec)
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.Item("1.0"))
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_template)
     Logger.Log "------------- End View Specification Test(2) ---------"
 End Sub
 

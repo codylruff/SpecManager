@@ -8,6 +8,15 @@ Function CreateSpecification() As Specification
     Set CreateSpecification = New Specification
 End Function
 
+Function CopySpecification(spec As Specification) As Specification
+    Dim spec_copy As Specification
+    Set spec_copy = New Specification
+    With spec
+        spec_copy.JsonToObject .PropertiesJson, .TolerancesJson, .MaterialId, .SpecType, .Revision
+    End With
+    Set CopySpecification = spec_copy
+End Function
+
 Function CreateNewTemplate(Optional template_name As String = vbNullString) As SpecificationTemplate
     Dim template As SpecificationTemplate
     Set template = New SpecificationTemplate

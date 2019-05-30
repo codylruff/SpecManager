@@ -15,10 +15,20 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
+
+
+
+
 Option Explicit
 
 Private Sub cmdPrint_Click()
     PrintConsole
+End Sub
+
+Private Sub cmdSelectType_Click()
+    SelectType
 End Sub
 
 Private Sub UserForm_Initialize()
@@ -38,6 +48,10 @@ Private Sub cmdExportPdf_Click()
 End Sub
 
 Private Sub ClearThisForm()
+    Dim i As Integer
+    Do While cboSelectType.ListCount > 0
+        cboSelectType.RemoveItem 0
+    Loop
     ClearForm Me
 End Sub
 
@@ -57,10 +71,26 @@ Private Sub UserForm_Terminate()
     Logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
+Private Sub PopulateCboSelectType()
+    Dim rev As Variant
+    Dim i As Integer
+    Do While cboSelectType.ListCount > 0
+        cboSelectType.RemoveItem 0
+    Loop
+    With cboSelectType
+        For Each rev In App.specs
+            .AddItem rev
+            .Value = rev
+        Next rev
+    End With
+End Sub
+
 Sub MaterialSearch()
     SpecManager.RestartApp
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
+    PopulateCboSelectType
+    cboSelectType.Value = App.current_spec.SpecType
 End Sub
 
 Sub Back()
@@ -68,13 +98,33 @@ Sub Back()
     GuiCommands.GoToMain
 End Sub
 
+Sub SelectType()
+    Set App.current_spec = App.specs.Item(cboSelectType.Value)
+    SpecManager.PrintSpecification Me
+End Sub
+
 Sub PrintConsole()
 ' This subroutine prints the contents of the console box using the default printer assign in user settings.
+    'Check if there is actually text to print
+    Dim spec As Specification
+    Dim T As Variant
+    Dim new_sht As Worksheet
     If Me.txtConsole.Text = vbNullString Then
         MsgBox "There is nothing to print!"
     Else
-        App.console.PrintObjectToSheet App.current_spec, shtSpecificationForm
-        Utils.PrintSheet shtSpecificationForm
+        ' Print the specs one at a time to the default printer
+        For Each T In App.specs
+            Set spec = App.specs.Item(T)
+            Set new_sht = Utils.CreateNewSheet(spec.SpecType)
+            App.console.PrintObjectToSheet spec, new_sht
+            Application.PrintCommunication = False
+            With new_sht.PageSetup
+                .FitToPagesWide = 1
+                .FitToPagesTall = False
+            End With
+            Application.PrintCommunication = True
+            Utils.PrintSheet new_sht
+        Next T
     End If
 End Sub
 

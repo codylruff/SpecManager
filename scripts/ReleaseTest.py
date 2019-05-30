@@ -1,8 +1,6 @@
 import shutil, os, argparse, json
 from distutils.dir_util import copy_tree
     
-# Takes github release tag as command line arg "vX.Y.Z"
-
 # ****************************************************************************************
 # 	1. Create new release folder C:/Users/cruff/source/SM - Final/bin/spec-manager-vX.Y.Z
 # 	2. Copy Spec Manager vX.Y.Z into the release folder
@@ -38,6 +36,7 @@ def get_arguments():
 
     parser = argparse.ArgumentParser(description='Create a new release of spec-manager.')
     parser.add_argument('-version', help='the version number that makes the tag value used for github release url')
+    parser.add_argument('-installer', help='copies the installer files to the network drive')
 
     return parser.parse_args()
 
@@ -101,30 +100,45 @@ def update_json_files(release_dir, release_ver):
     with open(user_json_file, 'w') as out_file:
         json.dump(user_json, out_file)
 
+def update_installer_files(repo_dir, installer_dir):
+    repo_installer_dir = repo_dir + "/scripts/usb installer"
+    copy_tree(repo_installer_dir, installer_dir)
+
 def main():
 
     # Get arguments
-    ver = get_arguments().version
-
-    # Create new release directory
-    repo_dir = r"C:/Users/cruff/source/SM - Final/release-script-test"
-    release_dir = repo_dir + "/bin/spec-manager-v" + ver
-    create_release_folder(release_dir)
+    installer = False
+    args = get_arguments()
+    ver = args.version
+    installer = args.installer
     
-     # copy the new excel file into the release folder
-    excel_file = repo_dir + "/Spec Manager v" + ver + ".xlsm"
-    shutil.copy(excel_file, release_dir)
+    # Initialize repo directory
+    repo_dir = r'C:/Users/cruff/source/SM - Final/release-script-test'
 
-    # Copy all other files && folders to the release directory
-    copy_files_to_release_folder(repo_dir, release_dir)
+    if not installer:
+        # Create new release directory
+        release_dir = repo_dir + "/bin/spec-manager-v" + ver
+        create_release_folder(release_dir)
+        
+        # copy the new excel file into the release folder
+        excel_file = repo_dir + "/Spec Manager v" + ver + ".xlsm"
+        shutil.copy(excel_file, release_dir)
 
-    # Update the json files with the new version
-    print('Updating json configuration files . . .')
-    update_json_files(release_dir, ver)
+        # Copy all other files && folders to the release directory
+        copy_files_to_release_folder(repo_dir, release_dir)
 
-    # Zip the directory for release
-    print('Creating spec manager archive . . . ')
-    shutil.make_archive(release_dir, 'zip', release_dir)
+        # Update the json files with the new version
+        print('Updating json configuration files . . .')
+        update_json_files(release_dir, ver)
+
+        # Zip the directory for release
+        print('Creating spec manager archive . . . ')
+        shutil.make_archive(release_dir, 'zip', release_dir)
+    else:
+        print('Updating the installer on the network drive . . . ')
+        installer_dir = repo_dir + '/Data Manager/setup files/spec-manager-setup'
+        update_installer_files(repo_dir, installer_dir)
+
 
 if __name__ == "__main__":
     main()

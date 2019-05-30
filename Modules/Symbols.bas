@@ -1,9 +1,9 @@
 Attribute VB_Name = "Symbols"
 Option Explicit
 ' Test Comment
-Public Const PublicDir             As String = "S:\Data Manager"
-Public Const SM_PATH               As String = "C:\Users\"
-Public Const SQLITE_PATH           As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+Public Const PUBLIC_DIR               As String = "S:\Data Manager"
+Public Const SM_PATH                  As String = "C:\Users\"
+Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
 
 ' SPEC MANAGER ERROR DESCRIPTIONS:
 Public Const SM_SEARCH_SUCCESS     As Long = 0

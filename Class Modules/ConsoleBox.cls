@@ -43,33 +43,54 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet)
         .Range("A" & 1).Value = spec.SpecType & " : "
         .Range("B" & 1).Value = spec.MaterialId
         .Range("A" & 1).Font.Bold = True
-        .Range("A" & 1).Font.Size = 13
+        .Range("A" & 1).Font.Size = 20
         .Range("B" & 1).Font.Bold = True
-        .Range("B" & 1).Font.Size = 13
+        .Range("B" & 1).Font.Size = 20
         i = 3
         For Each Key In spec.Properties
             If Not spec.Properties(Key) = vbNullString Then
                 .Range("A" & i).Value = CStr(Key) & " : "
-                .Range("B" & i).Value = spec.Properties(CStr(Key))
-                .Range("A" & i).Font.Size = 12
-                .Range("B" & i).Font.Size = 12
+                .Range("B" & i).Value = CStr(spec.Properties(CStr(Key)))
+                .Range("A" & i).Font.Size = 17
+                .Range("B" & i).Font.Size = 17
+                .Range("B" & i).HorizontalAlignment = xlHAlignCenter
+                If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(251) Then
+                    .Range("B" & i).Font.Name = "Wingdings"
+                End If
             Else
                 .Range("A" & i).Value = CStr(Key)
                 .Range("B" & i).Value = "-"
-                .Range("A" & i).Font.Size = 12
-                .Range("B" & i).Font.Size = 12
+                .Range("A" & i).Font.Size = 17
+                .Range("B" & i).Font.Size = 17
             End If
             i = i + 1
         Next Key
         .columns("A:G").AutoFit
         i = i + 2
     End With
-    'Dim PicPath As String
-    'PicPath = "S:\Data Manager\Specifications\weave-patterns\101.jpg"
-    'Dim img As Picture
-    'Sheets("SpecificationForm").Activate
-    'ActiveSheet.Range("A" & i).Activate
-    'Set img = ActiveSheet.Pictures.Insert(PicPath)
+    Dim xPic As Object
+    Dim PicPath As String
+    Dim img As Picture
+    If spec.SpecType = "Ballistic Testing Requirements" Then
+        
+        For Each xPic In sht.Pictures
+            xPic.Delete
+        Next
+        
+        PicPath = "S:\Data Manager\Specifications\ballistic-package\15x15-corner.jpg"
+        
+        sht.Activate
+        ActiveSheet.Range("A" & i).Activate
+        Set img = ActiveSheet.Pictures.Insert(PicPath)
+    ElseIf spec.SpecType = "Testing Requirements" Then
+        For Each xPic In sht.Pictures
+            xPic.Delete
+        Next
+        PicPath = "S:\Data Manager\Specifications\weave-patterns\plain.jpg"
+        sht.Activate
+        ActiveSheet.Range("A" & i).Activate
+        Set img = ActiveSheet.Pictures.Insert(PicPath)
+    End If
 End Sub
 
 Public Sub PrintObject(obj As Object)
@@ -79,14 +100,25 @@ Public Sub PrintObject(obj As Object)
     FormId.txtConsole.Text = vbNullString
     'PrintLine obj.SpecType, obj.MaterialId
     'PrintLine "Revision", obj.Revision
+    
     For Each Key In obj.Properties
         If Not obj.Properties(Key) = vbNullString Then
-            PrintLine CStr(Key), obj.Properties(CStr(Key))
+            PrintLine CStr(Key), FormatAsciiToYesNo(obj.Properties(CStr(Key)))
         Else
             PrintLine CStr(Key), "-"
         End If
     Next Key
 End Sub
+
+Private Function FormatAsciiToYesNo(char As String) As String
+
+    If char = Chr(252) Then
+        char = "Required"
+    ElseIf char = Chr(251) Then
+        char = "-"
+    End If
+    FormatAsciiToYesNo = char
+End Function
 
 Public Sub PrintLine(ParamArray var() As Variant)
     Dim i As Integer

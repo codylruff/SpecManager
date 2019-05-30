@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formCreateSpec 
    Caption         =   "Specification Control"
-   ClientHeight    =   10548
+   ClientHeight    =   10545
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   9735
@@ -13,6 +13,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
+
+
+
+
 
 
 
@@ -50,7 +56,7 @@ End Sub
 Private Sub cmdSaveChanges_Click()
 ' Calls method to save a new specification revision x.0)
     Dim ret_val As Long
-    ret_val = SpecManager.SaveSpecification(App.current_spec)
+    ret_val = SpecManager.SaveNewSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         MsgBox "New Specification Was Not Saved. Contact Admin."
@@ -98,7 +104,7 @@ End Sub
 Sub SaveChanges()
 ' Calls method to save a new specification revision x.0)
     Dim ret_val As Long
-    ret_val = SpecManager.SaveSpecification(App.current_spec)
+    ret_val = SpecManager.SaveNewSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Create Spec Fail"

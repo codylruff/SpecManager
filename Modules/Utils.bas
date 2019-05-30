@@ -71,6 +71,7 @@ End Function
 
 Function CreateNewSheet(shtName As String) As Worksheet
 ' Creates a new worksheet with the given name
+    Application.DisplayAlerts = False
     Dim exists As Boolean, i As Integer
     With ThisWorkbook
         For i = 1 To Worksheets.count
@@ -84,6 +85,7 @@ Function CreateNewSheet(shtName As String) As Worksheet
         .Sheets.Add(After:=.Sheets(.Sheets.count)).Name = shtName
     End With
     Set CreateNewSheet = Sheets(shtName)
+    Application.DisplayAlerts = True
 End Function
 
 Function CheckForEmpties(frm) As Boolean

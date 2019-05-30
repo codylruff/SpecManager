@@ -62,19 +62,21 @@ Function SearchForSpecifications(material_id As String) As Long
 ' Manages the search procedure
     Dim coll As Collection
     Dim specs_dict As Object
+    Dim itms
     Set specs_dict = SpecManager.GetSpecifications(material_id)
     If specs_dict Is Nothing Then
         Logger.Log "Could not find a standard for : " & material_id
         SearchForSpecifications = SM_SEARCH_FAILURE
     Else
         Set App.specs = specs_dict
-        Set App.current_spec = SelectLatestSpec()
+        itms = App.specs.Items
+        Set App.current_spec = itms(0)
         Set coll = New Collection
         For Each Key In App.specs
             coll.Add App.specs.Item(Key)
         Next Key
         Logger.Log "Succesfully retrieved specifications for : " & material_id
-        SpecManager.UpdateTemplateChanges coll
+        'SpecManager.UpdateTemplateChanges coll
         SearchForSpecifications = SM_SEARCH_SUCCESS
     End If
 End Function
@@ -160,10 +162,10 @@ Function GetSpecifications(material_id As String) As Object
     Else
         For Each json_dict In json_coll
             Set spec = Factory.CreateSpecFromDict(json_dict)
-            specs_dict.Add json_dict.Item("Revision"), spec
-            rev = json_dict.Item("Revision")
+            specs_dict.Add json_dict.Item("Spec_Type"), spec
+            'rev = json_dict.Item("Revision")
         Next json_dict
-        specs_dict.Item(rev).IsLatest = True
+        'specs_dict.Item(rev).IsLatest = True
         Set GetSpecifications = specs_dict
     End If
     Exit Function
@@ -185,11 +187,34 @@ Sub PrintTemplate(frm As MSForms.UserForm)
     App.console.PrintObject App.current_template
 End Sub
 
-Function SaveSpecification(spec As Specification) As Long
+Function SaveNewSpecification(spec As Specification) As Long
     If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
-        SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        SaveNewSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    Else
+        SaveNewSpecification = DB_PUSH_DENIED
+    End If
+End Function
+
+Function SaveSpecification(spec As Specification, old_spec As Specification) As Long
+    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
+        If ArchiveSpecification(old_spec) = DB_DELETE_SUCCESS Then
+            SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        Else
+            SaveSpecification = DB_PUSH_DENIED
+        End If
     Else
         SaveSpecification = DB_PUSH_DENIED
+    End If
+End Function
+
+Function ArchiveSpecification(old_spec As Specification) As Long
+' Archives the last spec in order to make room for the new one.
+    Dim ret_val As Long
+    ' 1. Insert old version into archived_specifications
+    ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    ' 3. Delete old version from standard_specifications
+    If ret_val = DB_PUSH_SUCCESS Then
+        ArchiveSpecification = IIf(DeleteSpecification(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
     End If
 End Function
 
@@ -217,9 +242,9 @@ Function DeleteSpecificationTemplate(template As SpecificationTemplate) As Long
     End If
 End Function
 
-Function DeleteSpecification(spec As Specification) As Long
+Function DeleteSpecification(spec As Specification, Optional tbl As String = "standard_specifications") As Long
     If App.current_user.PrivledgeLevel = USER_ADMIN Then
-        DeleteSpecification = IIf(DataAccess.DeleteSpec(spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+        DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
     Else
         DeleteSpecification = DB_DELETE_DENIED
     End If
@@ -265,34 +290,6 @@ Function InitializeNewSpecification()
         Set .current_spec.Tolerances = .current_template.Properties
     End With
 End Function
-
-Sub WorksheetToDatabase()
-    Dim ws As Worksheet
-    Dim i, j As Integer
-    Dim last_row As Integer
-    Dim number_props As Integer
-    Dim property As String
-    
-    With App
-        Set ws = ActiveWorkbook.Sheets(.current_template.SpecType & " Upload")
-        last_row = ws.Range("A1").End(xlDown).Row
-        number_props = .current_template.Properties.count
-        For i = 2 To last_row
-            InitializeNewSpecification
-            Logger.Log CStr(number_props)
-            For j = 1 To number_props
-            property = Utils.ConvertToCamelCase(CStr(ws.Cells(1, j).Value))
-            Logger.Log "Column " & j & ": " & property & ", Row " & i & ": " & CStr(ws.Cells(i, j).Value)
-            .current_spec.Properties.Item(property) = ws.Cells(i, j).Value
-            If property = "MaterialNumber" Then
-                .current_spec.MaterialId = ws.Cells(i, j).Value
-            End If
-            Next j
-            Logger.Log "DataAccess returned : " & SaveSpecification(.current_spec)
-            Set .current_spec = Nothing
-        Next i
-    End With
-End Sub
 
 Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Dim ws As Worksheet

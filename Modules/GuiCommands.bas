@@ -206,7 +206,7 @@ Public Sub ConsoleBoxToPdf()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError
-    fileName = PublicDir & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
+    fileName = PUBLIC_DIR & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
     Set ws = Sheets("SpecificationForm")
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
@@ -226,7 +226,7 @@ Public Sub ConsoleBoxToPdf_Test()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError
-    fileName = PublicDir & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
+    fileName = PUBLIC_DIR & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
     Set ws = Sheets("SpecificationForm")
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _

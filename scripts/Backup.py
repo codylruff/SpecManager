@@ -9,11 +9,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from pathlib import Path
 
-import argparse
-import sqlite3
-import shutil
-import time
-import os
+import argparse, sqlite3, shutil, time, os
 
 #sqlite_file = 'S:\Data Manager\Database\SAATI_Spec_Manager.db3'
 
@@ -70,7 +66,8 @@ def get_arguments():
 if __name__ == "__main__":
     #args = get_arguments()
     #sqlite3_backup(args.db_file, args.backup_dir)
-    sqlite3_backup(r'c:\users\cruff\source\SM - Final\Database\SAATI_Spec_Manager.db3',
-                   r'c:\users\cruff\desktop\Database_Backups')
+    db_path = r'S:\Data Manager\Database\SAATI_Spec_Manager.db3'
+    sqlite3_backup(db_path, r'c:\users\cruff\desktop\Database_Backups')
+    sqlite3_backup(db_path, r'S:\Data Manager\Database\backups')               
     #clean_data(r'c:\users\cruff\desktop\Database_Backups')
     print ("\nBackup update has been successful.")

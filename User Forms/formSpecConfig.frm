@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formSpecConfig 
    Caption         =   "Specification Control"
-   ClientHeight    =   11868
+   ClientHeight    =   11865
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   9810
@@ -17,7 +17,12 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
+
+Private Sub cmdSelectType_Click()
+    SelectType
+End Sub
 
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
@@ -32,7 +37,8 @@ Private Sub cmdBack_Click()
 End Sub
 
 Private Sub cmdExportPdf_Click()
-    ExportPdf
+    MsgBox "Function is unavailable at this time."
+    'ExportPdf
 End Sub
 
 Private Sub cmdSaveChanges_Click()
@@ -45,28 +51,24 @@ Private Sub cmdSubmit_Click()
     Submit
 End Sub
 
-Private Sub cmdSearch_Click()
-    Search
-End Sub
-
 Private Sub ClearThisForm()
     Dim i As Integer
     Do While cboSelectProperty.ListCount > 0
         cboSelectProperty.RemoveItem 0
     Loop
-    Do While cboSelectRevision.ListCount > 0
-        cboSelectRevision.RemoveItem 0
+    Do While cboSelectType.ListCount > 0
+        cboSelectType.RemoveItem 0
     Loop
     ClearForm Me
 End Sub
 
-Private Sub PopulateCboSelectRevision()
+Private Sub PopulateCboSelectType()
     Dim rev As Variant
     Dim i As Integer
-    Do While cboSelectRevision.ListCount > 0
-        cboSelectRevision.RemoveItem 0
+    Do While cboSelectType.ListCount > 0
+        cboSelectType.RemoveItem 0
     Loop
-    With cboSelectRevision
+    With cboSelectType
         For Each rev In App.specs
             .AddItem rev
             .Value = rev
@@ -109,7 +111,8 @@ Sub MaterialSearch()
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectProperty
-    PopulateCboSelectRevision
+    PopulateCboSelectType
+    cboSelectType.Value = App.current_spec.SpecType
     
 End Sub
 
@@ -125,8 +128,12 @@ End Sub
 Sub SaveChanges()
 ' Calls method to save a new specification incremented the revision by +0.1
     Dim ret_val As Long
-    App.current_spec.Revision = CStr(CDbl(App.current_spec.Revision) + 1) & ".0"
-    ret_val = SpecManager.SaveSpecification(App.current_spec)
+    Dim old_spec As Specification
+    Set old_spec = New Specification
+    Set old_spec = Factory.CopySpecification(App.current_spec)
+    App.specs.Add "to_archive", old_spec
+    App.current_spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
+    ret_val = SpecManager.SaveSpecification(App.current_spec, old_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         Logger.Log "New Specification Was Not Saved. Contact Admin."
@@ -145,7 +152,7 @@ Sub Submit()
     SpecManager.PrintSpecification Me
 End Sub
 
-Sub Search()
-    Set App.current_spec = App.specs.Item(cboSelectRevision.Value)
+Sub SelectType()
+    Set App.current_spec = App.specs.Item(cboSelectType.Value)
     SpecManager.PrintSpecification Me
 End Sub
