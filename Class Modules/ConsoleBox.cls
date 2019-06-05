@@ -34,28 +34,115 @@ End Property
 '----------
 ' METHODS
 '----------
-Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet)
+Private Function GetWeavePatternImagePath(material_id As String) As String
+' Given a material_id retrieve the file path for the weave pattern image
+    Dim weave_id As String
+
+    Select Case Mid(material_id, 13, 1)
+        Case "9"
+            weave_id = "6HS"
+        Case "A"
+            weave_id = "Twill_2x2"
+        Case "B"
+            weave_id = "Twill_4x4"
+        Case "C"
+            weave_id = "Basket_2x2"
+        Case "D"
+            weave_id = "Basket_3x3"
+        Case "E"
+            weave_id = "Basket_4x4"
+        Case "G"
+            weave_id = "5HS"
+        Case "H"
+            weave_id = "8HS"
+        Case "O"
+            weave_id = "Twill_3x1"
+        Case "P"
+            weave_id = "Twill_2x1"
+        Case "Q"
+            weave_id = "Twill_7x1"
+        Case "T"
+            weave_id = "Plain"
+        Case "U"
+            weave_id = "Tape_Basket_2x2"
+        Case "R"
+            weave_id = "Tape_Plain"
+        Case "S"
+            weave_id = "Tape_Twill_2x2"
+        Case "V"
+            weave_id = "Twill_3x1"
+        Case "7"
+            weave_id = "Double_Cloth"
+        Case Else
+            weave_id = "Not_Available"
+    End Select
+
+    Logger.Log "Inserting image : " & weave_id & ".jpg"
+    GetWeavePatternImagePath = "S:\Data Manager\Specifications\weave-pattern\" & weave_id & ".jpg"
+
+End Function
+
+Private Function GetBallisticPackageImagePath() As String
+' Returns the path of the correct ballistic package image given the requirements
+    Dim img_path As String
+    img_path = "S:\Data Manager\Specifications\ballistic-package\15x15-corner.jpg"
+    GetBallisticPackageImagePath = img_path
+End Function
+
+Private Sub InsertImage(sht As Worksheet, img_path As String, row_id As Integer)
+' Inserts the given image into the given sheet
+    Dim xPic As Object
+    Dim img As Picture
+    For Each xPic In sht.Pictures
+        xPic.Delete
+    Next
+    sht.Activate
+    ActiveSheet.Range("A" & row_id).Activate
+    Set img = ActiveSheet.Pictures.Insert(img_path)
+End Sub
+
+Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString)
 ' Print object to specified worksheet starting in cell "A1"
     Dim Key As Variant
     Dim i As Integer
+    Dim path As String
+
+    ' Clear any existing information from the sheet
     sht.Cells.ClearContents
+
+    ' Insert/Format body of the specification
     With sht
+        ' Spec Header
         .Range("A" & 1).Value = spec.SpecType & " : "
         .Range("B" & 1).Value = spec.MaterialId
         .Range("A" & 1).Font.Bold = True
         .Range("A" & 1).Font.Size = 20
         .Range("B" & 1).Font.Bold = True
         .Range("B" & 1).Font.Size = 20
-        i = 3
+        If prod_order <> vbNullString Then
+            .Range("A" & 2).Value = "Production Order : "
+            .Range("B" & 2).Value = prod_order
+            .Range("A" & 2).Font.Bold = True
+            .Range("A" & 2).Font.Size = 20
+            .Range("B" & 2).Font.Bold = True
+            .Range("B" & 2).Font.Size = 20
+            .Range("B" & i).HorizontalAlignment = xlHAlignLeft
+            i = 4
+        Else
+            i = 3
+        End If
+        ' Spec Properties
         For Each Key In spec.Properties
             If Not spec.Properties(Key) = vbNullString Then
                 .Range("A" & i).Value = CStr(Key) & " : "
                 .Range("B" & i).Value = CStr(spec.Properties(CStr(Key)))
                 .Range("A" & i).Font.Size = 17
                 .Range("B" & i).Font.Size = 17
-                .Range("B" & i).HorizontalAlignment = xlHAlignCenter
+                .Range("B" & i).HorizontalAlignment = xlHAlignLeft
                 If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(251) Then
                     .Range("B" & i).Font.Name = "Wingdings"
+                Else
+                    .Range("B" & i).Font.Name = "Calibri"
                 End If
             Else
                 .Range("A" & i).Value = CStr(Key)
@@ -68,29 +155,13 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet)
         .columns("A:G").AutoFit
         i = i + 2
     End With
-    Dim xPic As Object
-    Dim PicPath As String
-    Dim img As Picture
+    ' Insert images per requirements
     If spec.SpecType = "Ballistic Testing Requirements" Then
-        
-        For Each xPic In sht.Pictures
-            xPic.Delete
-        Next
-        
-        PicPath = "S:\Data Manager\Specifications\ballistic-package\15x15-corner.jpg"
-        
-        sht.Activate
-        ActiveSheet.Range("A" & i).Activate
-        Set img = ActiveSheet.Pictures.Insert(PicPath)
+        InsertImage sht, GetBallisticPackageImagePath, i
     ElseIf spec.SpecType = "Testing Requirements" Then
-        For Each xPic In sht.Pictures
-            xPic.Delete
-        Next
-        PicPath = "S:\Data Manager\Specifications\weave-patterns\plain.jpg"
-        sht.Activate
-        ActiveSheet.Range("A" & i).Activate
-        Set img = ActiveSheet.Pictures.Insert(PicPath)
+        InsertImage sht, GetWeavePatternImagePath(spec.MaterialId), i
     End If
+
 End Sub
 
 Public Sub PrintObject(obj As Object)
@@ -108,6 +179,14 @@ Public Sub PrintObject(obj As Object)
             PrintLine CStr(Key), "-"
         End If
     Next Key
+End Sub
+
+Public Sub ListObjects(dict As Object)
+' Given a dictionary of specifications lists the specs by type in the console
+    Dim T As Variant
+    For Each T In dict
+        Me.FormId.txtConsole.Text = FormId.txtConsole.Text & CStr(T) & vbNewLine
+    Next T
 End Sub
 
 Private Function FormatAsciiToYesNo(char As String) As String

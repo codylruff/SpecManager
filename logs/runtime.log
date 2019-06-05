@@ -1,31 +1,16 @@
-30-May-2019 17:28:45.77 : --------- Start formViewSpecs ----------
-30-May-2019 17:28:48.45 : ------------- Restarting Application
-30-May-2019 17:28:48.46 : Searching for GKE001015N00T0BZ specifications . . . 
-30-May-2019 17:28:48.47 : -----------------------------------
-30-May-2019 17:28:48.48 : SELECT * FROM  standard_specifications WHERE Material_Id= 'GKE001015N00T0BZ'
-30-May-2019 17:28:48.50 : Checking Row 1 . . . 
-30-May-2019 17:28:48.51 : Column 1 : Id, Row 1 : 1178
-30-May-2019 17:28:48.52 : Column 2 : Material_Id, Row 1 : GKE001015N00T0BZ
-30-May-2019 17:28:48.53 : Column 3 : Time_Stamp, Row 1 : 5/30/2019 2:19:44 PM
-30-May-2019 17:28:48.54 : Column 4 : Properties_Json, Row 1 : {"QC Sample Length":"1.5 yds","Warp/Pick Count":"\u00FC","Usable Width":"\u00FC","Dry Weight":"\u00FC","Fabric Breaking Strength":"\u00FC","Yarn Breaking Strength":"\u00FB","Thickness":"\u00FC","Crimp":"\u00FC","Conditioned Weight":"\u00FC","Resin Content":"\u00FB","Volatile Content":"\u00FB","Glass Transition (Tg)":"\u00FB","Laminated Weight":"\u00FB","Coated Weight":"\u00FB"}
-30-May-2019 17:28:48.55 : Column 5 : Spec_Type, Row 1 : Testing Requirements
-30-May-2019 17:28:48.56 : Column 6 : Revision, Row 1 : 1
-30-May-2019 17:28:48.57 : Column 7 : Tolerances_Json, Row 1 : {}
-30-May-2019 17:28:48.58 : Checking Row 2 . . . 
-30-May-2019 17:28:48.59 : Column 1 : Id, Row 2 : 1320
-30-May-2019 17:28:48.60 : Column 2 : Material_Id, Row 2 : GKE001015N00T0BZ
-30-May-2019 17:28:48.61 : Column 3 : Time_Stamp, Row 2 : 5/30/2019 2:21:29 PM
-30-May-2019 17:28:48.62 : Column 4 : Properties_Json, Row 2 : {"Ballistic Sample Length":"1.5 yds","Number of Layers":8}
-30-May-2019 17:28:48.63 : Column 5 : Spec_Type, Row 2 : Ballistic Testing Requirements
-30-May-2019 17:28:48.64 : Column 6 : Revision, Row 2 : 1
-30-May-2019 17:28:48.65 : Column 7 : Tolerances_Json, Row 2 : {}
-30-May-2019 17:28:48.66 : Succesfully retrieved specifications for : GKE001015N00T0BZ
-30-May-2019 17:28:48.67 : Printing Specification . . . 
-30-May-2019 17:28:51.95 : Failed to save file PDF Fail
-30-May-2019 17:29:00.27 : Printing Specification . . . 
-30-May-2019 17:29:05.14 : Failed to save file PDF Fail
-30-May-2019 17:29:12.75 : Printing Specification . . . 
-30-May-2019 17:29:14.87 : Failed to save file PDF Fail
-30-May-2019 17:29:19.19 : --------- End formViewSpecs ----------
-30-May-2019 17:29:20.61 : ------------- Stopping Application
-30-May-2019 17:29:20.62 : Saving : runtime.log
+05-Jun-2019 15:19:54.89 : ------------- Starting Application
+05-Jun-2019 15:19:54.91 : Searching for user name . . . 
+05-Jun-2019 15:19:54.93 : -----------------------------------
+05-Jun-2019 15:19:54.94 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+05-Jun-2019 15:19:54.96 : Checking Row 1 . . . 
+05-Jun-2019 15:19:54.97 : Column 1 : Name, Row 1 : CRUFF
+05-Jun-2019 15:19:54.99 : Column 2 : Protection, Row 1 : 25
+05-Jun-2019 15:19:55.00 : Column 3 : Filtration, Row 1 : 25
+05-Jun-2019 15:19:55.02 : Column 4 : Chemical, Row 1 : 25
+05-Jun-2019 15:19:55.04 : Column 5 : Privledge_Level, Row 1 : 25
+05-Jun-2019 15:19:55.05 : Column 6 : Product_Line, Row 1 : Admin
+05-Jun-2019 15:19:55.07 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+05-Jun-2019 15:19:55.86 : ------------- Stopping Application
+05-Jun-2019 15:19:55.88 : Saving : runtime.log
+05-Jun-2019 15:20:02.42 : ------------- Stopping Application
+05-Jun-2019 15:20:02.44 : Saving : runtime.log

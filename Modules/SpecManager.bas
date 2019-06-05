@@ -173,6 +173,17 @@ NullSpecException:
     Set GetSpecifications = Nothing
 End Function
 
+Sub ListSpecifications(frm As MSForms.UserForm)
+' Lists the specifications currently selected in txtConsole for the given form
+    Logger.Log "Listing Specifications . . . "
+    Set App.console = Factory.CreateConsoleBox(frm)
+    If Not App.specs Is Nothing Then
+        App.console.ListObjects App.specs
+    Else
+        App.console.PrintLine "No specifications are available for this code."
+    End If
+End Sub
+
 Sub PrintSpecification(frm As MSForms.UserForm)
     Logger.Log "Printing Specification . . . "
     Set App.console = Factory.CreateConsoleBox(frm)
