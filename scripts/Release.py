@@ -98,7 +98,13 @@ def update_json_files(release_dir, release_ver):
     # modify the user file
     with open(user_json_file) as json_file:
         user_json = json.load(json_file)
-    user_json['app_version'] = release_ver
+        user_json['app_version'] = release_ver
+        user_json['name'] = ""
+        user_json['default_printer'] = ""
+        user_json['default_log_level'] = ""
+        user_json['privledge_level'] = ""
+        user_json['product_line'] = ""
+        user_json['repo_path'] = ""
     with open(user_json_file, 'w') as out_file:
         json.dump(user_json, out_file)
 

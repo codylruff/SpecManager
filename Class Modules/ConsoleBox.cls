@@ -106,7 +106,9 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     Dim Key As Variant
     Dim i As Integer
     Dim path As String
-
+    
+    ' Disable updates to the gui during processing
+    Application.DisplayAlerts = False
     ' Clear any existing information from the sheet
     sht.Cells.ClearContents
 
@@ -161,7 +163,8 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     ElseIf spec.SpecType = "Testing Requirements" Then
         InsertImage sht, GetWeavePatternImagePath(spec.MaterialId), i
     End If
-
+    ' Enable updates to the gui after processing
+    Application.DisplayAlerts = True
 End Sub
 
 Public Sub PrintObject(obj As Object)
