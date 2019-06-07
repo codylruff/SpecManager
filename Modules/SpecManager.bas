@@ -156,7 +156,7 @@ Function GetSpecifications(material_id As String) As Object
     Set json_coll = record.records
     Set specs_dict = CreateObject("Scripting.Dictionary")
     
-    If json_coll.Count = 0 Then
+    If json_coll.count = 0 Then
         Set GetSpecifications = Nothing
         Exit Function
     Else

@@ -1,2 +1,34 @@
-05-Jun-2019 18:02:53.16 : ------------- Stopping Application
-05-Jun-2019 18:02:53.17 : Saving : runtime.log
+07-Jun-2019 16:46:55.54 : ------------- Starting Application
+07-Jun-2019 16:46:55.55 : Searching for user name . . . 
+07-Jun-2019 16:46:55.56 : -----------------------------------
+07-Jun-2019 16:46:55.57 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+07-Jun-2019 16:46:55.58 : Checking Row 1 . . . 
+07-Jun-2019 16:46:55.59 : Column 1 : Name, Row 1 : CRUFF
+07-Jun-2019 16:46:55.60 : Column 2 : Protection, Row 1 : 25
+07-Jun-2019 16:46:55.61 : Column 3 : Filtration, Row 1 : 25
+07-Jun-2019 16:46:55.62 : Column 4 : Chemical, Row 1 : 25
+07-Jun-2019 16:46:55.63 : Column 5 : Privledge_Level, Row 1 : 25
+07-Jun-2019 16:46:55.64 : Column 6 : Product_Line, Row 1 : Admin
+07-Jun-2019 16:46:55.65 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+07-Jun-2019 16:46:56.93 : ------------- Restarting Application
+07-Jun-2019 16:46:56.96 : --------- Start formPrintSpecifications ----------
+07-Jun-2019 16:47:01.08 : ------------- Restarting Application
+07-Jun-2019 16:47:01.09 : Searching for TKE064029C00T0DCRH specifications . . . 
+07-Jun-2019 16:47:01.10 : -----------------------------------
+07-Jun-2019 16:47:01.11 : SELECT * FROM  standard_specifications WHERE Material_Id= 'TKE064029C00T0DCRH'
+07-Jun-2019 16:47:01.12 : Checking Row 1 . . . 
+07-Jun-2019 16:47:01.13 : Column 1 : Id, Row 1 : 1946
+07-Jun-2019 16:47:01.14 : Column 2 : Material_Id, Row 1 : TKE064029C00T0DCRH
+07-Jun-2019 16:47:01.15 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:46:05 PM
+07-Jun-2019 16:47:01.16 : Column 4 : Properties_Json, Row 1 : {"QC Sample Length":"0 yds","Warp/Pick Count":"\u00FB","Usable Width":"\u00FB","Dry Weight":"\u00FB","Fabric Breaking Strength":"\u00FB","Thickness":"\u00FB","Crimp":"\u00FB","Conditioned Weight":"\u00FB","Residual Shrinkage":"\u00FB","Yarn Break Force":"\u00FB","Resin Content":"\u00FB","Volatile Content":"\u00FB","Glass Transition (Tg)":"\u00FB","Laminated Weight":"\u00FB","Coated Weight":"\u00FB"}
+07-Jun-2019 16:47:01.17 : Column 5 : Spec_Type, Row 1 : Testing Requirements
+07-Jun-2019 16:47:01.18 : Column 6 : Revision, Row 1 : 1
+07-Jun-2019 16:47:01.19 : Column 7 : Tolerances_Json, Row 1 : {}
+07-Jun-2019 16:47:01.20 : Succesfully retrieved specifications for : TKE064029C00T0DCRH
+07-Jun-2019 16:47:01.21 : Listing Specifications . . . 
+07-Jun-2019 16:50:10.05 : Inserting image : Plain.jpg
+07-Jun-2019 16:50:38.55 : --------- End formPrintSpecifications ----------
+07-Jun-2019 16:50:40.57 : ------------- Stopping Application
+07-Jun-2019 16:50:40.58 : Saving : runtime.log
+07-Jun-2019 16:50:40.61 : ------------- Stopping Application
+07-Jun-2019 16:50:40.62 : Saving : runtime.log

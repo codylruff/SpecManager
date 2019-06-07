@@ -133,8 +133,9 @@ $StatusText.Refresh()
 Start-Sleep -Seconds 1
 $Excel = New-Object -comobject Excel.Application
 $FilePath = "$SpecManagerDir\Spec Manager $tag.xlsm"
-$Excel.Workbooks.Open($FilePath)
+$Excel.WindowState = -4140
 $Excel.visible = $true
+$Excel.Workbooks.Open($FilePath)
 # Close the form
 $Form.Hide
 

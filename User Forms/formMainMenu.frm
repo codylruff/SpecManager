@@ -16,48 +16,6 @@ Attribute VB_Exposed = False
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdConfig_Click()
@@ -95,6 +53,7 @@ End Sub
 Private Sub cmdExit_Click()
     SpecManager.StopApp
     GuiCommands.UnloadAllForms
+    GuiCommands.ExitApp
 End Sub
 
 Private Sub cmdEditTemplates_Click()

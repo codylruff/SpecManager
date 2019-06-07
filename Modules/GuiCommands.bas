@@ -173,6 +173,7 @@ Public Sub ExitApp()
     If Windows.count > 1 Then
         For Each w In Windows
             If w.Parent.Name = ThisWorkbook.Name Then
+                Application.Visible = True
                 w.Parent.Save
                 w.Parent.Close
             End If

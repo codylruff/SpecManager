@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formPrintSpecifications 
    Caption         =   "Spec-Manager "
-   ClientHeight    =   6015
+   ClientHeight    =   6615
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   6540
@@ -14,11 +14,13 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
     'MsgBox "Function un-available"
-    PrintAllSpecs
+    PrintSelectedSpecs PromptHandler.ProtectionPlannerSequence
+    'Debug.Print PromptHandler.ProtectionPlannerSequence
     'ExportPdf
 End Sub
 
@@ -69,7 +71,7 @@ Sub Back()
     GuiCommands.GoToMain
 End Sub
 
-Sub PrintAllSpecs()
+Sub PrintSelectedSpecs(setup_only As Boolean)
 ' This subroutine prints the contents of the console box using the default printer assign in user settings.
     'Check if there is actually text to print
     Dim spec As Specification
@@ -82,6 +84,17 @@ Sub PrintAllSpecs()
     Else
         ' Print the specs one at a time to the default printer
         For Each T In App.specs
+            If setup_only Then
+               Dim setup_spec As Specification
+               If App.specs.exists("Setup Requirements") Then
+                  ' Print only the setup spec
+                  Set setup_spec = App.specs.Item("Setup Requirements")
+
+               Else
+                  MsgBox "No Setup Requirements Exist for this Material."
+               End If
+               Exit Sub
+            End If
             Set spec = App.specs.Item(T)
             Set new_sht = Utils.CreateNewSheet(spec.SpecType)
             App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
