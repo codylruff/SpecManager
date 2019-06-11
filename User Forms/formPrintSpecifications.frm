@@ -13,8 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -77,7 +75,7 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
     Dim spec As Specification
     Dim T As Variant
     Dim new_sht As Worksheet
-    If Me.txtConsole.Text = "No specifications are available for this code." Then
+    If Me.txtConsole.text = "No specifications are available for this code." Then
          MsgBox "There is nothing to print!"
     ElseIf Not IsNumeric(Me.txtProductionOrder) Then
          MsgBox "Please enter a production order."
@@ -110,7 +108,7 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
 End Sub
 
 Sub ExportPdf(Optional isTest As Boolean = False)
-    App.console.PrintObjectToSheet App.specs.Item("Testing Requirements"), Sheets("pdf"), txtProductionOrder
+    App.console.PrintObjectToSheet App.specs.Item("Testing Requirements"), Utils.CreateNewSheet("pdf"), txtProductionOrder
     If isTest Then
         GuiCommands.ConsoleBoxToPdf_Test
     Else

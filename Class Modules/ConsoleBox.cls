@@ -29,7 +29,7 @@ Public Property Get OutputHistory() As VBA.Collection: Set OutputHistory = Outpu
 Public Property Set FormId(Value As MSForms.UserForm): Set FormId_ = Value: End Property
 Public Property Get FormId() As MSForms.UserForm: Set FormId = FormId_: End Property
 Public Property Get CurrentText() As String
-     CurrentText = Me.FormId.txtConsole.Text
+     CurrentText = Me.FormId.txtConsole.text
 End Property
 '----------
 ' METHODS
@@ -118,17 +118,17 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
         .Range("A" & 1).Value = spec.SpecType & " : "
         .Range("B" & 1).Value = spec.MaterialId
         .Range("A" & 1).Font.Bold = True
-        .Range("A" & 1).Font.Size = 20
+        .Range("A" & 1).Font.Size = 18
         .Range("B" & 1).Font.Bold = True
-        .Range("B" & 1).Font.Size = 20
+        .Range("B" & 1).Font.Size = 18
         If prod_order <> vbNullString Then
             .Range("A" & 2).Value = "Production Order : "
             .Range("B" & 2).Value = prod_order
             .Range("A" & 2).Font.Bold = True
-            .Range("A" & 2).Font.Size = 20
+            .Range("A" & 2).Font.Size = 18
             .Range("B" & 2).Font.Bold = True
-            .Range("B" & 2).Font.Size = 20
-            .Range("B" & i).HorizontalAlignment = xlHAlignLeft
+            .Range("B" & 2).Font.Size = 18
+            .Range("B" & 2).HorizontalAlignment = xlHAlignLeft
             i = 4
         Else
             i = 3
@@ -141,8 +141,10 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                 .Range("A" & i).Font.Size = 17
                 .Range("B" & i).Font.Size = 17
                 .Range("B" & i).HorizontalAlignment = xlHAlignLeft
-                If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(251) Then
+                If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(171) Then
                     .Range("B" & i).Font.Name = "Wingdings"
+                ElseIf spec.Properties(Key) = Chr(210) Then
+                    .Range("B" & i).Font.Name = "Windings 2"
                 Else
                     .Range("B" & i).Font.Name = "Calibri"
                 End If
@@ -171,7 +173,7 @@ Public Sub PrintObject(obj As Object)
 ' Print object to console
     Dim Key As Variant
     ' Clear the console
-    FormId.txtConsole.Text = vbNullString
+    FormId.txtConsole.text = vbNullString
     'PrintLine obj.SpecType, obj.MaterialId
     'PrintLine "Revision", obj.Revision
     
@@ -188,7 +190,7 @@ Public Sub ListObjects(dict As Object)
 ' Given a dictionary of specifications lists the specs by type in the console
     Dim T As Variant
     For Each T In dict
-        Me.FormId.txtConsole.Text = FormId.txtConsole.Text & CStr(T) & vbNewLine
+        Me.FormId.txtConsole.text = FormId.txtConsole.text & CStr(T) & vbNewLine
     Next T
 End Sub
 
@@ -215,7 +217,7 @@ Public Sub PrintLine(ParamArray var() As Variant)
          End If
     Next
     OutputHistory.Add s
-    Me.FormId.txtConsole.Text = FormId.txtConsole.Text & s & vbNewLine
+    Me.FormId.txtConsole.text = FormId.txtConsole.text & s & vbNewLine
 End Sub
 
 Private Sub Class_Initialize()
