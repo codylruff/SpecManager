@@ -14,15 +14,15 @@ Public Sub SetLogLevel(level As Long)
     log_level = level
 End Sub
 
-Public Sub Log(Text As String)
-    If buffer Is Nothing Then Set buffet = New VBA.Collection
-    buffer.AddLine Text
-    Debug.Print Logger.printf("{0} : {1}", buffer(buffer.Count)(0), buffer(buffer.Count)(1))
+Public Sub Log(text As String)
+    If buffer Is Nothing Then Set buffer = New VBA.Collection
+    buffer.Add AddLine(text)
+    Debug.Print Logger.printf("{0} : {1}", buffer(buffer.count)(0), buffer(buffer.count)(1))
 End Sub
 
-Public Sub Trace(Text As String)
+Public Sub Trace(text As String)
 ' Used to signify a transition point in the application log
-    Log "------------- " & Text
+    Log "------------- " & text
 End Sub
 
 Public Sub ResetLog(Optional log_type As String = "runtime")
@@ -30,10 +30,10 @@ Public Sub ResetLog(Optional log_type As String = "runtime")
     Logger.ClearBuffer
 End Sub
 
-Private Function AddLine(text as string) As Variant
+Private Function AddLine(text As String) As Variant
     Dim line As Variant
-    line(0) = TimeInMS
-    line(1) = text
+
+    line = Array(TimeInMS, text)
     
     AddLine = line
     
@@ -45,6 +45,7 @@ End Sub
 
 Public Sub SaveLog(Optional file_name As String = "runtime")
     Dim line As Variant
+    Dim i As Long
     If buffer Is Nothing Then Exit Sub
     folder_path = ThisWorkbook.path & "\logs"
     file_path = folder_path & "\" & file_name & ".log"
@@ -52,9 +53,9 @@ Public Sub SaveLog(Optional file_name As String = "runtime")
     If Not FSO.FolderExists(folder_path) Then FSO.CreateFolder folder_path
     Logger.Log "Saving : " & file_name & ".log"
     Set stream = FSO.CreateTextFile(file_path, True)
-    For i=0 To buffer.Count
+    For i = 1 To buffer.count
       stream.WriteLine Logger.printf("{0} : {1}", buffer(i)(0), buffer(i)(1))
-    Next I
+    Next i
     stream.Close
 End Sub
 
