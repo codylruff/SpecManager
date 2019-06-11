@@ -140,6 +140,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                 .Range("B" & i).Value = CStr(spec.Properties(CStr(Key)))
                 .Range("A" & i).Font.Size = 17
                 .Range("B" & i).Font.Size = 17
+                .Range("B" & i).Font.Bold = True
                 .Range("B" & i).HorizontalAlignment = xlHAlignLeft
                 If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(171) Then
                     .Range("B" & i).Font.Name = "Wingdings"
@@ -153,6 +154,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                 .Range("B" & i).Value = "-"
                 .Range("A" & i).Font.Size = 17
                 .Range("B" & i).Font.Size = 17
+                .Range("B" & i).Font.Bold = True
             End If
             i = i + 1
         Next Key
