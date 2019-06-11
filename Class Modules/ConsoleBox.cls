@@ -145,7 +145,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                 If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(171) Then
                     .Range("B" & i).Font.Name = "Wingdings"
                 ElseIf spec.Properties(Key) = Chr(210) Then
-                    .Range("B" & i).Font.Name = "Windings 2"
+                    .Range("B" & i).Font.Name = "Wingdings 2"
                 Else
                     .Range("B" & i).Font.Name = "Calibri"
                 End If
