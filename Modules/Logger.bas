@@ -15,12 +15,9 @@ Public Sub SetLogLevel(level As Long)
 End Sub
 
 Public Sub Log(Text As String)
-    If buffer Is Nothing Then Set buffer = CreateObject("Scripting.Dictionary")
-    Do Until Not buffer.exists(TimeInMS)
-        Application.Wait (Now + TimeValue("0:00:01") / 1000)
-    Loop
-    buffer.Add Key:=TimeInMS, Item:=Text
-    Debug.Print Logger.printf("{0} : {1}", TimeInMS, Text)
+    If buffer Is Nothing Then Set buffet = New VBA.Collection
+    buffer.AddLine Text
+    Debug.Print Logger.printf("{0} : {1}", buffer(buffer.Count)(0), buffer(buffer.Count)(1))
 End Sub
 
 Public Sub Trace(Text As String)
@@ -33,12 +30,21 @@ Public Sub ResetLog(Optional log_type As String = "runtime")
     Logger.ClearBuffer
 End Sub
 
+Private Function AddLine(text as string) As Variant
+    Dim line As Variant
+    line(0) = TimeInMS
+    line(1) = text
+    
+    AddLine = line
+    
+End Function
+
 Public Sub NotImplementedException()
     Logger.Log "Not Implemented Exception!"
 End Sub
 
 Public Sub SaveLog(Optional file_name As String = "runtime")
-    Dim Key As Variant
+    Dim line As Variant
     If buffer Is Nothing Then Exit Sub
     folder_path = ThisWorkbook.path & "\logs"
     file_path = folder_path & "\" & file_name & ".log"
@@ -46,9 +52,9 @@ Public Sub SaveLog(Optional file_name As String = "runtime")
     If Not FSO.FolderExists(folder_path) Then FSO.CreateFolder folder_path
     Logger.Log "Saving : " & file_name & ".log"
     Set stream = FSO.CreateTextFile(file_path, True)
-    For Each Key In buffer
-      stream.WriteLine Logger.printf("{0} : {1}", Key, buffer.Item(Key))
-    Next Key
+    For i=0 To buffer.Count
+      stream.WriteLine Logger.printf("{0} : {1}", buffer(i)(0), buffer(i)(1))
+    Next I
     stream.Close
 End Sub
 
