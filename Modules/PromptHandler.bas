@@ -44,30 +44,3 @@ End Function
 Private Sub question(question_text As String)
     formUserPrompt.lblQuestion.Caption = question_text
 End Sub
-
-' Prompt Click Yes No Events
-'----------------------------------
-Public Sub FinishingOrderPrompt_Yes()
-
-End Sub
-
-Public Sub FinishingOrderPrompt_No()
-
-End Sub
-'----------------------------------
-Public Sub FirstCutPrompt_Yes()
-
-End Sub
-
-Public Sub FirstCutPrompt_No()
-
-End Sub
-'-----------------------------------
-Public Sub IsotexBoundPrompt_Yes()
-
-End Sub
-
-Public Sub IsotexBoundPrompt_No()
-
-End Sub
-'-----------------------------------
