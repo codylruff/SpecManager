@@ -11,6 +11,7 @@ Sub ToggleExcelGui(b As Boolean)
 End Sub
 
 Public Function RemoveWhiteSpace(target As String) As String
+'test
     With CreateObject("VBScript.RegExp")
         .Pattern = "\s"
         .MultiLine = True
@@ -20,6 +21,7 @@ Public Function RemoveWhiteSpace(target As String) As String
 End Function
 
 Function ConvertToCamelCase(s As String) As String
+'test
 ' Converts sentence case to Camel Case
     On Error GoTo RegExError
     With CreateObject("VBScript.RegExp")
@@ -33,6 +35,7 @@ RegExError:
 End Function
 
 Function SplitCamelCase(sString As String, Optional sDelim As String = " ") As String
+'test
 ' Converts camel case to sentence case
 On Error GoTo Error_Handler
     Dim oRegEx As Object
@@ -54,6 +57,7 @@ Error_Handler:
 End Function
 
 Function GetLine(ParamArray var() As Variant) As String
+'test
     Const Padding = 25
     Dim i As Integer
     Dim s As String
@@ -70,6 +74,7 @@ Function GetLine(ParamArray var() As Variant) As String
 End Function
 
 Function CreateNewSheet(shtName As String) As Worksheet
+'test
 ' Creates a new worksheet with the given name
     Application.DisplayAlerts = False
     Dim exists As Boolean, i As Integer
@@ -138,6 +143,7 @@ Sub Insert(rng As Range, val)
 End Sub
 
 Public Function printf(mask As String, ParamArray tokens()) As String
+'test
     Dim i As Long
     For i = 0 To UBound(tokens)
         mask = Replace$(mask, "{" & i & "}", tokens(i))
@@ -154,6 +160,7 @@ Public Sub PrintSheet(ws As Worksheet)
 End Sub
 
 Public Function ArrayLength(arr As Variant) As Long
+'test
     ArrayLength = UBound(arr) - LBound(arr) + 1
 End Function
 
@@ -169,6 +176,7 @@ Sub ChangeActivePrinter()
 End Sub
 
 Public Function ToFileExtension(extension_type As Long) As String
+'test
 ' Given an enum converts to the file extension string for vba files
     Select Case extension_type
         Case 1
