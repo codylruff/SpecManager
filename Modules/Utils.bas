@@ -99,14 +99,14 @@ Function CheckForEmpties(frm) As Boolean
     For Each ctl In frm.Controls
         Select Case VBA.TypeName(ctl)
             Case "TextBox"
-                If ctl.Value = vbNullString Then
+                If ctl.value = vbNullString Then
                     MsgBox "All boxes must be filed.", vbExclamation, "Input Error"
                     ctl.SetFocus
                     CheckForEmpties = True
                     Exit Function
                 End If
             Case "ComboBox"
-                If ctl.Value = vbNullString Then
+                If ctl.value = vbNullString Then
                     MsgBox "Make a selection from the drop down menu.", vbExclamation, "Input Error"
                     ctl.SetFocus
                     CheckForEmpties = True
@@ -129,17 +129,17 @@ Sub UpdateTable(shtName As String, tblName As String, Header As String, val)
 'Adds an entry at the bottom of specified column header.
     Dim rng As Range
     Set rng = Sheets(shtName).Range(tblName & "[" & Header & "]")
-    rng.End(xlDown).Offset(1, 0).Value = val
+    rng.End(xlDown).Offset(1, 0).value = val
 End Sub
 
 Sub Update(rng As Range, val)
 'Adds an entry at the bottom of specified column header.
-    rng.End(xlDown).Offset(1, 0).Value = val
+    rng.End(xlDown).Offset(1, 0).value = val
 End Sub
 
 Sub Insert(rng As Range, val)
 'Inserts an entry into a specific named cell.
-    rng.Value = val
+    rng.value = val
 End Sub
 
 Public Function printf(mask As String, ParamArray tokens()) As String

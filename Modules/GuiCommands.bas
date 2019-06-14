@@ -195,7 +195,7 @@ Public Sub ClearForm(frm)
             Case "TextBox"
                 ctl.text = vbNullString
             Case "CheckBox", "OptionButton", "ToggleButton"
-                ctl.Value = False
+                ctl.value = False
             Case "ComboBox", "ListBox"
                 ctl.ListIndex = -1
             Case Else

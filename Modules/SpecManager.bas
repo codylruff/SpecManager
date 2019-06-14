@@ -76,7 +76,7 @@ Function SearchForSpecifications(material_id As String) As Long
             coll.Add App.specs.Item(Key)
         Next Key
         Logger.Log "Succesfully retrieved specifications for : " & material_id
-        'SpecManager.UpdateTemplateChanges coll
+        SpecManager.UpdateTemplateChanges
         SearchForSpecifications = SM_SEARCH_SUCCESS
     End If
 End Function
@@ -108,38 +108,33 @@ Function ListAllTemplateTypes() As Collection
     Set ListAllTemplateTypes = coll
 End Function
 
-Sub UpdateTemplateChanges(specifications As Collection)
-    ' Apply a specification template to a collection of specifications
-    ' this is done in order to apply any changes to a template that
-    ' happened since the previous template was changed.
-    Dim Key As Variant
+Sub UpdateTemplateChanges()
+    ' Apply any changes to material specs that happened since the previous template was revised.
+    Dim Key, T As Variant
     Dim spec As Specification
     Dim template As SpecificationTemplate
-    Logger.Log "Applying specifications for any template changes . . ."
-    Set App.current_template = GetTemplate(App.current_spec.SpecType)
-    For Each Key In App.current_template.Properties
-        If Not App.current_spec.Properties.exists(Key) Then
-            Logger.Log "Adding : " & Key & " to specification properties list."
-            For Each spec In specifications
+    Set spec = New Specification
+    Logger.Log "Checking specifications for any template updates . . ."
+    For Each T In App.specs
+        Set spec = App.specs.Item(T)
+        Set App.current_template = GetTemplate(spec.SpecType)
+        For Each Key In App.current_template.Properties
+            ' Checks for existance current template properites in previous spec
+            If Not spec.Properties.exists(Key) Then
+                ' Missing properties are added.
+                Logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
                 spec.Properties.Add Key:=Key, Item:=vbNullString
-            Next spec
-        End If
-    Next Key
-    For Each Key In App.current_spec.Properties
-        If Not App.current_template.Properties.exists(Key) Then
-            For Each spec In specifications
-            Logger.Log "Removing : " & Key & " from specification properties list."
-                spec.Properties.Remove Key
-            Next spec
-        End If
-    Next Key
-    For Each Key In App.specs
-        For Each spec In specifications
-            If spec.Revision = Key Then
-                Set App.specs.Item(Key) = spec
             End If
-        Next spec
-    Next Key
+        Next Key
+        For Each Key In spec.Properties
+            ' Checks for existance of current_spec Properties in current_template.
+            If Not App.current_template.Properties.exists(Key) Then
+                ' Old properties are removed
+                Logger.Log "Removing : " & Key & " from " & spec.MaterialId & " properties list."
+                spec.Properties.Remove Key
+            End If
+        Next Key
+    Next T
 End Sub
 
 Function GetSpecifications(material_id As String) As Object
@@ -303,8 +298,8 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     For Each dict In dicts
         Set App.current_spec = Factory.CreateSpecFromDict(dict)
         props = App.current_spec.ToArray
-        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Value = App.current_spec.Header
-        ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).Value = props
+        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).value = App.current_spec.Header
+        ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).value = props
         i = i + 1
     Next dict
     ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).columns.AutoFit
@@ -328,11 +323,11 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
                 dict.Add .Cells(1, k), .Cells(i, k)
             Next k
             json_string = JsonVBA.ConvertToJson(dict)
-            .Cells(i, num_cols + start_col).Value = json_string
+            .Cells(i, num_cols + start_col).value = json_string
             spec_dict.Add "Properties_Json", json_string
             spec_dict.Add "Tolerances_Json", "{}"
-            spec_dict.Add "Material_Id", .Cells(i, 1).Value
-            spec_dict.Add "Spec_Type", .Cells(i, 2).Value
+            spec_dict.Add "Material_Id", .Cells(i, 1).value
+            spec_dict.Add "Spec_Type", .Cells(i, 2).value
             spec_dict.Add "Revision", 1
             Set new_spec = Factory.CreateSpecFromDict(spec_dict)
             If DataAccess.PushSpec(new_spec) <> DB_PUSH_SUCCESS Then
@@ -361,6 +356,6 @@ Public Sub CopyPropertiesFromFile()
         style_number = Mid(ws.Cells(r, 1), 6, 3)
         json_file_path = ThisWorkbook.path & "\RBAs\" & style_number & ".json"
         json_string = Replace(JsonVBA.ReadJsonFileToString(json_file_path), "NaN", vbNullString)
-        ws.Cells(r, 2).Value = json_string
+        ws.Cells(r, 2).value = json_string
     Next r
 End Sub

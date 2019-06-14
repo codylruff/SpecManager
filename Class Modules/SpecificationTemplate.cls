@@ -18,11 +18,11 @@ Private ProductLine_      As String
 '----------------
 ' AUTO-PROPERTIES
 '----------------
-Public Property Let ProductLine(Value As String): ProductLine_ = Value: End Property
+Public Property Let ProductLine(value As String): ProductLine_ = value: End Property
 Public Property Get ProductLine() As String: ProductLine = ProductLine_: End Property
-Public Property Let Revision(Value As String): Revision_ = Value: End Property
+Public Property Let Revision(value As String): Revision_ = value: End Property
 Public Property Get Revision() As String: Revision = Revision_: End Property
-Public Property Let SpecType(Value As String): SpecType_ = Value: End Property
+Public Property Let SpecType(value As String): SpecType_ = value: End Property
 Public Property Get SpecType() As String: SpecType = SpecType_: End Property
 '--METHODS--'
 Public Sub AddProperty(property As String)

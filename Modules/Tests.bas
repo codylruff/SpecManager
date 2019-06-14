@@ -31,8 +31,8 @@ Sub CreateTemplate_Test()
     'GuiCommands.GoToMain
     SpecManager.RestartApp
     ' 2. Enter a template name "test_template"
-    formNewTemplateInput.cboProductLine.Value = "Test"
-    formNewTemplateInput.txtTemplateName.Value = "test_template"
+    formNewTemplateInput.cboProductLine.value = "Test"
+    formNewTemplateInput.txtTemplateName.value = "test_template"
     ' 3. Click the Submit button
     formNewTemplateInput.Continue
     ' 4. Change txtPropertyName = "test_property"

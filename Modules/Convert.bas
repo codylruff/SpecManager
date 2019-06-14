@@ -426,7 +426,7 @@ If StartCells.Cells.count = 1 Then
     Set DestRng = StartCells
     For Each V In coll
         If IsObject(V) = False Then
-            DestRng.Value = V
+            DestRng.value = V
             If DestRng.Row < DestRng.Parent.rows.count Then
                 Set DestRng = DestRng(2, 1)
             Else
@@ -453,7 +453,7 @@ If StartCells.Cells.count = 2 Then
         Set DestRng = StartCells.Cells(1, 1)
         For Each V In coll
             If IsObject(V) = False Then
-                DestRng.Value = V
+                DestRng.value = V
                 If DestRng.Column < StartCells.Parent.columns.count Then
                     Set DestRng = DestRng(1, 2)
                 Else
@@ -472,7 +472,7 @@ If StartCells.Cells.count = 2 Then
         Set DestRng = StartCells.Cells(1, 1)
         For Each V In coll
             If IsObject(V) = False Then
-                DestRng.Value = V
+                DestRng.value = V
                 If DestRng.Row < StartCells.Parent.rows.count Then
                     Set DestRng = DestRng(2, 1)
                 Else
@@ -493,7 +493,7 @@ For Ndx = 1 To StartCells.Cells.count
     If Ndx <= coll.count Then
         V = coll(Ndx)
         If IsObject(V) = False Then
-            StartCells.Cells(Ndx).Value = V
+            StartCells.Cells(Ndx).value = V
         End If
     End If
 Next Ndx
@@ -548,7 +548,7 @@ If StartCells.Cells.count = 1 Then
     Set DestRng = StartCells
     For Each V In dict.Items
         If IsObject(V) = False Then
-            DestRng.Value = V
+            DestRng.value = V
             If DestRng.Row < DestRng.Parent.rows.count Then
                 Set DestRng = DestRng(2, 1)
             Else
@@ -575,7 +575,7 @@ If StartCells.Cells.count = 2 Then
         Set DestRng = StartCells.Cells(1, 1)
         For Each V In dict.Items
             If IsObject(V) = False Then
-                DestRng.Value = V
+                DestRng.value = V
                 If DestRng.Column < StartCells.Parent.columns.count Then
                     Set DestRng = DestRng(1, 2)
                 Else
@@ -594,7 +594,7 @@ If StartCells.Cells.count = 2 Then
         Set DestRng = StartCells.Cells(1, 1)
         For Each V In dict.Items
             If IsObject(V) = False Then
-                DestRng.Value = V
+                DestRng.value = V
                 If DestRng.Row < StartCells.Parent.rows.count Then
                     Set DestRng = DestRng(2, 1)
                 Else
@@ -615,7 +615,7 @@ For Ndx = 1 To StartCells.Cells.count
     If Ndx <= dict.count Then
         V = dict.Items(Ndx - 1)
         If IsObject(V) = False Then
-            StartCells.Cells(Ndx).Value = V
+            StartCells.Cells(Ndx).value = V
         End If
     End If
 Next Ndx
