@@ -46,16 +46,26 @@ End Function
 
 Sub MaterialInput(material_id As String)
 ' Takes user input for material search
+    Dim ret_val As Long
     If material_id = vbNullString Then
         ' You must enter a material id before clicking search
         MsgBox "You must enter a material id.", , "Invalid Search Exception"
         Exit Sub
     End If
-    If SpecManager.SearchForSpecifications(material_id) = SM_SEARCH_FAILURE Then
+    ret_val = SpecManager.SearchForSpecifications(material_id)
+    If ret_val = SM_SEARCH_FAILURE Then
         ' Let the user know that the specifcation could not be found.
         MsgBox "Specification not found!", , "Null Spec Exception"
         Exit Sub
+    ElseIf ret_val = SM_SEARCH_AGAIN Then
+        ret_val = SpecManager.SearchForSpecifications(material_id)
+        If ret_val = SM_SEARCH_FAILURE Then
+            ' Let the user know that the specifcation could not be found.
+            MsgBox "Specification not found!", , "Null Spec Exception"
+            Exit Sub
+        End If
     End If
+
 End Sub
 
 Function SearchForSpecifications(material_id As String) As Long
@@ -76,8 +86,12 @@ Function SearchForSpecifications(material_id As String) As Long
             coll.Add App.specs.Item(Key)
         Next Key
         Logger.Log "Succesfully retrieved specifications for : " & material_id
-        SpecManager.UpdateTemplateChanges
-        SearchForSpecifications = SM_SEARCH_SUCCESS
+        If SpecManager.UpdateTemplateChanges Then
+            Logger.Log "Search again since updates took place."
+            SearchForSpecifications = SM_SEARCH_AGAIN
+        Else
+            SearchForSpecifications = SM_SEARCH_SUCCESS
+        End If
     End If
 End Function
 
@@ -108,15 +122,19 @@ Function ListAllTemplateTypes() As Collection
     Set ListAllTemplateTypes = coll
 End Function
 
-Sub UpdateTemplateChanges()
+Private Function UpdateTemplateChanges() As Boolean
     ' Apply any changes to material specs that happened since the previous template was revised.
     Dim Key, T As Variant
+    Dim ret_val As Long
+    Dim updated As Boolean
     Dim spec As Specification
     Dim template As SpecificationTemplate
-    Set spec = New Specification
+    Dim old_spec As Specification
     Logger.Log "Checking specifications for any template updates . . ."
+    updated = False
     For Each T In App.specs
         Set spec = App.specs.Item(T)
+        Set old_spec = Factory.CopySpecification(spec)
         Set App.current_template = GetTemplate(spec.SpecType)
         For Each Key In App.current_template.Properties
             ' Checks for existance current template properites in previous spec
@@ -134,8 +152,21 @@ Sub UpdateTemplateChanges()
                 spec.Properties.Remove Key
             End If
         Next Key
+        If old_spec.PropertiesJson <> spec.PropertiesJson Then
+            ret_val = SpecManager.SaveSpecification(spec, old_spec)
+            If ret_val <> DB_PUSH_SUCCESS Then
+                updated = True
+                Logger.Log "Data Access returned: " & ret_val
+                Logger.Log "New Specification Was Not Saved. Contact Admin."
+            Else
+                Logger.Log "Data Access returned: " & ret_val
+                Logger.Log "New Specification Succesfully Saved."
+            End If
+        End If
     Next T
-End Sub
+
+    UpdateTemplateChanges = updated
+End Function
 
 Function GetSpecifications(material_id As String) As Object
     Dim json_dict As Object
@@ -196,7 +227,7 @@ Sub PrintTemplate(frm As MSForms.UserForm)
 End Sub
 
 Function SaveNewSpecification(spec As Specification) As Long
-    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
+    If ManagerOrAdmin Then
         SaveNewSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
         SaveNewSpecification = DB_PUSH_DENIED
@@ -204,7 +235,7 @@ Function SaveNewSpecification(spec As Specification) As Long
 End Function
 
 Function SaveSpecification(spec As Specification, old_spec As Specification) As Long
-    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
+    If ManagerOrAdmin Then
         If ArchiveSpecification(old_spec) = DB_DELETE_SUCCESS Then
             SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
         Else
@@ -227,7 +258,7 @@ Function ArchiveSpecification(old_spec As Specification) As Long
 End Function
 
 Function SaveSpecificationTemplate(template As SpecificationTemplate) As Long
-    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
+    If ManagerOrAdmin Then
         SaveSpecificationTemplate = IIf(DataAccess.PushTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
         SaveSpecificationTemplate = DB_PUSH_DENIED
@@ -235,7 +266,7 @@ Function SaveSpecificationTemplate(template As SpecificationTemplate) As Long
 End Function
 
 Function UpdateSpecificationTemplate(template As SpecificationTemplate) As Long
-    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
+    If ManagerOrAdmin Then
         UpdateSpecificationTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
         UpdateSpecificationTemplate = DB_PUSH_DENIED
@@ -258,20 +289,20 @@ Function DeleteSpecification(spec As Specification, Optional tbl As String = "st
     End If
 End Function
 
+Private Function ManagerOrAdmin() As Boolean
+' Test to see if the current account has the manager privledges.
+    If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
+        ManagerOrAdmin = True
+    Else
+        ManagerOrAdmin = False
+    End If
+End Function
+
 Private Function MaterialInputValidation(material_id As String) As String
 ' Ensures that the material id input by the user is parseable.
     ' PASS
     MaterialInputValidation = material_id
     
-End Function
-
-Function SelectLatestSpec() As Specification
-    Dim Key As Variant
-    For Each Key In App.specs
-        If App.specs.Item(Key).IsLatest = True Then
-            Set SelectLatestSpec = App.specs.Item(Key)
-        End If
-    Next Key
 End Function
 
 Function InitializeNewSpecification()

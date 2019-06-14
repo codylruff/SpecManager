@@ -15,6 +15,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
 Option Explicit
 
 Private Sub cmdSelectType_Click()
@@ -72,7 +74,7 @@ Private Sub PopulateCboSelectType()
     With cboSelectType
         For Each rev In App.specs
             .AddItem rev
-            .Value = rev
+            .value = rev
         Next rev
     End With
 End Sub
@@ -89,7 +91,7 @@ Private Sub PopulateCboSelectProperty()
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
-    txtPropertyValue.Value = vbNullString
+    txtPropertyValue.value = vbNullString
 End Sub
 
 Private Sub cmdClear_Click()
@@ -113,7 +115,7 @@ Sub MaterialSearch()
     SpecManager.PrintSpecification Me
     PopulateCboSelectProperty
     PopulateCboSelectType
-    cboSelectType.Value = App.current_spec.SpecType
+    cboSelectType.value = App.current_spec.SpecType
 End Sub
 
 Sub Back()
@@ -146,18 +148,18 @@ End Sub
 Sub Submit()
 ' This executes a set property command
     ' Check for empty controls
-    If cboSelectProperty.Value = vbNullString Then Exit Sub
+    If cboSelectProperty.value = vbNullString Then Exit Sub
     ' Change the property desired
     With App.current_spec
-        .Properties.Item(cboSelectProperty.Value) = txtPropertyValue
+        .Properties.Item(cboSelectProperty.value) = txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub
 
 Sub SelectType()
     ' Check for empty controls
-    If cboSelectType.Value = vbNullString Then Exit Sub
+    If cboSelectType.value = vbNullString Then Exit Sub
     ' Select the specification desired
-    Set App.current_spec = App.specs.Item(cboSelectType.Value)
+    Set App.current_spec = App.specs.Item(cboSelectType.value)
     SpecManager.PrintSpecification Me
 End Sub

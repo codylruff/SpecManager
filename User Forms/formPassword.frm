@@ -72,6 +72,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 '---------------------------------
@@ -84,5 +86,5 @@ Private Sub cmdClose_Click()
 End Sub
 
 Private Sub cmdEnter_Click()
-    AccessControl.Open_Config txtPassword.Value
+    AccessControl.Open_Config txtPassword.value
 End Sub

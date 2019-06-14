@@ -25,6 +25,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub cmdPrint_Click()
@@ -85,7 +87,7 @@ Private Sub PopulateCboSelectType()
     With cboSelectType
         For Each rev In App.specs
             .AddItem rev
-            .Value = rev
+            .value = rev
         Next rev
     End With
 End Sub
@@ -95,7 +97,7 @@ Sub MaterialSearch()
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectType
-    cboSelectType.Value = App.current_spec.SpecType
+    cboSelectType.value = App.current_spec.SpecType
 End Sub
 
 Sub Back()
@@ -104,7 +106,7 @@ Sub Back()
 End Sub
 
 Sub SelectType()
-    Set App.current_spec = App.specs.Item(cboSelectType.Value)
+    Set App.current_spec = App.specs.Item(cboSelectType.value)
     SpecManager.PrintSpecification Me
 End Sub
 

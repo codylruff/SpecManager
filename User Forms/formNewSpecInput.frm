@@ -84,6 +84,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboSelectSpecType
@@ -106,7 +108,7 @@ Private Sub PopulateCboSelectSpecType()
 End Sub
 
 Private Sub cmdContinue_Click()
-    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.Value, UCase(Utils.RemoveWhiteSpace(txtSpecName.Value))) <> vbNullString Then
+    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
         Unload Me
         formCreateSpec.Show vbModeless
     Else
@@ -116,7 +118,7 @@ Private Sub cmdContinue_Click()
 End Sub
 
 Sub Continue()
-    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.Value, UCase(Utils.RemoveWhiteSpace(txtSpecName.Value))) <> vbNullString Then
+    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
         Logger.Log "Spec Input Pass"
     Else
         Logger.Log "Spec Input Fail"

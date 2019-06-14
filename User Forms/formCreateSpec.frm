@@ -36,6 +36,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -95,7 +97,7 @@ Private Sub PopulateCboSelectProperty()
           .AddItem prop
         Next prop
     End With
-    txtPropertyValue.Value = vbNullString
+    txtPropertyValue.value = vbNullString
 End Sub
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
@@ -130,7 +132,7 @@ End Sub
 Sub SetProperty()
 ' This executes a set property command
     With App.current_spec
-        .Properties.Item(cboSelectProperty.Value) = txtPropertyValue
+        .Properties.Item(cboSelectProperty.value) = txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub
