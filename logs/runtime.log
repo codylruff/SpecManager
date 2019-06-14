@@ -1,34 +1,743 @@
-07-Jun-2019 16:46:55.54 : ------------- Starting Application
-07-Jun-2019 16:46:55.55 : Searching for user name . . . 
-07-Jun-2019 16:46:55.56 : -----------------------------------
-07-Jun-2019 16:46:55.57 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
-07-Jun-2019 16:46:55.58 : Checking Row 1 . . . 
-07-Jun-2019 16:46:55.59 : Column 1 : Name, Row 1 : CRUFF
-07-Jun-2019 16:46:55.60 : Column 2 : Protection, Row 1 : 25
-07-Jun-2019 16:46:55.61 : Column 3 : Filtration, Row 1 : 25
-07-Jun-2019 16:46:55.62 : Column 4 : Chemical, Row 1 : 25
-07-Jun-2019 16:46:55.63 : Column 5 : Privledge_Level, Row 1 : 25
-07-Jun-2019 16:46:55.64 : Column 6 : Product_Line, Row 1 : Admin
-07-Jun-2019 16:46:55.65 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
-07-Jun-2019 16:46:56.93 : ------------- Restarting Application
-07-Jun-2019 16:46:56.96 : --------- Start formPrintSpecifications ----------
-07-Jun-2019 16:47:01.08 : ------------- Restarting Application
-07-Jun-2019 16:47:01.09 : Searching for TKE064029C00T0DCRH specifications . . . 
-07-Jun-2019 16:47:01.10 : -----------------------------------
-07-Jun-2019 16:47:01.11 : SELECT * FROM  standard_specifications WHERE Material_Id= 'TKE064029C00T0DCRH'
-07-Jun-2019 16:47:01.12 : Checking Row 1 . . . 
-07-Jun-2019 16:47:01.13 : Column 1 : Id, Row 1 : 1946
-07-Jun-2019 16:47:01.14 : Column 2 : Material_Id, Row 1 : TKE064029C00T0DCRH
-07-Jun-2019 16:47:01.15 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:46:05 PM
-07-Jun-2019 16:47:01.16 : Column 4 : Properties_Json, Row 1 : {"QC Sample Length":"0 yds","Warp/Pick Count":"\u00FB","Usable Width":"\u00FB","Dry Weight":"\u00FB","Fabric Breaking Strength":"\u00FB","Thickness":"\u00FB","Crimp":"\u00FB","Conditioned Weight":"\u00FB","Residual Shrinkage":"\u00FB","Yarn Break Force":"\u00FB","Resin Content":"\u00FB","Volatile Content":"\u00FB","Glass Transition (Tg)":"\u00FB","Laminated Weight":"\u00FB","Coated Weight":"\u00FB"}
-07-Jun-2019 16:47:01.17 : Column 5 : Spec_Type, Row 1 : Testing Requirements
-07-Jun-2019 16:47:01.18 : Column 6 : Revision, Row 1 : 1
-07-Jun-2019 16:47:01.19 : Column 7 : Tolerances_Json, Row 1 : {}
-07-Jun-2019 16:47:01.20 : Succesfully retrieved specifications for : TKE064029C00T0DCRH
-07-Jun-2019 16:47:01.21 : Listing Specifications . . . 
-07-Jun-2019 16:50:10.05 : Inserting image : Plain.jpg
-07-Jun-2019 16:50:38.55 : --------- End formPrintSpecifications ----------
-07-Jun-2019 16:50:40.57 : ------------- Stopping Application
-07-Jun-2019 16:50:40.58 : Saving : runtime.log
-07-Jun-2019 16:50:40.61 : ------------- Stopping Application
-07-Jun-2019 16:50:40.62 : Saving : runtime.log
+14-Jun-2019 13:34:40.10 : ------------- Starting Application
+14-Jun-2019 13:34:40.11 : Searching for user name . . . 
+14-Jun-2019 13:34:40.11 : -----------------------------------
+14-Jun-2019 13:34:40.11 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+14-Jun-2019 13:34:40.14 : Checking Row 1 . . . 
+14-Jun-2019 13:34:40.14 : Column 1 : Name, Row 1 : CRUFF
+14-Jun-2019 13:34:40.14 : Column 2 : Protection, Row 1 : 25
+14-Jun-2019 13:34:40.14 : Column 3 : Filtration, Row 1 : 25
+14-Jun-2019 13:34:40.14 : Column 4 : Chemical, Row 1 : 25
+14-Jun-2019 13:34:40.14 : Column 5 : Privledge_Level, Row 1 : 25
+14-Jun-2019 13:34:40.14 : Column 6 : Product_Line, Row 1 : Admin
+14-Jun-2019 13:34:40.14 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+14-Jun-2019 13:34:41.21 : ------------- Restarting Application
+14-Jun-2019 13:34:41.25 : --------- Start formPrintSpecifications ----------
+14-Jun-2019 13:34:43.45 : ------------- Restarting Application
+14-Jun-2019 13:34:43.45 : Searching for GKE003369C0000DD specifications . . . 
+14-Jun-2019 13:34:43.45 : -----------------------------------
+14-Jun-2019 13:34:43.45 : SELECT * FROM  standard_specifications WHERE Material_Id= 'GKE003369C0000DD'
+14-Jun-2019 13:34:43.46 : Checking Row 1 . . . 
+14-Jun-2019 13:34:43.46 : Column 1 : Id, Row 1 : 1553
+14-Jun-2019 13:34:43.46 : Column 2 : Material_Id, Row 1 : GKE003369C0000DD
+14-Jun-2019 13:34:43.46 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:05:54 PM
+14-Jun-2019 13:34:43.46 : Column 4 : Properties_Json, Row 1 : {"Ballistic Sample Length":"2.5 yds","Number of Layers":22}
+14-Jun-2019 13:34:43.46 : Column 5 : Spec_Type, Row 1 : Ballistic Testing Requirements
+14-Jun-2019 13:34:43.46 : Column 6 : Revision, Row 1 : 1
+14-Jun-2019 13:34:43.47 : Column 7 : Tolerances_Json, Row 1 : {}
+14-Jun-2019 13:34:43.47 : Checking Row 2 . . . 
+14-Jun-2019 13:34:43.47 : Column 1 : Id, Row 2 : 2028
+14-Jun-2019 13:34:43.47 : Column 2 : Material_Id, Row 2 : GKE003369C0000DD
+14-Jun-2019 13:34:43.47 : Column 3 : Time_Stamp, Row 2 : 6/11/2019 4:41:46 PM
+14-Jun-2019 13:34:43.47 : Column 4 : Properties_Json, Row 2 : {"QC Sample Length":1.5,"Warp/Pick Count":"\u00AB","Usable Width":"\u00AB","Dry Weight":"\u00AB","Fabric Breaking Strength":"\u00FC","Thickness":"\u00FC","Crimp":"\u00FC","Conditioned Weight":"\u00FC","Residual Shrinkage":"\u00D2","Yarn Break Force":"\u00D2","Resin Content":"\u00D2","Volatile Content":"\u00D2","Glass Transition (Tg)":"\u00D2","Laminated Weight":"\u00D2","Coated Weight":"\u00D2"}
+14-Jun-2019 13:34:43.47 : Column 5 : Spec_Type, Row 2 : Testing Requirements
+14-Jun-2019 13:34:43.47 : Column 6 : Revision, Row 2 : 1
+14-Jun-2019 13:34:43.47 : Column 7 : Tolerances_Json, Row 2 : {}
+14-Jun-2019 13:34:43.47 : Checking Row 3 . . . 
+14-Jun-2019 13:34:43.47 : Column 1 : Id, Row 3 : 2101
+14-Jun-2019 13:34:43.48 : Column 2 : Material_Id, Row 3 : GKE003369C0000DD
+14-Jun-2019 13:34:43.48 : Column 3 : Time_Stamp, Row 3 : 6/11/2019 4:41:51 PM
+14-Jun-2019 13:34:43.48 : Column 4 : Properties_Json, Row 3 : {
+    "actual weft count": "31.4 ppi",
+    "article code": ,
+    "aux selvedges closing degrees": 340,
+    "bottom rapier clamps": "serrated",
+    "bottom spreader bars": "spreader",
+    "central selvedges drawing in": ,
+    "central selvedges ends per dent": ,
+    "central selvedges number ends": ,
+    "central selvedges weave": ,
+    "central selvedges yarn count": ,
+    "cutting degrees": 84,
+    "date": "5/2/2019",
+    "dorn left selvedges drawing in": ,
+    "dorn left selvedges ends per dent": ,
+    "dorn left selvedges number ends": ,
+    "dorn left selvedges weave": ,
+    "dorn left selvedges yarn count": ,
+    "draw in harness": "1,2selvedge 3,4,5,6,7,8body",
+    "draw in reed": "2 per dent",
+    "fabric width": "65",
+    "first heddle": "89 mm",
+    "first heddle 1": "89 mm",
+    "first heddle guide": "135 mm",
+    "harness configuration": "2selvedge 6 body",
+    "horizontal back rest roller": 20.5,
+    "last heddle": "52 mm",
+    "last heddle guide": "135 mm",
+    "left main selvedges drawing in": ,
+    "left main selvedges ends per dent": ,
+    "left main selvedges number ends": ,
+    "left main selvedges weave": ,
+    "left main selvedges yarn count": ,
+    "left selvedges drawing in": "2 per heddle",
+    "left selvedges ends per dent": "6 per dent/4 dents",
+    "left selvedges number ends": 24,
+    "left selvedges weave": "Plain",
+    "left selvedges yarn count": "840 den",
+    "loom number": 913,
+    "loom type": "Dornier 190",
+    "number ends wo selvedges": 2036,
+    "number harnesses": 8,
+    "pinch roller felt type": "smooth blue",
+    "press roller type": "smooth blue",
+    "rba number": ,
+    "reed": "6.10 cm",
+    "reed width": "67 1/4 inches",
+    "right main selvedges drawing in": ,
+    "right main selvedges ends per dent": ,
+    "right main selvedges number ends": ,
+    "right main selvedges weave": ,
+    "right main selvedges yarn count": ,
+    "right selvedges drawing in": "2 per heddle",
+    "right selvedges ends per dent": "6 per dent/4 dents",
+    "right selvedges number ends": 24,
+    "right selvedges weave": "Plain",
+    "right selvedges yarn count": "840 den",
+    "sand roller type": "orange peel",
+    "selvedges type": "Plain",
+    "shed closing degrees": 342,
+    "speed": "332  RPM",
+    "springs type": "green",
+    "style number": "336",
+    "temples composition": "2 burr 1 green pinwheel",
+    "upper rapier clamps": "serrated",
+    "upper spreader bars": "smooth",
+    "vertical back rest roller": 15,
+    "warp tension": "50  cN/filo",
+    "weave pattern": "sateen",
+    "weft count set point": "31 ppi",
+    "file name": "RBA Form 336.xlsx"
+}
+14-Jun-2019 13:34:43.48 : Column 5 : Spec_Type, Row 3 : Weaving RBA
+14-Jun-2019 13:34:43.48 : Column 6 : Revision, Row 3 : 1
+14-Jun-2019 13:34:43.48 : Column 7 : Tolerances_Json, Row 3 : {}
+14-Jun-2019 13:34:43.49 : Error Returned From --> SpecManager.GetSpecifications()
+14-Jun-2019 13:34:43.49 : Could not find a standard for : GKE003369C0000DD
+14-Jun-2019 13:34:44.96 : Listing Specifications . . . 
+14-Jun-2019 13:34:46.15 : --------- End formPrintSpecifications ----------
+14-Jun-2019 13:42:11.25 : ------------- Starting Application
+14-Jun-2019 13:42:11.25 : Searching for user name . . . 
+14-Jun-2019 13:42:11.25 : -----------------------------------
+14-Jun-2019 13:42:11.25 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+14-Jun-2019 13:42:11.26 : Checking Row 1 . . . 
+14-Jun-2019 13:42:11.26 : Column 1 : Name, Row 1 : CRUFF
+14-Jun-2019 13:42:11.26 : Column 2 : Protection, Row 1 : 25
+14-Jun-2019 13:42:11.26 : Column 3 : Filtration, Row 1 : 25
+14-Jun-2019 13:42:11.26 : Column 4 : Chemical, Row 1 : 25
+14-Jun-2019 13:42:11.26 : Column 5 : Privledge_Level, Row 1 : 25
+14-Jun-2019 13:42:11.26 : Column 6 : Product_Line, Row 1 : Admin
+14-Jun-2019 13:42:11.26 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+14-Jun-2019 13:42:12.35 : ------------- Restarting Application
+14-Jun-2019 13:42:12.38 : --------- Start formPrintSpecifications ----------
+14-Jun-2019 13:42:13.70 : ------------- Restarting Application
+14-Jun-2019 13:42:13.70 : Searching for GKE003369C0000DD specifications . . . 
+14-Jun-2019 13:42:13.70 : -----------------------------------
+14-Jun-2019 13:42:13.70 : SELECT * FROM  standard_specifications WHERE Material_Id= 'GKE003369C0000DD'
+14-Jun-2019 13:42:13.70 : Checking Row 1 . . . 
+14-Jun-2019 13:42:13.70 : Column 1 : Id, Row 1 : 1553
+14-Jun-2019 13:42:13.71 : Column 2 : Material_Id, Row 1 : GKE003369C0000DD
+14-Jun-2019 13:42:13.71 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:05:54 PM
+14-Jun-2019 13:42:13.71 : Column 4 : Properties_Json, Row 1 : {"Ballistic Sample Length":"2.5 yds","Number of Layers":22}
+14-Jun-2019 13:42:13.71 : Column 5 : Spec_Type, Row 1 : Ballistic Testing Requirements
+14-Jun-2019 13:42:13.71 : Column 6 : Revision, Row 1 : 1
+14-Jun-2019 13:42:13.71 : Column 7 : Tolerances_Json, Row 1 : {}
+14-Jun-2019 13:42:13.71 : Checking Row 2 . . . 
+14-Jun-2019 13:42:13.71 : Column 1 : Id, Row 2 : 2028
+14-Jun-2019 13:42:13.71 : Column 2 : Material_Id, Row 2 : GKE003369C0000DD
+14-Jun-2019 13:42:13.71 : Column 3 : Time_Stamp, Row 2 : 6/11/2019 4:41:46 PM
+14-Jun-2019 13:42:13.71 : Column 4 : Properties_Json, Row 2 : {"QC Sample Length":1.5,"Warp/Pick Count":"\u00AB","Usable Width":"\u00AB","Dry Weight":"\u00AB","Fabric Breaking Strength":"\u00FC","Thickness":"\u00FC","Crimp":"\u00FC","Conditioned Weight":"\u00FC","Residual Shrinkage":"\u00D2","Yarn Break Force":"\u00D2","Resin Content":"\u00D2","Volatile Content":"\u00D2","Glass Transition (Tg)":"\u00D2","Laminated Weight":"\u00D2","Coated Weight":"\u00D2"}
+14-Jun-2019 13:42:13.72 : Column 5 : Spec_Type, Row 2 : Testing Requirements
+14-Jun-2019 13:42:13.72 : Column 6 : Revision, Row 2 : 1
+14-Jun-2019 13:42:13.72 : Column 7 : Tolerances_Json, Row 2 : {}
+14-Jun-2019 13:42:13.72 : Checking Row 3 . . . 
+14-Jun-2019 13:42:13.72 : Column 1 : Id, Row 3 : 2101
+14-Jun-2019 13:42:13.72 : Column 2 : Material_Id, Row 3 : GKE003369C0000DD
+14-Jun-2019 13:42:13.73 : Column 3 : Time_Stamp, Row 3 : 6/11/2019 4:41:51 PM
+14-Jun-2019 13:42:13.73 : Column 4 : Properties_Json, Row 3 : {
+    "actual weft count": "31.4 ppi",
+    "article code":"" ,
+    "aux selvedges closing degrees": 340,
+    "bottom rapier clamps": "serrated",
+    "bottom spreader bars": "spreader",
+    "central selvedges drawing in":"" ,
+    "central selvedges ends per dent":"" ,
+    "central selvedges number ends":"" ,
+    "central selvedges weave":"" ,
+    "central selvedges yarn count":"" ,
+    "cutting degrees": 84,
+    "date": "5/2/2019",
+    "dorn left selvedges drawing in":"" ,
+    "dorn left selvedges ends per dent":"" ,
+    "dorn left selvedges number ends":"" ,
+    "dorn left selvedges weave":"" ,
+    "dorn left selvedges yarn count":"" ,
+    "draw in harness": "1,2selvedge 3,4,5,6,7,8body",
+    "draw in reed": "2 per dent",
+    "fabric width": "65",
+    "first heddle": "89 mm",
+    "first heddle 1": "89 mm",
+    "first heddle guide": "135 mm",
+    "harness configuration": "2selvedge 6 body",
+    "horizontal back rest roller": 20.5,
+    "last heddle": "52 mm",
+    "last heddle guide": "135 mm",
+    "left main selvedges drawing in":"" ,
+    "left main selvedges ends per dent":"" ,
+    "left main selvedges number ends":"" ,
+    "left main selvedges weave":"" ,
+    "left main selvedges yarn count":"" ,
+    "left selvedges drawing in": "2 per heddle",
+    "left selvedges ends per dent": "6 per dent/4 dents",
+    "left selvedges number ends": 24,
+    "left selvedges weave": "Plain",
+    "left selvedges yarn count": "840 den",
+    "loom number": 913,
+    "loom type": "Dornier 190",
+    "number ends wo selvedges": 2036,
+    "number harnesses": 8,
+    "pinch roller felt type": "smooth blue",
+    "press roller type": "smooth blue",
+    "rba number":"" ,
+    "reed": "6.10 cm",
+    "reed width": "67 1/4 inches",
+    "right main selvedges drawing in":"" ,
+    "right main selvedges ends per dent":"" ,
+    "right main selvedges number ends":"" ,
+    "right main selvedges weave":"" ,
+    "right main selvedges yarn count":"" ,
+    "right selvedges drawing in": "2 per heddle",
+    "right selvedges ends per dent": "6 per dent/4 dents",
+    "right selvedges number ends": 24,
+    "right selvedges weave": "Plain",
+    "right selvedges yarn count": "840 den",
+    "sand roller type": "orange peel",
+    "selvedges type": "Plain",
+    "shed closing degrees": 342,
+    "speed": "332  RPM",
+    "springs type": "green",
+    "style number": "336",
+    "temples composition": "2 burr 1 green pinwheel",
+    "upper rapier clamps": "serrated",
+    "upper spreader bars": "smooth",
+    "vertical back rest roller": 15,
+    "warp tension": "50  cN/filo",
+    "weave pattern": "sateen",
+    "weft count set point": "31 ppi",
+    "file name": "RBA Form 336.xlsx"
+}
+14-Jun-2019 13:42:13.73 : Column 5 : Spec_Type, Row 3 : Weaving RBA
+14-Jun-2019 13:42:13.73 : Column 6 : Revision, Row 3 : 1
+14-Jun-2019 13:42:13.73 : Column 7 : Tolerances_Json, Row 3 : {}
+14-Jun-2019 13:42:13.73 : Succesfully retrieved specifications for : GKE003369C0000DD
+14-Jun-2019 13:42:13.74 : Listing Specifications . . . 
+14-Jun-2019 13:42:22.34 : ------------- Restarting Application
+14-Jun-2019 13:42:22.34 : Searching for GKE005309D00T0DC specifications . . . 
+14-Jun-2019 13:42:22.34 : -----------------------------------
+14-Jun-2019 13:42:22.34 : SELECT * FROM  standard_specifications WHERE Material_Id= 'GKE005309D00T0DC'
+14-Jun-2019 13:42:22.34 : Checking Row 1 . . . 
+14-Jun-2019 13:42:22.35 : Column 1 : Id, Row 1 : 1536
+14-Jun-2019 13:42:22.35 : Column 2 : Material_Id, Row 1 : GKE005309D00T0DC
+14-Jun-2019 13:42:22.35 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:05:53 PM
+14-Jun-2019 13:42:22.35 : Column 4 : Properties_Json, Row 1 : {"Ballistic Sample Length":"2 yds","Number of Layers":15}
+14-Jun-2019 13:42:22.35 : Column 5 : Spec_Type, Row 1 : Ballistic Testing Requirements
+14-Jun-2019 13:42:22.36 : Column 6 : Revision, Row 1 : 1
+14-Jun-2019 13:42:22.36 : Column 7 : Tolerances_Json, Row 1 : {}
+14-Jun-2019 13:42:22.36 : Checking Row 2 . . . 
+14-Jun-2019 13:42:22.36 : Column 1 : Id, Row 2 : 2008
+14-Jun-2019 13:42:22.37 : Column 2 : Material_Id, Row 2 : GKE005309D00T0DC
+14-Jun-2019 13:42:22.37 : Column 3 : Time_Stamp, Row 2 : 6/11/2019 4:41:45 PM
+14-Jun-2019 13:42:22.37 : Column 4 : Properties_Json, Row 2 : {"QC Sample Length":1.5,"Warp/Pick Count":"\u00AB","Usable Width":"\u00AB","Dry Weight":"\u00AB","Fabric Breaking Strength":"\u00FC","Thickness":"\u00FC","Crimp":"\u00FC","Conditioned Weight":"\u00FC","Residual Shrinkage":"\u00D2","Yarn Break Force":"\u00D2","Resin Content":"\u00D2","Volatile Content":"\u00D2","Glass Transition (Tg)":"\u00D2","Laminated Weight":"\u00D2","Coated Weight":"\u00D2"}
+14-Jun-2019 13:42:22.37 : Column 5 : Spec_Type, Row 2 : Testing Requirements
+14-Jun-2019 13:42:22.37 : Column 6 : Revision, Row 2 : 1
+14-Jun-2019 13:42:22.37 : Column 7 : Tolerances_Json, Row 2 : {}
+14-Jun-2019 13:42:22.37 : Checking Row 3 . . . 
+14-Jun-2019 13:42:22.37 : Column 1 : Id, Row 3 : 2097
+14-Jun-2019 13:42:22.38 : Column 2 : Material_Id, Row 3 : GKE005309D00T0DC
+14-Jun-2019 13:42:22.38 : Column 3 : Time_Stamp, Row 3 : 6/11/2019 4:41:51 PM
+14-Jun-2019 13:42:22.38 : Column 4 : Properties_Json, Row 3 : {
+    "actual weft count": "31.33 ppi",
+    "article code":"" ,
+    "aux selvedges closing degrees":"" ,
+    "bottom rapier clamps": "serrated",
+    "bottom spreader bars": "spreader",
+    "central selvedges drawing in":"" ,
+    "central selvedges ends per dent":"" ,
+    "central selvedges number ends":"" ,
+    "central selvedges weave":"" ,
+    "central selvedges yarn count":"" ,
+    "cutting degrees": 84,
+    "date": "6/4/2019",
+    "dorn left selvedges drawing in":"" ,
+    "dorn left selvedges ends per dent":"" ,
+    "dorn left selvedges number ends":"" ,
+    "dorn left selvedges weave":"" ,
+    "dorn left selvedges yarn count":"" ,
+    "draw in harness": "1,2selvedge,3,4,5,6,7,8body",
+    "draw in reed": "2 per dent",
+    "fabric width": "60 1/4 inches",
+    "first heddle": "95 mm",
+    "first heddle 1": "95 mm",
+    "first heddle guide": "104 mm",
+    "harness configuration": "2 selvedge/6 body",
+    "horizontal back rest roller": 22,
+    "last heddle": "46 mm",
+    "last heddle guide": "104 mm",
+    "left main selvedges drawing in":"" ,
+    "left main selvedges ends per dent":"" ,
+    "left main selvedges number ends":"" ,
+    "left main selvedges weave":"" ,
+    "left main selvedges yarn count":"" ,
+    "left selvedges drawing in": "1,2,1,2,1,2",
+    "left selvedges ends per dent": "6ends/4dents",
+    "left selvedges number ends": 24,
+    "left selvedges weave": "plain",
+    "left selvedges yarn count": "830den",
+    "loom number": 941,
+    "loom type": "Dornier 220",
+    "number ends wo selvedges": 1884,
+    "number harnesses": 8,
+    "pinch roller felt type": "smooth brown",
+    "press roller type": "orange peel",
+    "rba number":"" ,
+    "reed": "6.0cm",
+    "reed width": "63 1/4 inches",
+    "right main selvedges drawing in":"" ,
+    "right main selvedges ends per dent":"" ,
+    "right main selvedges number ends":"" ,
+    "right main selvedges weave":"" ,
+    "right main selvedges yarn count":"" ,
+    "right selvedges drawing in": "1,2,1,2,1,2",
+    "right selvedges ends per dent": "6ends/4dents",
+    "right selvedges number ends": 24,
+    "right selvedges weave": "plain",
+    "right selvedges yarn count": "830den",
+    "sand roller type": "orange peel",
+    "selvedges type": "Plain",
+    "shed closing degrees": 340,
+    "speed": "370    RPM",
+    "springs type": "Black",
+    "style number": "530",
+    "temples composition": "2burr/1green pinwheel",
+    "upper rapier clamps": "serrated",
+    "upper spreader bars": "spresder",
+    "vertical back rest roller": 14.75,
+    "warp tension": " 110    cN/filo",
+    "weave pattern": "plain",
+    "weft count set point": "31 ppi",
+    "file name": "RBA Form STYLE 530.xlsx"
+}
+14-Jun-2019 13:42:22.38 : Column 5 : Spec_Type, Row 3 : Weaving RBA
+14-Jun-2019 13:42:22.39 : Column 6 : Revision, Row 3 : 1
+14-Jun-2019 13:42:22.39 : Column 7 : Tolerances_Json, Row 3 : {}
+14-Jun-2019 13:42:22.39 : Succesfully retrieved specifications for : GKE005309D00T0DC
+14-Jun-2019 13:42:22.39 : Listing Specifications . . . 
+14-Jun-2019 13:42:27.86 : ------------- Restarting Application
+14-Jun-2019 13:42:27.86 : Searching for HKE003259C00H0DC specifications . . . 
+14-Jun-2019 13:42:27.86 : -----------------------------------
+14-Jun-2019 13:42:27.86 : SELECT * FROM  standard_specifications WHERE Material_Id= 'HKE003259C00H0DC'
+14-Jun-2019 13:42:27.87 : Checking Row 1 . . . 
+14-Jun-2019 13:42:27.87 : Column 1 : Id, Row 1 : 1540
+14-Jun-2019 13:42:27.87 : Column 2 : Material_Id, Row 1 : HKE003259C00H0DC
+14-Jun-2019 13:42:27.88 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:05:53 PM
+14-Jun-2019 13:42:27.88 : Column 4 : Properties_Json, Row 1 : {"Ballistic Sample Length":"3 yds","Number of Layers":26}
+14-Jun-2019 13:42:27.88 : Column 5 : Spec_Type, Row 1 : Ballistic Testing Requirements
+14-Jun-2019 13:42:27.88 : Column 6 : Revision, Row 1 : 1
+14-Jun-2019 13:42:27.88 : Column 7 : Tolerances_Json, Row 1 : {}
+14-Jun-2019 13:42:27.89 : Checking Row 2 . . . 
+14-Jun-2019 13:42:27.89 : Column 1 : Id, Row 2 : 2013
+14-Jun-2019 13:42:27.89 : Column 2 : Material_Id, Row 2 : HKE003259C00H0DC
+14-Jun-2019 13:42:27.89 : Column 3 : Time_Stamp, Row 2 : 6/11/2019 4:41:45 PM
+14-Jun-2019 13:42:27.89 : Column 4 : Properties_Json, Row 2 : {"QC Sample Length":1.5,"Warp/Pick Count":"\u00AB","Usable Width":"\u00AB","Dry Weight":"\u00AB","Fabric Breaking Strength":"\u00FC","Thickness":"\u00FC","Crimp":"\u00FC","Conditioned Weight":"\u00FC","Residual Shrinkage":"\u00D2","Yarn Break Force":"\u00D2","Resin Content":"\u00D2","Volatile Content":"\u00D2","Glass Transition (Tg)":"\u00D2","Laminated Weight":"\u00D2","Coated Weight":"\u00D2"}
+14-Jun-2019 13:42:27.89 : Column 5 : Spec_Type, Row 2 : Testing Requirements
+14-Jun-2019 13:42:27.89 : Column 6 : Revision, Row 2 : 1
+14-Jun-2019 13:42:27.89 : Column 7 : Tolerances_Json, Row 2 : {}
+14-Jun-2019 13:42:27.89 : Checking Row 3 . . . 
+14-Jun-2019 13:42:27.89 : Column 1 : Id, Row 3 : 2099
+14-Jun-2019 13:42:27.90 : Column 2 : Material_Id, Row 3 : HKE003259C00H0DC
+14-Jun-2019 13:42:27.90 : Column 3 : Time_Stamp, Row 3 : 6/11/2019 4:41:51 PM
+14-Jun-2019 13:42:27.90 : Column 4 : Properties_Json, Row 3 : {
+    "actual weft count":"" ,
+    "article code":"" ,
+    "aux selvedges closing degrees":"" ,
+    "bottom rapier clamps": "serrated",
+    "bottom spreader bars": "spreader",
+    "central selvedges drawing in":"" ,
+    "central selvedges ends per dent":"" ,
+    "central selvedges number ends":"" ,
+    "central selvedges weave":"" ,
+    "central selvedges yarn count":"" ,
+    "cutting degrees": 85,
+    "date": "6/6/2019",
+    "dorn left selvedges drawing in":"" ,
+    "dorn left selvedges ends per dent":"" ,
+    "dorn left selvedges number ends":"" ,
+    "dorn left selvedges weave":"" ,
+    "dorn left selvedges yarn count":"" ,
+    "draw in harness": "3,5,4,6,7,8,9,10",
+    "draw in reed": "2 per dent",
+    "fabric width": "63 7/8 inches",
+    "first heddle": "70 mm",
+    "first heddle 1": "70 mm",
+    "first heddle guide": "100 mm",
+    "harness configuration": "1,2selvedge/3thru10body",
+    "horizontal back rest roller": 22,
+    "last heddle": "10 mm",
+    "last heddle guide": "100 mm",
+    "left main selvedges drawing in": "1,2,1,2,1,2",
+    "left main selvedges ends per dent": "2ends/3 dents",
+    "left main selvedges number ends": 6,
+    "left main selvedges weave": "Plain",
+    "left main selvedges yarn count": "670 den",
+    "left selvedges drawing in": "1,2,1,2,1,2",
+    "left selvedges ends per dent": "6 ends/4 dents",
+    "left selvedges number ends": 24,
+    "left selvedges weave": "Plain",
+    "left selvedges yarn count": "830 den",
+    "loom number": 915,
+    "loom type": "Dornier 190",
+    "number ends wo selvedges": 1658,
+    "number harnesses": 10,
+    "pinch roller felt type": "smooth blue",
+    "press roller type": "smooth blue",
+    "rba number":"" ,
+    "reed": "5.05 cm",
+    "reed width": "67 1/2 inches",
+    "right main selvedges drawing in": "1,2,1,2,1,2",
+    "right main selvedges ends per dent": "2ends/3 dents",
+    "right main selvedges number ends": 6,
+    "right main selvedges weave": "Plain",
+    "right main selvedges yarn count": "670 den",
+    "right selvedges drawing in": "1,21,2,1,2",
+    "right selvedges ends per dent": "6 ends/4 dents",
+    "right selvedges number ends": 24,
+    "right selvedges weave": "Plain",
+    "right selvedges yarn count": "830 den",
+    "sand roller type": "orange peel",
+    "selvedges type": "Plain",
+    "shed closing degrees": 341,
+    "speed": "329   RPM",
+    "springs type": "Black",
+    "style number": "325",
+    "temples composition": "2 burr 1 pinwheel",
+    "upper rapier clamps": "serrated",
+    "upper spreader bars": "smooth",
+    "vertical back rest roller": 14.5,
+    "warp tension": "135    cN/filo",
+    "weave pattern": "melanie",
+    "weft count set point": 26,
+    "file name": "RBA Form style 325.xlsx"
+}
+14-Jun-2019 13:42:27.90 : Column 5 : Spec_Type, Row 3 : Weaving RBA
+14-Jun-2019 13:42:27.90 : Column 6 : Revision, Row 3 : 1
+14-Jun-2019 13:42:27.90 : Column 7 : Tolerances_Json, Row 3 : {}
+14-Jun-2019 13:42:27.91 : Succesfully retrieved specifications for : HKE003259C00H0DC
+14-Jun-2019 13:42:27.91 : Listing Specifications . . . 
+14-Jun-2019 13:42:32.45 : ------------- Restarting Application
+14-Jun-2019 13:42:32.45 : Searching for GKE005309D00T0CZ specifications . . . 
+14-Jun-2019 13:42:32.45 : -----------------------------------
+14-Jun-2019 13:42:32.45 : SELECT * FROM  standard_specifications WHERE Material_Id= 'GKE005309D00T0CZ'
+14-Jun-2019 13:42:32.46 : Checking Row 1 . . . 
+14-Jun-2019 13:42:32.46 : Column 1 : Id, Row 1 : 1529
+14-Jun-2019 13:42:32.46 : Column 2 : Material_Id, Row 1 : GKE005309D00T0CZ
+14-Jun-2019 13:42:32.46 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:05:53 PM
+14-Jun-2019 13:42:32.46 : Column 4 : Properties_Json, Row 1 : {"Ballistic Sample Length":"2.5 yds","Number of Layers":15}
+14-Jun-2019 13:42:32.46 : Column 5 : Spec_Type, Row 1 : Ballistic Testing Requirements
+14-Jun-2019 13:42:32.46 : Column 6 : Revision, Row 1 : 1
+14-Jun-2019 13:42:32.46 : Column 7 : Tolerances_Json, Row 1 : {}
+14-Jun-2019 13:42:32.47 : Checking Row 2 . . . 
+14-Jun-2019 13:42:32.47 : Column 1 : Id, Row 2 : 1997
+14-Jun-2019 13:42:32.47 : Column 2 : Material_Id, Row 2 : GKE005309D00T0CZ
+14-Jun-2019 13:42:32.47 : Column 3 : Time_Stamp, Row 2 : 6/11/2019 4:41:44 PM
+14-Jun-2019 13:42:32.47 : Column 4 : Properties_Json, Row 2 : {"QC Sample Length":1.5,"Warp/Pick Count":"\u00AB","Usable Width":"\u00AB","Dry Weight":"\u00AB","Fabric Breaking Strength":"\u00FC","Thickness":"\u00FC","Crimp":"\u00FC","Conditioned Weight":"\u00FC","Residual Shrinkage":"\u00D2","Yarn Break Force":"\u00D2","Resin Content":"\u00D2","Volatile Content":"\u00D2","Glass Transition (Tg)":"\u00D2","Laminated Weight":"\u00D2","Coated Weight":"\u00D2"}
+14-Jun-2019 13:42:32.48 : Column 5 : Spec_Type, Row 2 : Testing Requirements
+14-Jun-2019 13:42:32.48 : Column 6 : Revision, Row 2 : 1
+14-Jun-2019 13:42:32.48 : Column 7 : Tolerances_Json, Row 2 : {}
+14-Jun-2019 13:42:32.48 : Checking Row 3 . . . 
+14-Jun-2019 13:42:32.48 : Column 1 : Id, Row 3 : 2095
+14-Jun-2019 13:42:32.48 : Column 2 : Material_Id, Row 3 : GKE005309D00T0CZ
+14-Jun-2019 13:42:32.48 : Column 3 : Time_Stamp, Row 3 : 6/11/2019 4:41:51 PM
+14-Jun-2019 13:42:32.48 : Column 4 : Properties_Json, Row 3 : {
+    "actual weft count": "31.33 ppi",
+    "article code":"" ,
+    "aux selvedges closing degrees":"" ,
+    "bottom rapier clamps": "serrated",
+    "bottom spreader bars": "spreader",
+    "central selvedges drawing in":"" ,
+    "central selvedges ends per dent":"" ,
+    "central selvedges number ends":"" ,
+    "central selvedges weave":"" ,
+    "central selvedges yarn count":"" ,
+    "cutting degrees": 84,
+    "date": "6/4/2019",
+    "dorn left selvedges drawing in":"" ,
+    "dorn left selvedges ends per dent":"" ,
+    "dorn left selvedges number ends":"" ,
+    "dorn left selvedges weave":"" ,
+    "dorn left selvedges yarn count":"" ,
+    "draw in harness": "1,2selvedge,3,4,5,6,7,8body",
+    "draw in reed": "2 per dent",
+    "fabric width": "60 1/4 inches",
+    "first heddle": "95 mm",
+    "first heddle 1": "95 mm",
+    "first heddle guide": "104 mm",
+    "harness configuration": "2 selvedge/6 body",
+    "horizontal back rest roller": 22,
+    "last heddle": "46 mm",
+    "last heddle guide": "104 mm",
+    "left main selvedges drawing in":"" ,
+    "left main selvedges ends per dent":"" ,
+    "left main selvedges number ends":"" ,
+    "left main selvedges weave":"" ,
+    "left main selvedges yarn count":"" ,
+    "left selvedges drawing in": "1,2,1,2,1,2",
+    "left selvedges ends per dent": "6ends/4dents",
+    "left selvedges number ends": 24,
+    "left selvedges weave": "plain",
+    "left selvedges yarn count": "830den",
+    "loom number": 941,
+    "loom type": "Dornier 220",
+    "number ends wo selvedges": 1884,
+    "number harnesses": 8,
+    "pinch roller felt type": "smooth brown",
+    "press roller type": "orange peel",
+    "rba number":"" ,
+    "reed": "6.0cm",
+    "reed width": "63 1/4 inches",
+    "right main selvedges drawing in":"" ,
+    "right main selvedges ends per dent":"" ,
+    "right main selvedges number ends":"" ,
+    "right main selvedges weave":"" ,
+    "right main selvedges yarn count":"" ,
+    "right selvedges drawing in": "1,2,1,2,1,2",
+    "right selvedges ends per dent": "6ends/4dents",
+    "right selvedges number ends": 24,
+    "right selvedges weave": "plain",
+    "right selvedges yarn count": "830den",
+    "sand roller type": "orange peel",
+    "selvedges type": "Plain",
+    "shed closing degrees": 340,
+    "speed": "370    RPM",
+    "springs type": "Black",
+    "style number": "530",
+    "temples composition": "2burr/1green pinwheel",
+    "upper rapier clamps": "serrated",
+    "upper spreader bars": "spresder",
+    "vertical back rest roller": 14.75,
+    "warp tension": " 110    cN/filo",
+    "weave pattern": "plain",
+    "weft count set point": "31 ppi",
+    "file name": "RBA Form STYLE 530.xlsx"
+}
+14-Jun-2019 13:42:32.48 : Column 5 : Spec_Type, Row 3 : Weaving RBA
+14-Jun-2019 13:42:32.49 : Column 6 : Revision, Row 3 : 1
+14-Jun-2019 13:42:32.49 : Column 7 : Tolerances_Json, Row 3 : {}
+14-Jun-2019 13:42:32.49 : Succesfully retrieved specifications for : GKE005309D00T0CZ
+14-Jun-2019 13:42:32.50 : Listing Specifications . . . 
+14-Jun-2019 13:42:35.07 : ------------- Restarting Application
+14-Jun-2019 13:42:35.07 : Searching for GKE005309D00T0CZ specifications . . . 
+14-Jun-2019 13:42:35.07 : -----------------------------------
+14-Jun-2019 13:42:35.07 : SELECT * FROM  standard_specifications WHERE Material_Id= 'GKE005309D00T0CZ'
+14-Jun-2019 13:42:35.08 : Checking Row 1 . . . 
+14-Jun-2019 13:42:35.08 : Column 1 : Id, Row 1 : 1529
+14-Jun-2019 13:42:35.08 : Column 2 : Material_Id, Row 1 : GKE005309D00T0CZ
+14-Jun-2019 13:42:35.08 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:05:53 PM
+14-Jun-2019 13:42:35.09 : Column 4 : Properties_Json, Row 1 : {"Ballistic Sample Length":"2.5 yds","Number of Layers":15}
+14-Jun-2019 13:42:35.09 : Column 5 : Spec_Type, Row 1 : Ballistic Testing Requirements
+14-Jun-2019 13:42:35.09 : Column 6 : Revision, Row 1 : 1
+14-Jun-2019 13:42:35.09 : Column 7 : Tolerances_Json, Row 1 : {}
+14-Jun-2019 13:42:35.09 : Checking Row 2 . . . 
+14-Jun-2019 13:42:35.09 : Column 1 : Id, Row 2 : 1997
+14-Jun-2019 13:42:35.10 : Column 2 : Material_Id, Row 2 : GKE005309D00T0CZ
+14-Jun-2019 13:42:35.10 : Column 3 : Time_Stamp, Row 2 : 6/11/2019 4:41:44 PM
+14-Jun-2019 13:42:35.10 : Column 4 : Properties_Json, Row 2 : {"QC Sample Length":1.5,"Warp/Pick Count":"\u00AB","Usable Width":"\u00AB","Dry Weight":"\u00AB","Fabric Breaking Strength":"\u00FC","Thickness":"\u00FC","Crimp":"\u00FC","Conditioned Weight":"\u00FC","Residual Shrinkage":"\u00D2","Yarn Break Force":"\u00D2","Resin Content":"\u00D2","Volatile Content":"\u00D2","Glass Transition (Tg)":"\u00D2","Laminated Weight":"\u00D2","Coated Weight":"\u00D2"}
+14-Jun-2019 13:42:35.10 : Column 5 : Spec_Type, Row 2 : Testing Requirements
+14-Jun-2019 13:42:35.10 : Column 6 : Revision, Row 2 : 1
+14-Jun-2019 13:42:35.11 : Column 7 : Tolerances_Json, Row 2 : {}
+14-Jun-2019 13:42:35.11 : Checking Row 3 . . . 
+14-Jun-2019 13:42:35.11 : Column 1 : Id, Row 3 : 2095
+14-Jun-2019 13:42:35.11 : Column 2 : Material_Id, Row 3 : GKE005309D00T0CZ
+14-Jun-2019 13:42:35.11 : Column 3 : Time_Stamp, Row 3 : 6/11/2019 4:41:51 PM
+14-Jun-2019 13:42:35.11 : Column 4 : Properties_Json, Row 3 : {
+    "actual weft count": "31.33 ppi",
+    "article code":"" ,
+    "aux selvedges closing degrees":"" ,
+    "bottom rapier clamps": "serrated",
+    "bottom spreader bars": "spreader",
+    "central selvedges drawing in":"" ,
+    "central selvedges ends per dent":"" ,
+    "central selvedges number ends":"" ,
+    "central selvedges weave":"" ,
+    "central selvedges yarn count":"" ,
+    "cutting degrees": 84,
+    "date": "6/4/2019",
+    "dorn left selvedges drawing in":"" ,
+    "dorn left selvedges ends per dent":"" ,
+    "dorn left selvedges number ends":"" ,
+    "dorn left selvedges weave":"" ,
+    "dorn left selvedges yarn count":"" ,
+    "draw in harness": "1,2selvedge,3,4,5,6,7,8body",
+    "draw in reed": "2 per dent",
+    "fabric width": "60 1/4 inches",
+    "first heddle": "95 mm",
+    "first heddle 1": "95 mm",
+    "first heddle guide": "104 mm",
+    "harness configuration": "2 selvedge/6 body",
+    "horizontal back rest roller": 22,
+    "last heddle": "46 mm",
+    "last heddle guide": "104 mm",
+    "left main selvedges drawing in":"" ,
+    "left main selvedges ends per dent":"" ,
+    "left main selvedges number ends":"" ,
+    "left main selvedges weave":"" ,
+    "left main selvedges yarn count":"" ,
+    "left selvedges drawing in": "1,2,1,2,1,2",
+    "left selvedges ends per dent": "6ends/4dents",
+    "left selvedges number ends": 24,
+    "left selvedges weave": "plain",
+    "left selvedges yarn count": "830den",
+    "loom number": 941,
+    "loom type": "Dornier 220",
+    "number ends wo selvedges": 1884,
+    "number harnesses": 8,
+    "pinch roller felt type": "smooth brown",
+    "press roller type": "orange peel",
+    "rba number":"" ,
+    "reed": "6.0cm",
+    "reed width": "63 1/4 inches",
+    "right main selvedges drawing in":"" ,
+    "right main selvedges ends per dent":"" ,
+    "right main selvedges number ends":"" ,
+    "right main selvedges weave":"" ,
+    "right main selvedges yarn count":"" ,
+    "right selvedges drawing in": "1,2,1,2,1,2",
+    "right selvedges ends per dent": "6ends/4dents",
+    "right selvedges number ends": 24,
+    "right selvedges weave": "plain",
+    "right selvedges yarn count": "830den",
+    "sand roller type": "orange peel",
+    "selvedges type": "Plain",
+    "shed closing degrees": 340,
+    "speed": "370    RPM",
+    "springs type": "Black",
+    "style number": "530",
+    "temples composition": "2burr/1green pinwheel",
+    "upper rapier clamps": "serrated",
+    "upper spreader bars": "spresder",
+    "vertical back rest roller": 14.75,
+    "warp tension": " 110    cN/filo",
+    "weave pattern": "plain",
+    "weft count set point": "31 ppi",
+    "file name": "RBA Form STYLE 530.xlsx"
+}
+14-Jun-2019 13:42:35.12 : Column 5 : Spec_Type, Row 3 : Weaving RBA
+14-Jun-2019 13:42:35.12 : Column 6 : Revision, Row 3 : 1
+14-Jun-2019 13:42:35.12 : Column 7 : Tolerances_Json, Row 3 : {}
+14-Jun-2019 13:42:35.13 : Succesfully retrieved specifications for : GKE005309D00T0CZ
+14-Jun-2019 13:42:35.13 : Listing Specifications . . . 
+14-Jun-2019 13:42:37.51 : --------- End formPrintSpecifications ----------
+14-Jun-2019 13:42:39.21 : ------------- Restarting Application
+14-Jun-2019 13:42:39.24 : --------- Start formSpecConfig ----------
+14-Jun-2019 13:42:41.06 : Searching for GKE005309D00T0CZ specifications . . . 
+14-Jun-2019 13:42:41.07 : -----------------------------------
+14-Jun-2019 13:42:41.07 : SELECT * FROM  standard_specifications WHERE Material_Id= 'GKE005309D00T0CZ'
+14-Jun-2019 13:42:41.07 : Checking Row 1 . . . 
+14-Jun-2019 13:42:41.07 : Column 1 : Id, Row 1 : 1529
+14-Jun-2019 13:42:41.07 : Column 2 : Material_Id, Row 1 : GKE005309D00T0CZ
+14-Jun-2019 13:42:41.07 : Column 3 : Time_Stamp, Row 1 : 6/4/2019 5:05:53 PM
+14-Jun-2019 13:42:41.07 : Column 4 : Properties_Json, Row 1 : {"Ballistic Sample Length":"2.5 yds","Number of Layers":15}
+14-Jun-2019 13:42:41.07 : Column 5 : Spec_Type, Row 1 : Ballistic Testing Requirements
+14-Jun-2019 13:42:41.07 : Column 6 : Revision, Row 1 : 1
+14-Jun-2019 13:42:41.07 : Column 7 : Tolerances_Json, Row 1 : {}
+14-Jun-2019 13:42:41.08 : Checking Row 2 . . . 
+14-Jun-2019 13:42:41.08 : Column 1 : Id, Row 2 : 1997
+14-Jun-2019 13:42:41.08 : Column 2 : Material_Id, Row 2 : GKE005309D00T0CZ
+14-Jun-2019 13:42:41.08 : Column 3 : Time_Stamp, Row 2 : 6/11/2019 4:41:44 PM
+14-Jun-2019 13:42:41.09 : Column 4 : Properties_Json, Row 2 : {"QC Sample Length":1.5,"Warp/Pick Count":"\u00AB","Usable Width":"\u00AB","Dry Weight":"\u00AB","Fabric Breaking Strength":"\u00FC","Thickness":"\u00FC","Crimp":"\u00FC","Conditioned Weight":"\u00FC","Residual Shrinkage":"\u00D2","Yarn Break Force":"\u00D2","Resin Content":"\u00D2","Volatile Content":"\u00D2","Glass Transition (Tg)":"\u00D2","Laminated Weight":"\u00D2","Coated Weight":"\u00D2"}
+14-Jun-2019 13:42:41.09 : Column 5 : Spec_Type, Row 2 : Testing Requirements
+14-Jun-2019 13:42:41.09 : Column 6 : Revision, Row 2 : 1
+14-Jun-2019 13:42:41.09 : Column 7 : Tolerances_Json, Row 2 : {}
+14-Jun-2019 13:42:41.10 : Checking Row 3 . . . 
+14-Jun-2019 13:42:41.10 : Column 1 : Id, Row 3 : 2095
+14-Jun-2019 13:42:41.10 : Column 2 : Material_Id, Row 3 : GKE005309D00T0CZ
+14-Jun-2019 13:42:41.10 : Column 3 : Time_Stamp, Row 3 : 6/11/2019 4:41:51 PM
+14-Jun-2019 13:42:41.10 : Column 4 : Properties_Json, Row 3 : {
+    "actual weft count": "31.33 ppi",
+    "article code":"" ,
+    "aux selvedges closing degrees":"" ,
+    "bottom rapier clamps": "serrated",
+    "bottom spreader bars": "spreader",
+    "central selvedges drawing in":"" ,
+    "central selvedges ends per dent":"" ,
+    "central selvedges number ends":"" ,
+    "central selvedges weave":"" ,
+    "central selvedges yarn count":"" ,
+    "cutting degrees": 84,
+    "date": "6/4/2019",
+    "dorn left selvedges drawing in":"" ,
+    "dorn left selvedges ends per dent":"" ,
+    "dorn left selvedges number ends":"" ,
+    "dorn left selvedges weave":"" ,
+    "dorn left selvedges yarn count":"" ,
+    "draw in harness": "1,2selvedge,3,4,5,6,7,8body",
+    "draw in reed": "2 per dent",
+    "fabric width": "60 1/4 inches",
+    "first heddle": "95 mm",
+    "first heddle 1": "95 mm",
+    "first heddle guide": "104 mm",
+    "harness configuration": "2 selvedge/6 body",
+    "horizontal back rest roller": 22,
+    "last heddle": "46 mm",
+    "last heddle guide": "104 mm",
+    "left main selvedges drawing in":"" ,
+    "left main selvedges ends per dent":"" ,
+    "left main selvedges number ends":"" ,
+    "left main selvedges weave":"" ,
+    "left main selvedges yarn count":"" ,
+    "left selvedges drawing in": "1,2,1,2,1,2",
+    "left selvedges ends per dent": "6ends/4dents",
+    "left selvedges number ends": 24,
+    "left selvedges weave": "plain",
+    "left selvedges yarn count": "830den",
+    "loom number": 941,
+    "loom type": "Dornier 220",
+    "number ends wo selvedges": 1884,
+    "number harnesses": 8,
+    "pinch roller felt type": "smooth brown",
+    "press roller type": "orange peel",
+    "rba number":"" ,
+    "reed": "6.0cm",
+    "reed width": "63 1/4 inches",
+    "right main selvedges drawing in":"" ,
+    "right main selvedges ends per dent":"" ,
+    "right main selvedges number ends":"" ,
+    "right main selvedges weave":"" ,
+    "right main selvedges yarn count":"" ,
+    "right selvedges drawing in": "1,2,1,2,1,2",
+    "right selvedges ends per dent": "6ends/4dents",
+    "right selvedges number ends": 24,
+    "right selvedges weave": "plain",
+    "right selvedges yarn count": "830den",
+    "sand roller type": "orange peel",
+    "selvedges type": "Plain",
+    "shed closing degrees": 340,
+    "speed": "370    RPM",
+    "springs type": "Black",
+    "style number": "530",
+    "temples composition": "2burr/1green pinwheel",
+    "upper rapier clamps": "serrated",
+    "upper spreader bars": "spresder",
+    "vertical back rest roller": 14.75,
+    "warp tension": " 110    cN/filo",
+    "weave pattern": "plain",
+    "weft count set point": "31 ppi",
+    "file name": "RBA Form STYLE 530.xlsx"
+}
+14-Jun-2019 13:42:41.11 : Column 5 : Spec_Type, Row 3 : Weaving RBA
+14-Jun-2019 13:42:41.11 : Column 6 : Revision, Row 3 : 1
+14-Jun-2019 13:42:41.11 : Column 7 : Tolerances_Json, Row 3 : {}
+14-Jun-2019 13:42:41.11 : Succesfully retrieved specifications for : GKE005309D00T0CZ
+14-Jun-2019 13:42:41.11 : Printing Specification . . . 
+14-Jun-2019 13:42:43.90 : Printing Specification . . . 
+14-Jun-2019 13:42:57.32 : Printing Specification . . . 
+14-Jun-2019 13:43:16.87 : --------- End formSpecConfig ----------
+14-Jun-2019 13:43:44.23 : Saving : runtime.log

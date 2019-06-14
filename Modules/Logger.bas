@@ -20,6 +20,10 @@ Public Sub Log(text As String)
     Debug.Print Logger.printf("{0} : {1}", buffer(buffer.count)(0), buffer(buffer.count)(1))
 End Sub
 
+Public Sub Error(function_name As String)
+    Logger.Log ("Error Returned From --> " & function_name)
+End Sub
+
 Public Sub Trace(text As String)
 ' Used to signify a transition point in the application log
     Log "------------- " & text

@@ -150,11 +150,14 @@ Function GetSpecifications(material_id As String) As Object
     Dim rev As String
     Dim Key As Variant
     Dim record As DatabaseRecord
+
     On Error GoTo NullSpecException
+
     Set record = DataAccess.GetSpecificationRecords(MaterialInputValidation(material_id))
     record.SetDictionary
+
     Set json_coll = record.records
-    Set specs_dict = CreateObject("Scripting.Dictionary")
+    Set specs_dict = Factory.CreateDictionary
     
     If json_coll.count = 0 Then
         Set GetSpecifications = Nothing
@@ -163,13 +166,12 @@ Function GetSpecifications(material_id As String) As Object
         For Each json_dict In json_coll
             Set spec = Factory.CreateSpecFromDict(json_dict)
             specs_dict.Add json_dict.Item("Spec_Type"), spec
-            'rev = json_dict.Item("Revision")
         Next json_dict
-        'specs_dict.Item(rev).IsLatest = True
         Set GetSpecifications = specs_dict
     End If
     Exit Function
 NullSpecException:
+    Logger.Error "SpecManager.GetSpecifications()"
     Set GetSpecifications = Nothing
 End Function
 
@@ -223,7 +225,7 @@ Function ArchiveSpecification(old_spec As Specification) As Long
     Dim ret_val As Long
     ' 1. Insert old version into archived_specifications
     ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
-    ' 3. Delete old version from standard_specifications
+    ' 2. Delete old version from standard_specifications
     If ret_val = DB_PUSH_SUCCESS Then
         ArchiveSpecification = IIf(DeleteSpecification(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
     End If
@@ -263,24 +265,9 @@ End Function
 
 Private Function MaterialInputValidation(material_id As String) As String
 ' Ensures that the material id input by the user is parseable.
-' TODO: This function is awful need to refactor unsure how due to the
-'       ridiculous lack of uniqueness in the database.
-'       "The style 101 problem"
-    If (material_id <> "101") And (Mid(material_id, 5, 3) <> "101") Then
-        MaterialInputValidation = material_id
-        Exit Function
-    End If
-    If Len(material_id) >= 5 Then
-        MaterialInputValidation = Mid(material_id, 5, 3) & Mid(material_id, 2, 2)
-    Else
-        Dim question As Integer
-        question = MsgBox("Click Yes for Style 101 Kevlar or No for Hyosung.", vbYesNo + vbQuestion, "Style 101 has two version")
-        If question = vbYes Then
-            MaterialInputValidation = "101" & "KE"
-        Else
-            MaterialInputValidation = "101" & "HY"
-        End If
-    End If
+    ' PASS
+    MaterialInputValidation = material_id
+    
 End Function
 
 Function SelectLatestSpec() As Specification
@@ -329,7 +316,7 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
     Dim dict As Object
     Dim i As Integer
     Dim k As Integer
-    Dim json_String As String
+    Dim json_string As String
     Dim new_spec As Specification
     Dim spec_dict As Object
 
@@ -340,9 +327,9 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
             For k = start_col To num_cols
                 dict.Add .Cells(1, k), .Cells(i, k)
             Next k
-            json_String = JsonVBA.ConvertToJson(dict)
-            .Cells(i, num_cols + start_col).Value = json_String
-            spec_dict.Add "Properties_Json", json_String
+            json_string = JsonVBA.ConvertToJson(dict)
+            .Cells(i, num_cols + start_col).Value = json_string
+            spec_dict.Add "Properties_Json", json_string
             spec_dict.Add "Tolerances_Json", "{}"
             spec_dict.Add "Material_Id", .Cells(i, 1).Value
             spec_dict.Add "Spec_Type", .Cells(i, 2).Value
@@ -360,4 +347,20 @@ End Sub
 
 Public Sub TestTableToJson()
     TableToJson 83, 17, ActiveWorkbook.Sheets("testing"), start_col:=3
+End Sub
+
+Public Sub CopyPropertiesFromFile()
+    ' Get range of material ids
+    Dim ws As Worksheet
+    Dim style_number As String
+    Dim json_string As String
+    Dim json_file_path As String
+    Dim r As Long
+    Set ws = Sheet4
+    For r = 2 To 58
+        style_number = Mid(ws.Cells(r, 1), 6, 3)
+        json_file_path = ThisWorkbook.path & "\RBAs\" & style_number & ".json"
+        json_string = Replace(JsonVBA.ReadJsonFileToString(json_file_path), "NaN", vbNullString)
+        ws.Cells(r, 2).Value = json_string
+    Next r
 End Sub

@@ -977,7 +977,7 @@ End If
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 For Each KRng In KeyRange.Cells
     ItemNdx = ItemNdx + 1
-    KeyExists = dict.exists(Key:=KRng.Text)
+    KeyExists = dict.exists(Key:=KRng.text)
     If KeyExists = True Then
         '''''''''''''''''''''''''''''''''''''''''''
         ' The key already exists in the Dictionary.
@@ -998,7 +998,7 @@ For Each KRng In KeyRange.Cells
         ' exit the function.
         '''''''''''''''''''''''''''''''''''''''''
         If ReplaceOnDuplicateKey = True Then
-            dict.Remove Key:=KRng.Text
+            dict.Remove Key:=KRng.text
             KeyExists = False
         Else
             If StopOnDuplicateKey = True Then
@@ -1009,9 +1009,9 @@ For Each KRng In KeyRange.Cells
     End If
     If KeyExists = False Then
         If RangeAsObject = True Then
-            dict.Add Key:=KRng.Text, Item:=ItemRange.Cells(ItemNdx)
+            dict.Add Key:=KRng.text, Item:=ItemRange.Cells(ItemNdx)
         Else
-            dict.Add Key:=KRng.Text, Item:=ItemRange.Cells(ItemNdx).Text
+            dict.Add Key:=KRng.text, Item:=ItemRange.Cells(ItemNdx).text
         End If
     End If
 Next KRng
@@ -1158,7 +1158,7 @@ For Each IRng In ItemRange.Cells
             If RangeAsObject = True Then
                 coll.Add Item:=IRng, Key:=KeyRange.Cells(KeyNdx)
             Else
-                coll.Add Item:=IRng.Text, Key:=KeyRange.Cells(KeyNdx)
+                coll.Add Item:=IRng.text, Key:=KeyRange.Cells(KeyNdx)
             End If
         Else
             '''''''''''''''''''''
@@ -1166,7 +1166,7 @@ For Each IRng In ItemRange.Cells
             If RangeAsObject = True Then
                 coll.Add Item:=IRng
             Else
-                coll.Add Item:=IRng.Text
+                coll.Add Item:=IRng.text
             End If
             '''''''''''''''''''''
             
