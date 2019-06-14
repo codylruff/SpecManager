@@ -13,29 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdAddProperty_Click()
@@ -54,14 +31,14 @@ End Sub
 Sub AddProperty()
     ' This executes an add property command
     With App.current_template
-        .AddProperty txtPropertyName.Value
+        .AddProperty txtPropertyName.value
     End With
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
 
 Sub RemoveProperty()
-    App.current_template.RemoveProperty cboSelectProperty.Value
+    App.current_template.RemoveProperty cboSelectProperty.value
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
@@ -90,9 +67,6 @@ Private Sub ClearThisForm()
     Do While cboSelectProperty.ListCount > 0
         cboSelectProperty.RemoveItem 0
     Loop
-    Do While cboSelectTemplate.ListCount > 0
-        cboSelectTemplate.RemoveItem 0
-    Loop
     ClearForm Me
 End Sub
 
@@ -108,8 +82,8 @@ Private Sub PopulateCboSelectProperty()
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
-    txtPropertyName.Value = vbNullString
-    cboSelectProperty.Value = vbNullString
+    txtPropertyName.value = vbNullString
+    cboSelectProperty.value = vbNullString
 End Sub
 
 Private Sub PopulateCboSelectTemplate()
@@ -131,7 +105,6 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    
     Logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
@@ -154,8 +127,9 @@ Sub SaveChanges()
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
         Logger.Log "Edit Template Fail"
+        MsgBox "Update Failed, Contact Administrator."
     Else
         Logger.Log "Data Access returned: " & ret_val
-        Logger.Log "Edit Template Pass"
+        MsgBox "Template Update Successful."
     End If
 End Sub
