@@ -142,6 +142,7 @@ Private Function UpdateTemplateChanges() As Boolean
                 ' Missing properties are added.
                 Logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
                 spec.Properties.Add Key:=Key, Item:=vbNullString
+                updated = True
             End If
         Next Key
         For Each Key In spec.Properties
@@ -150,12 +151,12 @@ Private Function UpdateTemplateChanges() As Boolean
                 ' Old properties are removed
                 Logger.Log "Removing : " & Key & " from " & spec.MaterialId & " properties list."
                 spec.Properties.Remove Key
+                updated = True
             End If
         Next Key
-        If old_spec.PropertiesJson <> spec.PropertiesJson Then
+        If updated = True Then
             ret_val = SpecManager.SaveSpecification(spec, old_spec)
             If ret_val <> DB_PUSH_SUCCESS Then
-                updated = True
                 Logger.Log "Data Access returned: " & ret_val
                 Logger.Log "New Specification Was Not Saved. Contact Admin."
             Else
