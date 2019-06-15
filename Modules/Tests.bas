@@ -1,6 +1,23 @@
 Attribute VB_Name = "Tests"
 
+Public Sub RunTests()
+' Called from the TestRunner worksheet with a button.
+    Dim Reporter As New WorkbookReporter
+    ' Sets the reporter to use a certain sheet
+    ' Therefore a sheet named TestRunner is required here.
+    Reporter.ConnectTo TestRunner
+    ' Sets the number of test suites to run. One for each module with tests in it.
+    Reporter.Start NumSuites:=1
+    ' Each suite is stored as a function in a module that returns a TestSuite
+    ' So essentially tests can be stored each in there respective modules.
+    Reporter.Output Utils.Tests
+    ' Display testing results to the worksheet
+    Reporter.Done
+End Sub
+
+
 Sub AllTests()
+' End to end testings for the GUI and other hard to test functionality
     On Error GoTo TestFailedException
     Logger.ResetLog
     Logger.Log "----------- Starting Test Suite -----------------"

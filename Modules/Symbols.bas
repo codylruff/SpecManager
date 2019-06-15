@@ -8,6 +8,7 @@ Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAAT
 ' SPEC MANAGER ERROR DESCRIPTIONS:
 Public Const SM_SEARCH_SUCCESS     As Long = 0
 Public Const SM_SEARCH_FAILURE     As Long = 1
+Public Const SM_REGEX_ERROR        As Long = 4
 
 ' DATABASE ERROR DESCRIPTIONS:
 Public Const DB_PUSH_SUCCESS       As Long = 0
