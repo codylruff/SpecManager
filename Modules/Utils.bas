@@ -4,14 +4,65 @@ Option Explicit
 ' DESCRIPTION: Util Module holds
 ' miscellenous helper functions.
 '=================================
-Sub ToggleExcelGui(b As Boolean)
-' Disables unpleasent ui effects
-    Application.ScreenUpdating = b
-    Application.DisplayAlerts = b
-End Sub
+
+Public Function Tests() As TestSuite
+' Contains vba-tests for this module code
+    Set Tests = New TestSuite
+    Tests.Description = "Utils"
+    
+    Dim Reporter As New ImmediateReporter
+    Reporter.ListenTo Tests
+    
+    Dim Suite As New TestSuite
+    Dim Test As TestCase
+
+    With Tests.Test("RemoveWhiteSpace(target As String) As String should remove all whitespace from given string")
+        Set Test = Suite.Test("should pass")
+        With Test
+            .IsEqual RemoveWhiteSpace(" "), vbNullString
+            .IsEqual RemoveWhiteSpace(" 1 A !"), "1A!"
+        End With
+        
+        .IsEqual Test.Result, TestResultType.Pass
+    End With
+
+    With Tests.Test("ConvertToCamelCase(s As String) As String")
+        Set Test = Suite.Test("should pass")
+        With Test
+            .IsEqual ConvertToCamelCase("camel case"), "CamelCase"
+            .IsEqual ConvertToCamelCase("1Camel Case_Test _with! symbols"), "CamelCaseTestWithSymbols"
+            
+        End With
+        
+        .IsEqual Test.Result, TestResultType.Pass
+    End With
+
+    With Tests.Test("SplitCamelCase(sString As String, Optional sDelim As String = ' ') As String")
+        Set Test = Suite.Test("should pass")
+        With Test
+            .IsEqual SplitCamelCase("CamelCase"), "Camel Case" ' Passing
+            .IsEqual SplitCamelCase("1Camel Case_Test _with! symbols"), "1Camel Case_Test _with! symbols" ' Passing
+            .IsEqual SplitCamelCase("snake_case", sDelim:="_"), "snake case" ' Failing
+        End With
+        
+        .IsEqual Test.Result, TestResultType.Pass
+    End With
+
+    With Tests.Test("GetLine(ParamArray var() As Variant) As String")
+        Set Test = Suite.Test("should pass")
+        With Test
+            .IsEqual GetLine("1", "2", "3", "A", "_", "S3@"), "123A_S3@" & vbNewLine
+            Logger.Log GetLine("1", "2", "3", "A", "_", "S3@")
+        End With
+        
+        .IsEqual Test.Result, TestResultType.Pass
+    End With
+
+End Function
+
 
 Public Function RemoveWhiteSpace(target As String) As String
-'test
+'tested
     With CreateObject("VBScript.RegExp")
         .Pattern = "\s"
         .MultiLine = True
@@ -21,8 +72,9 @@ Public Function RemoveWhiteSpace(target As String) As String
 End Function
 
 Function ConvertToCamelCase(s As String) As String
-'test
+'tested
 ' Converts sentence case to Camel Case
+' numbers and symbols will be removed
     On Error GoTo RegExError
     With CreateObject("VBScript.RegExp")
         .Pattern = "[^a-zA-Z]"
@@ -31,11 +83,12 @@ Function ConvertToCamelCase(s As String) As String
     End With
     Exit Function
 RegExError:
+    Err.Raise SM_REGEX_ERROR
     Logger.Log "RegEx Error: ConvertToCamelCase"
 End Function
 
 Function SplitCamelCase(sString As String, Optional sDelim As String = " ") As String
-'test
+'test failing
 ' Converts camel case to sentence case
 On Error GoTo Error_Handler
     Dim oRegEx As Object
@@ -92,6 +145,12 @@ Function CreateNewSheet(shtName As String) As Worksheet
     Set CreateNewSheet = Sheets(shtName)
     Application.DisplayAlerts = True
 End Function
+
+Sub ToggleExcelGui(b As Boolean)
+' Disables unpleasent ui effects
+    Application.ScreenUpdating = b
+    Application.DisplayAlerts = b
+End Sub
 
 Function CheckForEmpties(frm) As Boolean
 'Clears the values from a user form.

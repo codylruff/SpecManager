@@ -1,13 +1,2 @@
-14-Jun-2019 17:42:05.88 : ------------- Starting Application
-14-Jun-2019 17:42:05.89 : Searching for user name . . . 
-14-Jun-2019 17:42:05.89 : -----------------------------------
-14-Jun-2019 17:42:05.89 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
-14-Jun-2019 17:42:05.91 : Checking Row 1 . . . 
-14-Jun-2019 17:42:05.91 : Column 1 : Name, Row 1 : CRUFF
-14-Jun-2019 17:42:05.91 : Column 2 : Protection, Row 1 : 25
-14-Jun-2019 17:42:05.91 : Column 3 : Filtration, Row 1 : 25
-14-Jun-2019 17:42:05.91 : Column 4 : Chemical, Row 1 : 25
-14-Jun-2019 17:42:05.91 : Column 5 : Privledge_Level, Row 1 : 25
-14-Jun-2019 17:42:05.91 : Column 6 : Product_Line, Row 1 : Admin
-14-Jun-2019 17:42:05.91 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
-14-Jun-2019 17:42:26.19 : Saving : runtime.log
+14-Jun-2019 17:43:00.79 : ------------- Stopping Application
+14-Jun-2019 17:43:00.79 : Saving : runtime.log
