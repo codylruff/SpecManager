@@ -14,17 +14,16 @@ Private m_data      As Variant
 Private rows_       As Long
 Private columns_    As Long
 Public Fields       As Object
-Private m_records    As VBA.Collection
+Private m_records   As VBA.Collection
 
 Private Property Set records(ByRef obj As VBA.Collection)
     Set m_records = obj
 End Property
 Public Property Get records() As VBA.Collection
     If m_records Is Nothing Then
-       Set records = InitializeRecords
-    Else
-       Set records = m_records
+       InitializeRecords
     End If
+    Set records = m_records
 End Property
 Public Property Get Header() As Variant: Header = m_header: End Property
 Public Property Let Header(ByVal Value As Variant): m_header = Value: End Property
@@ -35,7 +34,7 @@ Public Property Get rows() As Long: rows = rows_: End Property
 Public Property Let columns(Value As Long): columns_ = Value: End Property
 Public Property Get columns() As Long: columns = columns_: End Property
 
-Private Function InitializeRecords() As VBA.Collection
+Private Function InitializeRecords()
 ' Returns a dictionary representation of this object
     Dim dict As Object
     Dim coll As VBA.Collection
@@ -51,5 +50,5 @@ Private Function InitializeRecords() As VBA.Collection
         coll.Add dict
     Next j
     Set Fields = dict
-    Set InitializeRecords = coll
+    Set m_records = coll
 End Function
