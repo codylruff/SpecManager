@@ -24,15 +24,15 @@ Private OutputHistory_  As VBA.Collection
 '------------
 ' AUTO-PROPERTIES
 '------------
-Public Property Set OutputHistory(value As VBA.Collection): Set OutputHistory_ = value: End Property
+Public Property Set OutputHistory(Value As VBA.Collection): Set OutputHistory_ = Value: End Property
 Public Property Get OutputHistory() As VBA.Collection: Set OutputHistory = OutputHistory_: End Property
-Public Property Set FormId(value As MSForms.UserForm): Set FormId_ = value: End Property
+Public Property Set FormId(Value As MSForms.UserForm): Set FormId_ = Value: End Property
 Public Property Get FormId() As MSForms.UserForm: Set FormId = FormId_: End Property
 Public Property Get CurrentText() As String
      CurrentText = Me.FormId.txtConsole.text
 End Property
-Public Property Let CurrentText(value As String)
-    CurrentText = value
+Public Property Let CurrentText(Value As String)
+    CurrentText = Value
 End Property
 '----------
 ' METHODS
@@ -123,15 +123,15 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     ' Insert/Format body of the specification
     With sht
         ' Spec Header
-        .Range("A" & 1).value = spec.SpecType & " : "
-        .Range("B" & 1).value = spec.MaterialId
+        .Range("A" & 1).Value = spec.SpecType & " : "
+        .Range("B" & 1).Value = spec.MaterialId
         .Range("A" & 1).Font.Bold = True
         .Range("A" & 1).Font.Size = 18
         .Range("B" & 1).Font.Bold = True
         .Range("B" & 1).Font.Size = 18
         If prod_order <> vbNullString Then
-            .Range("A" & 2).value = "Production Order : "
-            .Range("B" & 2).value = prod_order
+            .Range("A" & 2).Value = "Production Order : "
+            .Range("B" & 2).Value = prod_order
             .Range("A" & 2).Font.Bold = True
             .Range("A" & 2).Font.Size = 18
             .Range("B" & 2).Font.Bold = True
@@ -144,8 +144,8 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
         ' Spec Properties
         For Each Key In spec.Properties
             If Not spec.Properties(Key) = vbNullString Then
-                .Range("A" & i).value = CStr(Key) & " : "
-                .Range("B" & i).value = CStr(spec.Properties(CStr(Key)))
+                .Range("A" & i).Value = CStr(Key) & " : "
+                .Range("B" & i).Value = CStr(spec.Properties(CStr(Key)))
                 .Range("A" & i).Font.Size = 17
                 .Range("B" & i).Font.Size = 17
                 .Range("B" & i).Font.Bold = True
@@ -158,8 +158,8 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                     .Range("B" & i).Font.Name = "Calibri"
                 End If
             Else
-                .Range("A" & i).value = CStr(Key)
-                .Range("B" & i).value = "-"
+                .Range("A" & i).Value = CStr(Key)
+                .Range("B" & i).Value = "-"
                 .Range("A" & i).Font.Size = 17
                 .Range("B" & i).Font.Size = 17
                 .Range("B" & i).Font.Bold = True

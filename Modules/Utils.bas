@@ -132,7 +132,7 @@ Function CreateNewSheet(shtName As String) As Worksheet
     Application.DisplayAlerts = False
     Dim exists As Boolean, i As Integer
     With ThisWorkbook
-        For i = 1 To Worksheets.count
+        For i = 1 To Worksheets.Count
             If Worksheets(i).Name = shtName Then
                 exists = True
             End If
@@ -140,16 +140,16 @@ Function CreateNewSheet(shtName As String) As Worksheet
         If exists = True Then
             .Sheets(shtName).Delete
         End If
-        .Sheets.Add(After:=.Sheets(.Sheets.count)).Name = shtName
+        .Sheets.Add(After:=.Sheets(.Sheets.Count)).Name = shtName
     End With
     Set CreateNewSheet = Sheets(shtName)
     Application.DisplayAlerts = True
 End Function
 
-Sub ToggleExcelGui(b As Boolean)
+Sub ToggleExcelGui(B As Boolean)
 ' Disables unpleasent ui effects
-    Application.ScreenUpdating = b
-    Application.DisplayAlerts = b
+    Application.ScreenUpdating = B
+    Application.DisplayAlerts = B
 End Sub
 
 Function CheckForEmpties(frm) As Boolean
@@ -158,14 +158,14 @@ Function CheckForEmpties(frm) As Boolean
     For Each ctl In frm.Controls
         Select Case VBA.TypeName(ctl)
             Case "TextBox"
-                If ctl.value = vbNullString Then
+                If ctl.Value = vbNullString Then
                     MsgBox "All boxes must be filed.", vbExclamation, "Input Error"
                     ctl.SetFocus
                     CheckForEmpties = True
                     Exit Function
                 End If
             Case "ComboBox"
-                If ctl.value = vbNullString Then
+                If ctl.Value = vbNullString Then
                     MsgBox "Make a selection from the drop down menu.", vbExclamation, "Input Error"
                     ctl.SetFocus
                     CheckForEmpties = True
@@ -179,7 +179,7 @@ End Function
 Sub UnloadAllForms(Optional dummyVariable As Byte)
 'Unloads all open user forms
     Dim i As Long
-    For i = VBA.UserForms.count - 1 To 0 Step -1
+    For i = VBA.UserForms.Count - 1 To 0 Step -1
         Unload VBA.UserForms(i)
     Next
 End Sub
@@ -188,17 +188,17 @@ Sub UpdateTable(shtName As String, tblName As String, Header As String, val)
 'Adds an entry at the bottom of specified column header.
     Dim rng As Range
     Set rng = Sheets(shtName).Range(tblName & "[" & Header & "]")
-    rng.End(xlDown).Offset(1, 0).value = val
+    rng.End(xlDown).Offset(1, 0).Value = val
 End Sub
 
 Sub Update(rng As Range, val)
 'Adds an entry at the bottom of specified column header.
-    rng.End(xlDown).Offset(1, 0).value = val
+    rng.End(xlDown).Offset(1, 0).Value = val
 End Sub
 
 Sub Insert(rng As Range, val)
 'Inserts an entry into a specific named cell.
-    rng.value = val
+    rng.Value = val
 End Sub
 
 Public Function printf(mask As String, ParamArray tokens()) As String

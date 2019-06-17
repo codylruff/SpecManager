@@ -14,8 +14,8 @@ Public ProductLine      As String
 Private Name_           As String
 Public Settings         As Object
 
-Public Property Let Name(value As String)
-    Name_ = UCase(value)
+Public Property Let Name(Value As String)
+    Name_ = UCase(Value)
 End Property
 
 Public Property Get Name() As String

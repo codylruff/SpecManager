@@ -224,7 +224,7 @@ End If
 ' Ensure Coll has at least
 ' one item.
 ''''''''''''''''''''''''''''
-If coll.count < 1 Then
+If coll.Count < 1 Then
     CollectionToArray = Null
     Exit Function
 End If
@@ -233,13 +233,13 @@ End If
 ' Redim Arr to the number of
 ' elements in the collection.
 '''''''''''''''''''''''''''''
-ReDim arr(1 To coll.count)
+ReDim arr(1 To coll.Count)
 '''''''''''''''''''''''''''''
 ' Loop through the colletcion
 ' and add the elements of
 ' Collection to Arr.
 '''''''''''''''''''''''''''''
-For Ndx = 1 To coll.count
+For Ndx = 1 To coll.Count
     If IsObject(coll(Ndx)) = True Then
         Set arr(Ndx) = coll(Ndx)
     Else
@@ -299,7 +299,7 @@ Set dict = CreateObject("Scripting.Dictionary")
 ' Ensure we have at least one element in
 ' the collection object.
 '''''''''''''''''''''''''''''''''''''''''''
-If coll.count = 0 Then
+If coll.Count = 0 Then
     Set dict = Nothing
     Set CollectionToDictionary = Nothing
     Exit Function
@@ -313,7 +313,7 @@ End If
 ' to get the Key to be used in the Dictionary
 ' item.
 '''''''''''''''''''''''''''''''''''''''''''
-For Ndx = 1 To coll.count
+For Ndx = 1 To coll.Count
     '''''''''''''''''''''''''''''''''''''''
     ' Coll may contain object variables.
     ' Test for this condition and set
@@ -413,12 +413,12 @@ End If
 '''''''''''''''''''''''''''''''''''''
 ' Ensure StartCells is a single area.
 '''''''''''''''''''''''''''''''''''''
-If StartCells.Areas.count > 1 Then
+If StartCells.Areas.Count > 1 Then
     CollectionToRange = False
     Exit Function
 End If
 
-If StartCells.Cells.count = 1 Then
+If StartCells.Cells.Count = 1 Then
     '''''''''''''''''''''''''''''''''''''
     ' StartCells is one cell. Write out
     ' the collection moving downwards.
@@ -426,8 +426,8 @@ If StartCells.Cells.count = 1 Then
     Set DestRng = StartCells
     For Each V In coll
         If IsObject(V) = False Then
-            DestRng.value = V
-            If DestRng.Row < DestRng.Parent.rows.count Then
+            DestRng.Value = V
+            If DestRng.Row < DestRng.Parent.Rows.Count Then
                 Set DestRng = DestRng(2, 1)
             Else
                 CollectionToRange = False
@@ -440,12 +440,12 @@ If StartCells.Cells.count = 1 Then
     Exit Function
 End If
 
-If StartCells.Cells.count = 2 Then
+If StartCells.Cells.Count = 2 Then
     ''''''''''''''''''''''''''''''''''
     ' Test the orientation of the two
     ' cells in StartCells.
     ''''''''''''''''''''''''''''''''''
-    If StartCells.rows.count = 1 Then
+    If StartCells.Rows.Count = 1 Then
         '''''''''''''''''''''''''''''''''
         ' Write out the Colleciton moving
         ' across the row.
@@ -453,8 +453,8 @@ If StartCells.Cells.count = 2 Then
         Set DestRng = StartCells.Cells(1, 1)
         For Each V In coll
             If IsObject(V) = False Then
-                DestRng.value = V
-                If DestRng.Column < StartCells.Parent.columns.count Then
+                DestRng.Value = V
+                If DestRng.Column < StartCells.Parent.columns.Count Then
                     Set DestRng = DestRng(1, 2)
                 Else
                     CollectionToRange = False
@@ -472,8 +472,8 @@ If StartCells.Cells.count = 2 Then
         Set DestRng = StartCells.Cells(1, 1)
         For Each V In coll
             If IsObject(V) = False Then
-                DestRng.value = V
-                If DestRng.Row < StartCells.Parent.rows.count Then
+                DestRng.Value = V
+                If DestRng.Row < StartCells.Parent.Rows.Count Then
                     Set DestRng = DestRng(2, 1)
                 Else
                     CollectionToRange = False
@@ -489,11 +489,11 @@ End If
 ' Write the collection only into
 ' Cells of StartCells.
 '''''''''''''''''''''''''''''''''''''
-For Ndx = 1 To StartCells.Cells.count
-    If Ndx <= coll.count Then
+For Ndx = 1 To StartCells.Cells.Count
+    If Ndx <= coll.Count Then
         V = coll(Ndx)
         If IsObject(V) = False Then
-            StartCells.Cells(Ndx).value = V
+            StartCells.Cells(Ndx).Value = V
         End If
     End If
 Next Ndx
@@ -535,12 +535,12 @@ End If
 '''''''''''''''''''''''''''''''''''''
 ' Ensure StartCells is a single area.
 '''''''''''''''''''''''''''''''''''''
-If StartCells.Areas.count > 1 Then
+If StartCells.Areas.Count > 1 Then
     DictionaryToRange = False
     Exit Function
 End If
 
-If StartCells.Cells.count = 1 Then
+If StartCells.Cells.Count = 1 Then
     '''''''''''''''''''''''''''''''''''''
     ' StartCells is one cell. Write out
     ' the collection moving downwards.
@@ -548,8 +548,8 @@ If StartCells.Cells.count = 1 Then
     Set DestRng = StartCells
     For Each V In dict.Items
         If IsObject(V) = False Then
-            DestRng.value = V
-            If DestRng.Row < DestRng.Parent.rows.count Then
+            DestRng.Value = V
+            If DestRng.Row < DestRng.Parent.Rows.Count Then
                 Set DestRng = DestRng(2, 1)
             Else
                 DictionaryToRange = False
@@ -562,12 +562,12 @@ If StartCells.Cells.count = 1 Then
     Exit Function
 End If
 
-If StartCells.Cells.count = 2 Then
+If StartCells.Cells.Count = 2 Then
     ''''''''''''''''''''''''''''''''''
     ' Test the orientation of the two
     ' cells in StartCells.
     ''''''''''''''''''''''''''''''''''
-    If StartCells.rows.count = 1 Then
+    If StartCells.Rows.Count = 1 Then
         '''''''''''''''''''''''''''''''''
         ' Write out the Colleciton moving
         ' across the row.
@@ -575,8 +575,8 @@ If StartCells.Cells.count = 2 Then
         Set DestRng = StartCells.Cells(1, 1)
         For Each V In dict.Items
             If IsObject(V) = False Then
-                DestRng.value = V
-                If DestRng.Column < StartCells.Parent.columns.count Then
+                DestRng.Value = V
+                If DestRng.Column < StartCells.Parent.columns.Count Then
                     Set DestRng = DestRng(1, 2)
                 Else
                     DictionaryToRange = False
@@ -594,8 +594,8 @@ If StartCells.Cells.count = 2 Then
         Set DestRng = StartCells.Cells(1, 1)
         For Each V In dict.Items
             If IsObject(V) = False Then
-                DestRng.value = V
-                If DestRng.Row < StartCells.Parent.rows.count Then
+                DestRng.Value = V
+                If DestRng.Row < StartCells.Parent.Rows.Count Then
                     Set DestRng = DestRng(2, 1)
                 Else
                     DictionaryToRange = False
@@ -611,11 +611,11 @@ End If
 ' Write the Dictionary only into
 ' Cells of StartCells.
 '''''''''''''''''''''''''''''''''''''
-For Ndx = 1 To StartCells.Cells.count
-    If Ndx <= dict.count Then
+For Ndx = 1 To StartCells.Cells.Count
+    If Ndx <= dict.Count Then
         V = dict.Items(Ndx - 1)
         If IsObject(V) = False Then
-            StartCells.Cells(Ndx).value = V
+            StartCells.Cells(Ndx).Value = V
         End If
     End If
 Next Ndx
@@ -670,7 +670,7 @@ End If
 ' Ensure that Dict contains
 ' at least one entry.
 '''''''''''''''''''''''''''
-If dict.count = 0 Then
+If dict.Count = 0 Then
     DictionaryToArray = False
     Exit Function
 End If
@@ -678,9 +678,9 @@ End If
 '''''''''''''''''''''''''''''
 ' Redim the Arr variable.
 '''''''''''''''''''''''''''''
-ReDim arr(0 To dict.count - 1, 0 To 1)
+ReDim arr(0 To dict.Count - 1, 0 To 1)
 
-For Ndx = 0 To dict.count - 1
+For Ndx = 0 To dict.Count - 1
     arr(Ndx, 0) = dict.Keys(Ndx)
     '''''''''''''''''''''''''''''''''''''''''
     ' Test to see if the item in the Dict is
@@ -746,7 +746,7 @@ End If
 ' the Collection.
 '''''''''''''''''''''''''''''''''
 On Error Resume Next
-For Ndx = 0 To dict.count - 1
+For Ndx = 0 To dict.Count - 1
     If IsObject(dict.Items(Ndx)) = True Then
         Set ItemVar = dict.Items(Ndx)
     Else
@@ -867,11 +867,11 @@ End Select
 ' is 0 or 1, no sorting is required.
 ' Get out.
 ''''''''''''''''''''''''''''''''''''''
-If coll.count <= 1 Then
+If coll.Count <= 1 Then
     Exit Sub
 End If
-ReDim arr(1 To coll.count)
-For Ndx = 1 To coll.count
+ReDim arr(1 To coll.Count)
+For Ndx = 1 To coll.Count
     If IsObject(arr(Ndx)) = True Or IsArray(arr(Ndx)) = True Then
         Debug.Print "The items of the Collection cannot be arrays or objects."
         Exit Sub
@@ -948,8 +948,8 @@ End If
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Ensure KeyRange and ItemRange as the same size.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If (KeyRange.rows.count <> ItemRange.rows.count) Or _
-    (KeyRange.columns.count <> ItemRange.columns.count) Then
+If (KeyRange.Rows.Count <> ItemRange.Rows.Count) Or _
+    (KeyRange.columns.Count <> ItemRange.columns.Count) Then
     RangeToDictionary = False
     Exit Function
 End If
@@ -958,7 +958,7 @@ End If
 ' Ensure both KeyRange and ItemRange are single area
 ' ranges.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If (KeyRange.Areas.count > 1) Or (ItemRange.Areas.count > 1) Then
+If (KeyRange.Areas.Count > 1) Or (ItemRange.Areas.Count > 1) Then
     RangeToDictionary = False
     Exit Function
 End If
@@ -1075,8 +1075,8 @@ End If
 ' Ensure KeyRange and ItemRange as the same size.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If Not KeyRange Is Nothing Then
-    If (KeyRange.rows.count <> ItemRange.rows.count) Or _
-        (KeyRange.columns.count <> ItemRange.columns.count) Then
+    If (KeyRange.Rows.Count <> ItemRange.Rows.Count) Or _
+        (KeyRange.columns.Count <> ItemRange.columns.Count) Then
         RangeToCollection = False
         Exit Function
     End If
@@ -1086,13 +1086,13 @@ End If
 ' Ensure both KeyRange and ItemRange are single area
 ' ranges.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If ItemRange.Areas.count > 1 Then
+If ItemRange.Areas.Count > 1 Then
     RangeToCollection = False
     Exit Function
 End If
 
 If Not KeyRange Is Nothing Then
-    If KeyRange.Areas.count > 1 Then
+    If KeyRange.Areas.Count > 1 Then
         RangeToCollection = False
         Exit Function
     End If
@@ -1236,7 +1236,7 @@ End If
 ' in Dict is 0 or 1, no
 ' sorting is required.
 ''''''''''''''''''''''''''''
-If (dict.count = 0) Or (dict.count = 1) Then
+If (dict.Count = 0) Or (dict.Count = 1) Then
     Exit Sub
 End If
 
@@ -1252,9 +1252,9 @@ If SortByKey = True Then
     ' Dict object, and load that array
     ' with the key names.
     ''''''''''''''''''''''''''''''''''''''''
-    ReDim arr(0 To dict.count - 1)
+    ReDim arr(0 To dict.Count - 1)
     
-    For Ndx = 0 To dict.count - 1
+    For Ndx = 0 To dict.Count - 1
         arr(Ndx) = dict.Keys(Ndx)
     Next Ndx
     
@@ -1267,7 +1267,7 @@ If SortByKey = True Then
     ' our sorted array of keys Arr, and the
     ' Item comes from the original Dict object.
     ''''''''''''''''''''''''''''''''''''''''''''
-    For Ndx = 0 To dict.count - 1
+    For Ndx = 0 To dict.Count - 1
         KeyValue = arr(Ndx)
         TempDict.Add Key:=KeyValue, Item:=dict.Item(KeyValue)
     Next Ndx
@@ -1291,10 +1291,10 @@ Else
     ' This keeps the association between the
     ' item and its key.
     '''''''''''''''''''''''''''''''''''''''''''''''
-    ReDim arr(0 To dict.count - 1)
-    ReDim VTypes(0 To dict.count - 1)
+    ReDim arr(0 To dict.Count - 1)
+    ReDim VTypes(0 To dict.Count - 1)
 
-    For Ndx = 0 To dict.count - 1
+    For Ndx = 0 To dict.Count - 1
         If (IsObject(dict.Items(Ndx)) = True) Or _
             (IsArray(dict.Items(Ndx)) = True) Or _
             VarType(dict.Items(Ndx)) = vbUserDefinedType Then

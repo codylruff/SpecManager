@@ -62,7 +62,7 @@ Public Sub ExportAll()
     Const Padding = 24
 
     Dim VBComponent As Object
-    Dim count As Integer
+    Dim Count As Integer
     Dim path As String
     Dim directory As String
     Dim extension As String
@@ -93,7 +93,7 @@ Public Sub ExportAll()
         False, _
         "Spec Manager")
     
-    count = 0
+    Count = 0
     
     lngCounter = lngCounter + 1
     Call modProgress.ShowProgress( _
@@ -137,7 +137,7 @@ Public Sub ExportAll()
             If Err.Number <> 0 Then
                 Logger.Log "Failed to export " & VBComponent.Name & " to " & path
             Else
-                count = count + 1
+                Count = Count + 1
                 Logger.Log "Exported " & Left$(VBComponent.Name & ":" & Space(Padding), Padding) & path
             End If
 
@@ -170,7 +170,7 @@ Public Sub ExitApp()
 'This exits the application after saving the thisworkbook.
     Dim w As Window
     SpecManager.StopApp
-    If Windows.count > 1 Then
+    If Windows.Count > 1 Then
         For Each w In Windows
             If w.Parent.Name = ThisWorkbook.Name Then
                 Application.Visible = True
@@ -195,7 +195,7 @@ Public Sub ClearForm(frm)
             Case "TextBox"
                 ctl.text = vbNullString
             Case "CheckBox", "OptionButton", "ToggleButton"
-                ctl.value = False
+                ctl.Value = False
             Case "ComboBox", "ListBox"
                 ctl.ListIndex = -1
             Case Else

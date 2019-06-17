@@ -28,7 +28,7 @@ End Function
 Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecificationTemplate
     Dim template As SpecificationTemplate
     Set template = New SpecificationTemplate
-    record.SetDictionary
+    ' obsoleted
     With record.Fields
         template.JsonToObject .Item("Properties_Json"), .Item("Spec_Type"), .Item("Revision"), .Item("Product_Line")
     End With

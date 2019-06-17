@@ -157,7 +157,7 @@ Function SelectAllSpecifications(spec_type As String) As VBA.Collection
     Logger.Log "Selecting all specifications . . . "
     SQLstmt = "SELECT * FROM standard_specifications WHERE Spec_Type ='" & spec_type & "'"
     Set record = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
-    record.SetDictionary
+    ' obsoleted
     Set SelectAllSpecifications = record.records
 End Function
 
@@ -172,7 +172,7 @@ Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As St
     db.selectQry SQLstmt
     record.Data = db.Data
     record.Header = db.Header
-    record.rows = db.NumRows
+    record.Rows = db.NumRows
     record.columns = db.NumColumns
     Set ExecuteSQLSelect = record
     Exit Function

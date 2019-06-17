@@ -17,7 +17,7 @@ End Function
 Function GetPrivledges(Name As String) As Long
     Dim record As DatabaseRecord
     Set record = DataAccess.GetUser(Name)
-    record.SetDictionary
+    ' obsoleted
     If record.Fields Is Nothing Then
         GetPrivledges = DB_SELECT_FAILURE
     Else
@@ -51,7 +51,7 @@ Public Sub ConfigControl()
         formPassword.Show
     Else
         Application.DisplayAlerts = True
-        If Windows.count <> 1 Then
+        If Windows.Count <> 1 Then
             For Each w In Windows
                 If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
             Next w
@@ -69,7 +69,7 @@ Public Sub Open_Config(Password As String)
     Dim w As Window
     If Password = "@Wmp9296bm4ddw" Then
         Application.DisplayAlerts = True
-        If Windows.count <> 1 Then
+        If Windows.Count <> 1 Then
             For Each w In Windows
                 If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
             Next w

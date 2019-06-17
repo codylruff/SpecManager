@@ -114,7 +114,7 @@ Function ListAllTemplateTypes() As Collection
     Dim coll As Collection
     Set coll = New Collection
     Set record = DataAccess.GetTemplateTypes
-    record.SetDictionary
+    ' obsoleted
     Logger.Log "Listing all template types (spec Types) . . . "
     For Each dict In record.records
         coll.Add dict.Item("Spec_Type")
@@ -181,12 +181,12 @@ Function GetSpecifications(material_id As String) As Object
     On Error GoTo NullSpecException
 
     Set record = DataAccess.GetSpecificationRecords(MaterialInputValidation(material_id))
-    record.SetDictionary
+    ' obsoleted
 
     Set json_coll = record.records
     Set specs_dict = Factory.CreateDictionary
     
-    If json_coll.count = 0 Then
+    If json_coll.Count = 0 Then
         Set GetSpecifications = Nothing
         Exit Function
     Else
@@ -330,8 +330,8 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     For Each dict In dicts
         Set App.current_spec = Factory.CreateSpecFromDict(dict)
         props = App.current_spec.ToArray
-        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).value = App.current_spec.Header
-        ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).value = props
+        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Value = App.current_spec.Header
+        ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).Value = props
         i = i + 1
     Next dict
     ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).columns.AutoFit
@@ -355,11 +355,11 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
                 dict.Add .Cells(1, k), .Cells(i, k)
             Next k
             json_string = JsonVBA.ConvertToJson(dict)
-            .Cells(i, num_cols + start_col).value = json_string
+            .Cells(i, num_cols + start_col).Value = json_string
             spec_dict.Add "Properties_Json", json_string
             spec_dict.Add "Tolerances_Json", "{}"
-            spec_dict.Add "Material_Id", .Cells(i, 1).value
-            spec_dict.Add "Spec_Type", .Cells(i, 2).value
+            spec_dict.Add "Material_Id", .Cells(i, 1).Value
+            spec_dict.Add "Spec_Type", .Cells(i, 2).Value
             spec_dict.Add "Revision", 1
             Set new_spec = Factory.CreateSpecFromDict(spec_dict)
             If DataAccess.PushSpec(new_spec) <> DB_PUSH_SUCCESS Then
@@ -388,6 +388,6 @@ Public Sub CopyPropertiesFromFile()
         style_number = Mid(ws.Cells(r, 1), 6, 3)
         json_file_path = ThisWorkbook.path & "\RBAs\" & style_number & ".json"
         json_string = Replace(JsonVBA.ReadJsonFileToString(json_file_path), "NaN", vbNullString)
-        ws.Cells(r, 2).value = json_string
+        ws.Cells(r, 2).Value = json_string
     Next r
 End Sub

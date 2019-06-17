@@ -17,7 +17,7 @@ End Sub
 Public Sub Log(text As String)
     If buffer Is Nothing Then Set buffer = New VBA.Collection
     buffer.Add AddLine(text)
-    Debug.Print Logger.printf("{0} : {1}", buffer(buffer.count)(0), buffer(buffer.count)(1))
+    Debug.Print Logger.printf("{0} : {1}", buffer(buffer.Count)(0), buffer(buffer.Count)(1))
 End Sub
 
 Public Sub Error(function_name As String)
@@ -57,7 +57,7 @@ Public Sub SaveLog(Optional file_name As String = "runtime")
     If Not FSO.FolderExists(folder_path) Then FSO.CreateFolder folder_path
     Logger.Log "Saving : " & file_name & ".log"
     Set stream = FSO.CreateTextFile(file_path, True)
-    For i = 1 To buffer.count
+    For i = 1 To buffer.Count
       stream.WriteLine Logger.printf("{0} : {1}", buffer(i)(0), buffer(i)(1))
     Next i
     stream.Close

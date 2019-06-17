@@ -13,8 +13,18 @@ Private m_header    As Variant
 Private m_data      As Variant
 Private rows_       As Long
 Private columns_    As Long
-Public Fields       As Object
+Public m_fields     As Object
 Private m_records   As VBA.Collection
+
+Private Property Set Fields(ByRef obj As Object)
+    Set m_fields = obj
+End Property
+Public Property Get Fields() As Object
+    If m_fields Is Nothing Then
+       InitializeRecords
+    End If
+    Set Fields = m_fields
+End Property
 
 Private Property Set records(ByRef obj As VBA.Collection)
     Set m_records = obj
@@ -25,13 +35,14 @@ Public Property Get records() As VBA.Collection
     End If
     Set records = m_records
 End Property
+
 Public Property Get Header() As Variant: Header = m_header: End Property
-Public Property Let Header(ByVal value As Variant): m_header = value: End Property
+Public Property Let Header(ByVal Value As Variant): m_header = Value: End Property
 Public Property Get Data() As Variant: Data = m_data: End Property
-Public Property Let Data(ByVal value As Variant): m_data = value: End Property
-Public Property Let rows(value As Long): rows_ = value: End Property
-Public Property Get rows() As Long: rows = rows_: End Property
-Public Property Let columns(value As Long): columns_ = value: End Property
+Public Property Let Data(ByVal Value As Variant): m_data = Value: End Property
+Public Property Let Rows(Value As Long): rows_ = Value: End Property
+Public Property Get Rows() As Long: Rows = rows_: End Property
+Public Property Let columns(Value As Long): columns_ = Value: End Property
 Public Property Get columns() As Long: columns = columns_: End Property
 
 Private Function InitializeRecords()
@@ -39,8 +50,8 @@ Private Function InitializeRecords()
     Dim dict As Object
     Dim coll As VBA.Collection
     Set coll = New VBA.Collection
-    Dim i, j As Longi
-    For j = 1 To rows
+    Dim i, j As Long
+    For j = 1 To Rows
         Set dict = Factory.CreateDictionary()
         Logger.Log "Checking Row " & j & " . . . "
         For i = 1 To columns

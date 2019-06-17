@@ -48,8 +48,8 @@ Sub CreateTemplate_Test()
     'GuiCommands.GoToMain
     SpecManager.RestartApp
     ' 2. Enter a template name "test_template"
-    formNewTemplateInput.cboProductLine.value = "Test"
-    formNewTemplateInput.txtTemplateName.value = "test_template"
+    formNewTemplateInput.cboProductLine.Value = "Test"
+    formNewTemplateInput.txtTemplateName.Value = "test_template"
     ' 3. Click the Submit button
     formNewTemplateInput.Continue
     ' 4. Change txtPropertyName = "test_property"
@@ -128,11 +128,9 @@ Sub EditTemplate_Test()
     formEditTemplate.RemoveProperty
     ' 10. Save Changes
     formEditTemplate.SaveChanges
-    ' 11. Remove Spec Template
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_template)
-    ' 12. Report pass / fail
+    ' 11. Report pass / fail
     ' TODO:
-    ' 13. Go to main menu
+    ' 12. Go to main menu
     Logger.Log "------------- End Edit Template Test ----------------"
 End Sub
 
@@ -175,7 +173,10 @@ Sub ViewSpecification_AfterEdit_Test()
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
+    ' 7. Remove Spec
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec)
+    ' 8. Remove Spec Template
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_template)
     Logger.Log "------------- End View Specification Test(2) ---------"
 End Sub
 
