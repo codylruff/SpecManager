@@ -10,12 +10,17 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Public Type SQL
-    Select As Dictionary
+    Select As VBA.Collection
     From As String
     Insert As Dictionary
     Where As Dictionary
 End Type
 
 Public Function ExecuteSQL() As Long
+    Dim SQLstmt As String
+    If SelectAll Then
+        SQLstmt = “Select * From” & SQL.From
+From
 ExecuteSQL = 0
 End Function
+
