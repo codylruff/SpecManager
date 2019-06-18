@@ -20,7 +20,6 @@ Public Function ExecuteSQL() As Long
     Dim SQLstmt As String
     If SelectAll Then
         SQLstmt = “Select * From” & SQL.From
-From
-ExecuteSQL = 0
+    ExecuteSQL = 0
 End Function
 
