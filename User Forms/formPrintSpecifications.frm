@@ -86,9 +86,17 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
             If setup_only Then
                Dim setup_spec As Specification
                If App.specs.exists("Setup Requirements") Then
-                  ' Print only the setup spec
-                  Set setup_spec = App.specs.Item("Setup Requirements")
-
+                    ' Print only the setup spec
+                    Set new_sht = Utils.CreateNewSheet(spec.SpecType)
+                    Set spec = App.specs.Item("Setup Requirements")
+                    App.console.PrintObjectToSheet spec, new_sht, vbNullString
+                    Application.PrintCommunication = False
+                    With new_sht.PageSetup
+                        .FitToPagesWide = 1
+                        .FitToPagesTall = False
+                    End With
+                    Application.PrintCommunication = True
+                    Utils.PrintSheet new_sht
                Else
                   MsgBox "No Setup Requirements Exist for this Material."
                End If

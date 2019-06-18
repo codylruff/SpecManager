@@ -42,7 +42,7 @@ Public Const SQLITE_TEXT     As Long = 3
 Public Const SQLITE_BLOB     As Long = 4
 Public Const SQLITE_NULL     As Long = 5
 
-' SQLite atandard return value
+' SQLite atandard return
 Public Const SQLITE_OK         As Long = 0   ' Successful result
 Public Const SQLITE_ERROR      As Long = 1   ' SQL error or missing database
 Public Const SQLITE_INTERNAL   As Long = 2   ' Internal logic error in SQLite

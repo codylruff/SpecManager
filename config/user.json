@@ -1,9 +1,6 @@
 {
   "name": "CRuff",
-  "default_printer": "\\\\usdcfssc\\U4A1 on Ne05:",
-  "app_version": "0.0.1",
-  "default_log_level": 2,
-  "privledge_level": "25",
-  "product_line": "Admin",
-  "repo_path": "C:\\Users\\cruff\\source\\SM - Final"
+  "privledge_level": 20,
+  "product_line": "User",
+  "default_printer": "\\\\usdcfssc\\U4A1 on Ne05:"
 }

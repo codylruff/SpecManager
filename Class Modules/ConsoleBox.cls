@@ -109,72 +109,87 @@ Private Sub InsertImage(sht As Worksheet, img_path As String, row_id As Integer)
     Set img = ActiveSheet.Pictures.Insert(img_path)
 End Sub
 
+Private Sub LoadRbaToSheet(spec As Specification)
+' Load values from rba properties into cooresponding named range
+    Dim nr As Variant
+    Dim rng As Range
+    For Each nr In spec.Properties
+        Set rng = shtRBA.Range(CStr(nr))
+        Utils.Insert rng, spec.Properties(CStr(nr))
+    Next nr
+End Sub
+
 Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString)
 ' Print object to specified worksheet starting in cell "A1"
     Dim Key As Variant
     Dim i As Integer
     Dim path As String
-    
+
     ' Disable updates to the gui during processing
     Application.DisplayAlerts = False
-    ' Clear any existing information from the sheet
-    sht.Cells.ClearContents
-
-    ' Insert/Format body of the specification
-    With sht
-        ' Spec Header
-        .Range("A" & 1).Value = spec.SpecType & " : "
-        .Range("B" & 1).Value = spec.MaterialId
-        .Range("A" & 1).Font.Bold = True
-        .Range("A" & 1).Font.Size = 18
-        .Range("B" & 1).Font.Bold = True
-        .Range("B" & 1).Font.Size = 18
-        If prod_order <> vbNullString Then
-            .Range("A" & 2).Value = "Production Order : "
-            .Range("B" & 2).Value = prod_order
-            .Range("A" & 2).Font.Bold = True
-            .Range("A" & 2).Font.Size = 18
-            .Range("B" & 2).Font.Bold = True
-            .Range("B" & 2).Font.Size = 18
-            .Range("B" & 2).HorizontalAlignment = xlHAlignLeft
-            i = 4
-        Else
-            i = 3
-        End If
-        ' Spec Properties
-        For Each Key In spec.Properties
-            If Not spec.Properties(Key) = vbNullString Then
-                .Range("A" & i).Value = CStr(Key) & " : "
-                .Range("B" & i).Value = CStr(spec.Properties(CStr(Key)))
-                .Range("A" & i).Font.Size = 17
-                .Range("B" & i).Font.Size = 17
-                .Range("B" & i).Font.Bold = True
-                .Range("B" & i).HorizontalAlignment = xlHAlignLeft
-                If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(171) Then
-                    .Range("B" & i).Font.Name = "Wingdings"
-                ElseIf spec.Properties(Key) = Chr(210) Then
-                    .Range("B" & i).Font.Name = "Wingdings 2"
+    Select Case spec.SpecType
+        Case "Weaving RBA"
+            LoadRbaToSheet spec
+        Case Else
+            ' Insert/Format body of the specification
+            With sht
+                ' Clear any existing information from the sheet
+                .Cells.ClearContents
+                ' Spec Header
+                .Range("A" & 1).Value = spec.SpecType & " : "
+                .Range("B" & 1).Value = spec.MaterialId
+                .Range("A" & 1).Font.Bold = True
+                .Range("A" & 1).Font.Size = 18
+                .Range("B" & 1).Font.Bold = True
+                .Range("B" & 1).Font.Size = 18
+                If prod_order <> vbNullString Then
+                    .Range("A" & 2).Value = "Production Order : "
+                    .Range("B" & 2).Value = prod_order
+                    .Range("A" & 2).Font.Bold = True
+                    .Range("A" & 2).Font.Size = 18
+                    .Range("B" & 2).Font.Bold = True
+                    .Range("B" & 2).Font.Size = 18
+                    .Range("B" & 2).HorizontalAlignment = xlHAlignLeft
+                    i = 4
                 Else
-                    .Range("B" & i).Font.Name = "Calibri"
+                    i = 3
                 End If
-            Else
-                .Range("A" & i).Value = CStr(Key)
-                .Range("B" & i).Value = "-"
-                .Range("A" & i).Font.Size = 17
-                .Range("B" & i).Font.Size = 17
-                .Range("B" & i).Font.Bold = True
+                ' Spec Properties
+                For Each Key In spec.Properties
+                    If Not spec.Properties(Key) = vbNullString Then
+                        .Range("A" & i).Value = CStr(Key) & " : "
+                        .Range("B" & i).Value = CStr(spec.Properties(CStr(Key)))
+                        .Range("A" & i).Font.Size = 17
+                        .Range("B" & i).Font.Size = 17
+                        .Range("B" & i).Font.Bold = True
+                        .Range("B" & i).HorizontalAlignment = xlHAlignLeft
+                        If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(171) Then
+                            .Range("B" & i).Font.Name = "Wingdings"
+                        ElseIf spec.Properties(Key) = Chr(210) Then
+                            .Range("B" & i).Font.Name = "Wingdings 2"
+                        Else
+                            .Range("B" & i).Font.Name = "Calibri"
+                        End If
+                    Else
+                        .Range("A" & i).Value = CStr(Key)
+                        .Range("B" & i).Value = "-"
+                        .Range("A" & i).Font.Size = 17
+                        .Range("B" & i).Font.Size = 17
+                        .Range("B" & i).Font.Bold = True
+                    End If
+                    i = i + 1
+                Next Key
+                .columns("A:G").AutoFit
+                i = i + 2
+            End With
+            ' Insert images per requirements
+            If spec.SpecType = "Ballistic Testing Requirements" Then
+                InsertImage sht, GetBallisticPackageImagePath, i
+            ElseIf spec.SpecType = "Testing Requirements" Then
+                InsertImage sht, GetWeavePatternImagePath(spec.MaterialId), i
             End If
-            i = i + 1
-        Next Key
-        .columns("A:G").AutoFit
-        i = i + 2
-    End With
-    ' Insert images per requirements
-    If spec.SpecType = "Ballistic Testing Requirements" Then
-        InsertImage sht, GetBallisticPackageImagePath, i
-    ElseIf spec.SpecType = "Testing Requirements" Then
-        InsertImage sht, GetWeavePatternImagePath(spec.MaterialId), i
-    End If
+    
+    End Select
     ' Enable updates to the gui after processing
     Application.DisplayAlerts = True
 End Sub

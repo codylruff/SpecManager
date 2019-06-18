@@ -133,7 +133,8 @@ Function DeleteSpec(ByRef spec As Specification, Optional tbl As String = "stand
     On Error GoTo DbDeleteFailException
     ' Create SQL statement from objects
     SQLstmt = "DELETE FROM " & tbl & " " & _
-              "WHERE Material_Id ='" & spec.MaterialId & "' AND Revision ='" & spec.Revision & "'"
+              "WHERE Material_Id ='" & spec.MaterialId & "' AND Revision ='" & spec.Revision & "'" & _
+              " AND Spec_Type ='" & spec.SpecType & "'"
     ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     DeleteSpec = DB_DELETE_SUCCESS
     Exit Function

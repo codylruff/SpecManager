@@ -34,10 +34,9 @@ Public Sub InitializeApplication()
     GoToMain
     'Exit Sub
 'UpdateFailure:
-'    Logger.Log "Update failed"
+'    Logger.Log "Update failed" 
 '    MsgBox "Update Failed Contact Administrator!"
 End Sub
-
 
 Public Sub GoToMain()
 'Opens the main menu form.

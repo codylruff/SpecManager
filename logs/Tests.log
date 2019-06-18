@@ -1,209 +1,268 @@
-30-May-2019 15:29:47.23 : ----------- Starting Test Suite -----------------
-30-May-2019 15:29:47.24 : ------------- Starting Application
-30-May-2019 15:29:47.25 : Searching for user name . . . 
-30-May-2019 15:29:47.26 : -----------------------------------
-30-May-2019 15:29:47.27 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
-30-May-2019 15:29:47.28 : Checking Row 1 . . . 
-30-May-2019 15:29:47.29 : Column 1 : Name, Row 1 : CRUFF
-30-May-2019 15:29:47.30 : Column 2 : Protection, Row 1 : 25
-30-May-2019 15:29:47.31 : Column 3 : Filtration, Row 1 : 25
-30-May-2019 15:29:47.32 : Column 4 : Chemical, Row 1 : 25
-30-May-2019 15:29:47.33 : Column 5 : Privledge_Level, Row 1 : 25
-30-May-2019 15:29:47.34 : Column 6 : Product_Line, Row 1 : Admin
-30-May-2019 15:29:47.35 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
-30-May-2019 15:29:47.36 : ------------- Start Create Template Test ---------
-30-May-2019 15:29:47.37 : ------------- Restarting Application
-30-May-2019 15:29:47.38 : --------- formNewTemplateInput ----------
-30-May-2019 15:29:47.39 : Template Input Pass
-30-May-2019 15:29:47.40 : --------- Start formCreateGeneric ----------
-30-May-2019 15:29:47.41 : -----------------------------------
-30-May-2019 15:29:47.42 : INSERT INTO template_specifications (Time_Stamp, Properties_Json, Revision, Spec_Type, Product_Line) VALUES ('5/30/2019 3:29:47 PM','{"test_property":""}', '1', 'test_template', '')
-30-May-2019 15:29:47.45 : Data Access returned: 0, New Template Succesfully Saved.
-30-May-2019 15:29:47.46 : Create Template Pass
-30-May-2019 15:29:47.47 : ------------- End Create Template Test ------------
-30-May-2019 15:29:47.48 : ------------- Start Create Specification Test ---------
-30-May-2019 15:29:47.49 : ------------- Restarting Application
-30-May-2019 15:29:47.50 : --------- formNewSpecInput ----------
-30-May-2019 15:29:47.51 : Get all template types . . . 
-30-May-2019 15:29:47.52 : -----------------------------------
-30-May-2019 15:29:47.53 : SELECT * FROM template_specifications
-30-May-2019 15:29:47.54 : Checking Row 1 . . . 
-30-May-2019 15:29:47.55 : Column 1 : Id, Row 1 : 3
-30-May-2019 15:29:47.56 : Column 2 : Spec_Type, Row 1 : Testing Requirements
-30-May-2019 15:29:47.57 : Column 3 : Time_Stamp, Row 1 : 5/17/2019 11:56:45 AM
-30-May-2019 15:29:47.58 : Column 4 : Properties_Json, Row 1 : {"QC Sample Length":"","Warp/Pick Count":"","Usable Width":"","Dry Weight":"","Fabric Breaking Strength":"","Yarn Breaking Strength":"","Thickness":"","Crimp":"","Conditioned Weight":"","Resin Content":"","Volatile Content":"","Glass Transition (Tg)":"","Laminated Weight":"","Coated Weight":""}
-30-May-2019 15:29:47.59 : Column 5 : Revision, Row 1 : 1
-30-May-2019 15:29:47.60 : Column 6 : Product_Line, Row 1 : Protection
-30-May-2019 15:29:47.61 : Checking Row 2 . . . 
-30-May-2019 15:29:47.62 : Column 1 : Id, Row 2 : 4
-30-May-2019 15:29:47.63 : Column 2 : Spec_Type, Row 2 : Ballistic Testing Requirements
-30-May-2019 15:29:47.64 : Column 3 : Time_Stamp, Row 2 : 5/30/2019 1:49:36 PM
-30-May-2019 15:29:47.65 : Column 4 : Properties_Json, Row 2 : {"Sample Length":"","Number of Layers":""}
-30-May-2019 15:29:47.66 : Column 5 : Revision, Row 2 : 1
-30-May-2019 15:29:47.67 : Column 6 : Product_Line, Row 2 : Protection
-30-May-2019 15:29:47.68 : Checking Row 3 . . . 
-30-May-2019 15:29:47.69 : Column 1 : Id, Row 3 : 5
-30-May-2019 15:29:47.70 : Column 2 : Spec_Type, Row 3 : test_template
-30-May-2019 15:29:47.71 : Column 3 : Time_Stamp, Row 3 : 5/30/2019 3:29:47 PM
-30-May-2019 15:29:47.72 : Column 4 : Properties_Json, Row 3 : {"test_property":""}
-30-May-2019 15:29:47.73 : Column 5 : Revision, Row 3 : 1
-30-May-2019 15:29:47.74 : Column 6 : Product_Line, Row 3 : 
-30-May-2019 15:29:47.75 : Listing all template types (spec Types) . . . 
-30-May-2019 15:29:47.76 : Searching for test_template template . . . 
-30-May-2019 15:29:47.77 : -----------------------------------
-30-May-2019 15:29:47.78 : SELECT * FROM template_specifications WHERE Spec_Type= 'test_template'
-30-May-2019 15:29:47.79 : Succesfully retrieved template for : test_template
-30-May-2019 15:29:47.80 : Checking Row 1 . . . 
-30-May-2019 15:29:47.81 : Column 1 : Id, Row 1 : 5
-30-May-2019 15:29:47.82 : Column 2 : Spec_Type, Row 1 : test_template
-30-May-2019 15:29:47.83 : Column 3 : Time_Stamp, Row 1 : 5/30/2019 3:29:47 PM
-30-May-2019 15:29:47.84 : Column 4 : Properties_Json, Row 1 : {"test_property":""}
-30-May-2019 15:29:47.85 : Column 5 : Revision, Row 1 : 1
-30-May-2019 15:29:47.86 : Column 6 : Product_Line, Row 1 : 
-30-May-2019 15:29:47.87 : Spec Input Pass
-30-May-2019 15:29:47.88 : --------- formCreateSpec ----------
-30-May-2019 15:29:47.89 : Printing Specification . . . 
-30-May-2019 15:29:47.90 : Printing Specification . . . 
-30-May-2019 15:29:47.91 : -----------------------------------
-30-May-2019 15:29:47.92 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) VALUES ('TEST_SPECIFICATION', '5/30/2019 3:29:47 PM', '{"test_property":"Create specification test"}', '{"test_property":"Create specification test"}', '1.0', 'test_template')
-30-May-2019 15:29:47.95 : Data Access returned: 0
-30-May-2019 15:29:47.96 : Create Spec Pass
-30-May-2019 15:29:47.97 : ------------- End Create Specification Test ---------
-30-May-2019 15:29:47.98 : ------------- Start View Specification Test ---------
-30-May-2019 15:29:47.99 : ------------- Restarting Application
-30-May-2019 15:29:47.00 : --------- Start formViewSpecs ----------
-30-May-2019 15:29:48.00 : ------------- Restarting Application
-30-May-2019 15:29:48.01 : Searching for TEST_SPECIFICATION specifications . . . 
-30-May-2019 15:29:48.02 : -----------------------------------
-30-May-2019 15:29:48.03 : SELECT * FROM  standard_specifications WHERE Material_Id= 'TEST_SPECIFICATION'
-30-May-2019 15:29:48.04 : Checking Row 1 . . . 
-30-May-2019 15:29:48.05 : Column 1 : Id, Row 1 : 1414
-30-May-2019 15:29:48.06 : Column 2 : Material_Id, Row 1 : TEST_SPECIFICATION
-30-May-2019 15:29:48.07 : Column 3 : Time_Stamp, Row 1 : 5/30/2019 3:29:47 PM
-30-May-2019 15:29:48.08 : Column 4 : Properties_Json, Row 1 : {"test_property":"Create specification test"}
-30-May-2019 15:29:48.09 : Column 5 : Spec_Type, Row 1 : test_template
-30-May-2019 15:29:48.10 : Column 6 : Revision, Row 1 : 1.0
-30-May-2019 15:29:48.11 : Column 7 : Tolerances_Json, Row 1 : {"test_property":"Create specification test"}
-30-May-2019 15:29:48.12 : Succesfully retrieved specifications for : TEST_SPECIFICATION
-30-May-2019 15:29:48.13 : Printing Specification . . . 
-30-May-2019 15:29:48.14 : ------------- End View Specification Test(1) --------
-30-May-2019 15:29:48.15 : ------------- Start Edit Template Test --------------
-30-May-2019 15:29:48.16 : ------------- Restarting Application
-30-May-2019 15:29:48.17 : --------- Start formEditTemplate ----------
-30-May-2019 15:29:48.18 : Get all template types . . . 
-30-May-2019 15:29:48.19 : -----------------------------------
-30-May-2019 15:29:48.20 : SELECT * FROM template_specifications
-30-May-2019 15:29:48.21 : Checking Row 1 . . . 
-30-May-2019 15:29:48.22 : Column 1 : Id, Row 1 : 3
-30-May-2019 15:29:48.23 : Column 2 : Spec_Type, Row 1 : Testing Requirements
-30-May-2019 15:29:48.24 : Column 3 : Time_Stamp, Row 1 : 5/17/2019 11:56:45 AM
-30-May-2019 15:29:48.25 : Column 4 : Properties_Json, Row 1 : {"QC Sample Length":"","Warp/Pick Count":"","Usable Width":"","Dry Weight":"","Fabric Breaking Strength":"","Yarn Breaking Strength":"","Thickness":"","Crimp":"","Conditioned Weight":"","Resin Content":"","Volatile Content":"","Glass Transition (Tg)":"","Laminated Weight":"","Coated Weight":""}
-30-May-2019 15:29:48.26 : Column 5 : Revision, Row 1 : 1
-30-May-2019 15:29:48.27 : Column 6 : Product_Line, Row 1 : Protection
-30-May-2019 15:29:48.28 : Checking Row 2 . . . 
-30-May-2019 15:29:48.29 : Column 1 : Id, Row 2 : 4
-30-May-2019 15:29:48.30 : Column 2 : Spec_Type, Row 2 : Ballistic Testing Requirements
-30-May-2019 15:29:48.31 : Column 3 : Time_Stamp, Row 2 : 5/30/2019 1:49:36 PM
-30-May-2019 15:29:48.32 : Column 4 : Properties_Json, Row 2 : {"Sample Length":"","Number of Layers":""}
-30-May-2019 15:29:48.33 : Column 5 : Revision, Row 2 : 1
-30-May-2019 15:29:48.34 : Column 6 : Product_Line, Row 2 : Protection
-30-May-2019 15:29:48.35 : Checking Row 3 . . . 
-30-May-2019 15:29:48.36 : Column 1 : Id, Row 3 : 5
-30-May-2019 15:29:48.37 : Column 2 : Spec_Type, Row 3 : test_template
-30-May-2019 15:29:48.38 : Column 3 : Time_Stamp, Row 3 : 5/30/2019 3:29:47 PM
-30-May-2019 15:29:48.39 : Column 4 : Properties_Json, Row 3 : {"test_property":""}
-30-May-2019 15:29:48.40 : Column 5 : Revision, Row 3 : 1
-30-May-2019 15:29:48.41 : Column 6 : Product_Line, Row 3 : 
-30-May-2019 15:29:48.42 : Listing all template types (spec Types) . . . 
-30-May-2019 15:29:48.43 : Searching for test_template template . . . 
-30-May-2019 15:29:48.44 : -----------------------------------
-30-May-2019 15:29:48.45 : SELECT * FROM template_specifications WHERE Spec_Type= 'test_template'
-30-May-2019 15:29:48.46 : Succesfully retrieved template for : test_template
-30-May-2019 15:29:48.47 : Checking Row 1 . . . 
-30-May-2019 15:29:48.48 : Column 1 : Id, Row 1 : 5
-30-May-2019 15:29:48.49 : Column 2 : Spec_Type, Row 1 : test_template
-30-May-2019 15:29:48.50 : Column 3 : Time_Stamp, Row 1 : 5/30/2019 3:29:47 PM
-30-May-2019 15:29:48.51 : Column 4 : Properties_Json, Row 1 : {"test_property":""}
-30-May-2019 15:29:48.52 : Column 5 : Revision, Row 1 : 1
-30-May-2019 15:29:48.53 : Column 6 : Product_Line, Row 1 : 
-30-May-2019 15:29:48.54 : Printing Template . . . 
-30-May-2019 15:29:48.55 : Printing Template . . . 
-30-May-2019 15:29:48.56 : -----------------------------------
-30-May-2019 15:29:48.57 : UPDATE template_specifications SET Time_Stamp ='5/30/2019 3:29:48 PM', Properties_Json ='{"test_property":"","new_test_property":""}', Revision ='2.0' WHERE Spec_Type ='test_template'
-30-May-2019 15:29:48.59 : Data Access returned: 0
-30-May-2019 15:29:48.60 : Edit Template Pass
-30-May-2019 15:29:48.61 : Printing Template . . . 
-30-May-2019 15:29:48.62 : -----------------------------------
-30-May-2019 15:29:48.63 : UPDATE template_specifications SET Time_Stamp ='5/30/2019 3:29:48 PM', Properties_Json ='{"new_test_property":""}', Revision ='3.0' WHERE Spec_Type ='test_template'
-30-May-2019 15:29:48.65 : Data Access returned: 0
-30-May-2019 15:29:48.66 : Edit Template Pass
-30-May-2019 15:29:48.67 : -----------------------------------
-30-May-2019 15:29:48.68 : DELETE FROM template_specifications WHERE Spec_Type ='test_template' AND Revision ='3.0'
-30-May-2019 15:29:48.70 : SQLite returned : 2
-30-May-2019 15:29:48.71 : ------------- End Edit Template Test ----------------
-30-May-2019 15:29:48.72 : ------------- Start Edit Specification Test ---------
-30-May-2019 15:29:48.73 : ------------- Restarting Application
-30-May-2019 15:29:48.74 : --------- Start formSpecConfig ----------
-30-May-2019 15:29:48.75 : Searching for TEST_SPECIFICATION specifications . . . 
-30-May-2019 15:29:48.76 : -----------------------------------
-30-May-2019 15:29:48.77 : SELECT * FROM  standard_specifications WHERE Material_Id= 'TEST_SPECIFICATION'
-30-May-2019 15:29:48.78 : Checking Row 1 . . . 
-30-May-2019 15:29:48.79 : Column 1 : Id, Row 1 : 1414
-30-May-2019 15:29:48.80 : Column 2 : Material_Id, Row 1 : TEST_SPECIFICATION
-30-May-2019 15:29:48.81 : Column 3 : Time_Stamp, Row 1 : 5/30/2019 3:29:47 PM
-30-May-2019 15:29:48.82 : Column 4 : Properties_Json, Row 1 : {"test_property":"Create specification test"}
-30-May-2019 15:29:48.83 : Column 5 : Spec_Type, Row 1 : test_template
-30-May-2019 15:29:48.84 : Column 6 : Revision, Row 1 : 1.0
-30-May-2019 15:29:48.85 : Column 7 : Tolerances_Json, Row 1 : {"test_property":"Create specification test"}
-30-May-2019 15:29:48.86 : Succesfully retrieved specifications for : TEST_SPECIFICATION
-30-May-2019 15:29:48.87 : Printing Specification . . . 
-30-May-2019 15:29:48.88 : Printing Specification . . . 
-30-May-2019 15:29:48.89 : -----------------------------------
-30-May-2019 15:29:48.90 : INSERT INTO archived_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) VALUES ('TEST_SPECIFICATION', '5/30/2019 3:29:48 PM', '{"test_property":"Create specification test","new_test_property":"Edit specification test"}', '{"test_property":"Create specification test"}', '1.0', 'test_template')
-30-May-2019 15:29:48.93 : -----------------------------------
-30-May-2019 15:29:48.94 : DELETE FROM standard_specifications WHERE Material_Id ='TEST_SPECIFICATION' AND Revision ='1.0'
-30-May-2019 15:29:48.97 : -----------------------------------
-30-May-2019 15:29:48.98 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) VALUES ('TEST_SPECIFICATION', '5/30/2019 3:29:48 PM', '{"test_property":"Create specification test","new_test_property":"Edit specification test"}', '{"test_property":"Create specification test"}', '2', 'test_template')
-30-May-2019 15:29:49.01 : Data Access returned: 0
-30-May-2019 15:29:49.02 : New Specification Succesfully Saved.
-30-May-2019 15:29:49.03 : -----------------------------------
-30-May-2019 15:29:49.04 : DELETE FROM archived_specifications WHERE Material_Id ='TEST_SPECIFICATION' AND Revision ='1.0'
-30-May-2019 15:29:49.09 : SQLite returned : 2
-30-May-2019 15:29:49.10 : ------------- End Edit Specification Test -----------
-30-May-2019 15:29:49.11 : ------------- Start View Specification Test ---------
-30-May-2019 15:29:49.12 : ------------- Restarting Application
-30-May-2019 15:29:49.13 : ------------- Restarting Application
-30-May-2019 15:29:49.14 : Searching for TEST_SPECIFICATION specifications . . . 
-30-May-2019 15:29:49.15 : -----------------------------------
-30-May-2019 15:29:49.16 : SELECT * FROM  standard_specifications WHERE Material_Id= 'TEST_SPECIFICATION'
-30-May-2019 15:29:49.17 : Checking Row 1 . . . 
-30-May-2019 15:29:49.18 : Column 1 : Id, Row 1 : 1415
-30-May-2019 15:29:49.19 : Column 2 : Material_Id, Row 1 : TEST_SPECIFICATION
-30-May-2019 15:29:49.20 : Column 3 : Time_Stamp, Row 1 : 5/30/2019 3:29:48 PM
-30-May-2019 15:29:49.21 : Column 4 : Properties_Json, Row 1 : {"test_property":"Create specification test","new_test_property":"Edit specification test"}
-30-May-2019 15:29:49.22 : Column 5 : Spec_Type, Row 1 : test_template
-30-May-2019 15:29:49.23 : Column 6 : Revision, Row 1 : 2
-30-May-2019 15:29:49.24 : Column 7 : Tolerances_Json, Row 1 : {"test_property":"Create specification test"}
-30-May-2019 15:29:49.25 : Succesfully retrieved specifications for : TEST_SPECIFICATION
-30-May-2019 15:29:49.26 : Printing Specification . . . 
-30-May-2019 15:29:49.27 : -----------------------------------
-30-May-2019 15:29:49.28 : DELETE FROM standard_specifications WHERE Material_Id ='TEST_SPECIFICATION' AND Revision ='2'
-30-May-2019 15:29:49.30 : SQLite returned : 2
-30-May-2019 15:29:49.31 : ------------- End View Specification Test(2) ---------
-30-May-2019 15:29:49.32 : Searching for user name . . . 
-30-May-2019 15:29:49.33 : -----------------------------------
-30-May-2019 15:29:49.34 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
-30-May-2019 15:29:49.35 : Checking Row 1 . . . 
-30-May-2019 15:29:49.36 : Column 1 : Name, Row 1 : CRUFF
-30-May-2019 15:29:49.37 : Column 2 : Protection, Row 1 : 25
-30-May-2019 15:29:49.38 : Column 3 : Filtration, Row 1 : 25
-30-May-2019 15:29:49.39 : Column 4 : Chemical, Row 1 : 25
-30-May-2019 15:29:49.40 : Column 5 : Privledge_Level, Row 1 : 25
-30-May-2019 15:29:49.41 : Column 6 : Product_Line, Row 1 : Admin
-30-May-2019 15:29:49.42 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
-30-May-2019 15:29:49.43 : --------- End formSpecConfig ----------
-30-May-2019 15:29:49.45 : --------- End formEditTemplate ----------
-30-May-2019 15:29:49.46 : --------- End formViewSpecs ----------
-30-May-2019 15:29:49.48 : --------- End formCreateGeneric ----------
-30-May-2019 15:29:49.49 : ----------- Test Suite Complete ------------------
-30-May-2019 15:29:49.50 : Saving : tests.log
+18-Jun-2019 16:41:21.88 : ----------- Starting Test Suite -----------------
+18-Jun-2019 16:41:21.88 : ------------- Starting Application
+18-Jun-2019 16:41:21.90 : Searching for user name . . . 
+18-Jun-2019 16:41:21.90 : -----------------------------------
+18-Jun-2019 16:41:21.91 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+18-Jun-2019 16:41:21.91 : Checking Row 1 . . . 
+18-Jun-2019 16:41:21.91 : Column 1 : Name, Row 1 : CRUFF
+18-Jun-2019 16:41:21.91 : Column 2 : Protection, Row 1 : 25
+18-Jun-2019 16:41:21.91 : Column 3 : Filtration, Row 1 : 25
+18-Jun-2019 16:41:21.91 : Column 4 : Chemical, Row 1 : 25
+18-Jun-2019 16:41:21.91 : Column 5 : Privledge_Level, Row 1 : 25
+18-Jun-2019 16:41:21.91 : Column 6 : Product_Line, Row 1 : Admin
+18-Jun-2019 16:41:21.91 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+18-Jun-2019 16:41:21.91 : ------------- Start Create Template Test ---------
+18-Jun-2019 16:41:21.93 : ------------- Restarting Application
+18-Jun-2019 16:41:21.93 : --------- formNewTemplateInput ----------
+18-Jun-2019 16:41:21.93 : Template Input Pass
+18-Jun-2019 16:41:21.95 : --------- Start formCreateGeneric ----------
+18-Jun-2019 16:41:21.95 : -----------------------------------
+18-Jun-2019 16:41:21.95 : INSERT INTO template_specifications (Time_Stamp, Properties_Json, Revision, Spec_Type, Product_Line) VALUES ('6/18/2019 4:41:21 PM','{"test_property":""}', '1', 'test_template', '')
+18-Jun-2019 16:41:21.98 : Data Access returned: 0, New Template Succesfully Saved.
+18-Jun-2019 16:41:21.98 : Create Template Pass
+18-Jun-2019 16:41:21.98 : ------------- End Create Template Test ------------
+18-Jun-2019 16:41:21.98 : ------------- Start Create Specification Test ---------
+18-Jun-2019 16:41:21.98 : ------------- Restarting Application
+18-Jun-2019 16:41:21.98 : --------- formNewSpecInput ----------
+18-Jun-2019 16:41:21.98 : Get all template types . . . 
+18-Jun-2019 16:41:21.98 : -----------------------------------
+18-Jun-2019 16:41:21.98 : SELECT * FROM template_specifications
+18-Jun-2019 16:41:21.99 : Listing all template types (spec Types) . . . 
+18-Jun-2019 16:41:21.99 : Checking Row 1 . . . 
+18-Jun-2019 16:41:21.99 : Column 1 : Id, Row 1 : 3
+18-Jun-2019 16:41:21.99 : Column 2 : Spec_Type, Row 1 : Testing Requirements
+18-Jun-2019 16:41:21.99 : Column 3 : Time_Stamp, Row 1 : 5/17/2019 11:56:45 AM
+18-Jun-2019 16:41:21.99 : Column 4 : Properties_Json, Row 1 : {"QC Sample Length":"","Warp/Pick Count":"","Usable Width":"","Dry Weight":"","Fabric Breaking Strength":"","Thickness":"","Crimp":"","Conditioned Weight":"","Residual Shrinkage":"","Yarn Break Force":"","Resin Content":"","Volatile Content":"","Glass Transition (Tg)":"","Laminated Weight":"","Coated Weight":""}
+18-Jun-2019 16:41:21.99 : Column 5 : Revision, Row 1 : 1
+18-Jun-2019 16:41:21.99 : Column 6 : Product_Line, Row 1 : Protection
+18-Jun-2019 16:41:21.99 : Checking Row 2 . . . 
+18-Jun-2019 16:41:21.99 : Column 1 : Id, Row 2 : 4
+18-Jun-2019 16:41:21.99 : Column 2 : Spec_Type, Row 2 : Ballistic Testing Requirements
+18-Jun-2019 16:41:21.99 : Column 3 : Time_Stamp, Row 2 : 5/30/2019 1:49:36 PM
+18-Jun-2019 16:41:21.99 : Column 4 : Properties_Json, Row 2 : {"Sample Length":"","Number of Layers":""}
+18-Jun-2019 16:41:21.99 : Column 5 : Revision, Row 2 : 1
+18-Jun-2019 16:41:21.99 : Column 6 : Product_Line, Row 2 : Protection
+18-Jun-2019 16:41:21.99 : Checking Row 3 . . . 
+18-Jun-2019 16:41:22.01 : Column 1 : Id, Row 3 : 5
+18-Jun-2019 16:41:22.01 : Column 2 : Spec_Type, Row 3 : Weaving RBA
+18-Jun-2019 16:41:22.01 : Column 3 : Time_Stamp, Row 3 : 6/13/2019 3:06:45 PM
+18-Jun-2019 16:41:22.01 : Column 4 : Properties_Json, Row 3 : {"fd_09":"","fd_19":"","fd_29":"","fd_39":"","fd_49":"","fd_59":"","fd_69":"","fd_79":"","fd_89":"","fd_99":"","fd_08":"","fd_18":"","fd_28":"","fd_38":"","fd_48":"","fd_58":"","fd_68":"","fd_78":"","fd_88":"","fd_98":"","fd_07":"","fd_17":"","fd_27":"","fd_37":"","fd_47":"","fd_57":"","fd_67":"","fd_77":"","fd_87":"","fd_97":"","fd_06":"","fd_16":"","fd_26":"","fd_36":"","fd_46":"","fd_56":"","fd_66":"","fd_76":"","fd_86":"","fd_96":"","fd_05":"","fd_15":"","fd_25":"","fd_35":"","fd_45":"","fd_55":"","fd_65":"","fd_75":"","fd_85":"","fd_95":"","fd_04":"","fd_14":"","fd_24":"","fd_34":"","fd_44":"","fd_54":"","fd_64":"","fd_74":"","fd_84":"","fd_94":"","fd_03":"","fd_13":"","fd_23":"","fd_33":"","fd_43":"","fd_53":"","fd_63":"","fd_73":"","fd_83":"","fd_93":"","fd_02":"","fd_12":"","fd_22":"","fd_32":"","fd_42":"","fd_52":"","fd_62":"","fd_72":"","fd_82":"","fd_92":"","fd_01":"","fd_11":"","fd_21":"","fd_31":"","fd_41":"","fd_51":"","fd_61":"","fd_71":"","fd_81":"","fd_91":"","fd_00":"","fd_10":"","fd_20":"","fd_30":"","fd_40":"","fd_50":"","fd_60":"","fd_70":"","fd_80":"","fd_90":"","di_09":"","di_19":"","di_29":"","di_39":"","di_49":"","di_59":"","di_69":"","di_79":"","di_89":"","di_99":"","di_08":"","di_18":"","di_28":"","di_38":"","di_48":"","di_58":"","di_68":"","di_78":"","di_88":"","di_98":"","di_07":"","di_17":"","di_27":"","di_37":"","di_47":"","di_57":"","di_67":"","di_77":"","di_87":"","di_97":"","di_06":"","di_16":"","di_26":"","di_36":"","di_46":"","di_56":"","di_66":"","di_76":"","di_86":"","di_96":"","di_05":"","di_15":"","di_25":"","di_35":"","di_45":"","di_55":"","di_65":"","di_75":"","di_85":"","di_95":"","di_04":"","di_14":"","di_24":"","di_34":"","di_44":"","di_54":"","di_64":"","di_74":"","di_84":"","di_94":"","di_03":"","di_13":"","di_23":"","di_33":"","di_43":"","di_53":"","di_63":"","di_73":"","di_83":"","di_93":"","di_02":"","di_12":"","di_22":"","di_32":"","di_42":"","di_52":"","di_62":"","di_72":"","di_82":"","di_92":"","di_01":"","di_11":"","di_21":"","di_31":"","di_41":"","di_51":"","di_61":"","di_71":"","di_81":"","di_91":"","di_00":"","di_10":"","di_20":"","di_30":"","di_40":"","di_50":"","di_60":"","di_70":"","di_80":"","di_90":"","ld_09":"","ld_19":"","ld_29":"","ld_39":"","ld_49":"","ld_59":"","ld_69":"","ld_79":"","ld_89":"","ld_99":"","ld_08":"","ld_18":"","ld_28":"","ld_38":"","ld_48":"","ld_58":"","ld_68":"","ld_78":"","ld_88":"","ld_98":"","ld_07":"","ld_17":"","ld_27":"","ld_37":"","ld_47":"","ld_57":"","ld_67":"","ld_77":"","ld_87":"","ld_97":"","ld_06":"","ld_16":"","ld_26":"","ld_36":"","ld_46":"","ld_56":"","ld_66":"","ld_76":"","ld_86":"","ld_96":"","ld_05":"","ld_15":"","ld_25":"","ld_35":"","ld_45":"","ld_55":"","ld_65":"","ld_75":"","ld_85":"","ld_95":"","ld_04":"","ld_14":"","ld_24":"","ld_34":"","ld_44":"","ld_54":"","ld_64":"","ld_74":"","ld_84":"","ld_94":"","ld_03":"","ld_13":"","ld_23":"","ld_33":"","ld_43":"","ld_53":"","ld_63":"","ld_73":"","ld_83":"","ld_93":"","ld_02":"","ld_12":"","ld_22":"","ld_32":"","ld_42":"","ld_52":"","ld_62":"","ld_72":"","ld_82":"","ld_92":"","ld_01":"","ld_11":"","ld_21":"","ld_31":"","ld_41":"","ld_51":"","ld_61":"","ld_71":"","ld_81":"","ld_91":"","ld_00":"","ld_10":"","ld_20":"","ld_30":"","ld_40":"","ld_50":"","ld_60":"","ld_70":"","ld_80":"","ld_90":"","actual_weft_count":"","article_code":"","aux_selvedges_closing_degrees":"","bottom_rapier_clamps":"","bottom_spreader_bars":"","central_selvedges_drawing_in":"","central_selvedges_ends_per_dent":"","central_selvedges_number_ends":"","central_selvedges_weave":"","central_selvedges_yarn_count":"","cutting_degrees":"","date":"","dorn_left_selvedges_drawing_in":"","dorn_left_selvedges_ends_per_dent":"","dorn_left_selvedges_number_ends":"","dorn_left_selvedges_weave":"","dorn_left_selvedges_yarn_count":"","draw_in_harness":"","draw_in_reed":"","fabric_width":"","first_heddle":"","first_heddle_1":"","first_heddle_guide":"","harness_configuration":"","horizontal_back_rest_roller":"","last_heddle":"","last_heddle_guide":"","left_main_selvedges_drawing_in":"","left_main_selvedges_ends_per_dent":"","left_main_selvedges_number_ends":"","left_main_selvedges_weave":"","left_main_selvedges_yarn_count":"","left_selvedges_drawing_in":"","left_selvedges_ends_per_dent":"","left_selvedges_number_ends":"","left_selvedges_weave":"","left_selvedges_yarn_count":"","loom_number":"","loom_type":"","number_ends_wo_selvedges":"","number_harnesses":"","pinch_roller_felt_type":"","press_roller_type":"","rba_number":"","reed":"","reed_width":"","right_main_selvedges_drawing_in":"","right_main_selvedges_ends_per_dent":"","right_main_selvedges_number_ends":"","right_main_selvedges_weave":"","right_main_selvedges_yarn_count":"","right_selvedges_drawing_in":"","right_selvedges_ends_per_dent":"","right_selvedges_number_ends":"","right_selvedges_weave":"","right_selvedges_yarn_count":"","sand_roller_type":"","selvedges_type":"","shed_closing_degrees":"","speed":"","springs_type":"","style_number":"","temples_composition":"","upper_rapier_clamps":"","upper_spreader_bars":"","vertical_back_rest_roller":"","warp_tension":"","weave_pattern":"","weft_count_set_point":""}
+18-Jun-2019 16:41:22.01 : Column 5 : Revision, Row 3 : 1
+18-Jun-2019 16:41:22.01 : Column 6 : Product_Line, Row 3 : Protection
+18-Jun-2019 16:41:22.01 : Checking Row 4 . . . 
+18-Jun-2019 16:41:22.01 : Column 1 : Id, Row 4 : 6
+18-Jun-2019 16:41:22.01 : Column 2 : Spec_Type, Row 4 : test_template
+18-Jun-2019 16:41:22.01 : Column 3 : Time_Stamp, Row 4 : 6/18/2019 4:41:21 PM
+18-Jun-2019 16:41:22.01 : Column 4 : Properties_Json, Row 4 : {"test_property":""}
+18-Jun-2019 16:41:22.01 : Column 5 : Revision, Row 4 : 1
+18-Jun-2019 16:41:22.02 : Column 6 : Product_Line, Row 4 : 
+18-Jun-2019 16:41:22.02 : Searching for test_template template . . . 
+18-Jun-2019 16:41:22.02 : -----------------------------------
+18-Jun-2019 16:41:22.02 : SELECT * FROM template_specifications WHERE Spec_Type= 'test_template'
+18-Jun-2019 16:41:22.02 : Succesfully retrieved template for : test_template
+18-Jun-2019 16:41:22.02 : Checking Row 1 . . . 
+18-Jun-2019 16:41:22.02 : Column 1 : Id, Row 1 : 6
+18-Jun-2019 16:41:22.02 : Column 2 : Spec_Type, Row 1 : test_template
+18-Jun-2019 16:41:22.02 : Column 3 : Time_Stamp, Row 1 : 6/18/2019 4:41:21 PM
+18-Jun-2019 16:41:22.02 : Column 4 : Properties_Json, Row 1 : {"test_property":""}
+18-Jun-2019 16:41:22.02 : Column 5 : Revision, Row 1 : 1
+18-Jun-2019 16:41:22.04 : Column 6 : Product_Line, Row 1 : 
+18-Jun-2019 16:41:22.04 : Spec Input Pass
+18-Jun-2019 16:41:22.04 : --------- formCreateSpec ----------
+18-Jun-2019 16:41:22.04 : Printing Specification . . . 
+18-Jun-2019 16:41:22.04 : Printing Specification . . . 
+18-Jun-2019 16:41:22.04 : -----------------------------------
+18-Jun-2019 16:41:22.04 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) VALUES ('TEST_SPECIFICATION', '6/18/2019 4:41:22 PM', '{"test_property":"Create specification test"}', '{"test_property":"Create specification test"}', '1.0', 'test_template')
+18-Jun-2019 16:41:22.09 : Data Access returned: 0
+18-Jun-2019 16:41:22.09 : Create Spec Pass
+18-Jun-2019 16:41:22.09 : ------------- End Create Specification Test ---------
+18-Jun-2019 16:41:22.09 : ------------- Start View Specification Test ---------
+18-Jun-2019 16:41:22.09 : ------------- Restarting Application
+18-Jun-2019 16:41:22.09 : --------- Start formViewSpecs ----------
+18-Jun-2019 16:41:22.09 : ------------- Restarting Application
+18-Jun-2019 16:41:22.09 : Searching for TEST_SPECIFICATION specifications . . . 
+18-Jun-2019 16:41:22.09 : -----------------------------------
+18-Jun-2019 16:41:22.10 : SELECT * FROM  standard_specifications WHERE Material_Id= 'TEST_SPECIFICATION'
+18-Jun-2019 16:41:22.10 : Checking Row 1 . . . 
+18-Jun-2019 16:41:22.10 : Column 1 : Id, Row 1 : 2157
+18-Jun-2019 16:41:22.10 : Column 2 : Material_Id, Row 1 : TEST_SPECIFICATION
+18-Jun-2019 16:41:22.10 : Column 3 : Time_Stamp, Row 1 : 6/18/2019 4:41:22 PM
+18-Jun-2019 16:41:22.10 : Column 4 : Properties_Json, Row 1 : {"test_property":"Create specification test"}
+18-Jun-2019 16:41:22.10 : Column 5 : Spec_Type, Row 1 : test_template
+18-Jun-2019 16:41:22.10 : Column 6 : Revision, Row 1 : 1.0
+18-Jun-2019 16:41:22.10 : Column 7 : Tolerances_Json, Row 1 : {"test_property":"Create specification test"}
+18-Jun-2019 16:41:22.12 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+18-Jun-2019 16:41:22.12 : Checking specifications for any template updates . . .
+18-Jun-2019 16:41:22.12 : Searching for test_template template . . . 
+18-Jun-2019 16:41:22.12 : -----------------------------------
+18-Jun-2019 16:41:22.12 : SELECT * FROM template_specifications WHERE Spec_Type= 'test_template'
+18-Jun-2019 16:41:22.12 : Succesfully retrieved template for : test_template
+18-Jun-2019 16:41:22.13 : Checking Row 1 . . . 
+18-Jun-2019 16:41:22.13 : Column 1 : Id, Row 1 : 6
+18-Jun-2019 16:41:22.13 : Column 2 : Spec_Type, Row 1 : test_template
+18-Jun-2019 16:41:22.13 : Column 3 : Time_Stamp, Row 1 : 6/18/2019 4:41:21 PM
+18-Jun-2019 16:41:22.13 : Column 4 : Properties_Json, Row 1 : {"test_property":""}
+18-Jun-2019 16:41:22.13 : Column 5 : Revision, Row 1 : 1
+18-Jun-2019 16:41:22.13 : Column 6 : Product_Line, Row 1 : 
+18-Jun-2019 16:41:22.13 : Printing Specification . . . 
+18-Jun-2019 16:41:22.13 : ------------- End View Specification Test(1) --------
+18-Jun-2019 16:41:22.13 : ------------- Start Edit Template Test --------------
+18-Jun-2019 16:41:22.13 : ------------- Restarting Application
+18-Jun-2019 16:41:22.15 : --------- Start formEditTemplate ----------
+18-Jun-2019 16:41:22.15 : Get all template types . . . 
+18-Jun-2019 16:41:22.15 : -----------------------------------
+18-Jun-2019 16:41:22.15 : SELECT * FROM template_specifications
+18-Jun-2019 16:41:22.15 : Listing all template types (spec Types) . . . 
+18-Jun-2019 16:41:22.15 : Checking Row 1 . . . 
+18-Jun-2019 16:41:22.15 : Column 1 : Id, Row 1 : 3
+18-Jun-2019 16:41:22.15 : Column 2 : Spec_Type, Row 1 : Testing Requirements
+18-Jun-2019 16:41:22.15 : Column 3 : Time_Stamp, Row 1 : 5/17/2019 11:56:45 AM
+18-Jun-2019 16:41:22.15 : Column 4 : Properties_Json, Row 1 : {"QC Sample Length":"","Warp/Pick Count":"","Usable Width":"","Dry Weight":"","Fabric Breaking Strength":"","Thickness":"","Crimp":"","Conditioned Weight":"","Residual Shrinkage":"","Yarn Break Force":"","Resin Content":"","Volatile Content":"","Glass Transition (Tg)":"","Laminated Weight":"","Coated Weight":""}
+18-Jun-2019 16:41:22.15 : Column 5 : Revision, Row 1 : 1
+18-Jun-2019 16:41:22.15 : Column 6 : Product_Line, Row 1 : Protection
+18-Jun-2019 16:41:22.16 : Checking Row 2 . . . 
+18-Jun-2019 16:41:22.16 : Column 1 : Id, Row 2 : 4
+18-Jun-2019 16:41:22.16 : Column 2 : Spec_Type, Row 2 : Ballistic Testing Requirements
+18-Jun-2019 16:41:22.16 : Column 3 : Time_Stamp, Row 2 : 5/30/2019 1:49:36 PM
+18-Jun-2019 16:41:22.16 : Column 4 : Properties_Json, Row 2 : {"Sample Length":"","Number of Layers":""}
+18-Jun-2019 16:41:22.16 : Column 5 : Revision, Row 2 : 1
+18-Jun-2019 16:41:22.16 : Column 6 : Product_Line, Row 2 : Protection
+18-Jun-2019 16:41:22.16 : Checking Row 3 . . . 
+18-Jun-2019 16:41:22.16 : Column 1 : Id, Row 3 : 5
+18-Jun-2019 16:41:22.16 : Column 2 : Spec_Type, Row 3 : Weaving RBA
+18-Jun-2019 16:41:22.16 : Column 3 : Time_Stamp, Row 3 : 6/13/2019 3:06:45 PM
+18-Jun-2019 16:41:22.16 : Column 4 : Properties_Json, Row 3 : {"fd_09":"","fd_19":"","fd_29":"","fd_39":"","fd_49":"","fd_59":"","fd_69":"","fd_79":"","fd_89":"","fd_99":"","fd_08":"","fd_18":"","fd_28":"","fd_38":"","fd_48":"","fd_58":"","fd_68":"","fd_78":"","fd_88":"","fd_98":"","fd_07":"","fd_17":"","fd_27":"","fd_37":"","fd_47":"","fd_57":"","fd_67":"","fd_77":"","fd_87":"","fd_97":"","fd_06":"","fd_16":"","fd_26":"","fd_36":"","fd_46":"","fd_56":"","fd_66":"","fd_76":"","fd_86":"","fd_96":"","fd_05":"","fd_15":"","fd_25":"","fd_35":"","fd_45":"","fd_55":"","fd_65":"","fd_75":"","fd_85":"","fd_95":"","fd_04":"","fd_14":"","fd_24":"","fd_34":"","fd_44":"","fd_54":"","fd_64":"","fd_74":"","fd_84":"","fd_94":"","fd_03":"","fd_13":"","fd_23":"","fd_33":"","fd_43":"","fd_53":"","fd_63":"","fd_73":"","fd_83":"","fd_93":"","fd_02":"","fd_12":"","fd_22":"","fd_32":"","fd_42":"","fd_52":"","fd_62":"","fd_72":"","fd_82":"","fd_92":"","fd_01":"","fd_11":"","fd_21":"","fd_31":"","fd_41":"","fd_51":"","fd_61":"","fd_71":"","fd_81":"","fd_91":"","fd_00":"","fd_10":"","fd_20":"","fd_30":"","fd_40":"","fd_50":"","fd_60":"","fd_70":"","fd_80":"","fd_90":"","di_09":"","di_19":"","di_29":"","di_39":"","di_49":"","di_59":"","di_69":"","di_79":"","di_89":"","di_99":"","di_08":"","di_18":"","di_28":"","di_38":"","di_48":"","di_58":"","di_68":"","di_78":"","di_88":"","di_98":"","di_07":"","di_17":"","di_27":"","di_37":"","di_47":"","di_57":"","di_67":"","di_77":"","di_87":"","di_97":"","di_06":"","di_16":"","di_26":"","di_36":"","di_46":"","di_56":"","di_66":"","di_76":"","di_86":"","di_96":"","di_05":"","di_15":"","di_25":"","di_35":"","di_45":"","di_55":"","di_65":"","di_75":"","di_85":"","di_95":"","di_04":"","di_14":"","di_24":"","di_34":"","di_44":"","di_54":"","di_64":"","di_74":"","di_84":"","di_94":"","di_03":"","di_13":"","di_23":"","di_33":"","di_43":"","di_53":"","di_63":"","di_73":"","di_83":"","di_93":"","di_02":"","di_12":"","di_22":"","di_32":"","di_42":"","di_52":"","di_62":"","di_72":"","di_82":"","di_92":"","di_01":"","di_11":"","di_21":"","di_31":"","di_41":"","di_51":"","di_61":"","di_71":"","di_81":"","di_91":"","di_00":"","di_10":"","di_20":"","di_30":"","di_40":"","di_50":"","di_60":"","di_70":"","di_80":"","di_90":"","ld_09":"","ld_19":"","ld_29":"","ld_39":"","ld_49":"","ld_59":"","ld_69":"","ld_79":"","ld_89":"","ld_99":"","ld_08":"","ld_18":"","ld_28":"","ld_38":"","ld_48":"","ld_58":"","ld_68":"","ld_78":"","ld_88":"","ld_98":"","ld_07":"","ld_17":"","ld_27":"","ld_37":"","ld_47":"","ld_57":"","ld_67":"","ld_77":"","ld_87":"","ld_97":"","ld_06":"","ld_16":"","ld_26":"","ld_36":"","ld_46":"","ld_56":"","ld_66":"","ld_76":"","ld_86":"","ld_96":"","ld_05":"","ld_15":"","ld_25":"","ld_35":"","ld_45":"","ld_55":"","ld_65":"","ld_75":"","ld_85":"","ld_95":"","ld_04":"","ld_14":"","ld_24":"","ld_34":"","ld_44":"","ld_54":"","ld_64":"","ld_74":"","ld_84":"","ld_94":"","ld_03":"","ld_13":"","ld_23":"","ld_33":"","ld_43":"","ld_53":"","ld_63":"","ld_73":"","ld_83":"","ld_93":"","ld_02":"","ld_12":"","ld_22":"","ld_32":"","ld_42":"","ld_52":"","ld_62":"","ld_72":"","ld_82":"","ld_92":"","ld_01":"","ld_11":"","ld_21":"","ld_31":"","ld_41":"","ld_51":"","ld_61":"","ld_71":"","ld_81":"","ld_91":"","ld_00":"","ld_10":"","ld_20":"","ld_30":"","ld_40":"","ld_50":"","ld_60":"","ld_70":"","ld_80":"","ld_90":"","actual_weft_count":"","article_code":"","aux_selvedges_closing_degrees":"","bottom_rapier_clamps":"","bottom_spreader_bars":"","central_selvedges_drawing_in":"","central_selvedges_ends_per_dent":"","central_selvedges_number_ends":"","central_selvedges_weave":"","central_selvedges_yarn_count":"","cutting_degrees":"","date":"","dorn_left_selvedges_drawing_in":"","dorn_left_selvedges_ends_per_dent":"","dorn_left_selvedges_number_ends":"","dorn_left_selvedges_weave":"","dorn_left_selvedges_yarn_count":"","draw_in_harness":"","draw_in_reed":"","fabric_width":"","first_heddle":"","first_heddle_1":"","first_heddle_guide":"","harness_configuration":"","horizontal_back_rest_roller":"","last_heddle":"","last_heddle_guide":"","left_main_selvedges_drawing_in":"","left_main_selvedges_ends_per_dent":"","left_main_selvedges_number_ends":"","left_main_selvedges_weave":"","left_main_selvedges_yarn_count":"","left_selvedges_drawing_in":"","left_selvedges_ends_per_dent":"","left_selvedges_number_ends":"","left_selvedges_weave":"","left_selvedges_yarn_count":"","loom_number":"","loom_type":"","number_ends_wo_selvedges":"","number_harnesses":"","pinch_roller_felt_type":"","press_roller_type":"","rba_number":"","reed":"","reed_width":"","right_main_selvedges_drawing_in":"","right_main_selvedges_ends_per_dent":"","right_main_selvedges_number_ends":"","right_main_selvedges_weave":"","right_main_selvedges_yarn_count":"","right_selvedges_drawing_in":"","right_selvedges_ends_per_dent":"","right_selvedges_number_ends":"","right_selvedges_weave":"","right_selvedges_yarn_count":"","sand_roller_type":"","selvedges_type":"","shed_closing_degrees":"","speed":"","springs_type":"","style_number":"","temples_composition":"","upper_rapier_clamps":"","upper_spreader_bars":"","vertical_back_rest_roller":"","warp_tension":"","weave_pattern":"","weft_count_set_point":""}
+18-Jun-2019 16:41:22.16 : Column 5 : Revision, Row 3 : 1
+18-Jun-2019 16:41:22.16 : Column 6 : Product_Line, Row 3 : Protection
+18-Jun-2019 16:41:22.16 : Checking Row 4 . . . 
+18-Jun-2019 16:41:22.16 : Column 1 : Id, Row 4 : 6
+18-Jun-2019 16:41:22.18 : Column 2 : Spec_Type, Row 4 : test_template
+18-Jun-2019 16:41:22.18 : Column 3 : Time_Stamp, Row 4 : 6/18/2019 4:41:21 PM
+18-Jun-2019 16:41:22.18 : Column 4 : Properties_Json, Row 4 : {"test_property":""}
+18-Jun-2019 16:41:22.18 : Column 5 : Revision, Row 4 : 1
+18-Jun-2019 16:41:22.18 : Column 6 : Product_Line, Row 4 : 
+18-Jun-2019 16:41:22.18 : Searching for test_template template . . . 
+18-Jun-2019 16:41:22.18 : -----------------------------------
+18-Jun-2019 16:41:22.18 : SELECT * FROM template_specifications WHERE Spec_Type= 'test_template'
+18-Jun-2019 16:41:22.18 : Succesfully retrieved template for : test_template
+18-Jun-2019 16:41:22.20 : Checking Row 1 . . . 
+18-Jun-2019 16:41:22.20 : Column 1 : Id, Row 1 : 6
+18-Jun-2019 16:41:22.20 : Column 2 : Spec_Type, Row 1 : test_template
+18-Jun-2019 16:41:22.20 : Column 3 : Time_Stamp, Row 1 : 6/18/2019 4:41:21 PM
+18-Jun-2019 16:41:22.20 : Column 4 : Properties_Json, Row 1 : {"test_property":""}
+18-Jun-2019 16:41:22.20 : Column 5 : Revision, Row 1 : 1
+18-Jun-2019 16:41:22.20 : Column 6 : Product_Line, Row 1 : 
+18-Jun-2019 16:41:22.20 : Printing Template . . . 
+18-Jun-2019 16:41:22.20 : Printing Template . . . 
+18-Jun-2019 16:41:22.20 : -----------------------------------
+18-Jun-2019 16:41:22.20 : UPDATE template_specifications SET Time_Stamp ='6/18/2019 4:41:22 PM', Properties_Json ='{"test_property":"","new_test_property":""}', Revision ='2.0' WHERE Spec_Type ='test_template'
+18-Jun-2019 16:41:22.23 : Data Access returned: 0
+18-Jun-2019 16:41:23.66 : Printing Template . . . 
+18-Jun-2019 16:41:23.66 : -----------------------------------
+18-Jun-2019 16:41:23.66 : UPDATE template_specifications SET Time_Stamp ='6/18/2019 4:41:23 PM', Properties_Json ='{"new_test_property":""}', Revision ='3.0' WHERE Spec_Type ='test_template'
+18-Jun-2019 16:41:23.71 : Data Access returned: 0
+18-Jun-2019 16:41:24.59 : ------------- End Edit Template Test ----------------
+18-Jun-2019 16:41:24.59 : ------------- Start Edit Specification Test ---------
+18-Jun-2019 16:41:24.59 : ------------- Restarting Application
+18-Jun-2019 16:41:24.61 : --------- Start formSpecConfig ----------
+18-Jun-2019 16:41:27.81 : Searching for TEST_SPECIFICATION specifications . . . 
+18-Jun-2019 16:41:27.81 : -----------------------------------
+18-Jun-2019 16:41:27.81 : SELECT * FROM  standard_specifications WHERE Material_Id= 'TEST_SPECIFICATION'
+18-Jun-2019 16:41:27.82 : Checking Row 1 . . . 
+18-Jun-2019 16:41:27.82 : Column 1 : Id, Row 1 : 2157
+18-Jun-2019 16:41:27.82 : Column 2 : Material_Id, Row 1 : TEST_SPECIFICATION
+18-Jun-2019 16:41:27.82 : Column 3 : Time_Stamp, Row 1 : 6/18/2019 4:41:22 PM
+18-Jun-2019 16:41:27.83 : Column 4 : Properties_Json, Row 1 : {"test_property":"Create specification test"}
+18-Jun-2019 16:41:27.83 : Column 5 : Spec_Type, Row 1 : test_template
+18-Jun-2019 16:41:27.83 : Column 6 : Revision, Row 1 : 1.0
+18-Jun-2019 16:41:27.83 : Column 7 : Tolerances_Json, Row 1 : {"test_property":"Create specification test"}
+18-Jun-2019 16:41:27.83 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+18-Jun-2019 16:41:27.84 : Checking specifications for any template updates . . .
+18-Jun-2019 16:41:27.84 : Searching for test_template template . . . 
+18-Jun-2019 16:41:27.84 : -----------------------------------
+18-Jun-2019 16:41:27.84 : SELECT * FROM template_specifications WHERE Spec_Type= 'test_template'
+18-Jun-2019 16:41:27.84 : Succesfully retrieved template for : test_template
+18-Jun-2019 16:41:27.84 : Checking Row 1 . . . 
+18-Jun-2019 16:41:27.85 : Column 1 : Id, Row 1 : 6
+18-Jun-2019 16:41:27.85 : Column 2 : Spec_Type, Row 1 : test_template
+18-Jun-2019 16:41:27.85 : Column 3 : Time_Stamp, Row 1 : 6/18/2019 4:41:23 PM
+18-Jun-2019 16:41:27.85 : Column 4 : Properties_Json, Row 1 : {"new_test_property":""}
+18-Jun-2019 16:41:27.86 : Column 5 : Revision, Row 1 : 3.0
+18-Jun-2019 16:41:27.86 : Column 6 : Product_Line, Row 1 : 
+18-Jun-2019 16:41:27.86 : Adding : new_test_property to TEST_SPECIFICATION properties list.
+18-Jun-2019 16:41:27.86 : Removing : test_property from TEST_SPECIFICATION properties list.
+18-Jun-2019 16:41:27.86 : -----------------------------------
+18-Jun-2019 16:41:27.86 : INSERT INTO archived_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) VALUES ('TEST_SPECIFICATION', '6/18/2019 4:41:27 PM', '{"test_property":"Create specification test"}', '{"test_property":"Create specification test"}', '1.0', 'test_template')
+18-Jun-2019 16:41:27.91 : -----------------------------------
+18-Jun-2019 16:41:27.91 : DELETE FROM standard_specifications WHERE Material_Id ='TEST_SPECIFICATION' AND Revision ='1.0' AND Spec_Type ='test_template'
+18-Jun-2019 16:41:27.95 : -----------------------------------
+18-Jun-2019 16:41:27.95 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) VALUES ('TEST_SPECIFICATION', '6/18/2019 4:41:27 PM', '{"new_test_property":""}', '{"test_property":"Create specification test"}', '2', 'test_template')
+18-Jun-2019 16:41:27.00 : Data Access returned: 0
+18-Jun-2019 16:41:27.00 : New Specification Succesfully Saved.
+18-Jun-2019 16:41:27.00 : Search again since updates took place.
+18-Jun-2019 16:41:27.00 : Printing Specification . . . 
+18-Jun-2019 16:41:28.00 : Printing Specification . . . 
+18-Jun-2019 16:41:28.00 : -----------------------------------
+18-Jun-2019 16:41:28.00 : INSERT INTO archived_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) VALUES ('TEST_SPECIFICATION', '6/18/2019 4:41:28 PM', '{"new_test_property":"Edit specification test"}', '{"test_property":"Create specification test"}', '2', 'test_template')
+18-Jun-2019 16:41:28.05 : -----------------------------------
+18-Jun-2019 16:41:28.05 : DELETE FROM standard_specifications WHERE Material_Id ='TEST_SPECIFICATION' AND Revision ='2' AND Spec_Type ='test_template'
+18-Jun-2019 16:41:28.09 : -----------------------------------
+18-Jun-2019 16:41:28.09 : INSERT INTO standard_specifications (Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) VALUES ('TEST_SPECIFICATION', '6/18/2019 4:41:28 PM', '{"new_test_property":"Edit specification test"}', '{"test_property":"Create specification test"}', '3', 'test_template')
+18-Jun-2019 16:41:28.12 : Data Access returned: 0
+18-Jun-2019 16:41:28.13 : New Specification Succesfully Saved.
+18-Jun-2019 16:41:28.13 : -----------------------------------
+18-Jun-2019 16:41:28.13 : DELETE FROM archived_specifications WHERE Material_Id ='TEST_SPECIFICATION' AND Revision ='2' AND Spec_Type ='test_template'
+18-Jun-2019 16:41:28.16 : SQLite returned : 2
+18-Jun-2019 16:41:28.16 : ------------- End Edit Specification Test -----------
+18-Jun-2019 16:41:28.16 : ------------- Start View Specification Test ---------
+18-Jun-2019 16:41:28.16 : ------------- Restarting Application
+18-Jun-2019 16:41:28.16 : ------------- Restarting Application
+18-Jun-2019 16:41:28.16 : Searching for TEST_SPECIFICATION specifications . . . 
+18-Jun-2019 16:41:28.17 : -----------------------------------
+18-Jun-2019 16:41:28.17 : SELECT * FROM  standard_specifications WHERE Material_Id= 'TEST_SPECIFICATION'
+18-Jun-2019 16:41:28.18 : Checking Row 1 . . . 
+18-Jun-2019 16:41:28.18 : Column 1 : Id, Row 1 : 2159
+18-Jun-2019 16:41:28.18 : Column 2 : Material_Id, Row 1 : TEST_SPECIFICATION
+18-Jun-2019 16:41:28.18 : Column 3 : Time_Stamp, Row 1 : 6/18/2019 4:41:28 PM
+18-Jun-2019 16:41:28.18 : Column 4 : Properties_Json, Row 1 : {"new_test_property":"Edit specification test"}
+18-Jun-2019 16:41:28.19 : Column 5 : Spec_Type, Row 1 : test_template
+18-Jun-2019 16:41:28.19 : Column 6 : Revision, Row 1 : 3
+18-Jun-2019 16:41:28.19 : Column 7 : Tolerances_Json, Row 1 : {"test_property":"Create specification test"}
+18-Jun-2019 16:41:28.19 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+18-Jun-2019 16:41:28.19 : Checking specifications for any template updates . . .
+18-Jun-2019 16:41:28.20 : Searching for test_template template . . . 
+18-Jun-2019 16:41:28.20 : -----------------------------------
+18-Jun-2019 16:41:28.20 : SELECT * FROM template_specifications WHERE Spec_Type= 'test_template'
+18-Jun-2019 16:41:28.20 : Succesfully retrieved template for : test_template
+18-Jun-2019 16:41:28.20 : Checking Row 1 . . . 
+18-Jun-2019 16:41:28.20 : Column 1 : Id, Row 1 : 6
+18-Jun-2019 16:41:28.21 : Column 2 : Spec_Type, Row 1 : test_template
+18-Jun-2019 16:41:28.21 : Column 3 : Time_Stamp, Row 1 : 6/18/2019 4:41:23 PM
+18-Jun-2019 16:41:28.21 : Column 4 : Properties_Json, Row 1 : {"new_test_property":""}
+18-Jun-2019 16:41:28.21 : Column 5 : Revision, Row 1 : 3.0
+18-Jun-2019 16:41:28.21 : Column 6 : Product_Line, Row 1 : 
+18-Jun-2019 16:41:28.21 : Printing Specification . . . 
+18-Jun-2019 16:41:28.21 : -----------------------------------
+18-Jun-2019 16:41:28.21 : DELETE FROM standard_specifications WHERE Material_Id ='TEST_SPECIFICATION' AND Revision ='3' AND Spec_Type ='test_template'
+18-Jun-2019 16:41:28.25 : SQLite returned : 2
+18-Jun-2019 16:41:28.25 : -----------------------------------
+18-Jun-2019 16:41:28.25 : DELETE FROM template_specifications WHERE Spec_Type ='test_template' AND Revision ='3.0'
+18-Jun-2019 16:41:28.28 : SQLite returned : 2
+18-Jun-2019 16:41:28.28 : ------------- End View Specification Test(2) ---------
+18-Jun-2019 16:41:28.28 : Searching for user name . . . 
+18-Jun-2019 16:41:28.28 : -----------------------------------
+18-Jun-2019 16:41:28.28 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
+18-Jun-2019 16:41:28.29 : Checking Row 1 . . . 
+18-Jun-2019 16:41:28.29 : Column 1 : Name, Row 1 : CRUFF
+18-Jun-2019 16:41:28.29 : Column 2 : Protection, Row 1 : 25
+18-Jun-2019 16:41:28.29 : Column 3 : Filtration, Row 1 : 25
+18-Jun-2019 16:41:28.29 : Column 4 : Chemical, Row 1 : 25
+18-Jun-2019 16:41:28.30 : Column 5 : Privledge_Level, Row 1 : 25
+18-Jun-2019 16:41:28.30 : Column 6 : Product_Line, Row 1 : Admin
+18-Jun-2019 16:41:28.30 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
+18-Jun-2019 16:41:28.31 : --------- End formSpecConfig ----------
+18-Jun-2019 16:41:28.32 : --------- End formEditTemplate ----------
+18-Jun-2019 16:41:28.33 : --------- End formViewSpecs ----------
+18-Jun-2019 16:41:28.34 : --------- End formCreateGeneric ----------
+18-Jun-2019 16:41:28.35 : ----------- Test Suite Complete ------------------
+18-Jun-2019 16:41:28.35 : Saving : tests.log

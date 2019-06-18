@@ -8,6 +8,16 @@ Function CreateSpecification() As Specification
     Set CreateSpecification = New Specification
 End Function
 
+Function CreateSpecificationFromJsonFile(path As String) As Specification
+' Generate a specification object from a json file.
+    Dim spec As Specification
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Debug.Print fso.GetBaseName(path)
+    Set spec = CreateSpecification
+    spec.JsonToObject JsonVBA.ReadJsonFileToString(path), vbNullString, fso.GetBaseName(path), "Weaving RBA", "1.0"   
+End Function
+
 Function CopySpecification(spec As Specification) As Specification
     Dim spec_copy As Specification
     Set spec_copy = New Specification

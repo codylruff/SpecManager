@@ -88,10 +88,8 @@ Function SearchForSpecifications(material_id As String) As Long
         Logger.Log "Succesfully retrieved specifications for : " & material_id
         If SpecManager.UpdateTemplateChanges Then
             Logger.Log "Search again since updates took place."
-            SearchForSpecifications = SM_SEARCH_AGAIN
-        Else
-            SearchForSpecifications = SM_SEARCH_SUCCESS
         End If
+        SearchForSpecifications = SM_SEARCH_SUCCESS
     End If
 End Function
 
@@ -131,13 +129,13 @@ Private Function UpdateTemplateChanges() As Boolean
     Dim template As SpecificationTemplate
     Dim old_spec As Specification
     Logger.Log "Checking specifications for any template updates . . ."
-    updated = False
     For Each T In App.specs
+    updated = False
         Set spec = App.specs.Item(T)
         Set old_spec = Factory.CopySpecification(spec)
         Set App.current_template = GetTemplate(spec.SpecType)
         For Each Key In App.current_template.Properties
-            ' Checks for existance current template properites in previous spec
+            ' Checks for existence current template properites in previous spec
             If Not spec.Properties.exists(Key) Then
                 ' Missing properties are added.
                 Logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
@@ -155,6 +153,7 @@ Private Function UpdateTemplateChanges() As Boolean
             End If
         Next Key
         If updated = True Then
+            spec.Revision = CStr(CDbl(spec.Revision) + 1.0)
             ret_val = SpecManager.SaveSpecification(spec, old_spec)
             If ret_val <> DB_PUSH_SUCCESS Then
                 Logger.Log "Data Access returned: " & ret_val
