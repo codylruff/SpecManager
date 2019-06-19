@@ -127,6 +127,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
 
     ' Disable updates to the gui during processing
     Application.DisplayAlerts = False
+    Application.ScreenUpdating = False
     Select Case spec.SpecType
         Case "Weaving RBA"
             LoadRbaToSheet spec
@@ -192,6 +193,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     End Select
     ' Enable updates to the gui after processing
     Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
 End Sub
 
 Public Sub PrintObject(obj As Object)
@@ -203,13 +205,27 @@ Public Sub PrintObject(obj As Object)
     'PrintLine "Revision", obj.Revision
     
     For Each Key In obj.Properties
-        If Not obj.Properties(Key) = vbNullString Then
-            PrintLine CStr(Key), FormatAsciiToYesNo(obj.Properties(CStr(Key)))
-        Else
-            PrintLine CStr(Key), "-"
+        If ShouldPrint(Key) Then
+            If Not obj.Properties(Key) = vbNullString Then
+                PrintLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
+            Else
+                PrintLine CStr(Key), "-"
+            End If
         End If
     Next Key
 End Sub
+
+Public Function ShouldPrint(prop As String) As Boolean
+    If Left(prop,3) = "fd_" Then
+        ShouldPrint = False
+    ElseIf Left(prop,3) = "di_" Then
+        ShouldPrint = False
+    ElseIf Left(prop,3) = "ld_" Then
+        ShouldPrint = False
+    Else
+        ShouldPrint = True
+    End If
+End Function
 
 Public Sub ListObjects(dict As Object)
 ' Given a dictionary of specifications lists the specs by type in the console
@@ -219,20 +235,26 @@ Public Sub ListObjects(dict As Object)
     Next T
 End Sub
 
-Private Function FormatAsciiToYesNo(char As String) As String
+Private Function FormatAscii(char As String) As String
 
     If char = Chr(252) Then
         char = "Required"
-    ElseIf char = Chr(251) Then
+    ElseIf char = Chr(171) Then
+        char = "Critical"
+    ElseIf char = Chr(210) Then
+        char = "X"
+    ElseIf IsNumeric(Left(char,1)) Then
+        ' Pass
+    Else
         char = "-"
     End If
-    FormatAsciiToYesNo = char
+    FormatAscii = char
 End Function
 
 Public Sub PrintLine(ParamArray var() As Variant)
     Dim i As Integer
     Dim s As String
-    Const Padding = 25
+    Const Padding = 45
     s = vbNullString
     For i = LBound(var) To UBound(var)
          If (i + 1) Mod 2 = 0 Then

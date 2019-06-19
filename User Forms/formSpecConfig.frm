@@ -84,7 +84,9 @@ Private Sub PopulateCboSelectProperty()
     
     With cboSelectProperty
         For Each prop In App.current_spec.Properties
-          .AddItem Utils.SplitCamelCase(CStr(prop))
+            If App.console.ShouldPrint(prop) Then
+                .AddItem Utils.SplitCamelCase(CStr(prop))
+            End If
         Next prop
     End With
     txtPropertyValue.value = vbNullString
@@ -157,5 +159,6 @@ Sub SelectType()
     If cboSelectType.value = vbNullString Then Exit Sub
     ' Select the specification desired
     Set App.current_spec = App.specs.Item(cboSelectType.value)
+    PopulateCboSelectProperty
     SpecManager.PrintSpecification Me
 End Sub

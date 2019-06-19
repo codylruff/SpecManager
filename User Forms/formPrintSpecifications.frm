@@ -73,47 +73,52 @@ End Sub
 Sub PrintSelectedSpecs(setup_only As Boolean)
 ' This subroutine prints the contents of the console box using the default printer assign in user settings.
     'Check if there is actually text to print
+    Dim lngCounter As Long
+    Dim lngNumberOfTasks As Long
     Dim spec As Specification
     Dim T As Variant
     Dim new_sht As Worksheet
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
     If Me.txtConsole.text = "No specifications are available for this code." Then
          MsgBox "There is nothing to print!"
     ElseIf Not IsNumeric(Me.txtProductionOrder) Then
          MsgBox "Please enter a production order."
     Else
         ' Print the specs one at a time to the default printer
-        For Each T In App.specs
-            If setup_only Then
-               Dim setup_spec As Specification
-               If App.specs.exists("Setup Requirements") Then
-                    ' Print only the setup spec
-                    Set new_sht = Utils.CreateNewSheet(spec.SpecType)
-                    Set spec = App.specs.Item("Setup Requirements")
-                    App.console.PrintObjectToSheet spec, new_sht, vbNullString
-                    Application.PrintCommunication = False
-                    With new_sht.PageSetup
-                        .FitToPagesWide = 1
-                        .FitToPagesTall = False
-                    End With
-                    Application.PrintCommunication = True
-                    Utils.PrintSheet new_sht
-               Else
-                  MsgBox "No Setup Requirements Exist for this Material."
-               End If
-               Exit Sub
+        If setup_only Then
+            Dim setup_spec As Specification
+            If App.specs.exists("Setup Requirements") Then
+                ' Print only the setup spec
+                Set new_sht = Utils.CreateNewSheet(spec.SpecType)
+                Set spec = App.specs.Item("Setup Requirements")
+                App.console.PrintObjectToSheet spec, new_sht, vbNullString
+                Utils.PrintSheet new_sht, True
+            Else
+                MsgBox "No Setup Requirements Exist for this Material."
             End If
+            Exit Sub
+        End If
+            lngNumberOfTasks = App.specs.Count
+            lngCounter = 0
+        For Each T In App.specs
+            lngCounter = lngCounter + 1
             Set spec = App.specs.Item(T)
-            Set new_sht = Utils.CreateNewSheet(spec.SpecType)
-            App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
-            Application.PrintCommunication = False
-            With new_sht.PageSetup
-                .FitToPagesWide = 1
-                .FitToPagesTall = False
-            End With
-            Application.PrintCommunication = True
-            Utils.PrintSheet new_sht
+            modProgress.ShowProgress _
+                lngCounter,lngNumberOfTasks,"Printing : " & spec.SpecType, IIf(lngCounter = lngNumberOfTasks,True, False)
+            If spec.SpecType = "Testing Requirements" Or spec.SpecType = "Ballistic Testing Requirements" Then
+                Set new_sht = Utils.CreateNewSheet(spec.SpecType)
+                App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
+                Utils.PrintSheet new_sht, True
+            Else 
+                App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
+                Utils.PrintSheet shtRBA
+            End If
         Next T
     End If
+    Set ActiveSheet = shtStart
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
 End Sub
 
 Sub ExportPdf(Optional isTest As Boolean = False)

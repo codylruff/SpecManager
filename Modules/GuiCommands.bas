@@ -72,7 +72,7 @@ Public Sub ExportAll()
     lngCounter = 0
 
     Logger.ResetLog
-
+    lngCounter = lngCounter + 1
     Call modProgress.ShowProgress( _
         lngCounter, _
         lngNumberOfTasks, _

@@ -86,9 +86,9 @@ Function SearchForSpecifications(material_id As String) As Long
             coll.Add App.specs.Item(Key)
         Next Key
         Logger.Log "Succesfully retrieved specifications for : " & material_id
-        If SpecManager.UpdateTemplateChanges Then
-            Logger.Log "Search again since updates took place."
-        End If
+        ' If SpecManager.UpdateTemplateChanges Then
+        '     Logger.Log "Specs updated"
+        ' End If
         SearchForSpecifications = SM_SEARCH_SUCCESS
     End If
 End Function

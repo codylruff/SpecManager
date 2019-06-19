@@ -199,10 +199,18 @@ Public Function printf(mask As String, ParamArray tokens()) As String
     printf = mask
 End Function
 
-Public Sub PrintSheet(ws As Worksheet)
+Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
 ' Prints the sheet of the given name in the spec manager workbook
     If App.current_user.Settings.Item("default_printer") = vbNullString Then
         ChangeActivePrinter
+    End If
+    If FitToPage Then
+        Application.PrintCommunication = False
+        With ws.PageSetup
+            .FitToPagesWide = 1
+            .FitToPagesTall = True
+        End With
+        Application.PrintCommunication = True
     End If
     ws.PrintOut ActivePrinter:=App.current_user.Settings.Item("default_printer")
 End Sub
@@ -270,8 +278,7 @@ End Sub
 ' ==============================================
 ' RBA PARSER
 ' ==============================================
-Public Sub ParseRBAs()
-    Dim path As String
+Public Sub ParseRBAs(path As String)
     Dim wb As Workbook
     Dim strFile As String
     Dim rba_dict As Object
@@ -279,23 +286,17 @@ Public Sub ParseRBAs()
     Dim rng As Object
     Application.DisplayAlerts = False
     Application.ScreenUpdating = False
-    path = "C:\Users\cruff\source\SM - Final\rba_to_parse\"
-    strFile = Dir(path)
     Dim ret_val As Long
-    Do While Len(strFile) > 0
-        'Debug.Print path & strFile
-        Set wb = OpenWorkbook(path & strFile)
-        DeleteNames wb
-        Set rba_dict = CreateObject("Scripting.Dictionary")
-            Set rba_dict = AddRbaNames(rba_dict, wb, "fd", 73, 82, 2, 11)
-            Set rba_dict = AddRbaNames(rba_dict, wb, "di", 73, 82, 15, 24)
-            Set rba_dict = AddRbaNames(rba_dict, wb, "ld", 73, 82, 28, 37)
-            Set rba_dict = AddMoreRbaNames(rba_dict, wb)
-            ret_val = JsonVBA.WriteJsonObject(path & strFile & ".json", rba_dict)
-            Set rba_dict = Nothing
-            wb.Close
-        strFile = Dir
-    Loop
+    Set wb = OpenWorkbook(path)
+    DeleteNames wb
+    Set rba_dict = CreateObject("Scripting.Dictionary")
+    Set rba_dict = AddRbaNames(rba_dict, wb, "fd", 73, 82, 2, 11)
+    Set rba_dict = AddRbaNames(rba_dict, wb, "di", 73, 82, 15, 24)
+    Set rba_dict = AddRbaNames(rba_dict, wb, "ld", 73, 82, 28, 37)
+    Set rba_dict = AddMoreRbaNames(rba_dict, wb)
+    ret_val = JsonVBA.WriteJsonObject(path & ".json", rba_dict)
+    Set rba_dict = Nothing
+    wb.Close
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
 End Sub
