@@ -4,6 +4,10 @@ Function CreateDictionary() As Object
     Set CreateDictionary = CreateObject("Scripting.Dictionary")
 End Function
 
+Public Function CreateTable() As Table
+    Set CreateTable = New Table
+End Function
+
 Function CreateSpecification() As Specification
     Set CreateSpecification = New Specification
 End Function
