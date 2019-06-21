@@ -70,4 +70,4 @@ if __name__ == "__main__":
     sqlite3_backup(db_path, r'c:\users\cruff\desktop\Database_Backups')
     sqlite3_backup(db_path, r'S:\Data Manager\Database\backups')               
     #clean_data(r'c:\users\cruff\desktop\Database_Backups')
-    print ("\nBackup update has been successful.")
+    print("\nBackup update has been successful.")
