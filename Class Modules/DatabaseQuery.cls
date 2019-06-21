@@ -26,10 +26,29 @@ Public Type SQL
     Where As Dictionary
 End Type
 
-Public Function ExecuteSQL() As Long
+Private Function ExecuteSQL() As Long
     Dim SQLstmt As String
     If SelectAll Then
         SQLstmt = “Select * From” & SQL.From
     ExecuteSQL = 0
+End Function
+
+Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As String) As Long
+' Returns an table like array
+    Set recordset = New DatabaseRecord
+    On Error GoTo NullRecordException
+    Logger.Log "-----------------------------------"
+    Logger.Log SQLstmt
+    source.openDb path
+    source.selectQry SQLstmt
+    recordset.Data = source.Data
+    recordset.Header = source.Header
+    recordset.Rows = source.NumRows
+    recordset.columns = source.NumColumns
+    ExecuteSQLSelect = 0
+    Exit Function
+NullRecordException:
+    Logger.Log "SQL Select Error : NullRecordException!"
+    ExecuteSQLSelect = -1
 End Function
 
