@@ -7,7 +7,7 @@ End Sub
 
 Public Sub RestartApp()
     Logger.Trace "Restarting Application"
-    App.ResetInteractiveObject
+    App.RefreshObjects
 End Sub
 
 Public Sub StopApp()
@@ -106,7 +106,7 @@ Function GetTemplate(template_type As String) As SpecificationTemplate
 
 End Function
 
-Function ListAllTemplateTypes() As Collection
+Function GetAllTemplates() As Collection
     Dim record As DatabaseRecord
     Dim dict As Object
     Dim coll As Collection
@@ -115,9 +115,9 @@ Function ListAllTemplateTypes() As Collection
     ' obsoleted
     Logger.Log "Listing all template types (spec Types) . . . "
     For Each dict In record.records
-        coll.Add dict.Item("Spec_Type")
+        coll.Add item:=Factory.CreateTemplateFromDict(dict), key:=dict.Item("Spec_Type")
     Next dict
-    Set ListAllTemplateTypes = coll
+    Set GetAllTemplates = coll
 End Function
 
 Private Function UpdateTemplateChanges() As Boolean
@@ -171,7 +171,7 @@ End Function
 Function GetSpecifications(material_id As String) As Object
     Dim json_dict As Object
     Dim specs_dict As Object
-    Dim json_coll As Collection
+    Dim json_coll As VBA.Collection
     Dim spec As Specification
     Dim rev As String
     Dim Key As Variant
@@ -180,8 +180,6 @@ Function GetSpecifications(material_id As String) As Object
     On Error GoTo NullSpecException
 
     Set record = DataAccess.GetSpecificationRecords(MaterialInputValidation(material_id))
-    ' obsoleted
-
     Set json_coll = record.records
     Set specs_dict = Factory.CreateDictionary
     

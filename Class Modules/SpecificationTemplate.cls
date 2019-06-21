@@ -44,8 +44,6 @@ Public Sub JsonToObject(properties_json As String, spec_type As String, Revision
     SpecType = spec_type
     Revision = Revision_
     ProductLine = product_line
-    ' Properties.Item("Revision") = Revision_
-    ' Properties.Item("Spec_Type") = spec_type
 End Sub
 
 ' Constructor

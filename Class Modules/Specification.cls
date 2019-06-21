@@ -104,11 +104,13 @@ End Function
 
 ' Constructor
 Private Sub Class_Initialize()
+    Set Template = New VBA.Collection
     Set Properties = New Dictionary
     Set Tolerances = New Dictionary
 End Sub
 ' Deconstructor
 Private Sub Class_Terminate()
+    Set Template = Nothing
     Set Properties = Nothing
     Set Tolerances = Nothing
 End Sub

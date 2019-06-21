@@ -19,7 +19,9 @@ Function CreateSpecificationFromJsonFile(path As String) As Specification
     Set fso = CreateObject("Scripting.FileSystemObject")
     Debug.Print fso.GetBaseName(path)
     Set spec = CreateSpecification
-    spec.JsonToObject JsonVBA.ReadJsonFileToString(path), vbNullString, fso.GetBaseName(path), "Weaving RBA", "1.0"   
+    spec.JsonToObject JsonVBA.ReadJsonFileToString(path), vbNullString, fso.GetBaseName(path), "Weaving RBA", "1.0"
+    spec.Template = App.templates
+    Set CreateSpecificationFromJsonFile = spec   
 End Function
 
 Function CopySpecification(spec As Specification) As Specification
@@ -29,6 +31,15 @@ Function CopySpecification(spec As Specification) As Specification
         spec_copy.JsonToObject .PropertiesJson, .TolerancesJson, .MaterialId, .SpecType, .Revision
     End With
     Set CopySpecification = spec_copy
+End Function
+
+Function CopyTemplate(temp As SpecificationTemplate) As SpecificationTemplate
+    Dim temp_copy As SpecificationTemplate
+    Set temp_copy = New SpecificationTemplate
+    With temp
+        temp_copy.JsonToObject .PropertiesJson, .SpecType, .Revision, .ProductLine
+    End With
+    Set CopyTemplate = temp_copy
 End Function
 
 Function CreateNewTemplate(Optional template_name As String = vbNullString) As SpecificationTemplate
@@ -55,7 +66,17 @@ Function CreateSpecFromDict(dict As Object) As Specification
     With dict
         spec.JsonToObject .Item("Properties_Json"), .Item("Tolerances_Json"), .Item("Material_Id"), .Item("Spec_Type"), .Item("Revision")
     End With
+    Set spec.Template = Factory.CopyTemplate(App.Templates(spec.SpecType))
     Set CreateSpecFromDict = spec
+End Function
+
+Function CreateTemplateFromDict(dict As Object) As SpecificationTemplate
+    Dim temp As SpecificationTemplate
+    Set temp = New SpecificationTemplate
+    With dict
+        temp.JsonToObject .Item("Properties_Json"), .Item("Spec_Type"), .Item("Revision"), .Item("Product_Line")
+    End With
+    Set CreateTemplateFromDict = temp
 End Function
 
 Function CreateConsoleBox(frm As UserForm) As ConsoleBox

@@ -23,7 +23,7 @@ Sub AllTests()
     Logger.Log "----------- Starting Test Suite -----------------"
     Utils.UnloadAllForms
     SpecManager.StartApp
-    App.InitializeTestSuite
+    App.InitializeTestSuiteCredentials
     CreateTemplate_Test
     CreateSpecification_Test
     ViewSpecification_AfterCreate_Test
@@ -32,7 +32,7 @@ Sub AllTests()
     ViewSpecification_AfterEdit_Test
     ' Account Control
     ' TODO: This feature has not been implemented yet.
-    App.DeinitializeTestSuite
+    App.DeInitializeTestSuiteCredentials
     Utils.UnloadAllForms
     Logger.Log "----------- Test Suite Complete ------------------"
     Logger.ResetLog "tests"

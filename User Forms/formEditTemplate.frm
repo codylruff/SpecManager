@@ -88,11 +88,9 @@ Private Sub PopulateCboSelectProperty()
 End Sub
 
 Private Sub PopulateCboSelectTemplate()
-    Dim coll As VBA.Collection
     Dim template_type As Variant
-    Set coll = SpecManager.ListAllTemplateTypes
     With cboSelectTemplate
-        For Each template_type In coll
+        For Each template_type In App.Templates
             .AddItem CStr(template_type)
         Next template_type
     End With
