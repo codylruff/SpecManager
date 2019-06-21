@@ -78,11 +78,8 @@ Public Sub ExportAll()
         lngNumberOfTasks, _
         "Creating a New Version...", _
         False)
-    'If App.current_user.Settings.Item("repo_path") = vbNullString Then
-        directory = "C:\Users\cruff\source\SM - Final\"
-    'Else
-        'directory = "S:\Data Manager\updates\"
-    'End If
+
+    directory = ThisWorkbook.Path
     
     lngCounter = lngCounter + 1
     Call modProgress.ShowProgress( _
