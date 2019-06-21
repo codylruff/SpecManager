@@ -8,6 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+Public Event PropertyAdded
 ' Properties dictionary
 Public Properties   As Object
 Public Tolerances   As Object
@@ -33,6 +34,7 @@ Public Sub AddProperty(property As String, tolerance As Variant)
 ' Adds a property to the list of properties
     Me.Properties.Add property, vbNullString
     Me.Tolerances.Add property, tolerance
+    RaiseEvent PropertyAdded
 End Sub
 
 Public Sub JsonToObject(properties_json As String, tolerances_json As String, material_id As String, spec_type As String, Revision_ As String)
