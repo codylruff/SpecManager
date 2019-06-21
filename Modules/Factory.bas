@@ -1,7 +1,7 @@
 Attribute VB_Name = "Factory"
 
 Function CreateDictionary() As Object
-    Set CreateDictionary = CreateObject("Scripting.Dictionary")
+    Set CreateDictionary = New Dictionary
 End Function
 
 Public Function CreateTable() As Table

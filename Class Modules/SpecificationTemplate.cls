@@ -50,7 +50,7 @@ End Sub
 
 ' Constructor
 Private Sub Class_Initialize()
-    Set Properties = CreateObject("Scripting.Dictionary")
+    Set Properties = New Dictionary
 End Sub
 ' Deconstructor
 Private Sub Class_Terminate()

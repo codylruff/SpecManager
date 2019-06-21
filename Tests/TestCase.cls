@@ -575,7 +575,7 @@ Private Function Indent(Optional Indentation As Long)
 End Function
 
 Private Sub Class_Initialize()
-    Set Me.Context = CreateObject("Scripting.Dictionary")
+    Set Me.Context = New Dictionary
     Set pFailures = New VBA.Collection
 End Sub
 

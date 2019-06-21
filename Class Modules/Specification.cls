@@ -18,6 +18,15 @@ Private Revision_   As String
 Private MaterialId_ As String
 Private IsStandard_ As Boolean
 Private IsLatest_   As Boolean
+Private Template_   As SpecificationTemplate
+
+' Template
+Public Property Set Template(obj As SpecificationTemplate)
+    Set Template_ = obj
+End Property
+Public Property Get Template() As SpecificationTemplate
+    Set Template = Template_
+End Property
 Public Property Let IsStandard(Value As Boolean): IsStandard_ = Value: End Property
 Public Property Get IsStandard() As Boolean: IsStandard = IIf(IsStandard_ = Null, False, IsStandard_): End Property
 Public Property Let IsLatest(Value As Boolean): IsLatest_ = Value: End Property
@@ -28,6 +37,7 @@ Public Property Let SpecType(Value As String): SpecType_ = Value: End Property
 Public Property Get SpecType() As String: SpecType = SpecType_: End Property
 Public Property Get MaterialId() As String: MaterialId = MaterialId_: End Property
 Public Property Let MaterialId(Value As String): MaterialId_ = UCase(Value): End Property
+
 
 ' METHODS---
 Public Sub AddProperty(property As String, tolerance As Variant)
@@ -94,8 +104,8 @@ End Function
 
 ' Constructor
 Private Sub Class_Initialize()
-    Set Properties = CreateObject("Scripting.Dictionary")
-    Set Tolerances = CreateObject("Scripting.Dictionary")
+    Set Properties = New Dictionary
+    Set Tolerances = New Dictionary
 End Sub
 ' Deconstructor
 Private Sub Class_Terminate()

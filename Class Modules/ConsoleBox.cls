@@ -42,6 +42,7 @@ Public Sub ClearConsole()
     Me.CurrentText = vbNullString
     Logger.Log "Console Cleared"
 End Sub
+
 Private Function GetWeavePatternImagePath(material_id As String) As String
 ' Given a material_id retrieve the file path for the weave pattern image
     Dim weave_id As String
@@ -128,10 +129,13 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     ' Disable updates to the gui during processing
     Application.DisplayAlerts = False
     Application.ScreenUpdating = False
+    ' This tree selects any specs which have an associated custom worksheet template
     Select Case spec.SpecType
         Case "Weaving RBA"
             LoadRbaToSheet spec
         Case Else
+            ' All specifications which do not have a custom worksheet template
+            ' will be handled by this case.
             ' Insert/Format body of the specification
             With sht
                 ' Clear any existing information from the sheet

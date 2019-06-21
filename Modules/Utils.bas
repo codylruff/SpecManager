@@ -289,7 +289,7 @@ Public Sub ParseRBAs(path As String)
     Dim ret_val As Long
     Set wb = OpenWorkbook(path)
     DeleteNames wb
-    Set rba_dict = CreateObject("Scripting.Dictionary")
+    Set rba_dict = New Dictionary
     Set rba_dict = AddRbaNames(rba_dict, wb, "fd", 73, 82, 2, 11)
     Set rba_dict = AddRbaNames(rba_dict, wb, "di", 73, 82, 15, 24)
     Set rba_dict = AddRbaNames(rba_dict, wb, "ld", 73, 82, 28, 37)

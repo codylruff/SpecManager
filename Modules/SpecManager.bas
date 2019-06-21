@@ -322,7 +322,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Dim props As Variant
     RestartApp
     Application.ScreenUpdating = False
-    Set dict = CreateObject("Scripting.Dictionary")
+    Set dict = New Dictionary
     Set ws = Utils.CreateNewSheet(spec_type)
     Set dicts = DataAccess.SelectAllSpecifications(spec_type)
     i = 2

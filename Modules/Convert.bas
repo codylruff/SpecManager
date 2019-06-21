@@ -294,7 +294,7 @@ End If
 ' Reset Dict to a new, empty Dictionary
 ''''''''''''''''''''''''''''''''''''''''''''
 Set dict = Nothing
-Set dict = CreateObject("Scripting.Dictionary")
+Set dict = New Dictionary
 '''''''''''''''''''''''''''''''''''''''''''
 ' Ensure we have at least one element in
 ' the collection object.
@@ -968,7 +968,7 @@ End If
 ' If Dict is Nothing, create a new dictionary.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If dict Is Nothing Then
-    Set dict = CreateObject("Scripting.Dictionary")
+    Set dict = New Dictionary
 End If
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1243,7 +1243,7 @@ End If
 ''''''''''''''''''''''''''''
 ' Create a new TempDict.
 ''''''''''''''''''''''''''''
-Set TempDict = CreateObject("Scripting.Dictionary")
+Set TempDict = New Dictionary
 
 If SortByKey = True Then
     ''''''''''''''''''''''''''''''''''''''''
