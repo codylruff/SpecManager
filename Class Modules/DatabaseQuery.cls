@@ -10,6 +10,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 private Recordset_ As DatabaseRecord
+private source As IDatabase
+private db_path As String
 
 public property Set Recordset(obj As DatabaseRecord)
     Set Recordset_ = obj
@@ -26,6 +28,12 @@ Public Type SQL
     Where As Dictionary
 End Type
 
+Public Function ConnectToDataSource(path As String) As Long
+    Set source = Factory.CreateSQLiteDatabase()
+    db_path = path
+    ConnectToDataSource = 0
+End Function
+
 Private Function ExecuteSQL() As Long
     Dim SQLstmt As String
     If SelectAll Then
@@ -33,18 +41,20 @@ Private Function ExecuteSQL() As Long
     ExecuteSQL = 0
 End Function
 
-Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As String) As Long
+Private Function ExecuteSQLSelect(SQLstmt As String) As Long
 ' Returns an table like array
     Set recordset = New DatabaseRecord
     On Error GoTo NullRecordException
     Logger.Log "-----------------------------------"
     Logger.Log SQLstmt
-    source.openDb path
+    source.openDb db_path
     source.selectQry SQLstmt
-    recordset.Data = source.Data
-    recordset.Header = source.Header
-    recordset.Rows = source.NumRows
-    recordset.columns = source.NumColumns
+    With recordset
+        .Data = source.Data
+        .Header = source.Header
+        .Rows = source.NumRows
+        .columns = source.NumColumns
+    End With
     ExecuteSQLSelect = 0
     Exit Function
 NullRecordException:
