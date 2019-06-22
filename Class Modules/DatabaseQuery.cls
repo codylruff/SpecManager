@@ -23,9 +23,11 @@ End Property
 
 Public Type SQL
     Select As VBA.Collection
+    SelectAll As Boolean
     From As String
     Insert As Dictionary
     Where As Dictionary
+    Query As String
 End Type
 
 Public Function ConnectToDataSource(path As String) As Long
@@ -34,10 +36,30 @@ Public Function ConnectToDataSource(path As String) As Long
     ConnectToDataSource = 0
 End Function
 
+Public Function Execute() As Long
+    If sql.Select.Count = 0 Then
+        Execute = ExecuteSQL(SQLstmt)
+    Else
+        Execute = ExecuteSQLSelect(SQLstmt)
+    End If
+End Function
+
+private Function BuildSqlQuery() As Boolean
+    SqlQuery = vbNullString
+    
+    If sql.SelectAll Then
+        Append “Select * From” & sql.From”
+        BuildSqlQuery = True
+        Exit Function
+    Else
+        Append “SELECT “, IIf(sql.SelectAll, “* “, sql.Select), “ From “, sql.From
+    End If
+
+    
+End Function
+
 Private Function ExecuteSQL() As Long
-    Dim SQLstmt As String
-    If SelectAll Then
-        SQLstmt = “Select * From” & SQL.From
+        
     ExecuteSQL = 0
 End Function
 
