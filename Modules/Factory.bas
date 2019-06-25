@@ -1,7 +1,7 @@
 Attribute VB_Name = "Factory"
 
 Function CreateDictionary() As Object
-    Set CreateDictionary = New Dictionary
+    Set CreateDictionary = CreateObject("Scripting.Dictionary")
 End Function
 
 Public Function CreateTable() As Table
@@ -15,13 +15,13 @@ End Function
 Function CreateSpecificationFromJsonFile(path As String) As Specification
 ' Generate a specification object from a json file.
     Dim spec As Specification
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    Debug.Print fso.GetBaseName(path)
+    Dim FSO As Object
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    Debug.Print FSO.GetBaseName(path)
     Set spec = CreateSpecification
-    spec.JsonToObject JsonVBA.ReadJsonFileToString(path), vbNullString, fso.GetBaseName(path), "Weaving RBA", "1.0"
+    spec.JsonToObject JsonVBA.ReadJsonFileToString(path), vbNullString, FSO.GetBaseName(path), "Weaving RBA", "1.0"
     spec.Template = App.templates
-    Set CreateSpecificationFromJsonFile = spec   
+    Set CreateSpecificationFromJsonFile = spec
 End Function
 
 Function CopySpecification(spec As Specification) As Specification
@@ -43,21 +43,21 @@ Function CopyTemplate(temp As SpecificationTemplate) As SpecificationTemplate
 End Function
 
 Function CreateNewTemplate(Optional template_name As String = vbNullString) As SpecificationTemplate
-    Dim template As SpecificationTemplate
-    Set template = New SpecificationTemplate
-    template.SpecType = template_name
-    template.Revision = 1
-    Set CreateNewTemplate = template
+    Dim Template As SpecificationTemplate
+    Set Template = New SpecificationTemplate
+    Template.SpecType = template_name
+    Template.Revision = 1
+    Set CreateNewTemplate = Template
 End Function
 
 Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecificationTemplate
-    Dim template As SpecificationTemplate
-    Set template = New SpecificationTemplate
+    Dim Template As SpecificationTemplate
+    Set Template = New SpecificationTemplate
     ' obsoleted
     With record.Fields
-        template.JsonToObject .Item("Properties_Json"), .Item("Spec_Type"), .Item("Revision"), .Item("Product_Line")
+        Template.JsonToObject .Item("Properties_Json"), .Item("Spec_Type"), .Item("Revision"), .Item("Product_Line")
     End With
-    Set CreateTemplateFromRecord = template
+    Set CreateTemplateFromRecord = Template
 End Function
 
 Function CreateSpecFromDict(dict As Object) As Specification
@@ -66,7 +66,7 @@ Function CreateSpecFromDict(dict As Object) As Specification
     With dict
         spec.JsonToObject .Item("Properties_Json"), .Item("Tolerances_Json"), .Item("Material_Id"), .Item("Spec_Type"), .Item("Revision")
     End With
-    Set spec.Template = Factory.CopyTemplate(App.Templates(spec.SpecType))
+    Set spec.Template = Factory.CopyTemplate(App.templates(spec.SpecType))
     Set CreateSpecFromDict = spec
 End Function
 

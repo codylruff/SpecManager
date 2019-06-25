@@ -184,7 +184,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                     End If
                     i = i + 1
                 Next Key
-                .columns("A:G").AutoFit
+                .Columns("A:G").AutoFit
                 i = i + 2
             End With
             ' Insert images per requirements
@@ -209,7 +209,7 @@ Public Sub PrintObject(obj As Object)
     'PrintLine "Revision", obj.Revision
     
     For Each Key In obj.Properties
-        If ShouldPrint(Key) Then
+        If ShouldPrint(CStr(Key)) Then
             If Not obj.Properties(Key) = vbNullString Then
                 PrintLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
             Else
@@ -220,11 +220,11 @@ Public Sub PrintObject(obj As Object)
 End Sub
 
 Public Function ShouldPrint(prop As String) As Boolean
-    If Left(prop,3) = "fd_" Then
+    If Left(prop, 3) = "fd_" Then
         ShouldPrint = False
-    ElseIf Left(prop,3) = "di_" Then
+    ElseIf Left(prop, 3) = "di_" Then
         ShouldPrint = False
-    ElseIf Left(prop,3) = "ld_" Then
+    ElseIf Left(prop, 3) = "ld_" Then
         ShouldPrint = False
     Else
         ShouldPrint = True
@@ -247,7 +247,7 @@ Private Function FormatAscii(char As String) As String
         char = "Critical"
     ElseIf char = Chr(210) Then
         char = "X"
-    ElseIf IsNumeric(Left(char,1)) Then
+    ElseIf IsNumeric(Left(char, 1)) Then
         ' Pass
     Else
         char = "-"

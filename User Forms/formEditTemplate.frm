@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formEditTemplate
    Caption         =   "Specification Control"
    ClientHeight    =   11868
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   9810
+   ClientTop       =   468
+   ClientWidth     =   9816
    OleObjectBlob   =   "formEditTemplate.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 
 Option Explicit
 
@@ -32,14 +33,14 @@ End Sub
 Sub AddProperty()
     ' This executes an add property command
     With App.current_template
-        .AddProperty txtPropertyName.value
+        .AddProperty txtPropertyName.Value
     End With
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
 
 Sub RemoveProperty()
-    App.current_template.RemoveProperty cboSelectProperty.value
+    App.current_template.RemoveProperty cboSelectProperty.Value
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
@@ -83,15 +84,15 @@ Private Sub PopulateCboSelectProperty()
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
-    txtPropertyName.value = vbNullString
-    cboSelectProperty.value = vbNullString
+    txtPropertyName.Value = vbNullString
+    cboSelectProperty.Value = vbNullString
 End Sub
 
 Private Sub PopulateCboSelectTemplate()
     Dim template_type As Variant
     With cboSelectTemplate
-        For Each template_type In App.Templates
-            .AddItem CStr(template_type)
+        For Each template_type In App.templates
+            .AddItem CStr(template_type.SpecType)
         Next template_type
     End With
 End Sub

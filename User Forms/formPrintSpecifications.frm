@@ -3,7 +3,7 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formPrintSpecifications
    Caption         =   "Spec-Manager "
    ClientHeight    =   6615
    ClientLeft      =   120
-   ClientTop       =   465
+   ClientTop       =   468
    ClientWidth     =   6540
    OleObjectBlob   =   "formPrintSpecifications.frx":0000
    StartUpPosition =   1  'CenterOwner
@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 
 Option Explicit
 
@@ -88,7 +89,7 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
         ' Print the specs one at a time to the default printer
         If setup_only Then
             Dim setup_spec As Specification
-            If App.specs.exists("Setup Requirements") Then
+            If App.specs.Exists("Setup Requirements") Then
                 ' Print only the setup spec
                 Set new_sht = Utils.CreateNewSheet(spec.SpecType)
                 Set spec = App.specs.Item("Setup Requirements")
@@ -105,12 +106,12 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
             lngCounter = lngCounter + 1
             Set spec = App.specs.Item(T)
             modProgress.ShowProgress _
-                lngCounter,lngNumberOfTasks,"Printing : " & spec.SpecType, IIf(lngCounter = lngNumberOfTasks,True, False)
+                lngCounter, lngNumberOfTasks, "Printing : " & spec.SpecType, IIf(lngCounter = lngNumberOfTasks, True, False)
             If spec.SpecType = "Testing Requirements" Or spec.SpecType = "Ballistic Testing Requirements" Then
                 Set new_sht = Utils.CreateNewSheet(spec.SpecType)
                 App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
                 Utils.PrintSheet new_sht, True
-            Else 
+            Else
                 App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
                 Utils.PrintSheet shtRBA
             End If

@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formSpecConfig 
    Caption         =   "Specification Control"
-   ClientHeight    =   11865
+   ClientHeight    =   11868
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   9810
+   ClientTop       =   468
+   ClientWidth     =   9816
    OleObjectBlob   =   "formSpecConfig.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Option Explicit
 
 Private Sub cmdSelectType_Click()
@@ -70,7 +71,7 @@ Private Sub PopulateCboSelectType()
     With cboSelectType
         For Each rev In App.specs
             .AddItem rev
-            .value = rev
+            .Value = rev
         Next rev
     End With
 End Sub
@@ -84,12 +85,12 @@ Private Sub PopulateCboSelectProperty()
     
     With cboSelectProperty
         For Each prop In App.current_spec.Properties
-            If App.console.ShouldPrint(prop) Then
+            If App.console.ShouldPrint((prop)) Then
                 .AddItem Utils.SplitCamelCase(CStr(prop))
             End If
         Next prop
     End With
-    txtPropertyValue.value = vbNullString
+    txtPropertyValue.Value = vbNullString
 End Sub
 
 Private Sub cmdClear_Click()
@@ -113,7 +114,7 @@ Sub MaterialSearch()
     SpecManager.PrintSpecification Me
     PopulateCboSelectProperty
     PopulateCboSelectType
-    cboSelectType.value = App.current_spec.SpecType
+    cboSelectType.Value = App.current_spec.SpecType
 End Sub
 
 Sub Back()
@@ -146,19 +147,19 @@ End Sub
 Sub Submit()
 ' This executes a set property command
     ' Check for empty controls
-    If cboSelectProperty.value = vbNullString Then Exit Sub
+    If cboSelectProperty.Value = vbNullString Then Exit Sub
     ' Change the property desired
     With App.current_spec
-        .Properties.Item(cboSelectProperty.value) = txtPropertyValue
+        .Properties.Item(cboSelectProperty.Value) = txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub
 
 Sub SelectType()
     ' Check for empty controls
-    If cboSelectType.value = vbNullString Then Exit Sub
+    If cboSelectType.Value = vbNullString Then Exit Sub
     ' Select the specification desired
-    Set App.current_spec = App.specs.Item(cboSelectType.value)
+    Set App.current_spec = App.specs.Item(cboSelectType.Value)
     PopulateCboSelectProperty
     SpecManager.PrintSpecification Me
 End Sub

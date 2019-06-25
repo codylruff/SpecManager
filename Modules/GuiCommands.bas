@@ -34,7 +34,7 @@ Public Sub InitializeApplication()
     GoToMain
     'Exit Sub
 'UpdateFailure:
-'    Logger.Log "Update failed" 
+'    Logger.Log "Update failed"
 '    MsgBox "Update Failed Contact Administrator!"
 End Sub
 
@@ -79,7 +79,7 @@ Public Sub ExportAll()
         "Creating a New Version...", _
         False)
 
-    directory = ThisWorkbook.Path
+    directory = ThisWorkbook.path & "\"
     
     lngCounter = lngCounter + 1
     Call modProgress.ShowProgress( _

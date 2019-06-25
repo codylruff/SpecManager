@@ -9,11 +9,11 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 ' Events
-Public Event BeforeRefresh
-Public Event AfterRefresh
-Public Event BeforeStart
-Public Event AfterStart
-Public Event BeforeShutdown
+Public Event BeforeRefresh()
+Public Event AfterRefresh()
+Public Event BeforeStart()
+Public Event AfterStart()
+Public Event BeforeShutdown()
 ' Fields
 Public version As String
 Public current_user As Account
@@ -31,7 +31,7 @@ Sub Start()
     ' Create global object instances for specs and templates
     Set current_spec = New Specification
     Set templates = SpecManager.GetAllTemplates
-    Set specs = New Dictionary
+    Set specs = CreateObject("Scripting.Dictionary")
     Set console = New ConsoleBox
     Set current_template = New SpecificationTemplate
 End Sub
@@ -39,7 +39,7 @@ End Sub
 Public Sub RefreshObjects()
     Set current_spec = New Specification
     Set templates = SpecManager.GetAllTemplates
-    Set specs = New Dictionary
+    Set specs = CreateObject("Scripting.Dictionary")
     Set console = New ConsoleBox
     Set current_template = New SpecificationTemplate
 End Sub

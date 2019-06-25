@@ -52,7 +52,7 @@ Function GetSpecificationRecords(ByRef MaterialId As String) As DatabaseRecord
                      Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
 End Function
 
-Function PushTemplate(ByRef template As SpecificationTemplate)
+Function PushTemplate(ByRef Template As SpecificationTemplate)
 ' Push new template record
     Dim SQLstmt As String
     On Error GoTo DbPushFailException
@@ -60,10 +60,10 @@ Function PushTemplate(ByRef template As SpecificationTemplate)
     SQLstmt = "INSERT INTO template_specifications " & _
               "(Time_Stamp, Properties_Json, Revision, Spec_Type, Product_Line) " & _
               "VALUES ('" & CStr(Now()) & "'," & _
-                      "'" & template.PropertiesJson & "', " & _
-                      "'" & template.Revision & "', " & _
-                      "'" & template.SpecType & "', " & _
-                      "'" & template.ProductLine & "')"
+                      "'" & Template.PropertiesJson & "', " & _
+                      "'" & Template.Revision & "', " & _
+                      "'" & Template.SpecType & "', " & _
+                      "'" & Template.ProductLine & "')"
     ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     PushTemplate = DB_PUSH_SUCCESS
     Exit Function
@@ -72,7 +72,7 @@ DbPushFailException:
     PushTemplate = DB_PUSH_FAILURE
 End Function
 
-Function UpdateTemplate(ByRef template As SpecificationTemplate)
+Function UpdateTemplate(ByRef Template As SpecificationTemplate)
 ' Push new template record
     Dim SQLstmt As String
     On Error GoTo DbPushFailException
@@ -80,9 +80,9 @@ Function UpdateTemplate(ByRef template As SpecificationTemplate)
     SQLstmt = "UPDATE template_specifications " & _
               "SET " & _
               "Time_Stamp ='" & CStr(Now()) & "', " & _
-              "Properties_Json ='" & template.PropertiesJson & "', " & _
-              "Revision ='" & template.Revision & "' " & _
-              "WHERE Spec_Type ='" & template.SpecType & "'"
+              "Properties_Json ='" & Template.PropertiesJson & "', " & _
+              "Revision ='" & Template.Revision & "' " & _
+              "WHERE Spec_Type ='" & Template.SpecType & "'"
     ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     UpdateTemplate = DB_PUSH_SUCCESS
     Exit Function
@@ -112,13 +112,13 @@ DbPushFailException:
     PushSpec = DB_PUSH_FAILURE
 End Function
 
-Function DeleteTemplate(ByRef template As SpecificationTemplate) As Long
+Function DeleteTemplate(ByRef Template As SpecificationTemplate) As Long
 ' Deletes a record
     Dim SQLstmt As String
     On Error GoTo DbDeleteFailException
     ' Create SQL statement from objects
     SQLstmt = "DELETE FROM template_specifications " & _
-              "WHERE Spec_Type ='" & template.SpecType & "' AND Revision ='" & template.Revision & "'"
+              "WHERE Spec_Type ='" & Template.SpecType & "' AND Revision ='" & Template.Revision & "'"
     ExecuteSQL Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt
     DeleteTemplate = DB_DELETE_SUCCESS
     Exit Function
@@ -174,7 +174,7 @@ Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As St
     record.Data = db.Data
     record.Header = db.Header
     record.Rows = db.NumRows
-    record.columns = db.NumColumns
+    record.Columns = db.NumColumns
     Set ExecuteSQLSelect = record
     Exit Function
 NullRecordException:

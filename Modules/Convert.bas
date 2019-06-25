@@ -294,7 +294,7 @@ End If
 ' Reset Dict to a new, empty Dictionary
 ''''''''''''''''''''''''''''''''''''''''''''
 Set dict = Nothing
-Set dict = New Dictionary
+Set dict = CreateObject("Scripting.Dictionary")
 '''''''''''''''''''''''''''''''''''''''''''
 ' Ensure we have at least one element in
 ' the collection object.
@@ -342,7 +342,7 @@ For Ndx = 1 To coll.Count
     ' See if ItemKey already exists in the Dictionary.
     ' If so, return False. You can't have duplicate keys.
     '''''''''''''''''''''''''''''''''''''''''''''''''''''
-    If dict.exists(Key:=ItemKey) = True Then
+    If dict.Exists(Key:=ItemKey) = True Then
         Set dict = Nothing
         Set CollectionToDictionary = Nothing
         Exit Function
@@ -454,7 +454,7 @@ If StartCells.Cells.Count = 2 Then
         For Each V In coll
             If IsObject(V) = False Then
                 DestRng.Value = V
-                If DestRng.Column < StartCells.Parent.columns.Count Then
+                If DestRng.Column < StartCells.Parent.Columns.Count Then
                     Set DestRng = DestRng(1, 2)
                 Else
                     CollectionToRange = False
@@ -576,7 +576,7 @@ If StartCells.Cells.Count = 2 Then
         For Each V In dict.Items
             If IsObject(V) = False Then
                 DestRng.Value = V
-                If DestRng.Column < StartCells.Parent.columns.Count Then
+                If DestRng.Column < StartCells.Parent.Columns.Count Then
                     Set DestRng = DestRng(1, 2)
                 Else
                     DictionaryToRange = False
@@ -949,7 +949,7 @@ End If
 ' Ensure KeyRange and ItemRange as the same size.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If (KeyRange.Rows.Count <> ItemRange.Rows.Count) Or _
-    (KeyRange.columns.Count <> ItemRange.columns.Count) Then
+    (KeyRange.Columns.Count <> ItemRange.Columns.Count) Then
     RangeToDictionary = False
     Exit Function
 End If
@@ -968,7 +968,7 @@ End If
 ' If Dict is Nothing, create a new dictionary.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If dict Is Nothing Then
-    Set dict = New Dictionary
+    Set dict = CreateObject("Scripting.Dictionary")
 End If
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -977,7 +977,7 @@ End If
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 For Each KRng In KeyRange.Cells
     ItemNdx = ItemNdx + 1
-    KeyExists = dict.exists(Key:=KRng.text)
+    KeyExists = dict.Exists(Key:=KRng.text)
     If KeyExists = True Then
         '''''''''''''''''''''''''''''''''''''''''''
         ' The key already exists in the Dictionary.
@@ -1076,7 +1076,7 @@ End If
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If Not KeyRange Is Nothing Then
     If (KeyRange.Rows.Count <> ItemRange.Rows.Count) Or _
-        (KeyRange.columns.Count <> ItemRange.columns.Count) Then
+        (KeyRange.Columns.Count <> ItemRange.Columns.Count) Then
         RangeToCollection = False
         Exit Function
     End If
@@ -1243,7 +1243,7 @@ End If
 ''''''''''''''''''''''''''''
 ' Create a new TempDict.
 ''''''''''''''''''''''''''''
-Set TempDict = New Dictionary
+Set TempDict = CreateObject("Scripting.Dictionary")
 
 If SortByKey = True Then
     ''''''''''''''''''''''''''''''''''''''''

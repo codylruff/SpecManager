@@ -107,14 +107,14 @@ Function CreateNewSheet(shtName As String) As Worksheet
 'test
 ' Creates a new worksheet with the given name
     Application.DisplayAlerts = False
-    Dim exists As Boolean, i As Integer
+    Dim Exists As Boolean, i As Integer
     With ThisWorkbook
         For i = 1 To Worksheets.Count
             If Worksheets(i).Name = shtName Then
-                exists = True
+                Exists = True
             End If
         Next i
-        If exists = True Then
+        If Exists = True Then
             .Sheets(shtName).Delete
         End If
         .Sheets.Add(After:=.Sheets(.Sheets.Count)).Name = shtName
@@ -289,7 +289,7 @@ Public Sub ParseRBAs(path As String)
     Dim ret_val As Long
     Set wb = OpenWorkbook(path)
     DeleteNames wb
-    Set rba_dict = New Dictionary
+    Set rba_dict = CreateObject("Scripting.Dictionary")
     Set rba_dict = AddRbaNames(rba_dict, wb, "fd", 73, 82, 2, 11)
     Set rba_dict = AddRbaNames(rba_dict, wb, "di", 73, 82, 15, 24)
     Set rba_dict = AddRbaNames(rba_dict, wb, "ld", 73, 82, 28, 37)

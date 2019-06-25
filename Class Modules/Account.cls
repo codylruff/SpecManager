@@ -46,7 +46,7 @@ End Sub
 
 Private Sub CreateSettingsJson()
     If Settings Is Nothing Then
-        Set Settings = New Dictionary
+        Set Settings = CreateObject("Scripting.Dictionary")
     End If
     With Settings
         .Add "name", Environ("Username")
@@ -60,7 +60,7 @@ End Sub
 
 ' Constructor
 Private Sub Class_Initialize()
-    Set Settings = New Dictionary
+    Set Settings = CreateObject("Scripting.Dictionary")
 End Sub
 
 ' Deconstructor

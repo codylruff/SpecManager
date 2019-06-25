@@ -42,8 +42,8 @@ Public Property Get Data() As Variant: Data = m_data: End Property
 Public Property Let Data(ByVal Value As Variant): m_data = Value: End Property
 Public Property Let Rows(Value As Long): rows_ = Value: End Property
 Public Property Get Rows() As Long: Rows = rows_: End Property
-Public Property Let columns(Value As Long): columns_ = Value: End Property
-Public Property Get columns() As Long: columns = columns_: End Property
+Public Property Let Columns(Value As Long): columns_ = Value: End Property
+Public Property Get Columns() As Long: Columns = columns_: End Property
 
 Private Function InitializeRecords()
 ' Returns a dictionary representation of this object
@@ -54,7 +54,7 @@ Private Function InitializeRecords()
     For j = 1 To Rows
         Set dict = Factory.CreateDictionary()
         Logger.Log "Checking Row " & j & " . . . "
-        For i = 1 To columns
+        For i = 1 To Columns
         Logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & Data(j, i)
             dict.Add Key:=Header(1, i), Item:=Data(j, i)
         Next i

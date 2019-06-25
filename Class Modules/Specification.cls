@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-Public Event PropertyAdded
+Public Event PropertyAdded()
 ' Properties dictionary
 Public Properties   As Object
 Public Tolerances   As Object
@@ -104,9 +104,9 @@ End Function
 
 ' Constructor
 Private Sub Class_Initialize()
-    Set Template = New VBA.Collection
-    Set Properties = New Dictionary
-    Set Tolerances = New Dictionary
+    Set Template = New SpecificationTemplate
+    Set Properties = CreateObject("Scripting.Dictionary")
+    Set Tolerances = CreateObject("Scripting.Dictionary")
 End Sub
 ' Deconstructor
 Private Sub Class_Terminate()

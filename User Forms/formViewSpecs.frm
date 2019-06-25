@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formViewSpecs
    Caption         =   "Specification Control"
    ClientHeight    =   11865
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   9810
+   ClientTop       =   468
+   ClientWidth     =   9816
    OleObjectBlob   =   "formViewSpecs.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Option Explicit
 
 Private Sub cmdPrint_Click()
@@ -73,7 +74,7 @@ Private Sub PopulateCboSelectType()
     With cboSelectType
         For Each rev In App.specs
             .AddItem rev
-            .value = rev
+            .Value = rev
         Next rev
     End With
 End Sub
@@ -83,7 +84,7 @@ Sub MaterialSearch()
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectType
-    cboSelectType.value = App.current_spec.SpecType
+    cboSelectType.Value = App.current_spec.SpecType
 End Sub
 
 Sub Back()
@@ -92,7 +93,7 @@ Sub Back()
 End Sub
 
 Sub SelectType()
-    Set App.current_spec = App.specs.Item(cboSelectType.value)
+    Set App.current_spec = App.specs.Item(cboSelectType.Value)
     SpecManager.PrintSpecification Me
 End Sub
 

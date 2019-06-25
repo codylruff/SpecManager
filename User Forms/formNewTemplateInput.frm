@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formNewTemplateInput
    Caption         =   "Create New Template"
    ClientHeight    =   2952
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   4470
+   ClientTop       =   468
+   ClientWidth     =   4476
    OleObjectBlob   =   "formNewTemplateInput.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboProductLine
@@ -24,9 +25,9 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub cmdContinue_Click()
-    If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
-        If cboProductLine.value <> vbNullString Then
-            App.current_template.ProductLine = cboProductLine.value
+    If SpecManager.TemplateInput(txtTemplateName.Value) <> vbNullString Then
+        If cboProductLine.Value <> vbNullString Then
+            App.current_template.ProductLine = cboProductLine.Value
         Else
             MsgBox "Please select a product line!"
             Exit Sub
@@ -40,7 +41,7 @@ Private Sub cmdContinue_Click()
 End Sub
 
 Sub Continue()
-    If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
+    If SpecManager.TemplateInput(txtTemplateName.Value) <> vbNullString Then
         Logger.Log "Template Input Pass"
     Else
         Logger.Log "Template Input Fail"

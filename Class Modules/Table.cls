@@ -69,7 +69,7 @@ End Property
 
 Public Sub AddCustomSorter(sort_dict As Object, sort_name As String)
 ' Create a custom table sorter given a dictionary of labels with sort index (integer)
-    Me.CustomSorters.Add sort_dict, Key:=sort_name
+    CustomSorters.Add sort_dict, Key:=sort_name
 End Sub
 
 Public Sub CustomSort(sort_name As String, column_name As String)
@@ -79,25 +79,25 @@ Public Sub CustomSort(sort_name As String, column_name As String)
     Dim r As Long
     Dim c As Long
 
-    If Me.CustomSorters.Contains(sort_name) Then
-        Set sorter = Me.CustomSorters.Item(sort_name)
+    If CustomSorters.Contains(sort_name) Then
+        Set sorter = CustomSorters.Item(sort_name)
     Else
         Exit Sub
     End If
     
-    Set c = Me.Columns(column_name).Index
-    For r=0 To Me.Rows.Count - 1
+    c = Me.Columns(column_name).Index
+    For r = 0 To Me.Rows.Count - 1
         On Error Resume Next
-        Me.Data(r,c).Value = sorter(Me.Data(r,c).Value)
-    Next i
+        Me.Data(r, c).Value = sorter(Me.Data(r, c).Value)
+    Next r
 
-    On Error Goto 0
-    Me.list.Sort = Me.Columns(column_name)
+    On Error GoTo 0
+    list.Sort = Me.Columns(column_name)
 
 End Sub
 
 Private Sub Class_Initialze()
-    Set CustomSorters = VBA.Collection
+    Set CustomSorters = New VBA.Collection
 End Sub
 
 Private Sub Class_Terminate()

@@ -106,16 +106,16 @@ Function GetTemplate(template_type As String) As SpecificationTemplate
 
 End Function
 
-Function GetAllTemplates() As Collection
+Function GetAllTemplates() As VBA.Collection
     Dim record As DatabaseRecord
     Dim dict As Object
-    Dim coll As Collection
-    Set coll = New Collection
+    Dim coll As VBA.Collection
+    Set coll = New VBA.Collection
     Set record = DataAccess.GetTemplateTypes
     ' obsoleted
     Logger.Log "Listing all template types (spec Types) . . . "
     For Each dict In record.records
-        coll.Add item:=Factory.CreateTemplateFromDict(dict), key:=dict.Item("Spec_Type")
+        coll.Add Item:=Factory.CreateTemplateFromDict(dict), Key:=dict.Item("Spec_Type")
     Next dict
     Set GetAllTemplates = coll
 End Function
@@ -124,36 +124,36 @@ Private Function UpdateTemplateChanges() As Boolean
     ' Apply any changes to material specs that happened since the previous template was revised.
     Dim Key, T As Variant
     Dim ret_val As Long
-    Dim updated As Boolean
+    Dim Updated As Boolean
     Dim spec As Specification
-    Dim template As SpecificationTemplate
+    Dim Template As SpecificationTemplate
     Dim old_spec As Specification
     Logger.Log "Checking specifications for any template updates . . ."
     For Each T In App.specs
-    updated = False
+    Updated = False
         Set spec = App.specs.Item(T)
         Set old_spec = Factory.CopySpecification(spec)
         Set App.current_template = GetTemplate(spec.SpecType)
         For Each Key In App.current_template.Properties
             ' Checks for existence current template properites in previous spec
-            If Not spec.Properties.exists(Key) Then
+            If Not spec.Properties.Exists(Key) Then
                 ' Missing properties are added.
                 Logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
                 spec.Properties.Add Key:=Key, Item:=vbNullString
-                updated = True
+                Updated = True
             End If
         Next Key
         For Each Key In spec.Properties
             ' Checks for existance of current_spec Properties in current_template.
-            If Not App.current_template.Properties.exists(Key) Then
+            If Not App.current_template.Properties.Exists(Key) Then
                 ' Old properties are removed
                 Logger.Log "Removing : " & Key & " from " & spec.MaterialId & " properties list."
                 spec.Properties.Remove Key
-                updated = True
+                Updated = True
             End If
         Next Key
-        If updated = True Then
-            spec.Revision = CStr(CDbl(spec.Revision) + 1.0)
+        If Updated = True Then
+            spec.Revision = CStr(CDbl(spec.Revision) + 1#)
             ret_val = SpecManager.SaveSpecification(spec, old_spec)
             If ret_val <> DB_PUSH_SUCCESS Then
                 Logger.Log "Data Access returned: " & ret_val
@@ -165,7 +165,7 @@ Private Function UpdateTemplateChanges() As Boolean
         End If
     Next T
 
-    UpdateTemplateChanges = updated
+    UpdateTemplateChanges = Updated
 End Function
 
 Function GetSpecifications(material_id As String) As Object
@@ -255,25 +255,25 @@ Function ArchiveSpecification(old_spec As Specification) As Long
     End If
 End Function
 
-Function SaveSpecificationTemplate(template As SpecificationTemplate) As Long
+Function SaveSpecificationTemplate(Template As SpecificationTemplate) As Long
     If ManagerOrAdmin Then
-        SaveSpecificationTemplate = IIf(DataAccess.PushTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        SaveSpecificationTemplate = IIf(DataAccess.PushTemplate(Template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
         SaveSpecificationTemplate = DB_PUSH_DENIED
     End If
 End Function
 
-Function UpdateSpecificationTemplate(template As SpecificationTemplate) As Long
+Function UpdateSpecificationTemplate(Template As SpecificationTemplate) As Long
     If ManagerOrAdmin Then
-        UpdateSpecificationTemplate = IIf(DataAccess.UpdateTemplate(template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        UpdateSpecificationTemplate = IIf(DataAccess.UpdateTemplate(Template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
         UpdateSpecificationTemplate = DB_PUSH_DENIED
     End If
 End Function
 
-Function DeleteSpecificationTemplate(template As SpecificationTemplate) As Long
+Function DeleteSpecificationTemplate(Template As SpecificationTemplate) As Long
     If App.current_user.PrivledgeLevel = USER_ADMIN Then
-        DeleteSpecificationTemplate = IIf(DataAccess.DeleteTemplate(template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+        DeleteSpecificationTemplate = IIf(DataAccess.DeleteTemplate(Template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
     Else
         DeleteSpecificationTemplate = DB_DELETE_DENIED
     End If
@@ -320,7 +320,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Dim props As Variant
     RestartApp
     Application.ScreenUpdating = False
-    Set dict = New Dictionary
+    Set dict = CreateObject("Scripting.Dictionary")
     Set ws = Utils.CreateNewSheet(spec_type)
     Set dicts = DataAccess.SelectAllSpecifications(spec_type)
     i = 2
@@ -331,7 +331,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
         ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).Value = props
         i = i + 1
     Next dict
-    ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).columns.AutoFit
+    ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Columns.AutoFit
     Application.ScreenUpdating = True
 End Sub
 

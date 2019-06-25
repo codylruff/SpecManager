@@ -9,19 +9,19 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-private Recordset_ As DatabaseRecord
-private source As IDatabase
-private db_path As String
+Private Recordset_ As DatabaseRecord
+Private source As IDatabase
+Private db_path As String
 
-public property Set Recordset(obj As DatabaseRecord)
+Public Property Set Recordset(obj As DatabaseRecord)
     Set Recordset_ = obj
 End Property
 
-public property Get Recordset() As DatabaseRecord
+Public Property Get Recordset() As DatabaseRecord
     Set Recordset = Recordset_
 End Property
 
-Public Type SQL
+Public Type sql
     Select As VBA.Collection
     SelectAll As Boolean
     From As String
@@ -44,11 +44,11 @@ Public Function Execute() As Long
     End If
 End Function
 
-private Function BuildSqlQuery() As Boolean
+Private Function BuildSqlQuery() As Boolean
     SqlQuery = vbNullString
     
     If sql.SelectAll Then
-        Append “Select * From” & sql.From”
+        Append “SELECT * From” & sql.From”
         BuildSqlQuery = True
         Exit Function
     Else
@@ -65,17 +65,17 @@ End Function
 
 Private Function ExecuteSQLSelect(SQLstmt As String) As Long
 ' Returns an table like array
-    Set recordset = New DatabaseRecord
+    Set Recordset = New DatabaseRecord
     On Error GoTo NullRecordException
     Logger.Log "-----------------------------------"
     Logger.Log SQLstmt
     source.openDb db_path
     source.selectQry SQLstmt
-    With recordset
+    With Recordset
         .Data = source.Data
         .Header = source.Header
         .Rows = source.NumRows
-        .columns = source.NumColumns
+        .Columns = source.NumColumns
     End With
     ExecuteSQLSelect = 0
     Exit Function
