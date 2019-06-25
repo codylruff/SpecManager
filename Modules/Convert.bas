@@ -24,9 +24,7 @@ Option Compare Text
 '       SortCollection
 '       SortDictionary
 '
-' NOTE: You must have a reference to the Microsoft Scripting Runtime library. In VBA, go
-' to the Tools menu, choose References, and scroll down to and select "Microsft Scripting
-' Runtime".
+' NOTE: converted to latebinding
 '
 ' NOTE: This module requires the modArraySupport code module, which is available for download
 ' at http://www.cpearson.com/excel/VBAArrays.htm and the modQSortInPlace module, which is
