@@ -169,3 +169,18 @@ Sub AccessControl_Test()
     SpecManager.RestartApp
     Logger.Log "------------- End Access Control Test ----------------"
 End Sub
+
+Public Sub TestPrintSheet()
+    Dim ws As Worksheet
+    SpecManager.StartApp
+    Set ws = CreateNewSheet("test_print")
+    ws.Range("A1").Value = "0"
+    Utils.fncScreenUpdating State:=False
+    ws.PrintOut ActivePrinter:=App.current_user.Settings.Item("default_printer")
+    Utils.fncScreenUpdating State:=True
+    Application.DisplayAlerts = False
+    ws.Delete
+    Application.DisplayAlerts = True
+    SpecManager.RestartApp
+End Sub
+

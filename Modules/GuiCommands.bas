@@ -4,12 +4,12 @@ Option Explicit
 '=================================
 ' DESCRIPTION: Holds commands used
 ' through the GUI with exception
-' of the import function which is 
+' of the import function which is
 ' kept in ThisWorkbook.
 '=================================
 Public Sub ResetExcelGUI()
 ' Sets visible sheets in the excel gui to only start
-    HideAllSheets
+    HideAllSheets SAATI_Data_Manager.ThisWorkbook
 End Sub
 
 Private Sub HideAllSheets(wb As Workbook)
@@ -18,7 +18,7 @@ Private Sub HideAllSheets(wb As Workbook)
     For Each ws In wb.Worksheets
         If ws Is shtStart Then
             'Pass
-        ElseIf ws.Visible = xlSheetVisible Then 
+        ElseIf ws.Visible = xlSheetVisible Then
             ws.Visible = xlSheetHidden
             Logger.Log ws.Name & " was hidden."
         End If

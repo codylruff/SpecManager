@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formPrintSpecifications 
    Caption         =   "Spec-Manager "
-   ClientHeight    =   6615
+   ClientHeight    =   6612
    ClientLeft      =   120
    ClientTop       =   468
    ClientWidth     =   6540
@@ -13,8 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -77,10 +75,16 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
     Dim lngCounter As Long
     Dim lngNumberOfTasks As Long
     Dim spec As Specification
+    Dim sheetsToPrint
     Dim T As Variant
+    Dim origCalcMode As xlCalculation
     Dim new_sht As Worksheet
+
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
+    origCalcMode = Application.Calculation
+    Application.Calculation = xlCalculationManual
+
     If Me.txtConsole.text = "No specifications are available for this code." Then
          MsgBox "There is nothing to print!"
     ElseIf Not IsNumeric(Me.txtProductionOrder) Then
@@ -103,10 +107,8 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
             lngNumberOfTasks = App.specs.Count
             lngCounter = 0
         For Each T In App.specs
-            lngCounter = lngCounter + 1
             Set spec = App.specs.Item(T)
-            modProgress.ShowProgress _
-                lngCounter, lngNumberOfTasks, "Printing : " & spec.SpecType, IIf(lngCounter = lngNumberOfTasks, True, False)
+            lngCounter = lngCounter + 1
             If spec.SpecType = "Testing Requirements" Or spec.SpecType = "Ballistic Testing Requirements" Then
                 Set new_sht = Utils.CreateNewSheet(spec.SpecType)
                 App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
@@ -115,11 +117,14 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
                 App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
                 Utils.PrintSheet shtRBA
             End If
+            'modProgress.ShowProgress _
+            '    lngCounter, lngNumberOfTasks, "Printing : " & spec.SpecType, IIf(lngCounter = lngNumberOfTasks, True, False)
         Next T
     End If
-    Set ActiveSheet = shtStart
+    GuiCommands.ResetExcelGUI
     Application.ScreenUpdating = True
     Application.DisplayAlerts = True
+    Application.Calculation = origCalcMode
 End Sub
 
 Sub ExportPdf(Optional isTest As Boolean = False)

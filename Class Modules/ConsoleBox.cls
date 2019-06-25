@@ -114,10 +114,13 @@ Private Sub LoadRbaToSheet(spec As Specification)
 ' Load values from rba properties into cooresponding named range
     Dim nr As Variant
     Dim rng As Range
+    ' Add the revision number
+    Utils.Insert shtRBA.Range("revision"), "Rev. " & spec.Revision
     For Each nr In spec.Properties
         Set rng = shtRBA.Range(CStr(nr))
         Utils.Insert rng, spec.Properties(CStr(nr))
     Next nr
+    
 End Sub
 
 Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString)
@@ -125,7 +128,6 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     Dim Key As Variant
     Dim i As Integer
     Dim path As String
-
     ' Disable updates to the gui during processing
     Application.DisplayAlerts = False
     Application.ScreenUpdating = False

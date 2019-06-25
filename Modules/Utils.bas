@@ -4,6 +4,25 @@ Option Explicit
 ' DESCRIPTION: Util Module holds
 ' miscellenous helper functions.
 '=================================
+' ------------------------------------------------
+' WINDOWS API FUNCTIONS DO NOT CHANGE
+' ------------------------------------------------
+#If Win64 Then
+Public Declare PtrSafe Function SendMessageA Lib "USER32" (ByVal hWnd As LongPtr, ByVal wMsg As Long, ByVal wParam As LongPtr, lParam As Any) As LongPtr
+Public Declare PtrSafe Function GetDesktopWindow Lib "USER32" () As LongPtr
+Private Declare PtrSafe Function InvalidateRect Lib "USER32" (ByVal hWnd As LongPtr, lpRect As Long, ByVal bErase As Long) As LongPtr
+Private Declare PtrSafe Function UpdateWindow Lib "USER32" (ByVal hWnd As LongPtr) As LongPtr
+Private Declare PtrSafe Function IsWindow Lib "USER32" (ByVal hWnd As LongPtr) As LongPtr
+#Else
+Private Declare Function SendMessage Lib "USER32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+Private Declare Function GetDesktopWindow Lib "USER32" () As Long
+Private Declare Function InvalidateRect Lib "USER32" (ByVal hWnd As Long, lpRect As Long, ByVal bErase As Long) As Long
+Private Declare Function UpdateWindow Lib "USER32" (ByVal hWnd As Long) As Long
+Private Declare Function IsWindow Lib "USER32" (ByVal hWnd As Long) As Long
+#End If
+
+' -------------------------------------------------
+
 Public Function OpenWorkbook(path) As Workbook
     Set OpenWorkbook = Workbooks.Open(path, 0)
 End Function
@@ -201,18 +220,23 @@ End Function
 
 Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
 ' Prints the sheet of the given name in the spec manager workbook
+    If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
+        ws.Visible = xlSheetVisible
+    End If
     If App.current_user.Settings.Item("default_printer") = vbNullString Then
         ChangeActivePrinter
     End If
     If FitToPage Then
-        Application.PrintCommunication = False
+        If Application.PrintCommunication <> False Then Application.PrintCommunication = False
         With ws.PageSetup
-            .FitToPagesWide = 1
-            .FitToPagesTall = True
+            If .FitToPagesWide <> 1 Then .FitToPagesWide = 1
+            If .FitToPagesTall <> True Then .FitToPagesTall = True
         End With
         Application.PrintCommunication = True
     End If
+    'fncScreenUpdating State:=False
     ws.PrintOut ActivePrinter:=App.current_user.Settings.Item("default_printer")
+    'fncScreenUpdating State:=True
 End Sub
 
 Public Function ArrayLength(arr As Variant) As Long
@@ -464,4 +488,32 @@ Public Function AddRbaNames(dict As Object, wb As Workbook, tag As String, r_sta
         Next c
     Next r
     Set AddRbaNames = dict
+End Function
+
+#If Win64 Then
+Public Function fncScreenUpdating(State As Boolean, Optional Window_hWnd As LongPtr = 0)
+#Else
+Public Function fncScreenUpdating(State As Boolean, Optional Window_hWnd As Long = 0)
+#End If
+    Const WM_SETREDRAW = &HB
+    Const WM_PAINT = &HF
+    
+    If Window_hWnd = 0 Then
+        Window_hWnd = GetDesktopWindow()
+    Else
+        If IsWindow(hWnd:=Window_hWnd) = False Then
+            Exit Function
+        End If
+    End If
+    
+    If State = True Then
+        Call SendMessage(hWnd:=Window_hWnd, wMsg:=WM_SETREDRAW, wParam:=1, lParam:=0)
+        Call InvalidateRect(hWnd:=Window_hWnd, lpRect:=0, bErase:=True)
+        Call UpdateWindow(hWnd:=Window_hWnd)
+    
+    Else
+        Call SendMessage(hWnd:=Window_hWnd, wMsg:=WM_SETREDRAW, wParam:=0, lParam:=0)
+    
+    End If
+
 End Function
