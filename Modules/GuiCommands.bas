@@ -1,12 +1,30 @@
 Attribute VB_Name = "GuiCommands"
 Option Explicit
 '@Folder("Modules")
-
 '=================================
 ' DESCRIPTION: Holds commands used
 ' through the GUI with exception
-' of the import function.
+' of the import function which is 
+' kept in ThisWorkbook.
 '=================================
+Public Sub ResetExcelGUI()
+' Sets visible sheets in the excel gui to only start
+    HideAllSheets
+End Sub
+
+Private Sub HideAllSheets(wb As Workbook)
+' Hides all visible sheets in the given workbook.
+    Dim ws As Worksheet
+    For Each ws In wb.Worksheets
+        If ws Is shtStart Then
+            'Pass
+        ElseIf ws.Visible = xlSheetVisible Then 
+            ws.Visible = xlSheetHidden
+            Logger.Log ws.Name & " was hidden."
+        End If
+    Next ws
+End Sub
+
 Public Sub DeinitializeApplication()
     SpecManager.StopApp
     If Application.VBE.MainWindow.Visible = True Then

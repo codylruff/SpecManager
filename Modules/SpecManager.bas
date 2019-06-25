@@ -2,17 +2,20 @@ Attribute VB_Name = "SpecManager"
 
 Public Sub StartApp()
     Logger.Trace "Starting Application"
+    GuiCommands.ResetExcelGUI
     App.Start
 End Sub
 
 Public Sub RestartApp()
     Logger.Trace "Restarting Application"
+    GuiCommands.ResetExcelGUI
     App.RefreshObjects
 End Sub
 
 Public Sub StopApp()
     Logger.Trace "Stopping Application"
     Logger.SaveLog
+    GuiCommands.ResetExcelGUI
     App.Shutdown
 End Sub
 
