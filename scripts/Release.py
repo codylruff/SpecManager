@@ -121,7 +121,7 @@ def main():
     installer = args.installer
     
     # Initialize repo directory
-    repo_dir = r"C:/Users/cruff/Documents/Projects/source/Spec-Manager”
+    repo_dir = r"C:/Users/cruff/Documents/Projects/source/Spec-Manager"
 
     if not installer:
         # Create new release directory
