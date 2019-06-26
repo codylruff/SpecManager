@@ -104,11 +104,11 @@ Sub PrintSelectedSpecs(setup_only As Boolean)
             End If
             Exit Sub
         End If
-            lngNumberOfTasks = App.specs.Count
-            lngCounter = 0
+            'lngNumberOfTasks = App.specs.Count
+            'lngCounter = 0
         For Each T In App.specs
             Set spec = App.specs.Item(T)
-            lngCounter = lngCounter + 1
+            'lngCounter = lngCounter + 1
             If spec.SpecType = "Testing Requirements" Or spec.SpecType = "Ballistic Testing Requirements" Then
                 Set new_sht = Utils.CreateNewSheet(spec.SpecType)
                 App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
