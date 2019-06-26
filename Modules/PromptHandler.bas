@@ -2,17 +2,27 @@ Attribute VB_Name = "PromptHandler"
 Option Explicit
 Public Choice As Boolean
 
+Public Enum ProtectionPackage
+    WeavingTieIn = 1
+    WeavingTieBack = 2
+    FinishingWithQC = 3
+    FinishingNoQC = 4
+End Enum
+
 ' Prompt Sequences
 ' A prompt sequence is a series of prompts and conditionals
 ' used to determine the final outcome of events
-Function ProtectionPlannerSequence() As Boolean
+
+Function ProtectionPlanningSequence() As ProtectionPackage
 ' This sequence is shown to the protection planners upon clicking print.
 '-----------------------------------------------------------------------
 ' 1. Is this a finishing order?
-'       a. If no then proceed to print all specifications
+'       a. If no then proceed check for tie-back
 ' 2. Is this the first cut?
 '       a. If no then print only setupd documents
 ' 3. After finishing, will this roll be processed on the Isotex?
+' 4. Is this a straigh tie-back?
+'       a. If yes then proceed to print tie-back checklist 
 ' Roll is first cut so if no then print all specifications
 '------------------------------------------------------------------------
     ' Prompt #1 : Is this a finishing order?
@@ -27,18 +37,27 @@ Function ProtectionPlannerSequence() As Boolean
             question "After finishing, will this roll be processed on the Isotex?"
             formUserPrompt.Show
             If Choice = True Then
-                ProtectionPlannerSequence = True
+                ProtectionPlanningSequence = FinishingNoQC
                 Exit Function
             Else
-                ProtectionPlannerSequence = False
+                ProtectionPlanningSequence = FinishingWithQC
                 Exit Function
             End If
         Else
-            ProtectionPlannerSequence = True
+            ProtectionPlanningSequence = FinishingNoQC
             Exit Function
         End If
-        ProtectionPlannerSequence = False
+    Else
+        ' Prompt #4 : Is this a straight tie-back?
+        question "Is this a straight tie-back?"
+        formUserPrompt.Show
+        If Choice = True Then 
+            ProtectionPlanningSequence = WeavingTieBack
+        Else
+            ProtectionPlanningSequence = WeavingTieIn
+        End If
     End If
+
 End Function
 
 Private Sub question(question_text As String)

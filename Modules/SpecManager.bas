@@ -391,3 +391,16 @@ Public Sub CopyPropertiesFromFile()
         ws.Cells(r, 2).Value = json_string
     Next r
 End Sub
+
+Sub PrintPackage(doc_package As Object)
+' Print specs from the given doc_package (dictionary)
+    'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
+    Dim spec As Specification
+    Dim doc As Variant
+    For Each doc In doc_package
+        Set spec = doc_package(doc)
+        With spec
+            Utils.PrintSheet ThisWorkbook.Sheets(.Spec_Type), IIf(.Spec_Type = "Weaving RBA", False, True)
+        End With
+    Next doc
+End Sub

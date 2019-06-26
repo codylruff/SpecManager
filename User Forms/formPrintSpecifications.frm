@@ -16,10 +16,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
-    'MsgBox "Function un-available"
-    PrintSelectedSpecs PromptHandler.ProtectionPlannerSequence
-    'Debug.Print PromptHandler.ProtectionPlannerSequence
-    'ExportPdf
+    WriteAllDocuments
+    PrintSelectedPackage PromptHandler.ProtectionPlanningSequence
 End Sub
 
 Private Sub cmdSearch_Click()
@@ -69,58 +67,67 @@ Sub Back()
     GuiCommands.GoToMain
 End Sub
 
-Sub PrintSelectedSpecs(setup_only As Boolean)
-' This subroutine prints the contents of the console box using the default printer assign in user settings.
-    'Check if there is actually text to print
-    Dim lngCounter As Long
-    Dim lngNumberOfTasks As Long
+Sub PrintSelectedPackage(selected_pacakge As ProtectionPackage)
+' Prints the select document package for protection
+    Dim origCalcMode As xlCalculation
+
+    ' Toggle Gui Functions to speed up printing
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    origCalcMode = Application.Calculation
+    Application.Calculation = xlCalculationManual
+
+    ' Select document package
+    Select Case selected_package
+        Case WeavingTieIn
+            'SpecManager.PrintPackage DropKeys(App.specs, Array("Tie-Back Checklist"))
+        Case WeavingTieBack
+            'SpecManager.PrintPackage DropKeys(App.specs, Array("Tie-In Checklist"))
+        Case FinishingWithQC
+            'SpecManager.PrintPackage App.specs
+        Case FinishingNoQC
+            'SpecManager.PrintPackage DropKeys(App.specs, Array("Testing Requirements", "Ballistic Testing Requirements"))
+        Case Else
+            'SpecManager.PrintPackage App.specs
+    End Select
+
+    ' Toggle Gui Functions to speed up printing
+    GuiCommands.ResetExcelGUI
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+    Application.Calculation = origCalcMode
+End Sub
+
+Sub WriteAllDocuments()
+' Write all specification docs to the correct worksheets / create worksheet if missing
     Dim spec As Specification
     Dim sheetsToPrint
     Dim T As Variant
     Dim origCalcMode As xlCalculation
     Dim new_sht As Worksheet
 
+    If Me.txtConsole.text = "No specifications are available for this code." Then
+         MsgBox "There is nothing to print!"
+         Exit Sub
+    ElseIf Not IsNumeric(Me.txtProductionOrder) Then
+         MsgBox "Please enter a production order."
+         Exit Sub
+    End If
+
+    ' Toggle Gui Functions to speed up printing
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     origCalcMode = Application.Calculation
-    Application.Calculation = xlCalculationManual
+    Application.Calculation = xlCalculationManual    
 
-    If Me.txtConsole.text = "No specifications are available for this code." Then
-         MsgBox "There is nothing to print!"
-    ElseIf Not IsNumeric(Me.txtProductionOrder) Then
-         MsgBox "Please enter a production order."
-    Else
-        ' Print the specs one at a time to the default printer
-        If setup_only Then
-            Dim setup_spec As Specification
-            If App.specs.Exists("Setup Requirements") Then
-                ' Print only the setup spec
-                Set new_sht = Utils.CreateNewSheet(spec.SpecType)
-                Set spec = App.specs.Item("Setup Requirements")
-                App.console.PrintObjectToSheet spec, new_sht, vbNullString
-                Utils.PrintSheet new_sht, True
-            Else
-                MsgBox "No Setup Requirements Exist for this Material."
-            End If
-            Exit Sub
+    For Each T In App.specs
+        Set spec = App.specs.Item(T)
+            App.console.PrintObjectToSheet spec, _
+                        Utils.CreateNewSheet(spec.SpecType), _
+                        txtProductionOrder
         End If
-            'lngNumberOfTasks = App.specs.Count
-            'lngCounter = 0
-        For Each T In App.specs
-            Set spec = App.specs.Item(T)
-            'lngCounter = lngCounter + 1
-            If spec.SpecType = "Testing Requirements" Or spec.SpecType = "Ballistic Testing Requirements" Then
-                Set new_sht = Utils.CreateNewSheet(spec.SpecType)
-                App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
-                Utils.PrintSheet new_sht, True
-            Else
-                App.console.PrintObjectToSheet spec, new_sht, txtProductionOrder
-                Utils.PrintSheet shtRBA
-            End If
-            'modProgress.ShowProgress _
-            '    lngCounter, lngNumberOfTasks, "Printing : " & spec.SpecType, IIf(lngCounter = lngNumberOfTasks, True, False)
-        Next T
-    End If
+    Next T
+    ' Toggle Gui Functions to speed up printing
     GuiCommands.ResetExcelGUI
     Application.ScreenUpdating = True
     Application.DisplayAlerts = True
