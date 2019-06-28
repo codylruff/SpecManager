@@ -110,17 +110,20 @@ Private Sub InsertImage(sht As Worksheet, img_path As String, row_id As Integer)
     Set img = ActiveSheet.Pictures.Insert(img_path)
 End Sub
 
-Private Sub LoadRbaToSheet(spec As Specification)
+Private Sub LoadRbaToSheet(spec As Specification, qc_sample As String, ballistic_sample As String)
 ' Load values from rba properties into cooresponding named range
     Dim nr As Variant
     Dim rng As Range
     ' Add the revision number
-    Utils.Insert shtRBA.Range("revision"), "Rev. " & spec.Revision
+    On Error Resume Next
+    Utils.Insert shtRBA.Range("revision"), spec.Revision
+    Utils.Insert shtRBA.Range("qc_sample_size"), qc_sample
+    Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
     For Each nr In spec.Properties
         Set rng = shtRBA.Range(CStr(nr))
         Utils.Insert rng, spec.Properties(CStr(nr))
     Next nr
-    
+    On Error GoTo 0
 End Sub
 
 Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString)
@@ -134,7 +137,9 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     ' This tree selects any specs which have an associated custom worksheet template
     Select Case spec.SpecType
         Case "Weaving RBA"
-            LoadRbaToSheet spec
+            LoadRbaToSheet spec, _
+            App.specs("Testing Requirements").Properties("QC Sample Length"), _
+            App.specs("Ballistic Testing Requirements").Properties("Ballistic Sample Length")
         Case Else
             ' All specifications which do not have a custom worksheet template
             ' will be handled by this case.
@@ -251,7 +256,7 @@ Private Function FormatAscii(char As String) As String
         char = "X"
     ElseIf IsNumeric(Left(char, 1)) Then
         ' Pass
-    Else
+    ElseIf char = vbNullString Then
         char = "-"
     End If
     FormatAscii = char

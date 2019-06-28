@@ -227,6 +227,10 @@ Sub PrintTemplate(frm As MSForms.UserForm)
     App.console.PrintObject App.current_template
 End Sub
 
+Public Sub UpdateSingleProperty(property_name As String, property_value As Variant, material_id As String)
+' Updates the value of a single property without the use of the UI. This should make Admin easier.
+End Sub
+
 Function SaveNewSpecification(spec As Specification) As Long
     If ManagerOrAdmin Then
         SaveNewSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
@@ -337,6 +341,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Columns.AutoFit
     Application.ScreenUpdating = True
 End Sub
+
 
 Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet, Optional start_row As Integer = 2, Optional start_col As Integer = 1)
 ' Create a column at the end of a table and fill it with a json string represent each row.

@@ -233,7 +233,7 @@ End Function
 ' @param {JsonObject} (Dictionary or Collection)
 ' @throws TODO: Add Error Description/Constant
 ''
-Function WriteJsonObject(ByVal file_path As String, ByRef json_object As Object) As Long
+Function WriteJsonObject(ByVal file_path As String, ByRef json_object As Object, Optional white_space As Variant) As Long
     Dim FSO As Object
     Dim JsonTS As Object
     
@@ -241,7 +241,11 @@ Function WriteJsonObject(ByVal file_path As String, ByRef json_object As Object)
 
     Set FSO = CreateObject("Scripting.FileSystemObject")
     Set JsonTS = FSO.OpenTextFile(file_path, 2, True)
-    JsonTS.Write JsonVBA.ConvertToJson(json_object, 2)
+    If Not IsMissing(white_space) Then
+        JsonTS.Write JsonVBA.ConvertToJson(json_object, white_space)
+    Else
+        JsonTS.Write JsonVBA.ConvertToJson(json_object)
+    End If
     JsonTS.Close
     WriteJsonObject = 0
     Exit Function

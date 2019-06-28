@@ -60,6 +60,9 @@ Public Sub ConfigControl()
         End If
         Application.VBE.MainWindow.Visible = True
         shtDeveloper.Visible = xlSheetVisible
+        shtRBA.Visible = xlSheetVisible
+        shtRbaChangeLog.Visible = xlSheetVisible
+        shtRbaParser.Visible = xlSheetVisible
         'Application.SendKeys ("^r")
     End If
 End Sub
