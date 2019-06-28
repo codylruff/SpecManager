@@ -679,7 +679,7 @@ End If
 ReDim arr(0 To dict.Count - 1, 0 To 1)
 
 For Ndx = 0 To dict.Count - 1
-    arr(Ndx, 0) = dict.Keys(Ndx)
+    arr(Ndx, 0) = dict.keys(Ndx)
     '''''''''''''''''''''''''''''''''''''''''
     ' Test to see if the item in the Dict is
     ' an object. If so, use Set.
@@ -750,7 +750,7 @@ For Ndx = 0 To dict.Count - 1
     Else
         ItemVar = dict.Items(Ndx)
     End If
-    KeyVal = dict.Keys(Ndx)
+    KeyVal = dict.keys(Ndx)
     Err.Clear
     coll.Add Item:=ItemVar, Key:=KeyVal
     If Err.Number <> 0 Then
@@ -1253,7 +1253,7 @@ If SortByKey = True Then
     ReDim arr(0 To dict.Count - 1)
     
     For Ndx = 0 To dict.Count - 1
-        arr(Ndx) = dict.Keys(Ndx)
+        arr(Ndx) = dict.keys(Ndx)
     Next Ndx
     
     ''''''''''''''''''''''''''''''''''''''
@@ -1307,7 +1307,7 @@ Else
         ' array. We'll use these values later to convert
         ' back to the proper data type for Item.
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            arr(Ndx) = dict.Items(Ndx) & vbNullChar & dict.Keys(Ndx)
+            arr(Ndx) = dict.Items(Ndx) & vbNullChar & dict.keys(Ndx)
             VTypes(Ndx) = VarType(dict.Items(Ndx))
             
     Next Ndx

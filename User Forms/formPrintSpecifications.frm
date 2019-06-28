@@ -13,10 +13,18 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
-    WriteAllDocuments
+    If App.console.CurrentText = "No specifications are available for this code." Then
+         MsgBox "There is nothing to print!"
+         Exit Sub
+    ElseIf Not IsNumeric(Me.txtProductionOrder) Then
+         MsgBox "Please enter a production order."
+         Exit Sub
+    End If
+    WriteAllDocuments Me.txtProductionOrder
     PrintSelectedPackage PromptHandler.ProtectionPlanningSequence
 End Sub
 
@@ -60,6 +68,9 @@ Sub MaterialSearch()
     SpecManager.RestartApp
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.ListSpecifications Me
+    If Me.txtConsole.text = vbNullString Then
+        Me.txtConsole.text = "No specifications are available for this code."
+    End If
 End Sub
 
 Sub Back()
@@ -67,71 +78,30 @@ Sub Back()
     GuiCommands.GoToMain
 End Sub
 
-Sub PrintSelectedPackage(selected_pacakge As ProtectionPackage)
+Sub PrintSelectedPackage(selected_package As ProtectionPackage)
 ' Prints the select document package for protection
-    Dim origCalcMode As xlCalculation
-
-    ' Toggle Gui Functions to speed up printing
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-    origCalcMode = Application.Calculation
-    Application.Calculation = xlCalculationManual
 
     ' Select document package
     Select Case selected_package
-        Case WeavingTieIn
-            'SpecManager.PrintPackage DropKeys(App.specs, Array("Tie-Back Checklist"))
+        Case WeavingStyleChange
+            Logger.Log "Printing Weaving Style Change Package"
+            SpecManager.PrintPackage DropKeys(App.specs, Array("Tie Back Checklist"))
         Case WeavingTieBack
-            'SpecManager.PrintPackage DropKeys(App.specs, Array("Tie-In Checklist"))
+            Logger.Log "Print Weaving Tie-Back Package"
+            SpecManager.PrintPackage DropKeys(App.specs, Array("Style Change Checklist"))
         Case FinishingWithQC
-            'SpecManager.PrintPackage App.specs
+            Logger.Log "Printing Finishing with QC Package"
+            SpecManager.PrintPackage App.specs
         Case FinishingNoQC
-            'SpecManager.PrintPackage DropKeys(App.specs, Array("Testing Requirements", "Ballistic Testing Requirements"))
+            Logger.Log "Printing Finishing without QC Package"
+            SpecManager.PrintPackage DropKeys(App.specs, _
+                        Array("Testing Requirements", "Ballistic Testing Requirements"))
         Case Else
-            'SpecManager.PrintPackage App.specs
+            Logger.Log "Printing All Available Specs"
+            SpecManager.PrintPackage App.specs
     End Select
 
-    ' Toggle Gui Functions to speed up printing
-    GuiCommands.ResetExcelGUI
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-    Application.Calculation = origCalcMode
-End Sub
-
-Sub WriteAllDocuments()
-' Write all specification docs to the correct worksheets / create worksheet if missing
-    Dim spec As Specification
-    Dim sheetsToPrint
-    Dim T As Variant
-    Dim origCalcMode As xlCalculation
-    Dim new_sht As Worksheet
-
-    If Me.txtConsole.text = "No specifications are available for this code." Then
-         MsgBox "There is nothing to print!"
-         Exit Sub
-    ElseIf Not IsNumeric(Me.txtProductionOrder) Then
-         MsgBox "Please enter a production order."
-         Exit Sub
-    End If
-
-    ' Toggle Gui Functions to speed up printing
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-    origCalcMode = Application.Calculation
-    Application.Calculation = xlCalculationManual    
-
-    For Each T In App.specs
-        Set spec = App.specs.Item(T)
-            App.console.PrintObjectToSheet spec, _
-                        Utils.CreateNewSheet(spec.SpecType), _
-                        txtProductionOrder
-        End If
-    Next T
-    ' Toggle Gui Functions to speed up printing
-    GuiCommands.ResetExcelGUI
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-    Application.Calculation = origCalcMode
+    
 End Sub
 
 Sub ExportPdf(Optional isTest As Boolean = False)

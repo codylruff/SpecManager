@@ -397,10 +397,52 @@ Sub PrintPackage(doc_package As Object)
     'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
     Dim spec As Specification
     Dim doc As Variant
+    Dim origCalcMode As xlCalculation
+
+    ' Toggle Gui Functions to speed up printing
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    origCalcMode = Application.Calculation
+    Application.Calculation = xlCalculationManual
+
+    ' Print all the documents in the package
     For Each doc In doc_package
         Set spec = doc_package(doc)
         With spec
-            Utils.PrintSheet ThisWorkbook.Sheets(.Spec_Type), IIf(.Spec_Type = "Weaving RBA", False, True)
+            ' Check for multi-page documents
+            Utils.PrintSheet ThisWorkbook.Sheets(.SpecType), IIf(.SpecType = "Weaving RBA", False, True)
         End With
     Next doc
+
+    ' Toggle Gui Functions to speed up printing
+    GuiCommands.ResetExcelGUI
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+    Application.Calculation = origCalcMode
+
+End Sub
+
+Sub WriteAllDocuments(Optional order_number As String = vbNullString)
+' Write all specification docs to the correct worksheets / create worksheet if missing
+    Dim spec As Specification
+    Dim T As Variant
+    Dim origCalcMode As xlCalculation
+
+    ' Toggle Gui Functions to speed up printing
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    origCalcMode = Application.Calculation
+    Application.Calculation = xlCalculationManual
+
+    For Each T In App.specs
+        Set spec = App.specs.Item(T)
+            App.console.PrintObjectToSheet spec, _
+                        Utils.CreateNewSheet(spec.SpecType), _
+                        order_number
+    Next T
+    ' Toggle Gui Functions to speed up printing
+    GuiCommands.ResetExcelGUI
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+    Application.Calculation = origCalcMode
 End Sub

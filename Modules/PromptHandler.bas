@@ -3,7 +3,7 @@ Option Explicit
 Public Choice As Boolean
 
 Public Enum ProtectionPackage
-    WeavingTieIn = 1
+    WeavingStyleChange = 1
     WeavingTieBack = 2
     FinishingWithQC = 3
     FinishingNoQC = 4
@@ -22,7 +22,7 @@ Function ProtectionPlanningSequence() As ProtectionPackage
 '       a. If no then print only setupd documents
 ' 3. After finishing, will this roll be processed on the Isotex?
 ' 4. Is this a straigh tie-back?
-'       a. If yes then proceed to print tie-back checklist 
+'       a. If yes then proceed to print tie-back checklist
 ' Roll is first cut so if no then print all specifications
 '------------------------------------------------------------------------
     ' Prompt #1 : Is this a finishing order?
@@ -51,10 +51,10 @@ Function ProtectionPlanningSequence() As ProtectionPackage
         ' Prompt #4 : Is this a straight tie-back?
         question "Is this a straight tie-back?"
         formUserPrompt.Show
-        If Choice = True Then 
+        If Choice = True Then
             ProtectionPlanningSequence = WeavingTieBack
         Else
-            ProtectionPlanningSequence = WeavingTieIn
+            ProtectionPlanningSequence = WeavingStyleChange
         End If
     End If
 

@@ -19,14 +19,15 @@ Private Declare Function GetDesktopWindow Lib "USER32" () As Long
 Private Declare Function InvalidateRect Lib "USER32" (ByVal hWnd As Long, lpRect As Long, ByVal bErase As Long) As Long
 Private Declare Function UpdateWindow Lib "USER32" (ByVal hWnd As Long) As Long
 Private Declare Function IsWindow Lib "USER32" (ByVal hWnd As Long) As Long
-#End If 
+#End If
 ' -------------------------------------------------
 Public Function DropKeys(ByRef dict As Object, keys As Variant) As Object
 ' If a key exists the key and item will be removed and the modified dictionary returned.
-    For i = LBound(keys) To UBound(keys) - 1
-        If dict.Exists(keys(i)) Then dict.Remove(keys(i))
+    Dim i As Integer
+    For i = LBound(keys) To UBound(keys)
+        If dict.Exists(keys(i)) Then dict.Remove (keys(i))
     Next i
-    Set RemoveFromDictionary = dict
+    Set DropKeys = dict
 End Function
 
 Public Function OpenWorkbook(path) As Workbook
@@ -128,7 +129,7 @@ Function GetLine(ParamArray var() As Variant) As String
     GetLine = s & vbNewLine
 End Function
 
-Function CreateNewSheet(shtName As String) As Worksheet
+Function CreateNewSheet(shtName As String, Optional DeleteOldSheet As Boolean = False) As Worksheet
 'test
 ' Creates a new worksheet with the given name
     Application.DisplayAlerts = False
@@ -140,7 +141,12 @@ Function CreateNewSheet(shtName As String) As Worksheet
             End If
         Next i
         If Exists = True Then
-            .Sheets(shtName).Delete
+            If DeleteOldSheet Then
+                .Sheets(shtName).Delete
+            Else
+                Set CreateNewSheet = .Sheets(shtName)
+                Exit Function
+            End If
         End If
         .Sheets.Add(After:=.Sheets(.Sheets.Count)).Name = shtName
     End With
