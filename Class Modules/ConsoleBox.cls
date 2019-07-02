@@ -110,18 +110,33 @@ Private Sub InsertImage(sht As Worksheet, img_path As String, row_id As Integer)
     Set img = ActiveSheet.Pictures.Insert(img_path)
 End Sub
 
-Private Sub LoadRbaToSheet(spec As Specification, qc_sample As String, ballistic_sample As String)
+Private Sub LoadRbaToSheet(specs_dict As Object)
 ' Load values from rba properties into cooresponding named range
     Dim nr As Variant
     Dim rng As Range
-    ' Add the revision number
-    On Error Resume Next
+    Dim spec As Specification
+    Dim qc_sample As String
+    Dim ballistic_sample As String
+    ' Check for sample sizes if required
+    If specs_dict.Exists("Testing Requirements") Then
+        qc_sample = specs_dict("Testing Requirements").GetProperty("QC Sample Length")
+    Else
+        qc_sample = "1.5"
+    End If
+    If specs_dict.Exists("Ballistic Testing Requirements") Then
+        ballistic_sample = specs_dict("Ballistic Testing Requirements").GetProperty("Ballistic Sample Length")
+    Else
+        ballistic_sample = "NONE"
+    End If
+    ' Insert values into worksheet
+    Set spec = specs_dict("Weaving RBA")
     Utils.Insert shtRBA.Range("revision"), spec.Revision
     Utils.Insert shtRBA.Range("qc_sample_size"), qc_sample
     Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
+    On Error Resume Next
     For Each nr In spec.Properties
         Set rng = shtRBA.Range(CStr(nr))
-        Utils.Insert rng, spec.Properties(CStr(nr))
+        Utils.Insert rng, spec.GetProperty(CStr(nr))
     Next nr
     On Error GoTo 0
 End Sub
@@ -137,9 +152,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     ' This tree selects any specs which have an associated custom worksheet template
     Select Case spec.SpecType
         Case "Weaving RBA"
-            LoadRbaToSheet spec, _
-            App.specs("Testing Requirements").Properties("QC Sample Length"), _
-            App.specs("Ballistic Testing Requirements").Properties("Ballistic Sample Length")
+            LoadRbaToSheet App.specs
         Case Else
             ' All specifications which do not have a custom worksheet template
             ' will be handled by this case.
@@ -168,16 +181,16 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                 End If
                 ' Spec Properties
                 For Each Key In spec.Properties
-                    If Not spec.Properties(Key) = vbNullString Then
+                    If Not spec.GetProperty(CStr(Key)) = vbNullString Then
                         .Range("A" & i).Value = CStr(Key) & " : "
-                        .Range("B" & i).Value = CStr(spec.Properties(CStr(Key)))
+                        .Range("B" & i).Value = CStr(spec.GetProperty(CStr(Key)))
                         .Range("A" & i).Font.Size = 17
                         .Range("B" & i).Font.Size = 17
                         .Range("B" & i).Font.Bold = True
                         .Range("B" & i).HorizontalAlignment = xlHAlignLeft
-                        If spec.Properties(Key) = Chr(252) Or spec.Properties(Key) = Chr(171) Then
+                        If spec.GetProperty(CStr(Key)) = Chr(252) Or spec.GetProperty(CStr(Key)) = Chr(171) Then
                             .Range("B" & i).Font.Name = "Wingdings"
-                        ElseIf spec.Properties(Key) = Chr(210) Then
+                        ElseIf spec.GetProperty(CStr(Key)) = Chr(210) Then
                             .Range("B" & i).Font.Name = "Wingdings 2"
                         Else
                             .Range("B" & i).Font.Name = "Calibri"
@@ -217,8 +230,8 @@ Public Sub PrintObject(obj As Object)
     
     For Each Key In obj.Properties
         If ShouldPrint(CStr(Key)) Then
-            If Not obj.Properties(Key) = vbNullString Then
-                PrintLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
+            If Not obj.GetProperty(CStr(Key)) = vbNullString Then
+                PrintLine CStr(Key), FormatAscii(obj.GetProperty(CStr(Key)))
             Else
                 PrintLine CStr(Key), "-"
             End If
