@@ -40,11 +40,19 @@ Public Property Let MaterialId(Value As String): MaterialId_ = UCase(Value): End
 
 
 ' METHODS---
+Public Function GetProperty(property As String) As Variant
+    If Me.Properties.Exists(property) Then
+        GetProperty = Me.Properties(property)
+    Else
+        GetProperty = vbNullString
+    End If
+End Function
+
 Public Sub AddProperty(property As String, tolerance As Variant)
 ' Adds a property to the list of properties
     Me.Properties.Add property, vbNullString
     Me.Tolerances.Add property, tolerance
-    RaiseEvent PropertyAdded
+    'RaiseEvent PropertyAdded
 End Sub
 
 Public Sub JsonToObject(properties_json As String, tolerances_json As String, material_id As String, spec_type As String, Revision_ As String)
@@ -61,7 +69,7 @@ End Sub
 
 Public Function PropertiesJson() As String
 ' Store spec Properties dictionary as json
-    PropertiesJson = JsonVBA.ConvertToJson(Properties)
+    PropertiesJson = JsonVBA.ConvertToJson(Me.Properties)
 End Function
 
 Public Function TolerancesJson() As String
