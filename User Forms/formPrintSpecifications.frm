@@ -4,7 +4,7 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formPrintSpecifications
    ClientHeight    =   6612
    ClientLeft      =   120
    ClientTop       =   468
-   ClientWidth     =   6540
+   ClientWidth     =   6684
    OleObjectBlob   =   "formPrintSpecifications.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,8 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -27,6 +25,7 @@ Private Sub cmdPrintSpecifications_Click()
     End If
     WriteAllDocuments Me.txtProductionOrder
     PrintSelectedPackage PromptHandler.ProtectionPlanningSequence
+    ClearThisForm
 End Sub
 
 Private Sub cmdSearch_Click()

@@ -16,6 +16,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -26,7 +29,7 @@ Private Sub UserForm_Initialize()
         ' Set App.current_spec = New Specification
         ' .current_spec.SpecType = .current_template.SpecType
         ' .current_spec.Revision = 0#
-'        .current_template.Properties.Item(Utils.ConvertToCamelCase( _
+'        .current_template.GetProperty(Utils.ConvertToCamelCase( _
 '                cboSelectProperty.value)) = txtPropertyValue
         Set .current_spec.Properties = .current_template.Properties
         Set .current_spec.Tolerances = .current_template.Properties
@@ -110,7 +113,7 @@ End Sub
 Sub SetProperty()
 ' This executes a set property command
     With App.current_spec
-        .Properties.Item(cboSelectProperty.Value) = txtPropertyValue
+        .GetProperty(cboSelectProperty.Value) = txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub

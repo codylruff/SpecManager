@@ -16,6 +16,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub cmdSelectType_Click()
@@ -152,7 +155,7 @@ Sub Submit()
     If cboSelectProperty.Value = vbNullString Then Exit Sub
     ' Change the property desired
     With App.current_spec
-        .Properties.Item(cboSelectProperty.Value) = txtPropertyValue
+        .Properties(cboSelectProperty.Value) = txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub
