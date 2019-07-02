@@ -13,7 +13,7 @@ Public Sub ParseAll()
     Dim ws As Worksheet
     Set ws = shtRbaParser
     
-    For r = 1 To 16
+    For r = 19 To 20
         material_number = Cells(r, 1)
         Set json_object = ParseRBA(ThisWorkbook.path & "\RBAs\" & material_number & ".xlsx")
         json_object("article_code") = material_number
@@ -238,3 +238,22 @@ Public Function AddRbaNames(dict As Object, wb As Workbook, tag As String, r_sta
     Next r
     Set AddRbaNames = dict
 End Function
+
+Public Sub RenameRBAs()
+
+    Dim material_number As String
+    Dim r As Long
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Set ws = shtRbaParser
+    Application.DisplayAlerts = False
+    Application.ScreenUpdating = False
+    For r = 1 To 19
+        material_number = ws.Cells(r, 1)
+        Set wb = OpenWorkbook(ThisWorkbook.path & "\RBAs\" & ws.Cells(r, 3) & ".xlsx")
+        wb.SaveAs ThisWorkbook.path & "\RBAs\" & material_number & ".xlsx"
+        wb.Close
+    Next r
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
+End Sub
