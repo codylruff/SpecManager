@@ -95,8 +95,8 @@ if ($tag -ne $local_version) {
     $ZipFile = "$SpecManagerDir\spec-manager.zip"
     $ReleaseUri = "https://github.com/codylruff/SpecManager/releases/download/$tag/spec-manager-$tag.zip";
     
-    # Check version to speed up program if PSVersion 3.0 or higher.
-    if($PSVersionTable.PSVersion.Major -gt 2){
+    # Check version to speed up program if PSVersion 5.0 or higher.
+    if($PSVersionTable.PSVersion.Major -gt 4){
         $StatusText.Text = "Downloading Latest Version . . ."
         $StatusText.Refresh()
         [Net.ServicePointManager]::SecurityProtocol = $tls12

@@ -109,7 +109,7 @@ $StatusText.Text = "Downloading Spec-Manager. . ."
 $StatusText.Refresh()
 Start-Sleep -Seconds 2
 
-# Check version to speed up program if PSVersion 3.0 or higher.
+# Check version to speed up program if PSVersion 5.0 or higher.
 if($PSVersionTable.PSVersion.Major -gt 4){
     [Net.ServicePointManager]::SecurityProtocol = $tls12
     Invoke-WebRequest $ReleaseUri -Out $ZipFile
