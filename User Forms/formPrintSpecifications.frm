@@ -25,15 +25,15 @@ Private Sub cmdPrintSpecifications_Click()
     End If
     WriteAllDocuments Me.txtProductionOrder
     PrintSelectedPackage PromptHandler.ProtectionPlanningSequence
-    ClearThisForm
 End Sub
 
 Private Sub cmdSearch_Click()
-   If txtMaterialId = vbNullString Or txtMaterialId = " " Then
-      MsgBox "Please enter a material id."
-      Exit Sub
-   End If
-      MaterialSearch
+    ' Check for any white space and remove it
+    If Utils.RemoveWhiteSpace(txtMaterialId) = vbNullString Then
+       MsgBox "Please enter a material id."
+       Exit Sub
+    End If
+    MaterialSearch
 End Sub
 
 Private Sub UserForm_Initialize()

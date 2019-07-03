@@ -377,8 +377,12 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
     End With
 End Sub
 
-Public Sub TestTableToJson()
-    TableToJson 83, 17, ActiveWorkbook.Sheets("testing"), start_col:=3
+Public Sub EntireTableToJson()
+' Converts each row in the table to json format, then loads it into the specs db
+    TableToJson num_rows:=44, _
+                num_cols:=19, _
+                ws:=ActiveWorkbook.Sheets("Warping Requirements"), _
+                start_col:=3
 End Sub
 
 Public Sub CopyPropertiesFromFile()
