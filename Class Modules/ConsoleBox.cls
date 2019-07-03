@@ -230,8 +230,8 @@ Public Sub PrintObject(obj As Object)
     
     For Each Key In obj.Properties
         If ShouldPrint(CStr(Key)) Then
-            If Not obj.GetProperty(CStr(Key)) = vbNullString Then
-                PrintLine CStr(Key), FormatAscii(obj.GetProperty(CStr(Key)))
+            If Not obj.Properties(CStr(Key)) = vbNullString Then
+                PrintLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
             Else
                 PrintLine CStr(Key), "-"
             End If
