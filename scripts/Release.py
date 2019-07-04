@@ -114,7 +114,9 @@ def update_installer_files(repo_dir, installer_dir):
     copy_tree(repo_installer_dir, installer_dir)
 
 def create_release():
-    pass
+    g = Github(“codylruff”, “@9B882y4e”)
+    
+    
 
 def main():
 
