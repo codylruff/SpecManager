@@ -1,4 +1,5 @@
 import shutil, os, argparse, json
+from github import Github
 from distutils.dir_util import copy_tree
     
 # Takes github release tag as command line arg "vX.Y.Z"
@@ -111,6 +112,9 @@ def update_json_files(release_dir, release_ver):
 def update_installer_files(repo_dir, installer_dir):
     repo_installer_dir = repo_dir + "/scripts/usb installer"
     copy_tree(repo_installer_dir, installer_dir)
+
+def create_release():
+    pass
 
 def main():
 
