@@ -1,1 +1,1 @@
-# SpecManager
+# SAATI Spec-Manager
