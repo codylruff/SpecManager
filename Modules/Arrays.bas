@@ -3796,3 +3796,22 @@ End If
 
 
 End Function
+
+Function IsInArray(valToBeFound As Variant, arr As Variant) As Boolean
+'DEVELOPER: Ryan Wells (wellsr.com)
+'DESCRIPTION: Function to check if a value is in an array of values
+'INPUT: Pass the function a value to search for and an array of values of any data type.
+'OUTPUT: True if is in array, false otherwise
+    Dim element As Variant
+    On Error GoTo IsInArrayError: 'array is empty
+        For Each element In arr
+            If element = valToBeFound Then
+                IsInArray = True
+                Exit Function
+            End If
+        Next element
+    Exit Function
+    IsInArrayError:
+On Error GoTo 0
+    IsInArray = False
+End Function
