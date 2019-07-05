@@ -20,7 +20,7 @@ Public current_user As Account
 Public current_spec As Specification
 Public templates As VBA.Collection
 Public specs As Object
-Public console As DocumentPrinter
+Public printer As DocumentPrinter
 Public current_template As SpecificationTemplate
 ' Methods
 Sub Start()
@@ -32,7 +32,7 @@ Sub Start()
     Set current_spec = New Specification
     Set templates = SpecManager.GetAllTemplates
     Set specs = CreateObject("Scripting.Dictionary")
-    Set console = New DocumentPrinter
+    Set printer = New DocumentPrinter
     Set current_template = New SpecificationTemplate
 End Sub
 
@@ -40,7 +40,7 @@ Public Sub RefreshObjects()
     Set current_spec = New Specification
     Set templates = SpecManager.GetAllTemplates
     Set specs = CreateObject("Scripting.Dictionary")
-    Set console = New DocumentPrinter
+    Set printer = New DocumentPrinter
     Set current_template = New SpecificationTemplate
 End Sub
 
@@ -61,7 +61,7 @@ Public Sub Shutdown()
     Set current_user = Nothing
     Set current_spec = Nothing
     Set specs = Nothing
-    Set console = Nothing
+    Set printer = Nothing
     Set current_template = Nothing
 End Sub
 

@@ -91,7 +91,7 @@ Private Sub PopulateCboSelectProperty()
     
     With cboSelectProperty
         For Each prop In App.current_spec.Properties
-            If App.console.ShouldPrint((prop)) Then
+            If App.printer.ShouldPrint((prop)) Then
                 .AddItem Utils.SplitCamelCase(CStr(prop))
             End If
         Next prop

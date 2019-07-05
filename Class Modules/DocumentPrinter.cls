@@ -43,12 +43,20 @@ Public Sub ClearConsole()
     Logger.Log "Console Cleared"
 End Sub
 
-Private Sub InsertHeader()
+Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = vbNullString)
 ' Header Content and formatting for Spec Docs
+    ' Insert Header
+    With ws.PageSetup
+        .LeftHeader = spec.SpecType
+        .CenterHeader = spec.MaterialId
+        .RightHeader = spec.Revision & vbNewLine & _
+                       CStr(Now()) & vbNewLine & _
+                       production_order
+    End With
 End Sub
 
 Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = vbNullString, _
-            Optional leftHeaderText = vbNullString, Optional rightHeaderText = vbNullString)
+            Optional leftFooterText = vbNullString, Optional rightFooterText = vbNullString)
 ' Footer Content and formatting for Spec Docs
 
     If IsMissing(disclaimer) Then
@@ -56,11 +64,11 @@ Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = vbNull
                      "Printed and/or Unsigned Copies Are Uncontrolled."
     End If
     
-    ' Insert Header
+    ' Insert Footer
     With ws.PageSetup
-        .LeftHeader = leftHeaderText
-        .CenterHeader = disclaimer
-        .RightHeader = rightHeaderText
+        .LeftFooter = leftHeaderText
+        .CenterFooter = disclaimer
+        .RightFooter = rightHeaderText
     End With
 
 End Sub
@@ -105,7 +113,11 @@ Private Function GetWeavePatternImagePath(material_id As String) As String
         Case "7"
             weave_id = "Double_Cloth"
         Case Else
-            weave_id = "Not_Available"
+            If Arrays.IsInArray(Mid(material_id, 6, 3), Array("336", "930")) Then
+                weave_id = "6HS"
+            Else 
+                weave_id = "Not_Available"
+            End If
     End Select
 
     Logger.Log "Inserting image : " & weave_id & ".jpg"
@@ -163,10 +175,10 @@ Private Sub LoadRbaToSheet(specs_dict As Object)
     On Error GoTo 0
 End Sub
 
-Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString)
+Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString, _
+            Optional i As Integer = 3)
 ' Print object to specified worksheet starting in cell "A1"
     Dim Key As Variant
-    Dim i As Integer
     Dim path As String
     ' Disable updates to the gui during processing
     Application.DisplayAlerts = False
@@ -183,24 +195,25 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                 ' Clear any existing information from the sheet
                 .Cells.ClearContents
                 ' Spec Header
-                .Range("A" & 1).Value = spec.SpecType & " : "
-                .Range("B" & 1).Value = spec.MaterialId
-                .Range("A" & 1).Font.Bold = True
-                .Range("A" & 1).Font.Size = 18
-                .Range("B" & 1).Font.Bold = True
-                .Range("B" & 1).Font.Size = 18
-                If prod_order <> vbNullString Then
-                    .Range("A" & 2).Value = "Production Order : "
-                    .Range("B" & 2).Value = prod_order
-                    .Range("A" & 2).Font.Bold = True
-                    .Range("A" & 2).Font.Size = 18
-                    .Range("B" & 2).Font.Bold = True
-                    .Range("B" & 2).Font.Size = 18
-                    .Range("B" & 2).HorizontalAlignment = xlHAlignLeft
-                    i = 4
-                Else
-                    i = 3
-                End If
+
+                ' .Range("A" & 1).Value = spec.SpecType & " : "
+                ' .Range("B" & 1).Value = spec.MaterialId
+                ' .Range("A" & 1).Font.Bold = True
+                ' .Range("A" & 1).Font.Size = 18
+                ' .Range("B" & 1).Font.Bold = True
+                ' .Range("B" & 1).Font.Size = 18
+                ' If prod_order <> vbNullString Then
+                '     .Range("A" & 2).Value = "Production Order : "
+                '     .Range("B" & 2).Value = prod_order
+                '     .Range("A" & 2).Font.Bold = True
+                '     .Range("A" & 2).Font.Size = 18
+                '     .Range("B" & 2).Font.Bold = True
+                '     .Range("B" & 2).Font.Size = 18
+                '     .Range("B" & 2).HorizontalAlignment = xlHAlignLeft
+                '     i = 4
+                ' Else
+                '     i = 3
+                ' End If
                 ' Spec Properties
                 For Each Key In spec.Properties
                     If Not spec.GetProperty(CStr(Key)) = vbNullString Then

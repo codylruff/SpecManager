@@ -17,7 +17,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
-    If App.console.CurrentText = "No specifications are available for this code." Then
+    If App.printer.CurrentText = "No specifications are available for this code." Then
          MsgBox "There is nothing to print!"
          Exit Sub
     ElseIf Not IsNumeric(Me.txtProductionOrder) Then
@@ -106,7 +106,7 @@ Sub PrintSelectedPackage(selected_package As ProtectionPackage)
 End Sub
 
 Sub ExportPdf(Optional isTest As Boolean = False)
-    App.console.PrintObjectToSheet App.specs.Item("Testing Requirements"), Utils.CreateNewSheet("pdf"), txtProductionOrder
+    App.printer.PrintObjectToSheet App.specs.Item("Testing Requirements"), Utils.CreateNewSheet("pdf"), txtProductionOrder
     If isTest Then
         GuiCommands.DocumentPrinterToPdf_Test
     Else

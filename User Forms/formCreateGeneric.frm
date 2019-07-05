@@ -37,7 +37,7 @@ End Sub
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
     lblTemplateName = App.current_template.SpecType
-    Set App.console = Factory.CreateDocumentPrinter(Me)
+    Set App.printer = Factory.CreateDocumentPrinter(Me)
 End Sub
 
 Private Sub cmdAddProperty_Click()
@@ -45,7 +45,7 @@ Private Sub cmdAddProperty_Click()
 End Sub
 
 Sub AddProperty()
-   App.console.PrintLine Me.txtPropertyName
+   App.printer.PrintLine Me.txtPropertyName
    App.current_template.AddProperty Me.txtPropertyName
 End Sub
 

@@ -325,7 +325,6 @@ Public Sub ToggleAutoRecover()
 
 End Sub
 
-
 #If Win64 Then
 Public Function fncScreenUpdating(State As Boolean, Optional Window_hWnd As LongPtr = 0)
 #Else

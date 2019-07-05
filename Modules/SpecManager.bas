@@ -205,26 +205,26 @@ End Function
 Sub ListSpecifications(frm As MSForms.UserForm)
 ' Lists the specifications currently selected in txtConsole for the given form
     Logger.Log "Listing Specifications . . . "
-    Set App.console = Factory.CreateDocumentPrinter(frm)
+    Set App.printer = Factory.CreateDocumentPrinter(frm)
     If Not App.specs Is Nothing Then
-        App.console.ListObjects App.specs
+        App.printer.ListObjects App.specs
     Else
-        App.console.PrintLine "No specifications are available for this code."
+        App.printer.PrintLine "No specifications are available for this code."
     End If
 End Sub
 
 Sub PrintSpecification(frm As MSForms.UserForm)
     Logger.Log "Printing Specification . . . "
-    Set App.console = Factory.CreateDocumentPrinter(frm)
+    Set App.printer = Factory.CreateDocumentPrinter(frm)
     If Not App.current_spec Is Nothing Then
-        App.console.PrintObject App.current_spec
+        App.printer.PrintObject App.current_spec
     End If
 End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
     Logger.Log "Printing Template . . . "
-    Set App.console = Factory.CreateDocumentPrinter(frm)
-    App.console.PrintObject App.current_template
+    Set App.printer = Factory.CreateDocumentPrinter(frm)
+    App.printer.PrintObject App.current_template
 End Sub
 
 Public Sub UpdateSingleProperty(property_name As String, property_value As Variant, material_id As String)
@@ -445,7 +445,7 @@ Sub WriteAllDocuments(Optional order_number As String = vbNullString)
 
     For Each T In App.specs
         Set spec = App.specs.Item(T)
-            App.console.PrintObjectToSheet spec, _
+            App.printer.PrintObjectToSheet spec, _
                         Utils.CreateNewSheet(spec.SpecType), _
                         order_number
     Next T

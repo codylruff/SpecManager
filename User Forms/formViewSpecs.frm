@@ -116,7 +116,7 @@ Sub PrintConsole()
         For Each T In App.specs
             Set spec = App.specs.Item(T)
             Set new_sht = Utils.CreateNewSheet(spec.SpecType)
-            App.console.PrintObjectToSheet spec, new_sht
+            App.printer.PrintObjectToSheet spec, new_sht
             Application.PrintCommunication = False
             With new_sht.PageSetup
                 .FitToPagesWide = 1
@@ -129,7 +129,7 @@ Sub PrintConsole()
 End Sub
 
 Sub ExportPdf(Optional isTest As Boolean = False)
-    App.console.PrintObjectToSheet App.current_spec, Sheets("pdf")
+    App.printer.PrintObjectToSheet App.current_spec, Sheets("pdf")
     If isTest Then
         GuiCommands.DocumentPrinterToPdf_Test
     Else

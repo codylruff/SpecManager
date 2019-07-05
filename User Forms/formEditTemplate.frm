@@ -54,7 +54,7 @@ End Sub
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
     PopulateCboSelectTemplate
-    Set App.console = Factory.CreateDocumentPrinter(Me)
+    Set App.printer = Factory.CreateDocumentPrinter(Me)
 End Sub
 
 Private Sub cmdSearchTemplates_Click()
