@@ -113,10 +113,15 @@ def update_installer_files(repo_dir, installer_dir):
     repo_installer_dir = repo_dir + "/scripts/usb installer"
     copy_tree(repo_installer_dir, installer_dir)
 
-def create_release():
-    g = Github(“codylruff”, “@9B882y4e”)
-    
-    
+def create_release(repo_dir, version):
+    g = Github('codylruff', '@9B882y4e')
+    repo = g.get_repo('codylruff/SpecManager')
+    rel_name = input('Enter a name for the release : ')
+    rel_message = input('Enter a message for the release : ')
+    rel = repo.create_git_release('v' + version, rel_name, rel_message, target_commitish='master-')
+    print(rel.author)
+    asset_path = repo_dir + '/bin/spec-manager-v' + version + '.zip'
+    rel.upload_asset(asset_path, '', 'application/zip')
 
 def main():
 
@@ -148,6 +153,11 @@ def main():
         # Zip the directory for release
         print('Creating spec manager archive . . . ')
         shutil.make_archive(release_dir, 'zip', release_dir)
+
+        # Create new Github release
+        print('Creating Github release . . . ')
+        create_release(repo_dir, ver)
+
     else:
         print('Updating the installer on the network drive . . . ')
         installer_dir = 'S:/Data Manager/setup files/spec-manager-setup'
