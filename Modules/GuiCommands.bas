@@ -25,6 +25,17 @@ Private Sub HideAllSheets(wb As Workbook)
     Next ws
 End Sub
 
+Public Sub ShowAllSheets(wb As Workbook)
+' Makes all worksheets visible in the given workbook
+    Dim ws As Worksheet
+    For Each ws In wb.Worksheets
+        If ws.Visible <> xlSheetVisible Then
+            ws.Visible = xlSheetVisible
+        End If
+    Next ws
+
+End Sub
+
 Public Sub DeinitializeApplication()
     SpecManager.StopApp
     If Application.VBE.MainWindow.Visible = True Then

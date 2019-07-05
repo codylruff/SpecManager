@@ -60,6 +60,7 @@ Private Function InitializeRecords()
         Next i
         coll.Add dict
     Next j
-    Set Fields = dict
+    'Set Fields = CreateObject("Scripting.Dictionary")
+    Set m_fields = dict
     Set m_records = coll
 End Function

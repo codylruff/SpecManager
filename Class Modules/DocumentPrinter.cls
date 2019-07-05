@@ -45,30 +45,34 @@ End Sub
 
 Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = vbNullString)
 ' Header Content and formatting for Spec Docs
+    ' Clear Header
+    Utils.ClearHeaderFooter ws, header:=True, footer:=False
     ' Insert Header
     With ws.PageSetup
-        .LeftHeader = spec.SpecType
-        .CenterHeader = spec.MaterialId
-        .RightHeader = spec.Revision & vbNewLine & _
-                       CStr(Now()) & vbNewLine & _
-                       production_order
+        .LeftHeader = spec.SpecType & " (v" & spec.Template.Revision & ")" & chr(10) & _
+                      spec.Template.ProductLine
+        .CenterHeader = "Material : " & spec.MaterialId & chr(10) & _
+                        "Production Order : " & production_order
+        .RightHeader = "Revision : " & spec.Revision & chr(10) & _
+                       "Printed : " & CStr(Now())
     End With
 End Sub
 
 Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = vbNullString, _
             Optional leftFooterText = vbNullString, Optional rightFooterText = vbNullString)
 ' Footer Content and formatting for Spec Docs
-
-    If IsMissing(disclaimer) Then
+    'Clear footer
+    Utils.ClearHeaderFooter ws, header:=False, footer:=True
+    ' Initialize disclaimer text
+    If disclaimer = vbNullString Then
         disclaimer = "This document is the property of SAATI Americas - " & _
                      "Printed and/or Unsigned Copies Are Uncontrolled."
     End If
-    
     ' Insert Footer
     With ws.PageSetup
-        .LeftFooter = leftHeaderText
+        .LeftFooter = leftFooterText
         .CenterFooter = disclaimer
-        .RightFooter = rightHeaderText
+        .RightFooter = rightFooterText
     End With
 
 End Sub
@@ -176,7 +180,7 @@ Private Sub LoadRbaToSheet(specs_dict As Object)
 End Sub
 
 Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString, _
-            Optional i As Integer = 3)
+            Optional i As Integer = 2)
 ' Print object to specified worksheet starting in cell "A1"
     Dim Key As Variant
     Dim path As String
@@ -195,7 +199,8 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
                 ' Clear any existing information from the sheet
                 .Cells.ClearContents
                 ' Spec Header
-
+                InsertHeader sht, spec, prod_order
+                InsertFooter sht
                 ' .Range("A" & 1).Value = spec.SpecType & " : "
                 ' .Range("B" & 1).Value = spec.MaterialId
                 ' .Range("A" & 1).Font.Bold = True

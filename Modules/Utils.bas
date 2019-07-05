@@ -235,6 +235,9 @@ Sub Insert(rng As Range, val)
     rng.Value = val
 End Sub
 
+Function ReadNamedRange(name As String) As Variant
+End Function
+
 Public Function printf(mask As String, ParamArray tokens()) As String
 'test
     Dim i As Long
@@ -319,6 +322,29 @@ Public Function AskUser(question As String) As Boolean
         AskUser = False
     End If
 End Function
+
+Public Sub ClearHeaderFooter(ws As Worksheet, _
+           Optional header As Boolean = True, Optional footer As Boolean = True)
+' Clears the contents of header and footer (optionally select one or the other)
+    
+    ' Clear Header
+    If header Then
+        With ws.PageSetup
+            .LeftHeader = vbNullString
+            .CenterHeader = vbNullString
+            .RightHeader = vbNullString
+        End With
+    End If
+    ' Clear Footer
+    If footer Then
+        With ws.PageSetup
+            .LeftFooter = vbNullString
+            .CenterFooter = vbNullString
+            .RightFooter = vbNullString
+        End With
+    End If
+
+End Sub
 
 Public Sub ToggleAutoRecover()
 ' This sub will switch the auto recover function on and off.

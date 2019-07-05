@@ -58,11 +58,8 @@ Public Sub ConfigControl()
         Else
             Application.Visible = True
         End If
-        Application.VBE.MainWindow.Visible = True
-        shtDeveloper.Visible = xlSheetVisible
-        shtRBA.Visible = xlSheetVisible
-        shtRbaChangeLog.Visible = xlSheetVisible
-        shtRbaParser.Visible = xlSheetVisible
+        'Application.VBE.MainWindow.Visible = True
+        GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
         'Application.SendKeys ("^r")
     End If
 End Sub

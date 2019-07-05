@@ -5,6 +5,16 @@ Option Explicit
 'DESCRIPTION: Data Access Module
 '===================================
 
+Function GetSpecification(ByVal material_id As String, ByVal spec_type As String) As DatabaseRecord
+' Gets a single specifcation from the database
+    Dim SQLstmt As String
+    Logger.Log "Searching for " & spec_type & " : " & material_id
+    SQLstmt = "SELECT * FROM standard_specifications " & _
+              "WHERE Name ='" & material_id & "' AND " & _
+                    "Spec_Type ='" & spec_type & "'"            
+    Set GetSpecification = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
+End Function
+
 Function GetUser(ByVal Name As String) As DatabaseRecord
 ' Get a user from the database
     Dim SQLstmt As String

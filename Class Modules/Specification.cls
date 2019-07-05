@@ -19,7 +19,6 @@ Private MaterialId_ As String
 Private IsStandard_ As Boolean
 Private IsLatest_   As Boolean
 Private Template_   As SpecificationTemplate
-
 ' Template
 Public Property Set Template(obj As SpecificationTemplate)
     Set Template_ = obj

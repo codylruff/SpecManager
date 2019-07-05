@@ -455,3 +455,34 @@ Sub WriteAllDocuments(Optional order_number As String = vbNullString)
     Application.DisplayAlerts = True
     Application.Calculation = origCalcMode
 End Sub
+
+Public Sub UpdateRBAFromSheet()
+' This routine will update a specificaiton in the database
+' with the parameters entered into the sheet.
+    Dim material_id As String
+    Dim spec_type As String
+    Dim spec As Specification
+    Dim old_spec As Specification
+    Dim prop As Variant
+    Dim T As SpecificationTemplate
+    ' Start up spec-manager
+    SpecManager.StartApp
+    material_id = Range("article_code").Value
+    spec_type = "Weaving RBA"
+    Set spec = Factory.CreateSpecificationFromRecord(DataAccess.GetSpecification(material_id, spec_type))
+    Set props = CreateObject("Scripting.Dictionary")
+    For Each T In App.templates
+        If T.SpecType = spec_type Then
+            Set spec.Template = T
+        End If
+    Next T
+    ' Get spec by material_id and make a copy
+    Set old_spec = Factory.CopySpecification(spec)
+    ' Loop through named ranges and create a dictionary
+    For Each prop In spec.Properties
+        spec.Properties(CStr(prop)) = Range(prop).Value
+        Logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
+    Next prop
+    ' Update the specification
+    Logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec)
+End Sub
