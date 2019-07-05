@@ -205,7 +205,7 @@ End Function
 Sub ListSpecifications(frm As MSForms.UserForm)
 ' Lists the specifications currently selected in txtConsole for the given form
     Logger.Log "Listing Specifications . . . "
-    Set App.console = Factory.CreateConsoleBox(frm)
+    Set App.console = Factory.CreateDocumentPrinter(frm)
     If Not App.specs Is Nothing Then
         App.console.ListObjects App.specs
     Else
@@ -215,7 +215,7 @@ End Sub
 
 Sub PrintSpecification(frm As MSForms.UserForm)
     Logger.Log "Printing Specification . . . "
-    Set App.console = Factory.CreateConsoleBox(frm)
+    Set App.console = Factory.CreateDocumentPrinter(frm)
     If Not App.current_spec Is Nothing Then
         App.console.PrintObject App.current_spec
     End If
@@ -223,7 +223,7 @@ End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
     Logger.Log "Printing Template . . . "
-    Set App.console = Factory.CreateConsoleBox(frm)
+    Set App.console = Factory.CreateDocumentPrinter(frm)
     App.console.PrintObject App.current_template
 End Sub
 

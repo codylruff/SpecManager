@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -107,8 +108,8 @@ End Sub
 Sub ExportPdf(Optional isTest As Boolean = False)
     App.console.PrintObjectToSheet App.specs.Item("Testing Requirements"), Utils.CreateNewSheet("pdf"), txtProductionOrder
     If isTest Then
-        GuiCommands.ConsoleBoxToPdf_Test
+        GuiCommands.DocumentPrinterToPdf_Test
     Else
-        GuiCommands.ConsoleBoxToPdf
+        GuiCommands.DocumentPrinterToPdf
     End If
 End Sub

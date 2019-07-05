@@ -79,11 +79,11 @@ Function CreateTemplateFromDict(dict As Object) As SpecificationTemplate
     Set CreateTemplateFromDict = temp
 End Function
 
-Function CreateConsoleBox(frm As UserForm) As ConsoleBox
-    Dim obj As ConsoleBox
-    Set obj = New ConsoleBox
+Function CreateDocumentPrinter(frm As UserForm) As DocumentPrinter
+    Dim obj As DocumentPrinter
+    Set obj = New DocumentPrinter
     Set obj.FormId = frm
-    Set CreateConsoleBox = obj
+    Set CreateDocumentPrinter = obj
 End Function
 
 Function CreateDatabaseRecord() As DatabaseRecord

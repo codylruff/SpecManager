@@ -19,6 +19,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
 
 Private Sub cmdSelectType_Click()
@@ -128,7 +129,7 @@ Sub Back()
 End Sub
 
 Sub ExportPdf()
-    GuiCommands.ConsoleBoxToPdf
+    GuiCommands.DocumentPrinterToPdf
 End Sub
 
 Sub SaveChanges()

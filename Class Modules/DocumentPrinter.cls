@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "ConsoleBox"
+Attribute VB_Name = "DocumentPrinter"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -15,7 +15,7 @@ Option Explicit
 ' and uses it as a console output.
 '====================================
 'Factory Module Constructor function:
-'Function CreateConsoleBox(frm As UserForm) As ConsoleBox
+'Function CreateDocumentPrinter(frm As UserForm) As DocumentPrinter
 '----------------
 'CLASS VARIABLES
 '----------------
@@ -41,6 +41,28 @@ Public Sub ClearConsole()
 ' Clears the console of any text
     Me.CurrentText = vbNullString
     Logger.Log "Console Cleared"
+End Sub
+
+Private Sub InsertHeader()
+' Header Content and formatting for Spec Docs
+End Sub
+
+Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = vbNullString, _
+            Optional leftHeaderText = vbNullString, Optional rightHeaderText = vbNullString)
+' Footer Content and formatting for Spec Docs
+
+    If IsMissing(disclaimer) Then
+        disclaimer = "This document is the property of SAATI Americas - " & _
+                     "Printed and/or Unsigned Copies Are Uncontrolled."
+    End If
+    
+    ' Insert Header
+    With ws.PageSetup
+        .LeftHeader = leftHeaderText
+        .CenterHeader = disclaimer
+        .RightHeader = rightHeaderText
+    End With
+
 End Sub
 
 Private Function GetWeavePatternImagePath(material_id As String) As String

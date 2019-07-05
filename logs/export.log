@@ -1,40 +1,41 @@
-02-Jul-2019 09:19:10.84 : Exported AccessControl:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\AccessControl.bas
-02-Jul-2019 09:19:10.87 : Exported Arrays:                 C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Arrays.bas
-02-Jul-2019 09:19:10.89 : Exported Convert:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Convert.bas
-02-Jul-2019 09:19:10.91 : Exported DataAccess:             C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\DataAccess.bas
-02-Jul-2019 09:19:10.93 : Exported Factory:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Factory.bas
-02-Jul-2019 09:19:10.95 : Exported GuiCommands:            C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\GuiCommands.bas
-02-Jul-2019 09:19:10.98 : Exported JsonVBA:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\JsonVBA.bas
-02-Jul-2019 09:19:10.00 : Exported Logger:                 C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Logger.bas
-02-Jul-2019 09:19:11.01 : Exported modProgress:            C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\modProgress.bas
-02-Jul-2019 09:19:11.04 : Exported PromptHandler:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\PromptHandler.bas
-02-Jul-2019 09:19:11.06 : Exported RbaParser:              C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\RbaParser.bas
-02-Jul-2019 09:19:11.09 : Exported SpecManager:            C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\SpecManager.bas
-02-Jul-2019 09:19:11.11 : Exported Symbols:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Symbols.bas
-02-Jul-2019 09:19:11.12 : Exported Tests:                  C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Tests.bas
-02-Jul-2019 09:19:11.15 : Exported Utils:                  C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Utils.bas
-02-Jul-2019 09:19:11.18 : Exported formCreateGeneric:      C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formCreateGeneric.frm
-02-Jul-2019 09:19:11.20 : Exported formCreateSpec:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formCreateSpec.frm
-02-Jul-2019 09:19:11.23 : Exported formEditTemplate:       C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formEditTemplate.frm
-02-Jul-2019 09:19:11.25 : Exported formMainMenu:           C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formMainMenu.frm
-02-Jul-2019 09:19:11.28 : Exported formNewSpecInput:       C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formNewSpecInput.frm
-02-Jul-2019 09:19:11.31 : Exported formNewTemplateInput:   C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formNewTemplateInput.frm
-02-Jul-2019 09:19:11.34 : Exported formPassword:           C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formPassword.frm
-02-Jul-2019 09:19:11.39 : Exported formPrintSpecifications:C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formPrintSpecifications.frm
-02-Jul-2019 09:19:11.43 : Exported formSpecConfig:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formSpecConfig.frm
-02-Jul-2019 09:19:11.50 : Exported formUserPrompt:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formUserPrompt.frm
-02-Jul-2019 09:19:11.54 : Exported formViewSpecs:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formViewSpecs.frm
-02-Jul-2019 09:19:11.81 : Exported formWarpDataSheet:      C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formWarpDataSheet.frm
-02-Jul-2019 09:19:11.84 : Exported ufProgress:             C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\ufProgress.frm
-02-Jul-2019 09:19:11.85 : Exported Account:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\Account.cls
-02-Jul-2019 09:19:11.85 : Exported App:                    C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\App.cls
-02-Jul-2019 09:19:11.89 : Exported ConsoleBox:             C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\ConsoleBox.cls
-02-Jul-2019 09:19:11.90 : Exported DatabaseQuery:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\DatabaseQuery.cls
-02-Jul-2019 09:19:11.91 : Exported DatabaseRecord:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\DatabaseRecord.cls
-02-Jul-2019 09:19:11.93 : Exported IDatabase:              C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\IDatabase.cls
-02-Jul-2019 09:19:11.95 : Exported Specification:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\Specification.cls
-02-Jul-2019 09:19:11.98 : Exported SpecificationTemplate:  C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\SpecificationTemplate.cls
-02-Jul-2019 09:19:12.01 : Exported SQLiteDatabase:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\SQLiteDatabase.cls
-02-Jul-2019 09:19:12.02 : Exported Table:                  C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\Table.cls
-02-Jul-2019 09:19:12.04 : Export Complete.
-02-Jul-2019 09:19:12.04 : Saving : export.log
+05-Jul-2019 11:43:50.71 : Exported AccessControl:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\AccessControl.bas
+05-Jul-2019 11:43:50.76 : Exported Arrays:                 C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Arrays.bas
+05-Jul-2019 11:43:50.80 : Exported Convert:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Convert.bas
+05-Jul-2019 11:43:50.85 : Exported DataAccess:             C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\DataAccess.bas
+05-Jul-2019 11:43:50.89 : Exported Factory:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Factory.bas
+05-Jul-2019 11:43:50.95 : Exported GuiCommands:            C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\GuiCommands.bas
+05-Jul-2019 11:43:51.04 : Exported JsonVBA:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\JsonVBA.bas
+05-Jul-2019 11:43:51.14 : Exported Logger:                 C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Logger.bas
+05-Jul-2019 11:43:51.22 : Exported modProgress:            C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\modProgress.bas
+05-Jul-2019 11:43:51.31 : Exported PromptHandler:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\PromptHandler.bas
+05-Jul-2019 11:43:51.44 : Exported RbaParser:              C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\RbaParser.bas
+05-Jul-2019 11:43:51.49 : Exported SpecManager:            C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\SpecManager.bas
+05-Jul-2019 11:43:51.57 : Exported Symbols:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Symbols.bas
+05-Jul-2019 11:43:51.69 : Exported Tests:                  C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Tests.bas
+05-Jul-2019 11:43:51.77 : Exported Utils:                  C:\Users\cruff\Documents\Projects\source\Spec-Manager\Modules\Utils.bas
+05-Jul-2019 11:43:51.92 : Exported formCreateGeneric:      C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formCreateGeneric.frm
+05-Jul-2019 11:43:51.98 : Exported formCreateSpec:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formCreateSpec.frm
+05-Jul-2019 11:43:52.02 : Exported formEditTemplate:       C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formEditTemplate.frm
+05-Jul-2019 11:43:52.05 : Exported formMainMenu:           C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formMainMenu.frm
+05-Jul-2019 11:43:52.07 : Exported formNewSpecInput:       C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formNewSpecInput.frm
+05-Jul-2019 11:43:52.10 : Exported formNewTemplateInput:   C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formNewTemplateInput.frm
+05-Jul-2019 11:43:52.13 : Exported formPassword:           C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formPassword.frm
+05-Jul-2019 11:43:52.16 : Exported formPrintSpecifications:C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formPrintSpecifications.frm
+05-Jul-2019 11:43:52.20 : Exported formSpecConfig:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formSpecConfig.frm
+05-Jul-2019 11:43:52.22 : Exported formUserPrompt:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formUserPrompt.frm
+05-Jul-2019 11:43:52.27 : Exported formViewSpecs:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formViewSpecs.frm
+05-Jul-2019 11:43:52.55 : Exported formWarpDataSheet:      C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formWarpDataSheet.frm
+05-Jul-2019 11:43:52.58 : Exported ufProgress:             C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\ufProgress.frm
+05-Jul-2019 11:43:52.60 : Exported Account:                C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\Account.cls
+05-Jul-2019 11:43:52.62 : Exported App:                    C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\App.cls
+05-Jul-2019 11:43:52.68 : Exported ConsoleBox:             C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\ConsoleBox.cls
+05-Jul-2019 11:43:52.70 : Exported DatabaseQuery:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\DatabaseQuery.cls
+05-Jul-2019 11:43:52.72 : Exported DatabaseRecord:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\DatabaseRecord.cls
+05-Jul-2019 11:43:52.74 : Exported IDatabase:              C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\IDatabase.cls
+05-Jul-2019 11:43:52.76 : Exported Specification:          C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\Specification.cls
+05-Jul-2019 11:43:52.78 : Exported SpecificationTemplate:  C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\SpecificationTemplate.cls
+05-Jul-2019 11:43:52.81 : Exported SQLiteDatabase:         C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\SQLiteDatabase.cls
+05-Jul-2019 11:43:52.83 : Exported Table:                  C:\Users\cruff\Documents\Projects\source\Spec-Manager\Class Modules\Table.cls
+05-Jul-2019 11:43:52.85 : Exported formConsole:            C:\Users\cruff\Documents\Projects\source\Spec-Manager\User Forms\formConsole.frm
+05-Jul-2019 11:43:52.88 : Export Complete.
+05-Jul-2019 11:43:52.88 : Saving : export.log

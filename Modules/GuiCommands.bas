@@ -217,7 +217,7 @@ Public Sub ClearForm(frm)
     Next ctl
 End Sub
 
-Public Sub ConsoleBoxToPdf()
+Public Sub DocumentPrinterToPdf()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError
@@ -237,7 +237,7 @@ SaveFileError:
     Logger.Log "Failed to save file PDF Fail"
 End Sub
 
-Public Sub ConsoleBoxToPdf_Test()
+Public Sub DocumentPrinterToPdf_Test()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError

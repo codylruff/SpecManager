@@ -19,6 +19,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
 
 Private template_name As String
@@ -36,7 +37,7 @@ End Sub
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
     lblTemplateName = App.current_template.SpecType
-    Set App.console = Factory.CreateConsoleBox(Me)
+    Set App.console = Factory.CreateDocumentPrinter(Me)
 End Sub
 
 Private Sub cmdAddProperty_Click()

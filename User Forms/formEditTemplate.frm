@@ -20,6 +20,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
 
 Private Sub cmdAddProperty_Click()
@@ -53,7 +54,7 @@ End Sub
 Private Sub UserForm_Initialize()
     Logger.Log "--------- Start " & Me.Name & " ----------"
     PopulateCboSelectTemplate
-    Set App.console = Factory.CreateConsoleBox(Me)
+    Set App.console = Factory.CreateDocumentPrinter(Me)
 End Sub
 
 Private Sub cmdSearchTemplates_Click()

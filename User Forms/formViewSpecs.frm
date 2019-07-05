@@ -19,6 +19,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
 
 Private Sub cmdPrint_Click()
@@ -130,8 +131,8 @@ End Sub
 Sub ExportPdf(Optional isTest As Boolean = False)
     App.console.PrintObjectToSheet App.current_spec, Sheets("pdf")
     If isTest Then
-        GuiCommands.ConsoleBoxToPdf_Test
+        GuiCommands.DocumentPrinterToPdf_Test
     Else
-        GuiCommands.ConsoleBoxToPdf
+        GuiCommands.DocumentPrinterToPdf
     End If
 End Sub
