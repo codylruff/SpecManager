@@ -114,7 +114,9 @@ def update_installer_files(repo_dir, installer_dir):
     copy_tree(repo_installer_dir, installer_dir)
 
 def create_release(repo_dir, version):
-    g = Github('codylruff', '@9B882y4e')
+    user_name = input('Enter your Github user name : ')
+    secret = input('Enter your password : ')
+    g = Github(user_name, secret)
     repo = g.get_repo('codylruff/SpecManager')
     rel_name = input('Enter a name for the release : ')
     rel_message = input('Enter a message for the release : ')
