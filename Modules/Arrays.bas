@@ -975,7 +975,7 @@ Public Function DataTypeOfArray(arr As Variant) As VbVarType
 ' Returns -1 if Arr is not an array.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Dim Element As Variant
+Dim element As Variant
 Dim NumDimensions As Long
 
 ' If Arr is not an array, return
@@ -1002,25 +1002,25 @@ Else
             DataTypeOfArray = vbObject
             Exit Function
         End If
-        Element = arr(LBound(arr))
+        element = arr(LBound(arr))
     Else
         If IsObject(arr(LBound(arr), 1)) = True Then
             DataTypeOfArray = vbObject
             Exit Function
         End If
-        Element = arr(LBound(arr), 1)
+        element = arr(LBound(arr), 1)
     End If
     ' if we were passed an array of arrays, IsArray(Element) will
     ' be true. Therefore, return vbArray. If IsArray(Element) is false,
     ' we weren't passed an array of arrays, so simply return the data type of
     ' Element.
-    If IsArray(Element) = True Then
+    If IsArray(element) = True Then
         DataTypeOfArray = vbArray
     Else
-        If VarType(Element) = vbEmpty Then
+        If VarType(element) = vbEmpty Then
             DataTypeOfArray = vbVariant
         Else
-            DataTypeOfArray = VarType(Element)
+            DataTypeOfArray = VarType(element)
         End If
     End If
 End If
@@ -1736,7 +1736,7 @@ Public Function IsNumericDataType(TestVar As Variant) As Boolean
 ' IsNumeric should only be used to test strings for numeric content
 ' when converting a string value to a numeric variable.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    Dim Element As Variant
+    Dim element As Variant
     Dim NumDims As Long
     If IsArray(TestVar) = True Then
         NumDims = NumberOfArrayDimensions(arr:=TestVar)
@@ -1749,8 +1749,8 @@ Public Function IsNumericDataType(TestVar As Variant) As Boolean
             Exit Function
         End If
         If IsArrayAllocated(arr:=TestVar) = True Then
-            Element = TestVar(LBound(TestVar))
-            Select Case VarType(Element)
+            element = TestVar(LBound(TestVar))
+            Select Case VarType(element)
                 Case vbCurrency, vbDecimal, vbDouble, vbInteger, vbLong, vbSingle
                     IsNumericDataType = True
                     Exit Function
@@ -3811,7 +3811,7 @@ Function IsInArray(valToBeFound As Variant, arr As Variant) As Boolean
             End If
         Next element
     Exit Function
-    IsInArrayError:
+IsInArrayError:
 On Error GoTo 0
     IsInArray = False
 End Function

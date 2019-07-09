@@ -231,6 +231,14 @@ Public Sub UpdateSingleProperty(property_name As String, property_value As Varia
 ' Updates the value of a single property without the use of the UI. This should make Admin easier.
 End Sub
 
+Function CopySpecification(spec As Specification, material_id As String) As Long
+' Takes a material and makes a copy of it under a new material id
+    Dim spec_copy As Specification
+    Set spec_copy = Factory.CopySpecification(spec)
+    spec_copy.MaterialId = material_id
+    CopySpecification = SaveNewSpecification(spec_copy)
+End Function
+
 Function SaveNewSpecification(spec As Specification) As Long
     If ManagerOrAdmin Then
         SaveNewSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
@@ -328,7 +336,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     RestartApp
     Application.ScreenUpdating = False
     Set dict = CreateObject("Scripting.Dictionary")
-    Set ws = Utils.CreateNewSheet(spec_type)
+    Set ws = Utils.CreateNewSheet(spec_type & " Dump")
     Set dicts = DataAccess.SelectAllSpecifications(spec_type)
     i = 2
     For Each dict In dicts
@@ -431,7 +439,7 @@ Sub PrintPackage(doc_package As Object)
 
 End Sub
 
-Sub WriteAllDocuments(Optional order_number As String = vbNullString)
+Sub WriteAllDocuments(Optional order_number As String = vbNullString, Optional package_variant As DocumentPackageVariant = Default)
 ' Write all specification docs to the correct worksheets / create worksheet if missing
     Dim spec As Specification
     Dim T As Variant
@@ -447,7 +455,8 @@ Sub WriteAllDocuments(Optional order_number As String = vbNullString)
         Set spec = App.specs.Item(T)
             App.printer.PrintObjectToSheet spec, _
                         Utils.CreateNewSheet(spec.SpecType), _
-                        order_number
+                        order_number, _
+                        package_variant
     Next T
     ' Toggle Gui Functions to speed up printing
     GuiCommands.ResetExcelGUI
@@ -465,24 +474,23 @@ Public Sub UpdateRBAFromSheet()
     Dim old_spec As Specification
     Dim prop As Variant
     Dim T As SpecificationTemplate
+    App.Start
     ' Start up spec-manager
-    SpecManager.StartApp
-    material_id = Range("article_code").Value
+    material_id = CStr(Range("article_code").Value)
     spec_type = "Weaving RBA"
     Set spec = Factory.CreateSpecificationFromRecord(DataAccess.GetSpecification(material_id, spec_type))
     Set props = CreateObject("Scripting.Dictionary")
-    For Each T In App.templates
-        If T.SpecType = spec_type Then
-            Set spec.Template = T
-        End If
-    Next T
     ' Get spec by material_id and make a copy
     Set old_spec = Factory.CopySpecification(spec)
     ' Loop through named ranges and create a dictionary
+    spec.Revision = CStr(Range("revision").Value + 1)
     For Each prop In spec.Properties
         spec.Properties(CStr(prop)) = Range(prop).Value
         Logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
     Next prop
     ' Update the specification
     Logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec)
+    App.Shutdown
+    AccessControl.ConfigControl
 End Sub
+

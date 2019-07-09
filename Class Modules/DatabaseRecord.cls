@@ -16,14 +16,14 @@ Private columns_    As Long
 Public m_fields     As Object
 Private m_records   As VBA.Collection
 
-Private Property Set Fields(ByRef obj As Object)
+Private Property Set fields(ByRef obj As Object)
     Set m_fields = obj
 End Property
-Public Property Get Fields() As Object
+Public Property Get fields() As Object
     If m_fields Is Nothing Then
        InitializeRecords
     End If
-    Set Fields = m_fields
+    Set fields = m_fields
 End Property
 
 Private Property Set records(ByRef obj As VBA.Collection)
@@ -60,7 +60,11 @@ Private Function InitializeRecords()
         Next i
         coll.Add dict
     Next j
-    'Set Fields = CreateObject("Scripting.Dictionary")
     Set m_fields = dict
     Set m_records = coll
 End Function
+
+Private Sub Class_Initialize()
+    Set m_fields = CreateObject("Scripting.Dictionary")
+
+End Sub

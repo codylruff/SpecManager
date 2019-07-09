@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formMainMenu 
    Caption         =   "SAATI Spec-Manager"
-   ClientHeight    =   3528
+   ClientHeight    =   4656
    ClientLeft      =   48
    ClientTop       =   408
    ClientWidth     =   5520
@@ -25,7 +25,7 @@ End Sub
 Private Sub cmdCreateSpecification_Click()
 ' Form to create a new specification based on an existing template. Admin required
     SpecManager.RestartApp
-    If App.current_user.PrivledgeLevel < USER_MANAGER Then
+    If App.current_user.PrivledgeLevel <> USER_ADMIN Then
         Logger.Log App.current_user.Name & " attempted access to a restricted function."
         MsgBox "This function is not availble to you"
         Exit Sub
@@ -39,13 +39,17 @@ Private Sub cmdCreateTemplate_Click()
     SpecManager.RestartApp
     Logger.Log App.current_user.Name
     Logger.Log App.current_user.PrivledgeLevel
-    If App.current_user.PrivledgeLevel < USER_MANAGER Then
+    If App.current_user.PrivledgeLevel <> USER_ADMIN Then
         Logger.Log App.current_user.Name & " attempted access to a restricted function."
         MsgBox "This function is not availble to you"
         Exit Sub
     End If
     Unload Me
     formNewTemplateInput.Show vbModeless
+End Sub
+
+Private Sub cmdDatabaseQuery_Click()
+    MsgBox "Feature Under Development."
 End Sub
 
 Private Sub cmdExit_Click()
@@ -57,13 +61,19 @@ End Sub
 Private Sub cmdEditTemplates_Click()
 ' Form to edit an existing specification template. Admin required.
     SpecManager.RestartApp
-    If App.current_user.PrivledgeLevel < USER_MANAGER Then
+    If App.current_user.PrivledgeLevel <> USER_ADMIN Then
         Logger.Log App.current_user.Name & " attempted access to a restricted function."
         MsgBox "This function is not availble to you"
         Exit Sub
     End If
     Unload Me
     formEditTemplate.Show vbModeless
+End Sub
+
+Private Sub cmdViewDocuments_Click()
+    SpecManager.RestartApp
+    Unload Me
+    formViewSpecs.Show vbModeless
 End Sub
 
 Private Sub cmdViewSpecifications_Click()
@@ -76,7 +86,7 @@ End Sub
 Private Sub cmdEditSpecifications_Click()
 ' Form to edit an existing specification. Admin required
     SpecManager.RestartApp
-    If App.current_user.PrivledgeLevel < USER_MANAGER Then
+    If App.current_user.PrivledgeLevel <> USER_ADMIN Then
         Logger.Log App.current_user.Name & " attempted access to a restricted function."
         MsgBox "This function is not availble to you"
         Exit Sub

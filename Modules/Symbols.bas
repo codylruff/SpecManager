@@ -1,6 +1,6 @@
 Attribute VB_Name = "Symbols"
 Option Explicit
-' Test Comment
+' String Constants
 Public Const PUBLIC_DIR               As String = "S:\Data Manager"
 Public Const SM_PATH                  As String = "C:\Users\"
 Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"

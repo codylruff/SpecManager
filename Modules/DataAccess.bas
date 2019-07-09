@@ -10,8 +10,8 @@ Function GetSpecification(ByVal material_id As String, ByVal spec_type As String
     Dim SQLstmt As String
     Logger.Log "Searching for " & spec_type & " : " & material_id
     SQLstmt = "SELECT * FROM standard_specifications " & _
-              "WHERE Name ='" & material_id & "' AND " & _
-                    "Spec_Type ='" & spec_type & "'"            
+              "WHERE Material_Id ='" & material_id & "' AND " & _
+                    "Spec_Type ='" & spec_type & "'"
     Set GetSpecification = ExecuteSQLSelect(Factory.CreateSQLiteDatabase, DATABASE_PATH, SQLstmt)
 End Function
 

@@ -17,6 +17,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
+    Dim prompt_result As DocumentPackageVariant
     If App.printer.CurrentText = "No specifications are available for this code." Then
          MsgBox "There is nothing to print!"
          Exit Sub
@@ -24,8 +25,9 @@ Private Sub cmdPrintSpecifications_Click()
          MsgBox "Please enter a production order."
          Exit Sub
     End If
-    WriteAllDocuments Me.txtProductionOrder
-    PrintSelectedPackage PromptHandler.ProtectionPlanningSequence
+    prompt_result = PromptHandler.ProtectionPlanningSequence
+    SpecManager.WriteAllDocuments Me.txtProductionOrder, prompt_result
+    PrintSelectedPackage prompt_result
 End Sub
 
 Private Sub cmdSearch_Click()
@@ -79,7 +81,7 @@ Sub Back()
     GuiCommands.GoToMain
 End Sub
 
-Sub PrintSelectedPackage(selected_package As ProtectionPackage)
+Sub PrintSelectedPackage(selected_package As DocumentPackageVariant)
 ' Prints the select document package for protection
 
     ' Select document package

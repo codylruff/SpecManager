@@ -13,14 +13,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
 Option Explicit
+
+Private Sub cmdCopySpec_Click()
+' Makes a copy of the current spec, with a new material id
+    Dim new_material_id As String
+    Dim ret_val As Long
+    new_material_id = InputBox("Enter a material id for copy?")
+    ret_val = SpecManager.CopySpecification(App.current_spec, new_material_id)
+    If ret_val = DB_PUSH_SUCCESS Then
+        MsgBox "Copied Successfully"
+    Else
+        MsgBox "Copy Failed"
+    End If
+End Sub
 
 Private Sub cmdSelectType_Click()
     SelectType
@@ -40,11 +46,6 @@ End Sub
 
 Private Sub cmdBack_Click()
     Back
-End Sub
-
-Private Sub cmdExportPdf_Click()
-    MsgBox "Function is unavailable at this time."
-    'ExportPdf
 End Sub
 
 Private Sub cmdSaveChanges_Click()

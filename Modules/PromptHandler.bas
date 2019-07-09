@@ -2,7 +2,8 @@ Attribute VB_Name = "PromptHandler"
 Option Explicit
 Public Choice As Boolean
 
-Public Enum ProtectionPackage
+Public Enum DocumentPackageVariant
+    Default = 0
     WeavingStyleChange = 1
     WeavingTieBack = 2
     FinishingWithQC = 3
@@ -13,7 +14,7 @@ End Enum
 ' A prompt sequence is a series of prompts and conditionals
 ' used to determine the final outcome of events
 
-Function ProtectionPlanningSequence() As ProtectionPackage
+Function ProtectionPlanningSequence() As DocumentPackageVariant
 ' This sequence is shown to the protection planners upon clicking print.
 '-----------------------------------------------------------------------
 ' 1. Is this a finishing order?

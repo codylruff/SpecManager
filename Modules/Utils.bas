@@ -235,7 +235,7 @@ Sub Insert(rng As Range, val)
     rng.Value = val
 End Sub
 
-Function ReadNamedRange(name As String) As Variant
+Function ReadNamedRange(Name As String) As Variant
 End Function
 
 Public Function printf(mask As String, ParamArray tokens()) As String
@@ -324,11 +324,11 @@ Public Function AskUser(question As String) As Boolean
 End Function
 
 Public Sub ClearHeaderFooter(ws As Worksheet, _
-           Optional header As Boolean = True, Optional footer As Boolean = True)
+           Optional Header As Boolean = True, Optional footer As Boolean = True)
 ' Clears the contents of header and footer (optionally select one or the other)
     
     ' Clear Header
-    If header Then
+    If Header Then
         With ws.PageSetup
             .LeftHeader = vbNullString
             .CenterHeader = vbNullString

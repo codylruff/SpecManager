@@ -18,13 +18,13 @@ Function GetPrivledges(Name As String) As Long
     Dim record As DatabaseRecord
     Set record = DataAccess.GetUser(Name)
     ' obsoleted
-    If record.Fields Is Nothing Then
+    If record.records(1) Is Nothing Then
         GetPrivledges = DB_SELECT_FAILURE
     Else
         Set user = New Account
-        user.Name = record.Fields("Name")
-        user.PrivledgeLevel = record.Fields("Privledge_Level")
-        user.ProductLine = record.Fields("Product_Line")
+        user.Name = record.fields("Name")
+        user.PrivledgeLevel = record.fields("Privledge_Level")
+        user.ProductLine = record.fields("Product_Line")
         GetPrivledges = DB_SELECT_SUCCESS
     End If
 End Function

@@ -17,6 +17,20 @@ Option Explicit
 'Factory Module Constructor function:
 'Function CreateDocumentPrinter(frm As UserForm) As DocumentPrinter
 '----------------
+'CONSTANTS
+'----------------
+Private Const CHAR_REQUIRED          As Long = 252              ' Unicode character used to denote a required test
+Private Const CHAR_CRITICAL          As Long = 171              ' Unicode character used to denote a critical test
+Private Const CHAR_NOT_REQUIRED      As Long = 210              ' Unicode character used to denote that a test is not-required
+Private Const CHAR_NULL_VALUE        As Long = 45               ' Unicode character used to denote a null property value
+Private Const FONT_SIZE_VALUE        As Long = 17               ' Font size for property values
+Private Const FONT_SIZE_PROPERTY     As Long = 17               ' Font size for property names
+Private Const FONT_SIZE_HEADING      As Long = 17               ' Font size for document headings
+Private Const FONT_REQUIRED          As String = "Wingdings"    ' Font used to denote a required test
+Private Const FONT_CRITICAL          As String = "Wingdings"    ' Font used to denote a critical test
+Private Const FONT_NOT_REQUIRED      As String = "Wingdings 2"  ' Font used to denote that a test is not-required
+Private Const FONT_DEFAULT           As String = "Calibri"      ' Font used by default
+'----------------
 'CLASS VARIABLES
 '----------------
 Private FormId_         As MSForms.UserForm
@@ -46,14 +60,14 @@ End Sub
 Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = vbNullString)
 ' Header Content and formatting for Spec Docs
     ' Clear Header
-    Utils.ClearHeaderFooter ws, header:=True, footer:=False
+    Utils.ClearHeaderFooter ws, Header:=True, footer:=False
     ' Insert Header
     With ws.PageSetup
-        .LeftHeader = spec.SpecType & " (v" & spec.Template.Revision & ")" & chr(10) & _
+        .LeftHeader = spec.SpecType & " (v" & spec.Template.Revision & ")" & Chr(10) & _
                       spec.Template.ProductLine
-        .CenterHeader = "Material : " & spec.MaterialId & chr(10) & _
+        .CenterHeader = "Material : " & spec.MaterialId & Chr(10) & _
                         "Production Order : " & production_order
-        .RightHeader = "Revision : " & spec.Revision & chr(10) & _
+        .RightHeader = "Revision : " & spec.Revision & Chr(10) & _
                        "Printed : " & CStr(Now())
     End With
 End Sub
@@ -62,7 +76,7 @@ Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = vbNull
             Optional leftFooterText = vbNullString, Optional rightFooterText = vbNullString)
 ' Footer Content and formatting for Spec Docs
     'Clear footer
-    Utils.ClearHeaderFooter ws, header:=False, footer:=True
+    Utils.ClearHeaderFooter ws, Header:=False, footer:=True
     ' Initialize disclaimer text
     If disclaimer = vbNullString Then
         disclaimer = "This document is the property of SAATI Americas - " & _
@@ -119,7 +133,7 @@ Private Function GetWeavePatternImagePath(material_id As String) As String
         Case Else
             If Arrays.IsInArray(Mid(material_id, 6, 3), Array("336", "930")) Then
                 weave_id = "6HS"
-            Else 
+            Else
                 weave_id = "Not_Available"
             End If
     End Select
@@ -148,7 +162,7 @@ Private Sub InsertImage(sht As Worksheet, img_path As String, row_id As Integer)
     Set img = ActiveSheet.Pictures.Insert(img_path)
 End Sub
 
-Private Sub LoadRbaToSheet(specs_dict As Object)
+Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
 ' Load values from rba properties into cooresponding named range
     Dim nr As Variant
     Dim rng As Range
@@ -171,6 +185,8 @@ Private Sub LoadRbaToSheet(specs_dict As Object)
     Utils.Insert shtRBA.Range("revision"), spec.Revision
     Utils.Insert shtRBA.Range("qc_sample_size"), qc_sample
     Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
+    Utils.Insert shtRBA.Range("work_order"), prod_order
+    Utils.Insert shtRBA.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
     On Error Resume Next
     For Each nr In spec.Properties
         Set rng = shtRBA.Range(CStr(nr))
@@ -179,81 +195,52 @@ Private Sub LoadRbaToSheet(specs_dict As Object)
     On Error GoTo 0
 End Sub
 
+Private Sub LoadTestingRequirementsToSheet(spec As Specification, sht As Worksheet, prod_order As String, _
+            package_variant As DocumentPackageVariant)
+' Load QC Testing document per  given variant
+    Dim i As Integer
+    LoadGenericSpecificationDocument spec, sht, prod_order
+    ' Change Critical tests to Required tests for Tie-Backs
+    If package_variant = WeavingTieBack Then
+        For i = 2 To spec.Properties.Count
+            With sht.Range("B" & i)
+                If .Value = Chr(CHAR_CRITICAL) Then
+                    .Value = Chr(CHAR_REQUIRED)
+                    .Font.Name = FONT_REQUIRED
+                End If
+            End With
+        Next i
+    End If
+    ' Insert fabric construction image
+    InsertImage sht, GetWeavePatternImagePath(spec.MaterialId), spec.Properties.Count + 4
+End Sub
+
+Private Sub LoadBallisticTestingRequirementsToSheet(spec As Specification, sht As Worksheet, prod_order As String)
+' Load Ballistic Testing Requirements to Sheet
+    LoadGenericSpecificationDocument spec, sht, prod_order
+    ' Insert package build image
+    InsertImage sht, GetBallisticPackageImagePath, spec.Properties.Count + 4
+End Sub
+
 Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString, _
-            Optional i As Integer = 2)
+           Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
 ' Print object to specified worksheet starting in cell "A1"
-    Dim Key As Variant
-    Dim path As String
     ' Disable updates to the gui during processing
     Application.DisplayAlerts = False
     Application.ScreenUpdating = False
     ' This tree selects any specs which have an associated custom worksheet template
     Select Case spec.SpecType
         Case "Weaving RBA"
-            LoadRbaToSheet App.specs
+            LoadRbaToSheet App.specs, prod_order
+        Case "Testing Requirements"
+            LoadTestingRequirementsToSheet spec, sht, prod_order, package_variant
+        Case "Ballistic Testing Requirements"
+            LoadBallisticTestingRequirementsToSheet spec, sht, prod_order
         Case Else
             ' All specifications which do not have a custom worksheet template
             ' will be handled by this case.
             ' Insert/Format body of the specification
-            With sht
-                ' Clear any existing information from the sheet
-                .Cells.ClearContents
-                ' Spec Header
-                InsertHeader sht, spec, prod_order
-                InsertFooter sht
-                ' .Range("A" & 1).Value = spec.SpecType & " : "
-                ' .Range("B" & 1).Value = spec.MaterialId
-                ' .Range("A" & 1).Font.Bold = True
-                ' .Range("A" & 1).Font.Size = 18
-                ' .Range("B" & 1).Font.Bold = True
-                ' .Range("B" & 1).Font.Size = 18
-                ' If prod_order <> vbNullString Then
-                '     .Range("A" & 2).Value = "Production Order : "
-                '     .Range("B" & 2).Value = prod_order
-                '     .Range("A" & 2).Font.Bold = True
-                '     .Range("A" & 2).Font.Size = 18
-                '     .Range("B" & 2).Font.Bold = True
-                '     .Range("B" & 2).Font.Size = 18
-                '     .Range("B" & 2).HorizontalAlignment = xlHAlignLeft
-                '     i = 4
-                ' Else
-                '     i = 3
-                ' End If
-                ' Spec Properties
-                For Each Key In spec.Properties
-                    If Not spec.GetProperty(CStr(Key)) = vbNullString Then
-                        .Range("A" & i).Value = CStr(Key) & " : "
-                        .Range("B" & i).Value = CStr(spec.GetProperty(CStr(Key)))
-                        .Range("A" & i).Font.Size = 17
-                        .Range("B" & i).Font.Size = 17
-                        .Range("B" & i).Font.Bold = True
-                        .Range("B" & i).HorizontalAlignment = xlHAlignLeft
-                        If spec.GetProperty(CStr(Key)) = Chr(252) Or spec.GetProperty(CStr(Key)) = Chr(171) Then
-                            .Range("B" & i).Font.Name = "Wingdings"
-                        ElseIf spec.GetProperty(CStr(Key)) = Chr(210) Then
-                            .Range("B" & i).Font.Name = "Wingdings 2"
-                        Else
-                            .Range("B" & i).Font.Name = "Calibri"
-                        End If
-                    Else
-                        .Range("A" & i).Value = CStr(Key)
-                        .Range("B" & i).Value = "-"
-                        .Range("A" & i).Font.Size = 17
-                        .Range("B" & i).Font.Size = 17
-                        .Range("B" & i).Font.Bold = True
-                    End If
-                    i = i + 1
-                Next Key
-                .Columns("A:G").AutoFit
-                i = i + 2
-            End With
-            ' Insert images per requirements
-            If spec.SpecType = "Ballistic Testing Requirements" Then
-                InsertImage sht, GetBallisticPackageImagePath, i
-            ElseIf spec.SpecType = "Testing Requirements" Then
-                InsertImage sht, GetWeavePatternImagePath(spec.MaterialId), i
-            End If
-    
+            LoadGenericSpecificationDocument spec, sht, prod_order
     End Select
     ' Enable updates to the gui after processing
     Application.DisplayAlerts = True
@@ -273,13 +260,14 @@ Public Sub PrintObject(obj As Object)
             If Not obj.Properties(CStr(Key)) = vbNullString Then
                 PrintLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
             Else
-                PrintLine CStr(Key), "-"
+                PrintLine CStr(Key), Chr(CHAR_NULL_VALUE)
             End If
         End If
     Next Key
 End Sub
 
 Public Function ShouldPrint(prop As String) As Boolean
+' Acts as a filter for values that are difficult to visualize in tabular form
     If Left(prop, 3) = "fd_" Then
         ShouldPrint = False
     ElseIf Left(prop, 3) = "di_" Then
@@ -301,16 +289,16 @@ End Sub
 
 Private Function FormatAscii(char As String) As String
 
-    If char = Chr(252) Then
+    If char = Chr(CHAR_REQUIRED) Then
         char = "Required"
-    ElseIf char = Chr(171) Then
+    ElseIf char = Chr(CHAR_CRITICAL) Then
         char = "Critical"
-    ElseIf char = Chr(210) Then
+    ElseIf char = Chr(CHAR_NOT_REQUIRED) Then
         char = "X"
     ElseIf IsNumeric(Left(char, 1)) Then
         ' Pass
     ElseIf char = vbNullString Then
-        char = "-"
+        char = Chr(CHAR_NULL_VALUE)
     End If
     FormatAscii = char
 End Function
@@ -336,5 +324,44 @@ Private Sub Class_Initialize()
     Set OutputHistory = New VBA.Collection
 End Sub
 
-
+Private Sub LoadGenericSpecificationDocument(spec As Specification, sht As Worksheet, _
+            prod_order As String, Optional i As Integer = 2)
+' Handles all non-custom generic spec-docs
+    Dim Key As Variant
+    With sht
+        ' Clear any existing information from the sheet
+        .Cells.ClearContents
+        ' Spec Header
+        InsertHeader sht, spec, prod_order
+        InsertFooter sht
+        ' Spec Properties
+        For Each Key In spec.Properties
+            If Not spec.GetProperty(CStr(Key)) = vbNullString Then
+                .Range("A" & i).Value = CStr(Key) & " : "
+                .Range("A" & i).Font.Size = FONT_SIZE_PROPERTY
+                .Range("B" & i).Value = CStr(spec.GetProperty(CStr(Key)))
+                .Range("B" & i).Font.Size = FONT_SIZE_VALUE
+                .Range("B" & i).Font.Bold = True
+                .Range("B" & i).HorizontalAlignment = xlHAlignLeft
+                If spec.GetProperty(CStr(Key)) = Chr(CHAR_REQUIRED) Then
+                    .Range("B" & i).Font.Name = FONT_REQUIRED
+                ElseIf spec.GetProperty(CStr(Key)) = Chr(CHAR_CRITICAL) Then
+                    .Range("B" & i).Font.Name = FONT_CRITICAL
+                ElseIf spec.GetProperty(CStr(Key)) = Chr(CHAR_NOT_REQUIRED) Then
+                    .Range("B" & i).Font.Name = FONT_NOT_REQUIRED
+                Else
+                    .Range("B" & i).Font.Name = FONT_DEFAULT
+                End If
+            Else
+                .Range("A" & i).Value = CStr(Key)
+                .Range("A" & i).Font.Size = FONT_SIZE_PROPERTY
+                .Range("B" & i).Value = Chr(CHAR_NULL_VALUE)
+                .Range("B" & i).Font.Size = FONT_SIZE_VALUE
+                .Range("B" & i).Font.Bold = True
+            End If
+            i = i + 1
+        Next Key
+        .Columns("A:G").AutoFit
+    End With
+End Sub
 

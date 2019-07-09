@@ -51,12 +51,12 @@ Function CreateNewTemplate(Optional template_name As String = vbNullString) As S
 End Function
 
 Function CreateSpecificationFromRecord(record As DatabaseRecord) As Specification
-    Dim spec As Specification
-    Set spec = New Specification
+    Dim spec_ As Specification
+    Set spec_ = New Specification
     With record.records(1)
-        spec.JsonToObject .Item("Properties_Json"), .Item("Tolerances_Json"), .Item("Material_Id"), .Item("Spec_Type"), .Item("Revision")
+        spec_.JsonToObject .Item("Properties_Json"), .Item("Tolerances_Json"), .Item("Material_Id"), .Item("Spec_Type"), CStr(.Item("Revision"))
     End With
-    Set CreateSpecificationFromRecord = spec
+    Set CreateSpecificationFromRecord = spec_
 End Function
 
 Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecificationTemplate
