@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formViewSpecs 
    Caption         =   "Specification Control"
-   ClientHeight    =   11865
+   ClientHeight    =   7044
    ClientLeft      =   120
    ClientTop       =   468
    ClientWidth     =   9816
@@ -39,7 +39,7 @@ End Sub
 
 Private Sub cmdExportPdf_Click()
     ExportPdf
-    'MsgBox "Function Disabled."
+    'App.gDll.ShowDialog "Function Disabled.", vbOkOnly, "Under Development"
 End Sub
 
 Private Sub ClearThisForm()
@@ -75,7 +75,7 @@ Private Sub PopulateCboSelectType()
     With cboSelectType
         For Each rev In App.specs
             .AddItem rev
-            .Value = rev
+            .value = rev
         Next rev
     End With
 End Sub
@@ -85,7 +85,7 @@ Sub MaterialSearch()
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectType
-    cboSelectType.Value = App.current_spec.SpecType
+    cboSelectType.value = App.current_spec.SpecType
 End Sub
 
 Sub Back()
@@ -94,7 +94,7 @@ Sub Back()
 End Sub
 
 Sub SelectType()
-    Set App.current_spec = App.specs.Item(cboSelectType.Value)
+    Set App.current_spec = App.specs.Item(cboSelectType.value)
     SpecManager.PrintSpecification Me
 End Sub
 
@@ -105,29 +105,19 @@ Sub PrintConsole()
     Dim T As Variant
     Dim new_sht As Worksheet
     If Me.txtConsole.text = vbNullString Then
-        MsgBox "There is nothing to print!"
+        PromptHandler.Error "There is nothing to print!"
     Else
         ' Print the specs one at a time to the default printer
-        For Each T In App.specs
-            Set spec = App.specs.Item(T)
-            Set new_sht = Utils.CreateNewSheet(spec.SpecType)
-            App.printer.PrintObjectToSheet spec, new_sht
-            Application.PrintCommunication = False
-            With new_sht.PageSetup
-                .FitToPagesWide = 1
-                .FitToPagesTall = False
-            End With
-            Application.PrintCommunication = True
-            Utils.PrintSheet new_sht
-        Next T
+        App.gDll.ShowDialog "Function Disabled", vbOkOnly, "Under Development"
     End If
 End Sub
 
 Sub ExportPdf(Optional isTest As Boolean = False)
-    App.printer.PrintObjectToSheet App.current_spec, Sheets("pdf")
     If isTest Then
+        App.printer.PrintObjectToSheet App.current_spec, Sheets("pdf")
         GuiCommands.DocumentPrinterToPdf_Test
     Else
-        GuiCommands.DocumentPrinterToPdf
+        App.printer.PrintObjectToSheet App.current_spec, Sheets(App.current_spec.SpecType)
+        App.printer.ToPDF Sheets(App.current_spec.SpecType)
     End If
 End Sub

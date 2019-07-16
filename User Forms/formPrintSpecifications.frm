@@ -18,22 +18,27 @@ Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
     Dim prompt_result As DocumentPackageVariant
-    If App.printer.CurrentText = "No specifications are available for this code." Then
-         MsgBox "There is nothing to print!"
+    If App.printer.FormId Is Nothing Then
+         PromptHandler.Error "There is nothing to print!"
+         Exit Sub
+    ElseIf App.printer.CurrentText = "No specifications are available for this code." Then
+         PromptHandler.Error "There is nothing to print!"
          Exit Sub
     ElseIf Not IsNumeric(Me.txtProductionOrder) Then
-         MsgBox "Please enter a production order."
+         PromptHandler.Error "Please enter a production order."
          Exit Sub
     End If
     prompt_result = PromptHandler.ProtectionPlanningSequence
     SpecManager.WriteAllDocuments Me.txtProductionOrder, prompt_result
-    PrintSelectedPackage prompt_result
+    If Not App.TestingMode Then
+        PrintSelectedPackage prompt_result
+    End If
 End Sub
 
 Private Sub cmdSearch_Click()
     ' Check for any white space and remove it
     If Utils.RemoveWhiteSpace(txtMaterialId) = vbNullString Then
-       MsgBox "Please enter a material id."
+       PromptHandler.Error "Please enter a material id."
        Exit Sub
     End If
     MaterialSearch
@@ -88,20 +93,20 @@ Sub PrintSelectedPackage(selected_package As DocumentPackageVariant)
     Select Case selected_package
         Case WeavingStyleChange
             Logger.Log "Printing Weaving Style Change Package"
-            SpecManager.PrintPackage DropKeys(App.specs, Array("Tie Back Checklist"))
+            SpecManager.PrintPackage App.specs, selected_package
         Case WeavingTieBack
             Logger.Log "Print Weaving Tie-Back Package"
-            SpecManager.PrintPackage DropKeys(App.specs, Array("Style Change Checklist"))
+            SpecManager.PrintPackage App.specs, selected_package
         Case FinishingWithQC
             Logger.Log "Printing Finishing with QC Package"
-            SpecManager.PrintPackage App.specs
+            SpecManager.PrintPackage App.specs, selected_package
         Case FinishingNoQC
             Logger.Log "Printing Finishing without QC Package"
             SpecManager.PrintPackage DropKeys(App.specs, _
-                        Array("Testing Requirements", "Ballistic Testing Requirements"))
+                        Array("Testing Requirements", "Ballistic Testing Requirements")), selected_package
         Case Else
             Logger.Log "Printing All Available Specs"
-            SpecManager.PrintPackage App.specs
+            SpecManager.PrintPackage App.specs, selected_package
     End Select
 
     

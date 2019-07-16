@@ -1,13 +1,14 @@
 import shutil, os, argparse, json
 from github import Github
+from stdiomask import getpass
 from distutils.dir_util import copy_tree
-    
-# Takes github release tag as command line arg "vX.Y.Z"
+
+# Takes github release tag as command line arg "-version X.Y.Z"
 
 # ****************************************************************************************
 # 	1. Create new release folder C:/Users/cruff/source/SM - Final/bin/spec-manager-vX.Y.Z
 # 	2. Copy Spec Manager vX.Y.Z into the release folder
-# 	3. Copy the config, libs, logs, and scripts folders from the main repo directory into 
+# 	3. Copy the config, libs, logs, and scripts folders from the main repo directory into
 #      the release folder
 # 	4. Copy the Spec-Manager.ico file in the release directory
 # 	5. Update the json files in the config folder of the release directory
@@ -40,20 +41,23 @@ def get_arguments():
     parser = argparse.ArgumentParser(description='Create a new release of spec-manager.')
     parser.add_argument('-version', help='the version number that makes the tag value used for github release url')
     parser.add_argument('-installer', help='copies the installer files to the network drive')
+    parser.add_argument('-debug', help='runs the script in debug mode')  # Currently does nothing
 
     return parser.parse_args()
 
-def create_release_folder(dirName):
+
+def create_release_folder(dir_name):
     """Create the folder a new release"""
-    
+
     print("Creating new release directory . . . ")
 
     # Create target Directory if don't exist
-    if not os.path.exists(dirName):
-        os.mkdir(dirName)
-        print("Directory " , dirName ,  " Created ")
-    else:    
-        print("Directory " , dirName ,  " already exists")
+    if not os.path.exists(dir_name):
+        os.mkdir(dir_name)
+        print("Directory ", dir_name, " Created ")
+    else:
+        print("Directory ", dir_name, " already exists")
+
 
 def copy_files_to_release_folder(repo_dir, release_dir):
     """Copies all the necessary files from the repo to the release directory"""
@@ -68,19 +72,20 @@ def copy_files_to_release_folder(repo_dir, release_dir):
     repo_config_dir = repo_dir + "/config"
     repo_libs_dir = repo_dir + "/libs"
     repo_logs_dir = repo_dir + "/logs"
-    repo_scripts_dir = repo_dir + "/scripts"
+    repo_scripts_dir = repo_dir + "/scripts/startup"
 
-    # release directorys
+    # release directories
     release_config_dir = release_dir + "/config"
     release_libs_dir = release_dir + "/libs"
     release_logs_dir = release_dir + "/logs"
-    release_scripts_dir = release_dir + "/scripts"
+    release_scripts_dir = release_dir + "/scripts/startup"
 
     # copy from repo to release
     copy_tree(repo_config_dir, release_config_dir)
-    copy_tree(repo_libs_dir, release_libs_dir) 
-    copy_tree(repo_logs_dir, release_logs_dir) 
+    copy_tree(repo_libs_dir, release_libs_dir)
+    copy_tree(repo_logs_dir, release_logs_dir)
     copy_tree(repo_scripts_dir, release_scripts_dir)
+
 
 def update_json_files(release_dir, release_ver):
     """Updates the application version in the local_version.json && user.json files"""
@@ -90,12 +95,12 @@ def update_json_files(release_dir, release_ver):
     user_json_file = release_dir + "/config/user.json"
 
     # modify the local_version file
-    with open(local_version_json_file) as json_file:  
+    with open(local_version_json_file) as json_file:
         local_version_json = json.load(json_file)
     local_version_json['app_version'] = release_ver
     with open(local_version_json_file, 'w') as out_file:
         json.dump(local_version_json, out_file)
-    
+
     # modify the user file
     with open(user_json_file) as json_file:
         user_json = json.load(json_file)
@@ -109,38 +114,42 @@ def update_json_files(release_dir, release_ver):
     with open(user_json_file, 'w') as out_file:
         json.dump(user_json, out_file)
 
-def update_installer_files(repo_dir, installer_dir):
-    repo_installer_dir = repo_dir + "/scripts/usb installer"
+
+def update_installer_files(public_dir, installer_dir):
+    repo_installer_dir = repo_dir + "/scripts/install"
     copy_tree(repo_installer_dir, installer_dir)
 
-def create_release(repo_dir, version):
-    user_name = input('Enter your Github user name : ')
-    secret = input('Enter your password : ')
+
+def create_release(repo_dir, version, secret, user_name):
     g = Github(user_name, secret)
     repo = g.get_repo('codylruff/SpecManager')
-    rel_name = input('Enter a name for the release : ')
+    rel_name = 'Version : ' + version
     rel_message = input('Enter a message for the release : ')
     rel = repo.create_git_release('v' + version, rel_name, rel_message, target_commitish='master-')
     print(rel.author)
     asset_path = repo_dir + '/bin/spec-manager-v' + version + '.zip'
     rel.upload_asset(asset_path, '', 'application/zip')
 
-def main():
 
+def main():
     # Get arguments
-    installer = False
     args = get_arguments()
     ver = args.version
     installer = args.installer
-    
+    debug = args.debug
+
+    # Get credentials
+    user_name = input('User: ')
+    secret = getpass()
+
     # Initialize repo directory
     repo_dir = r"C:/Users/cruff/Documents/Projects/source/Spec-Manager"
 
-    if not installer:
+    if not (installer or debug):
         # Create new release directory
         release_dir = repo_dir + "/bin/spec-manager-v" + ver
         create_release_folder(release_dir)
-        
+
         # copy the new excel file into the release folder
         excel_file = repo_dir + "/Spec Manager v" + ver + ".xlsm"
         shutil.copy(excel_file, release_dir)
@@ -158,12 +167,16 @@ def main():
 
         # Create new Github release
         print('Creating Github release . . . ')
-        create_release(repo_dir, ver)
+        create_release(repo_dir, ver, secret, user_name)
 
-    else:
+    elif installer:
+
         print('Updating the installer on the network drive . . . ')
-        installer_dir = 'S:/Data Manager/setup files/spec-manager-setup'
+        installer_dir = 'S:/Data Manager/setup files/spec-manager-setup/installer'
         update_installer_files(repo_dir, installer_dir)
+
+    elif debug:
+        print('Running in debug mode . . .')
 
 
 if __name__ == "__main__":

@@ -77,7 +77,7 @@ Public Sub CustomSort(sort_name As String, column_name As String)
 ' NEEDS TESTING
     Dim sorter As Object
     Dim r As Long
-    Dim c As Long
+    Dim C As Long
 
     If CustomSorters.Contains(sort_name) Then
         Set sorter = CustomSorters.Item(sort_name)
@@ -85,10 +85,10 @@ Public Sub CustomSort(sort_name As String, column_name As String)
         Exit Sub
     End If
     
-    c = Me.Columns(column_name).Index
+    C = Me.Columns(column_name).index
     For r = 0 To Me.Rows.Count - 1
         On Error Resume Next
-        Me.Data(r, c).Value = sorter(Me.Data(r, c).Value)
+        Me.Data(r, C).value = sorter(Me.Data(r, C).value)
     Next r
 
     On Error GoTo 0

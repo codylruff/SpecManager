@@ -5,10 +5,10 @@ Private user As Account
 
 Function Account_Initialize() As Account
     If GetPrivledges(UCase(VBA.Environ("Username"))) <> DB_SELECT_SUCCESS Then
-        Logger.Log "Creating new user " & VBA.Environ("Username")
+        Logger.Log "Creating new user " & VBA.Environ("Username"), UserLog
         Set Account_Initialize = AccessControl.AutoAddNewUser
     Else
-        Logger.Log "Selected User : {" & user.ToString & "}"
+        Logger.Log "Selected User : {" & user.ToString & "}", UserLog
         Set Account_Initialize = user
     End If
     
@@ -18,13 +18,13 @@ Function GetPrivledges(Name As String) As Long
     Dim record As DatabaseRecord
     Set record = DataAccess.GetUser(Name)
     ' obsoleted
-    If record.records(1) Is Nothing Then
+    If record.Rows = 0 Then
         GetPrivledges = DB_SELECT_FAILURE
     Else
         Set user = New Account
-        user.Name = record.fields("Name")
-        user.PrivledgeLevel = record.fields("Privledge_Level")
-        user.ProductLine = record.fields("Product_Line")
+        user.Name = record.records(1).Item("Name")
+        user.PrivledgeLevel = record.records(1).Item("Privledge_Level")
+        user.ProductLine = record.records(1).Item("Product_Line")
         GetPrivledges = DB_SELECT_SUCCESS
     End If
 End Function
@@ -40,17 +40,23 @@ Function AutoAddNewUser() As Account
     new_user.ProductLine = "User"
     new_user.ChangeSetting "product_line", "User"
     new_user.SaveUserJson
-    Logger.Log DataAccess.PushNewUser(new_user)
+    Logger.Log DataAccess.PushNewUser(new_user), UserLog
     Set AutoAddNewUser = new_user
 End Function
 
 Public Sub ConfigControl()
 'Initializes the password form for config access.
     Dim w As Window
-    If Environ("UserName") <> "CRuff" Then
-        formPassword.Show
-    Else
-        Application.DisplayAlerts = True
+    Dim origCalcMode As xlCalculation
+    
+    If Open_Config(App.gDll.CreateInputBox(Password, "Access Control", "Enter your password :")) Then
+        
+        ' Toggle Gui Functions to speed up
+        Application.ScreenUpdating = False
+        Application.DisplayAlerts = False
+        origCalcMode = Application.Calculation
+        Application.Calculation = xlCalculationManual
+        
         If Windows.Count <> 1 Then
             For Each w In Windows
                 If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
@@ -58,30 +64,22 @@ Public Sub ConfigControl()
         Else
             Application.Visible = True
         End If
-        'Application.VBE.MainWindow.Visible = True
+        ' Show all worksheets
         GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
-        'Application.SendKeys ("^r")
+        
+        Application.ScreenUpdating = True
+        Application.DisplayAlerts = True
+        Application.Calculation = origCalcMode
     End If
 End Sub
 
-Public Sub Open_Config(Password As String)
+Private Function Open_Config(Password As String) As Boolean
 'Performs a password check and opens config.
     Dim w As Window
     If Password = "@Wmp9296bm4ddw" Then
-        Application.DisplayAlerts = True
-        If Windows.Count <> 1 Then
-            For Each w In Windows
-                If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
-            Next w
-        Else
-            Application.Visible = True
-        End If
-        Application.VBE.MainWindow.Visible = True
-        shtDeveloper.Visible = xlSheetVisible
-        'Application.SendKeys ("^r")
-        Unload formPassword
+        Open_Config = True
     Else
-        MsgBox "Access Denied", vbExclamation
-        Exit Sub
+        PromptHandler.AccessDenied
+        Open_Config = False
     End If
-End Sub
+End Function

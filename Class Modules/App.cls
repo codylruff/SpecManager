@@ -8,6 +8,13 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+
+#If VBA7 Then
+    Private Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+#Else
+    Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+#End If
+
 ' Events
 Public Event BeforeRefresh()
 Public Event AfterRefresh()
@@ -15,6 +22,9 @@ Public Event BeforeStart()
 Public Event AfterStart()
 Public Event BeforeShutdown()
 ' Fields
+Public gDll        As New KrishDll
+Public gMsg         As String
+Public gAppGuid     As String
 Public version As String
 Public current_user As Account
 Public current_spec As Specification
@@ -22,6 +32,8 @@ Public templates As VBA.Collection
 Public specs As Object
 Public printer As DocumentPrinter
 Public current_template As SpecificationTemplate
+Public TestingMode As Boolean
+
 ' Methods
 Sub Start()
     ' Log in with environ(username)
@@ -34,6 +46,7 @@ Sub Start()
     Set specs = CreateObject("Scripting.Dictionary")
     Set printer = New DocumentPrinter
     Set current_template = New SpecificationTemplate
+    TestingMode = False
 End Sub
 
 Public Sub RefreshObjects()
@@ -63,6 +76,79 @@ Public Sub Shutdown()
     Set specs = Nothing
     Set printer = Nothing
     Set current_template = Nothing
+    Logger.SaveAllLogs
 End Sub
 
+' -----------------------
+' VBA-TOOLS Methods
+' -----------------------
+Public Function testJson()
+'---------------------------------------------------------------------------------------
+' Procedure : testJson
+' Author    : KRISH
+' Date      : 21/05/2018
+' Purpose   : returns true or false whether an array has item or not
+' Returns   :
+'---------------------------------------------------------------------------------------
+'
+    Dim T As New TDialog
+    T.title = "test"
+    T.message = "this is a ' message"
+    T.dialogType = vbInformation
+    T.AddButton "button1", 1
+    T.AddButton "button2", 2, True
+    
+    Debug.Print T.ToJSON
+    
+    
+End Function
+
+'' Samples
+Public Function testOpenFile()
+    Dim Filters() As String
+    FnArrayAddItem Filters, "all files|*.*;"
+    
+    Dim Files As String
+    
+    Files = gDll.OpenFileA("test", Filters, False)
+    
+    On Error Resume Next
+    Debug.Print Files
+    'Debug.Print UBound(Files), Files(0)
+    
+End Function
+
+Public Function testJsonObject()
+    Dim Actor As Variant
+    Dim ActorAddress As Variant
+    
+    Set Actor = gDll.JsonParse("{ 'Name': 'John Wick', 'Address': { 'City': 'New York', 'State': 'NY' }, 'Age': 53 }")
+    
+    Set ActorAddress = gDll.JsonGetObject(Actor, "Address")
+    Debug.Print gDll.JsonGetValue(Actor, "Name") & " is from " & gDll.JsonGetValue(ActorAddress, "City") & " and he is " & gDll.JsonGetValue(Actor, "Age") & " years old."
+    Debug.Print gDll.JsonGetValue(Actor, "Address")
+    
+End Function
+
+Public Function TestJsonSerializeObject()
+    Dim Holder As Object
+    Set Holder = CreateObject("Scripting.Dictionary")
+    Holder.Add "Key1", "Value1"
+    Holder.Add "Key2", "Value2"
+    
+    Debug.Print gDll.DLL.JsonSerialize(Holder)
+    
+End Function
+
+Public Function OpenSettings(Parameter As String)
+    gDll.Toast "Hey you called OpenSettings() function with a parameter " & Parameter, vbInformation
+End Function
+
+Public Function ExecuteMe(Parameter1 As String, parameter2 As String)
+    gDll.Toast gDll.sFormat("Hey you called OpenSettings() function with a parameter {0} and {1}", Parameter1, parameter2), vbInformation
+End Function
+
+Public Function PicturePathFromUrl(url As String)
+    PicturePathFromUrl = gDll.PicturePathFromUrl(url, False, "", True)
+End Function
 

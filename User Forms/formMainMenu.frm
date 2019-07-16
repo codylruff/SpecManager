@@ -14,6 +14,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
+
+
 Option Explicit
 
 Private Sub cmdConfig_Click()
@@ -26,30 +29,28 @@ Private Sub cmdCreateSpecification_Click()
 ' Form to create a new specification based on an existing template. Admin required
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        Logger.Log App.current_user.Name & " attempted access to a restricted function."
-        MsgBox "This function is not availble to you"
+        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        PromptHandler.AccessDenied
         Exit Sub
     End If
     Unload Me
-    formNewSpecInput.Show vbModeless
+    formNewSpecInput.show vbModeless
 End Sub
 
 Private Sub cmdCreateTemplate_Click()
 ' Form to create a new template specification. Admin required.
     SpecManager.RestartApp
-    Logger.Log App.current_user.Name
-    Logger.Log App.current_user.PrivledgeLevel
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        Logger.Log App.current_user.Name & " attempted access to a restricted function."
-        MsgBox "This function is not availble to you"
+        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        PromptHandler.AccessDenied
         Exit Sub
     End If
     Unload Me
-    formNewTemplateInput.Show vbModeless
+    formNewTemplateInput.show vbModeless
 End Sub
 
 Private Sub cmdDatabaseQuery_Click()
-    MsgBox "Feature Under Development."
+    App.gDll.ShowDialog "Feature Under Development.", vbOkOnly, "Under Development"
 End Sub
 
 Private Sub cmdExit_Click()
@@ -62,37 +63,37 @@ Private Sub cmdEditTemplates_Click()
 ' Form to edit an existing specification template. Admin required.
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        Logger.Log App.current_user.Name & " attempted access to a restricted function."
-        MsgBox "This function is not availble to you"
+        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        PromptHandler.AccessDenied
         Exit Sub
     End If
     Unload Me
-    formEditTemplate.Show vbModeless
+    formEditTemplate.show vbModeless
 End Sub
 
 Private Sub cmdViewDocuments_Click()
     SpecManager.RestartApp
     Unload Me
-    formViewSpecs.Show vbModeless
+    formViewSpecs.show vbModeless
 End Sub
 
 Private Sub cmdViewSpecifications_Click()
 ' Form to view existing specifications. Admin not required.
     SpecManager.RestartApp
     Unload Me
-    formPrintSpecifications.Show vbModeless
+    formPrintSpecifications.show vbModeless
 End Sub
 
 Private Sub cmdEditSpecifications_Click()
 ' Form to edit an existing specification. Admin required
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        Logger.Log App.current_user.Name & " attempted access to a restricted function."
-        MsgBox "This function is not availble to you"
+        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        PromptHandler.AccessDenied
         Exit Sub
     End If
     Unload Me
-    formSpecConfig.Show vbModeless
+    formSpecConfig.show vbModeless
 End Sub
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)

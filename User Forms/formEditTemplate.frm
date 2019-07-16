@@ -14,16 +14,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdAddProperty_Click()
@@ -42,14 +32,14 @@ End Sub
 Sub AddProperty()
     ' This executes an add property command
     With App.current_template
-        .AddProperty txtPropertyName.Value
+        .AddProperty txtPropertyName.value
     End With
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
 
 Sub RemoveProperty()
-    App.current_template.RemoveProperty cboSelectProperty.Value
+    App.current_template.RemoveProperty cboSelectProperty.value
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
@@ -93,8 +83,8 @@ Private Sub PopulateCboSelectProperty()
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
-    txtPropertyName.Value = vbNullString
-    cboSelectProperty.Value = vbNullString
+    txtPropertyName.value = vbNullString
+    cboSelectProperty.value = vbNullString
 End Sub
 
 Private Sub PopulateCboSelectTemplate()
@@ -134,11 +124,11 @@ Sub SaveChanges()
     App.current_template.Revision = CStr(CDbl(App.current_template.Revision) + 1) & ".0"
     ret_val = SpecManager.UpdateSpecificationTemplate(App.current_template)
     If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
         Logger.Log "Edit Template Fail"
-        MsgBox "Update Failed, Contact Administrator."
+        PromptHandler.Error "Update Failed, Contact Administrator."
     Else
-        Logger.Log "Data Access returned: " & ret_val
-        MsgBox "Template Update Successful."
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
+        PromptHandler.Success "Template Update Successful."
     End If
 End Sub

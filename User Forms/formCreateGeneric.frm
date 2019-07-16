@@ -14,15 +14,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private template_name As String
@@ -48,7 +39,7 @@ Private Sub cmdAddProperty_Click()
 End Sub
 
 Sub AddProperty()
-   App.printer.PrintLine Me.txtPropertyName
+   App.printer.WriteLine Me.txtPropertyName
    App.current_template.AddProperty Me.txtPropertyName
 End Sub
 
@@ -56,11 +47,11 @@ Private Sub cmdSubmitTemplate_Click()
     Dim ret_val As Long
     ret_val = SpecManager.SaveSpecificationTemplate(App.current_template)
    If ret_val <> DB_PUSH_SUCCESS Then
-      Logger.Log "Data Access returned: " & ret_val
-        MsgBox "New Specification Was Not Saved. Contact Admin."
+      Logger.Log "Data Access returned: " & ret_val, DebugLog
+        PromptHandler.Error "New Specification Was Not Saved"
     Else
-        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved."
-        MsgBox "New Template Succesfully Saved."
+        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
+        PromptHandler.Success "New Template Succesfully Saved."
     End If
 End Sub
 
@@ -68,10 +59,10 @@ Sub SubmitTemplate()
     Dim ret_val As Long
     ret_val = SpecManager.SaveSpecificationTemplate(App.current_template)
    If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
         Logger.Log "Create Template Fail"
     Else
-        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved."
+        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
         Logger.Log "Create Template Pass"
     End If
 End Sub

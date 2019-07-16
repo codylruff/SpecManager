@@ -15,14 +15,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
-
-
-
-
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboProductLine
@@ -34,26 +26,26 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub cmdContinue_Click()
-    If SpecManager.TemplateInput(txtTemplateName.Value) <> vbNullString Then
-        If cboProductLine.Value <> vbNullString Then
-            App.current_template.ProductLine = cboProductLine.Value
+    If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
+        If cboProductLine.value <> vbNullString Then
+            App.current_template.ProductLine = cboProductLine.value
         Else
-            MsgBox "Please select a product line!"
+            PromptHandler.Error "Please select a product line!"
             Exit Sub
         End If
         Unload Me
-        formCreateGeneric.Show vbModeless
+        formCreateGeneric.show vbModeless
     Else
-        MsgBox "Please enter a template name !"
+        PromptHandler.Error "Please enter a template name !"
         Exit Sub
     End If
 End Sub
 
 Sub Continue()
-    If SpecManager.TemplateInput(txtTemplateName.Value) <> vbNullString Then
-        Logger.Log "Template Input Pass"
+    If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
+        Logger.Log "Template Input Pass", TestLog
     Else
-        Logger.Log "Template Input Fail"
+        Logger.Log "Template Input Fail", TestLog
     End If
 End Sub
 

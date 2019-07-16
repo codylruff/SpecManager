@@ -7,6 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
+'@ Tests
 ''
 ' ImmediateReporter v2.0.0-beta.3
 ' (c) Tim Hall - https://github.com/VBA-tools/VBA-TDD

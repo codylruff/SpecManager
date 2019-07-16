@@ -47,29 +47,14 @@ Public Sub DeinitializeApplication()
 End Sub
 
 Public Sub InitializeApplication()
-    ' If update_available Then
-    '     MsgBox "Please update the application to the current version."
-    '     Exit Sub
-    ' End If
     SpecManager.StartApp
-    'On Error GoTo UpdateFailure
-    ' Check for updates and start up the app if it is up to date
-    'Updater.UpdateSpecManager
-    'If update_available Then Exit Sub
-    'On Error GoTo 0
-    ' If the app is updated and you have already checked for updates the app will start.
-    'SpecManager.StartApp
     shtDeveloper.Visible = xlSheetVeryHidden
     GoToMain
-    'Exit Sub
-'UpdateFailure:
-'    Logger.Log "Update failed"
-'    MsgBox "Update Failed Contact Administrator!"
 End Sub
 
 Public Sub GoToMain()
 'Opens the main menu form.
-    formMainMenu.Show vbModeless
+    formMainMenu.show vbModeless
 End Sub
 
 Sub UnloadAllForms()
@@ -160,10 +145,10 @@ Public Sub ExportAll()
             Call VBComponent.Export(path)
             
             If Err.Number <> 0 Then
-                Logger.Log "Failed to export " & VBComponent.Name & " to " & path
+                Logger.Log "Failed to export " & VBComponent.Name & " to " & path, ExportLog
             Else
                 Count = Count + 1
-                Logger.Log "Exported " & Left$(VBComponent.Name & ":" & Space(Padding), Padding) & path
+                Logger.Log "Exported " & Left$(VBComponent.Name & ":" & Space(Padding), Padding) & path, ExportLog
             End If
 
             On Error GoTo 0
@@ -178,8 +163,8 @@ Public Sub ExportAll()
         "Finishing...", _
         True)
         
-    Logger.Log "Export Complete."
-    Logger.ResetLog "export"
+    Logger.Log "Export Complete.", ExportLog
+    Logger.ResetLog ExportLog
 End Sub
 
 Public Sub CloseConfig()
@@ -220,7 +205,7 @@ Public Sub ClearForm(frm)
             Case "TextBox"
                 ctl.text = vbNullString
             Case "CheckBox", "OptionButton", "ToggleButton"
-                ctl.Value = False
+                ctl.value = False
             Case "ComboBox", "ListBox"
                 ctl.ListIndex = -1
             Case Else
@@ -233,14 +218,14 @@ Public Sub DocumentPrinterToPdf()
     Dim fileName As String
     On Error GoTo SaveFileError
     fileName = PUBLIC_DIR & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
-    Set ws = Sheets("SpecificationForm")
+    Set ws = Sheets("pdf")
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
         fileName:=fileName, _
         Quality:=xlQualityStandard, _
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
-        OpenAfterPublish:=False
+        OpenAfterPublish:=True
     Logger.Log "PDF Saved : " & fileName
     Exit Sub
     
@@ -261,9 +246,9 @@ Public Sub DocumentPrinterToPdf_Test()
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=False
-    Logger.Log "PDF Saved : " & fileName
+    Logger.Log "PDF Saved : " & fileName, TestLog
     Exit Sub
     
 SaveFileError:
-    Logger.Log "Failed to save file PDF Fail"
+    Logger.Log "Failed to save file PDF Fail", TestLog
 End Sub

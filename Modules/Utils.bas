@@ -8,19 +8,37 @@ Option Explicit
 ' WINDOWS API FUNCTIONS DO NOT CHANGE
 ' ------------------------------------------------
 #If Win64 Then
-Public Declare PtrSafe Function SendMessageA Lib "USER32" (ByVal hWnd As LongPtr, ByVal wMsg As Long, ByVal wParam As LongPtr, lParam As Any) As LongPtr
-Public Declare PtrSafe Function GetDesktopWindow Lib "USER32" () As LongPtr
-Private Declare PtrSafe Function InvalidateRect Lib "USER32" (ByVal hWnd As LongPtr, lpRect As Long, ByVal bErase As Long) As LongPtr
-Private Declare PtrSafe Function UpdateWindow Lib "USER32" (ByVal hWnd As LongPtr) As LongPtr
-Private Declare PtrSafe Function IsWindow Lib "USER32" (ByVal hWnd As LongPtr) As LongPtr
+Public Declare PtrSafe Function SendMessageA Lib "user32" (ByVal Hwnd As LongPtr, ByVal wMsg As Long, ByVal wParam As LongPtr, lParam As Any) As LongPtr
+Public Declare PtrSafe Function GetDesktopWindow Lib "user32" () As LongPtr
+Private Declare PtrSafe Function InvalidateRect Lib "user32" (ByVal Hwnd As LongPtr, lpRect As Long, ByVal bErase As Long) As LongPtr
+Private Declare PtrSafe Function UpdateWindow Lib "user32" (ByVal Hwnd As LongPtr) As LongPtr
+Private Declare PtrSafe Function IsWindow Lib "user32" (ByVal Hwnd As LongPtr) As LongPtr
 #Else
-Private Declare Function SendMessage Lib "USER32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
-Private Declare Function GetDesktopWindow Lib "USER32" () As Long
-Private Declare Function InvalidateRect Lib "USER32" (ByVal hWnd As Long, lpRect As Long, ByVal bErase As Long) As Long
-Private Declare Function UpdateWindow Lib "USER32" (ByVal hWnd As Long) As Long
-Private Declare Function IsWindow Lib "USER32" (ByVal hWnd As Long) As Long
+Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal Hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+Private Declare Function GetDesktopWindow Lib "user32" () As Long
+Private Declare Function InvalidateRect Lib "user32" (ByVal Hwnd As Long, lpRect As Long, ByVal bErase As Long) As Long
+Private Declare Function UpdateWindow Lib "user32" (ByVal Hwnd As Long) As Long
+Private Declare Function IsWindow Lib "user32" (ByVal Hwnd As Long) As Long
 #End If
 ' -------------------------------------------------
+Public Function Contains(col As Collection, key As Variant) As Boolean
+    Dim obj As Variant
+
+    On Error GoTo err
+
+    Contains = True
+    obj = col(key)
+    Exit Function
+
+err:
+    Contains = False
+End Function
+
+Public Function FileExists(file_path As String) As Boolean
+' Tests whether a file exists
+    FileExists = IIf(Dir(file_path) <> "", True, False)
+End Function
+
 Public Function CleanString(ByVal target As String, find_strings As Variant, Optional remove_whitespace As Boolean = False) As String
     Dim i As Integer
     Dim clean_string As String
@@ -63,16 +81,16 @@ Sub DeleteNames(wb As Workbook)
     On Error GoTo 0
 End Sub
 
-Public Function CreateNamedRange(wb As Workbook, RangeName As String, sht As Worksheet, r As Long, c As Long) As Variant
+Public Function CreateNamedRange(wb As Workbook, RangeName As String, sht As Worksheet, r As Long, C As Long) As Variant
     Dim CellName As String
     Dim cell As Range
-    CellName = ConvertNumericToAlpha(c) & r
+    CellName = ConvertNumericToAlpha(C) & r
     
     Set cell = sht.Range(CellName)
     wb.Names.Add Name:=RangeName, RefersTo:=cell
 
     On Error GoTo ErrorHandler
-    CreateNamedRange = Range(wb.Names(RangeName)).Value
+    CreateNamedRange = Range(wb.Names(RangeName)).value
     Exit Function
 ErrorHandler:
     CreateNamedRange = False
@@ -101,7 +119,7 @@ Function ConvertToCamelCase(s As String) As String
     Exit Function
 RegExError:
     Err.Raise SM_REGEX_ERROR
-    Logger.Log "RegEx Error: ConvertToCamelCase"
+    Logger.Log "RegEx Error: ConvertToCamelCase", DebugLog
 End Function
 
 Function SplitCamelCase(sString As String, Optional sDelim As String = " ") As String
@@ -122,7 +140,7 @@ Error_Handler_Exit:
     Exit Function
  
 Error_Handler:
-    Logger.Log "RegEx Error: SplitCamelCase"
+    Logger.Log "RegEx Error: SplitCamelCase", DebugLog
     Resume Error_Handler_Exit
 End Function
 
@@ -192,14 +210,14 @@ Function CheckForEmpties(frm) As Boolean
     For Each ctl In frm.Controls
         Select Case VBA.TypeName(ctl)
             Case "TextBox"
-                If ctl.Value = vbNullString Then
+                If ctl.value = vbNullString Then
                     MsgBox "All boxes must be filed.", vbExclamation, "Input Error"
                     ctl.SetFocus
                     CheckForEmpties = True
                     Exit Function
                 End If
             Case "ComboBox"
-                If ctl.Value = vbNullString Then
+                If ctl.value = vbNullString Then
                     MsgBox "Make a selection from the drop down menu.", vbExclamation, "Input Error"
                     ctl.SetFocus
                     CheckForEmpties = True
@@ -222,17 +240,17 @@ Sub UpdateTable(shtName As String, tblName As String, Header As String, val)
 'Adds an entry at the bottom of specified column header.
     Dim rng As Range
     Set rng = Sheets(shtName).Range(tblName & "[" & Header & "]")
-    rng.End(xlDown).Offset(1, 0).Value = val
+    rng.End(xlDown).Offset(1, 0).value = val
 End Sub
 
 Sub Update(rng As Range, val)
 'Adds an entry at the bottom of specified column header.
-    rng.End(xlDown).Offset(1, 0).Value = val
+    rng.End(xlDown).Offset(1, 0).value = val
 End Sub
 
 Sub Insert(rng As Range, val)
 'Inserts an entry into a specific named cell.
-    rng.Value = val
+    rng.value = val
 End Sub
 
 Function ReadNamedRange(Name As String) As Variant
@@ -277,7 +295,7 @@ Sub ChangeActivePrinter()
 '
 ' ChangeActivePrinter Macro
 
-    Application.Dialogs(xlDialogPrinterSetup).Show
+    Application.Dialogs(xlDialogPrinterSetup).show
     Logger.Log "Setting default printer for Spec Manager : " & Application.ActivePrinter
     App.current_user.Settings.Item("default_printer") = Application.ActivePrinter
     App.current_user.SaveUserJson
@@ -362,19 +380,162 @@ Public Function fncScreenUpdating(State As Boolean, Optional Window_hWnd As Long
     If Window_hWnd = 0 Then
         Window_hWnd = GetDesktopWindow()
     Else
-        If IsWindow(hWnd:=Window_hWnd) = False Then
+        If IsWindow(Hwnd:=Window_hWnd) = False Then
             Exit Function
         End If
     End If
     
     If State = True Then
-        Call SendMessage(hWnd:=Window_hWnd, wMsg:=WM_SETREDRAW, wParam:=1, lParam:=0)
-        Call InvalidateRect(hWnd:=Window_hWnd, lpRect:=0, bErase:=True)
-        Call UpdateWindow(hWnd:=Window_hWnd)
+        Call SendMessage(Hwnd:=Window_hWnd, wMsg:=WM_SETREDRAW, wParam:=1, lParam:=0)
+        Call InvalidateRect(Hwnd:=Window_hWnd, lpRect:=0, bErase:=True)
+        Call UpdateWindow(Hwnd:=Window_hWnd)
     
     Else
-        Call SendMessage(hWnd:=Window_hWnd, wMsg:=WM_SETREDRAW, wParam:=0, lParam:=0)
+        Call SendMessage(Hwnd:=Window_hWnd, wMsg:=WM_SETREDRAW, wParam:=0, lParam:=0)
     
     End If
 
+End Function
+
+Sub CreateWorksheetScopedNameRanges()
+'PURPOSE: Create Worksheet Scoped versions of Workbook Scoped Named Ranges
+'SOURCE: www.TheSpreadsheetGuru.com/the-code-vault
+
+Dim nm As Name
+Dim rng As Range
+Dim FilterPhrase As String
+
+'Filter Named Ranges that contain specific phrase
+  'FilterPhrase = "Table"
+
+'Loop Through each named Range
+  For Each nm In ActiveWorkbook.Names
+  
+    'Is Name scoped at the Workbook level?
+      If TypeOf nm.Parent Is Workbook Then
+        Debug.Print nm.Name
+        'Does Name meet Filter Phrase Requirement? If so, recreate named range with Worksheet Scope
+          'If InStr(1, nm.Name, FilterPhrase) > 0 Then
+            Set rng = Range(nm.RefersTo)
+            rng.Parent.Names.Add Name:=nm.Name, RefersToR1C1:="=" & rng.Address(ReferenceStyle:=xlR1C1)
+          'End If
+          
+      End If
+      
+  Next nm
+
+End Sub
+
+Public Function ConvertTwipsToPixels(lngTwips As Long, lngDirection As PixelDirection) As Long
+'-----------------------------------------------------------------------------
+' Pixel to Twips conversions
+'-----------------------------------------------------------------------------
+' cf http://support.microsoft.com/default.aspx?scid=kb;en-us;210590
+' To call this function, pass the number of twips you want to convert,
+' and another parameter indicating the horizontal or vertical measurement
+' (0 for horizontal, non-zero for vertical). The following is a sample call:
+'
+
+   'Handle to device
+   #If VBA7 Then
+       Dim lngDC As LongPtr
+   #Else
+       Dim lngDC As Long
+   #End If
+
+   Dim lngPixelsPerInch As Long
+   Const nTwipsPerInch = 1440
+   lngDC = GetDC(0)
+   
+   If (lngDirection = PixelDirection.Horizontal) Then       'Horizontal
+      lngPixelsPerInch = GetDeviceCaps(lngDC, WU_LOGPIXELSX)
+   Else                            'Vertical
+      lngPixelsPerInch = GetDeviceCaps(lngDC, WU_LOGPIXELSY)
+   End If
+   lngDC = ReleaseDC(0, lngDC)
+   ConvertTwipsToPixels = (lngTwips / nTwipsPerInch) * lngPixelsPerInch
+   
+End Function
+
+Public Function ConvertTwipsToCm(Twips As Double, Optional iRound As Integer = 2) As Double
+'---------------------------------------------------------------------------------------
+' Procedure : ConvertTwipsToCm
+' Author    : KRISH J
+' Purpose   : The NOT version of ConvertCmToTwips
+' Returns   : Twips value in double
+'---------------------------------------------------------------------------------------
+'
+
+    ConvertTwipsToCm = Round(Twips / 567, iRound)
+End Function
+
+Public Function ConvertPointerToObject(ByVal lngThisPointer As Long) As Object
+'---------------------------------------------------------------------------------------
+' Procedure : ConvertPointerToObject
+' Author    : KRISH J
+' Date      : 20/12/2017
+' Purpose   : Retrieves the object from memory pointer
+'---------------------------------------------------------------------------------------
+'
+    Dim objThisObject As Object
+    RtlMoveMemory objThisObject, lngThisPointer, POINTERSIZE
+    Set ConvertPointerToObject = objThisObject
+    RtlMoveMemory objThisObject, ZEROPOINTER, POINTERSIZE
+End Function
+
+Public Function ConvertPixelsToTwips(lngPixels As Long, lngDirection As Long) As Long
+   'Handle to device
+   #If VBA7 Then
+       Dim lngDC As LongPtr
+   #Else
+       Dim lngDC As Long
+   #End If
+   Dim lngPixelsPerInch As Long
+   Const nTwipsPerInch = 1440
+   lngDC = GetDC(0)
+   
+   If (lngDirection = 0) Then       'Horizontal
+      lngPixelsPerInch = GetDeviceCaps(lngDC, WU_LOGPIXELSX)
+   Else                            'Vertical
+      lngPixelsPerInch = GetDeviceCaps(lngDC, WU_LOGPIXELSY)
+   End If
+   lngDC = ReleaseDC(0, lngDC)
+   ConvertPixelsToTwips = (lngPixels * nTwipsPerInch) / lngPixelsPerInch
+End Function
+
+Public Function ConvertObjectToPointer(ByRef objThisObject As Object) As Long
+'---------------------------------------------------------------------------------------
+' Procedure : ConvertObjectToPointer
+' Author    : KRISH J
+' Date      : 20/12/2017
+' Purpose   : Converts an object to a pointer in memory
+'---------------------------------------------------------------------------------------
+'
+    Dim lngThisPointer As Long
+
+    RtlMoveMemory lngThisPointer, objThisObject, POINTERSIZE
+    ConvertObjectToPointer = lngThisPointer
+End Function
+
+Public Function ConvertFontToCm(stringLength As Long) As Double
+'---------------------------------------------------------------------------------------
+' Procedure : ConvertFontToCm
+' Author    : KRISH J
+' Purpose   : Returns 10x smaller unit than given lenght
+' Returns   :
+'---------------------------------------------------------------------------------------
+
+    ConvertFontToCm = stringLength / 10
+End Function
+
+Public Function ConvertCmToTwips(ValueInCm As Double) As Double
+'---------------------------------------------------------------------------------------
+' Procedure : ConvertCmToTwips
+' Author    : KRISH J
+' Purpose   : Converts cm units into twips. 567 twips in one cm. 1440 twips in one inch
+' Returns   : Twips value in double
+'---------------------------------------------------------------------------------------
+'
+
+    ConvertCmToTwips = 567 * ValueInCm
 End Function

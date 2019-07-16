@@ -52,19 +52,19 @@ Sub MaterialInput(material_id As String)
     Dim ret_val As Long
     If material_id = vbNullString Then
         ' You must enter a material id before clicking search
-        MsgBox "You must enter a material id.", , "Invalid Search Exception"
+        PromptHandler.Error "Specification not found!"
         Exit Sub
     End If
     ret_val = SpecManager.SearchForSpecifications(material_id)
     If ret_val = SM_SEARCH_FAILURE Then
         ' Let the user know that the specifcation could not be found.
-        MsgBox "Specification not found!", , "Null Spec Exception"
+        PromptHandler.Error "Specification not found!"
         Exit Sub
     ElseIf ret_val = SM_SEARCH_AGAIN Then
         ret_val = SpecManager.SearchForSpecifications(material_id)
         If ret_val = SM_SEARCH_FAILURE Then
             ' Let the user know that the specifcation could not be found.
-            MsgBox "Specification not found!", , "Null Spec Exception"
+            PromptHandler.Error "Specification not found!"
             Exit Sub
         End If
     End If
@@ -159,10 +159,10 @@ Private Function UpdateTemplateChanges() As Boolean
             spec.Revision = CStr(CDbl(spec.Revision) + 1#)
             ret_val = SpecManager.SaveSpecification(spec, old_spec)
             If ret_val <> DB_PUSH_SUCCESS Then
-                Logger.Log "Data Access returned: " & ret_val
+                Logger.Log "Data Access returned: " & ret_val, DebugLog
                 Logger.Log "New Specification Was Not Saved. Contact Admin."
             Else
-                Logger.Log "Data Access returned: " & ret_val
+                Logger.Log "Data Access returned: " & ret_val, DebugLog
                 Logger.Log "New Specification Succesfully Saved."
             End If
         End If
@@ -209,7 +209,7 @@ Sub ListSpecifications(frm As MSForms.UserForm)
     If Not App.specs Is Nothing Then
         App.printer.ListObjects App.specs
     Else
-        App.printer.PrintLine "No specifications are available for this code."
+        App.printer.WriteLine "No specifications are available for this code."
     End If
 End Sub
 
@@ -217,14 +217,14 @@ Sub PrintSpecification(frm As MSForms.UserForm)
     Logger.Log "Printing Specification . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
     If Not App.current_spec Is Nothing Then
-        App.printer.PrintObject App.current_spec
+        App.printer.PrintObjectToConsole App.current_spec
     End If
 End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
     Logger.Log "Printing Template . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
-    App.printer.PrintObject App.current_template
+    App.printer.PrintObjectToConsole App.current_template
 End Sub
 
 Public Sub UpdateSingleProperty(property_name As String, property_value As Variant, material_id As String)
@@ -342,8 +342,8 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     For Each dict In dicts
         Set App.current_spec = Factory.CreateSpecFromDict(dict)
         props = App.current_spec.ToArray
-        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Value = App.current_spec.Header
-        ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).Value = props
+        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).value = App.current_spec.Header
+        ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).value = props
         i = i + 1
     Next dict
     ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Columns.AutoFit
@@ -368,15 +368,15 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
                 dict.Add .Cells(1, k), .Cells(i, k)
             Next k
             json_string = JsonVBA.ConvertToJson(dict)
-            .Cells(i, num_cols + start_col).Value = json_string
+            .Cells(i, num_cols + start_col).value = json_string
             spec_dict.Add "Properties_Json", json_string
             spec_dict.Add "Tolerances_Json", "{}"
-            spec_dict.Add "Material_Id", .Cells(i, 1).Value
-            spec_dict.Add "Spec_Type", .Cells(i, 2).Value
+            spec_dict.Add "Material_Id", .Cells(i, 1).value
+            spec_dict.Add "Spec_Type", .Cells(i, 2).value
             spec_dict.Add "Revision", 1
             Set new_spec = Factory.CreateSpecFromDict(spec_dict)
             If DataAccess.PushSpec(new_spec) <> DB_PUSH_SUCCESS Then
-                Logger.Log "Error Writing : " & spec_dict.Item("Material_Id")
+                Logger.Error "Error Writing : " & spec_dict.Item("Material_Id")
                 Exit Sub
             End If
             
@@ -405,11 +405,11 @@ Public Sub CopyPropertiesFromFile()
         style_number = Mid(ws.Cells(r, 1), 6, 3)
         json_file_path = ThisWorkbook.path & "\RBAs\" & style_number & ".json"
         json_string = Replace(JsonVBA.ReadJsonFileToString(json_file_path), "NaN", vbNullString)
-        ws.Cells(r, 2).Value = json_string
+        ws.Cells(r, 2).value = json_string
     Next r
 End Sub
 
-Sub PrintPackage(doc_package As Object)
+Sub PrintPackage(doc_package As Object, package_variant As DocumentPackageVariant)
 ' Print specs from the given doc_package (dictionary)
     'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
     Dim spec As Specification
@@ -426,8 +426,13 @@ Sub PrintPackage(doc_package As Object)
     For Each doc In doc_package
         Set spec = doc_package(doc)
         With spec
-            ' Check for multi-page documents
-            Utils.PrintSheet ThisWorkbook.Sheets(.SpecType), IIf(.SpecType = "Weaving RBA", False, True)
+            ' Weaving RBA gets special treament here to include the checklist.
+            If .SpecType = "Weaving RBA" Then
+                Utils.PrintSheet ThisWorkbook.Sheets("Weaving RBA"), False
+                Utils.PrintSheet ThisWorkbook.Sheets(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), False
+            Else
+                Utils.PrintSheet ThisWorkbook.Sheets(.SpecType), True
+            End If
         End With
     Next doc
 
@@ -476,20 +481,20 @@ Public Sub UpdateRBAFromSheet()
     Dim T As SpecificationTemplate
     App.Start
     ' Start up spec-manager
-    material_id = CStr(Range("article_code").Value)
+    material_id = CStr(Range("article_code").value)
     spec_type = "Weaving RBA"
     Set spec = Factory.CreateSpecificationFromRecord(DataAccess.GetSpecification(material_id, spec_type))
     Set props = CreateObject("Scripting.Dictionary")
     ' Get spec by material_id and make a copy
     Set old_spec = Factory.CopySpecification(spec)
     ' Loop through named ranges and create a dictionary
-    spec.Revision = CStr(Range("revision").Value + 1)
+    spec.Revision = CStr(Range("revision").value + 1)
     For Each prop In spec.Properties
-        spec.Properties(CStr(prop)) = Range(prop).Value
+        spec.Properties(CStr(prop)) = Range(prop).value
         Logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
     Next prop
     ' Update the specification
-    Logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec)
+    Logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec), DebugLog
     App.Shutdown
     AccessControl.ConfigControl
 End Sub

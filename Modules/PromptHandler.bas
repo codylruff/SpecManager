@@ -1,14 +1,5 @@
 Attribute VB_Name = "PromptHandler"
 Option Explicit
-Public Choice As Boolean
-
-Public Enum DocumentPackageVariant
-    Default = 0
-    WeavingStyleChange = 1
-    WeavingTieBack = 2
-    FinishingWithQC = 3
-    FinishingNoQC = 4
-End Enum
 
 ' Prompt Sequences
 ' A prompt sequence is a series of prompts and conditionals
@@ -27,17 +18,12 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
 ' Roll is first cut so if no then print all specifications
 '------------------------------------------------------------------------
     ' Prompt #1 : Is this a finishing order?
-    question "Is this a finishing order?"
-    formUserPrompt.Show
-    If Choice = True Then
+    If question("Is this a finishing order?") Then
         ' Prompt #2 : Is this the first loom cut?
-        question "Is this the first loom cut?"
-        formUserPrompt.Show
-        If Choice = True Then
+        
+        If question("Is this the first loom cut?") Then
             ' Prompt #3 : After finishing, will this roll be processed on the Isotex?
-            question "After finishing, will this roll be processed on the Isotex?"
-            formUserPrompt.Show
-            If Choice = True Then
+            If question("After finishing, will this roll be processed on the Isotex?") Then
                 ProtectionPlanningSequence = FinishingNoQC
                 Exit Function
             Else
@@ -50,9 +36,7 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
         End If
     Else
         ' Prompt #4 : Is this a straight tie-back?
-        question "Is this a straight tie-back?"
-        formUserPrompt.Show
-        If Choice = True Then
+        If question("Is this a straight tie-back?") Then
             ProtectionPlanningSequence = WeavingTieBack
         Else
             ProtectionPlanningSequence = WeavingStyleChange
@@ -61,6 +45,25 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
 
 End Function
 
-Private Sub question(question_text As String)
-    formUserPrompt.lblQuestion.Caption = question_text
+Private Function question(question_text As String) As Boolean
+    question = CBool(App.gDll.ShowDialogRich(question_text, vbYesNo, "Question"))
+End Function
+
+Public Sub AccessDenied()
+' Shows an access denied prompt
+    If Not App.TestingMode Then App.gDll.ShowDialog "Access Denied", vbCritical, "Access Control", ThemeBg:="#f44336"
 End Sub
+
+Public Sub Error(message_text As String)
+' Shows a handled error message
+    If Not App.TestingMode Then App.gDll.ShowDialog message_text, vbCritical, "Error Message", ThemeBg:="#f44336"
+End Sub
+
+Public Sub Success(message_text As String)
+    If Not App.TestingMode Then App.gDll.ShowDialog message_text, vbOkOnly, "Success!"
+End Sub
+
+Public Function UserInput(input_type As InputBoxType, title_text As String, message_text As String) As Variant
+    UserInput = App.gDll.CreateInputBox(input_type, title_text, message_text)
+End Function
+

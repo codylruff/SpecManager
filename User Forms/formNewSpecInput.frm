@@ -14,16 +14,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-
-
-
-
-
-
-
-
-
 Option Explicit
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboSelectSpecType
@@ -44,19 +36,19 @@ Private Sub PopulateCboSelectSpecType()
 End Sub
 
 Private Sub cmdContinue_Click()
-    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.Value, UCase(Utils.RemoveWhiteSpace(txtSpecName.Value))) <> vbNullString Then
+    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
         Unload Me
-        formCreateSpec.Show vbModeless
+        formCreateSpec.show vbModeless
     Else
-        MsgBox "Please enter a template type and specification name !"
+        PromptHandler.Error "Please enter a template type and specification name !"
         Exit Sub
     End If
 End Sub
 
 Sub Continue()
-    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.Value, UCase(Utils.RemoveWhiteSpace(txtSpecName.Value))) <> vbNullString Then
-        Logger.Log "Spec Input Pass"
+    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
+        Logger.Log "Spec Input Pass", TestLog
     Else
-        Logger.Log "Spec Input Fail"
+        Logger.Log "Spec Input Fail", TestLog
     End If
 End Sub

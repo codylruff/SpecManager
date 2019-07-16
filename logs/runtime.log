@@ -1,70 +1,23 @@
-09-Jul-2019 15:58:44.20 : ------------- Starting Application
-09-Jul-2019 15:58:44.20 : Developer was hidden.
-09-Jul-2019 15:58:44.20 : testing was hidden.
-09-Jul-2019 15:58:44.20 : Database Query was hidden.
-09-Jul-2019 15:58:44.21 : pdf was hidden.
-09-Jul-2019 15:58:44.21 : Weaving RBA was hidden.
-09-Jul-2019 15:58:44.21 : Warping Requirements was hidden.
-09-Jul-2019 15:58:44.21 : RBA Template Change Log was hidden.
-09-Jul-2019 15:58:44.21 : RbaParser was hidden.
-09-Jul-2019 15:58:44.21 : Testing Requirements was hidden.
-09-Jul-2019 15:58:44.21 : Ballistic Testing Requirements was hidden.
-09-Jul-2019 15:58:44.21 : Searching for user name . . . 
-09-Jul-2019 15:58:44.23 : -----------------------------------
-09-Jul-2019 15:58:44.23 : SELECT * FROM user_privledges WHERE Name ='CRUFF'
-09-Jul-2019 15:58:44.28 : Checking Row 1 . . . 
-09-Jul-2019 15:58:44.28 : Column 1 : Name, Row 1 : CRUFF
-09-Jul-2019 15:58:44.28 : Column 2 : Protection, Row 1 : 25
-09-Jul-2019 15:58:44.28 : Column 3 : Filtration, Row 1 : 25
-09-Jul-2019 15:58:44.28 : Column 4 : Chemical, Row 1 : 25
-09-Jul-2019 15:58:44.28 : Column 5 : Privledge_Level, Row 1 : 25
-09-Jul-2019 15:58:44.28 : Column 6 : Product_Line, Row 1 : Admin
-09-Jul-2019 15:58:44.28 : Selected User : {User Name : CRUFF, Privledge Level : 25, Product Line : Admin}
-09-Jul-2019 15:58:44.28 : Get all template types . . . 
-09-Jul-2019 15:58:44.29 : -----------------------------------
-09-Jul-2019 15:58:44.29 : SELECT * FROM template_specifications
-09-Jul-2019 15:58:44.31 : Listing all template types (spec Types) . . . 
-09-Jul-2019 15:58:44.32 : Checking Row 1 . . . 
-09-Jul-2019 15:58:44.32 : Column 1 : Id, Row 1 : 3
-09-Jul-2019 15:58:44.32 : Column 2 : Spec_Type, Row 1 : Testing Requirements
-09-Jul-2019 15:58:44.32 : Column 3 : Time_Stamp, Row 1 : 5/17/2019 11:56:45 AM
-09-Jul-2019 15:58:44.32 : Column 4 : Properties_Json, Row 1 : {"QC Sample Length":"","Warp/Pick Count":"","Usable Width":"","Dry Weight":"","Fabric Breaking Strength":"","Thickness":"","Crimp":"","Conditioned Weight":"","Residual Shrinkage":"","Yarn Break Force":"","Resin Content":"","Volatile Content":"","Glass Transition (Tg)":"","Laminated Weight":"","Coated Weight":""}
-09-Jul-2019 15:58:44.32 : Column 5 : Revision, Row 1 : 1
-09-Jul-2019 15:58:44.32 : Column 6 : Product_Line, Row 1 : Protection
-09-Jul-2019 15:58:44.32 : Checking Row 2 . . . 
-09-Jul-2019 15:58:44.32 : Column 1 : Id, Row 2 : 4
-09-Jul-2019 15:58:44.32 : Column 2 : Spec_Type, Row 2 : Ballistic Testing Requirements
-09-Jul-2019 15:58:44.32 : Column 3 : Time_Stamp, Row 2 : 5/30/2019 1:49:36 PM
-09-Jul-2019 15:58:44.32 : Column 4 : Properties_Json, Row 2 : {"Ballistic Sample Length":"","Number of Layers":""}
-09-Jul-2019 15:58:44.34 : Column 5 : Revision, Row 2 : 1
-09-Jul-2019 15:58:44.34 : Column 6 : Product_Line, Row 2 : Protection
-09-Jul-2019 15:58:44.34 : Checking Row 3 . . . 
-09-Jul-2019 15:58:44.34 : Column 1 : Id, Row 3 : 5
-09-Jul-2019 15:58:44.34 : Column 2 : Spec_Type, Row 3 : Weaving RBA
-09-Jul-2019 15:58:44.34 : Column 3 : Time_Stamp, Row 3 : 7/5/2019 2:47:30 PM
-09-Jul-2019 15:58:44.34 : Column 4 : Properties_Json, Row 3 : {"fd_09":"","fd_19":"","fd_29":"","fd_39":"","fd_49":"","fd_59":"","fd_69":"","fd_79":"","fd_89":"","fd_99":"","fd_08":"","fd_18":"","fd_28":"","fd_38":"","fd_48":"","fd_58":"","fd_68":"","fd_78":"","fd_88":"","fd_98":"","fd_07":"","fd_17":"","fd_27":"","fd_37":"","fd_47":"","fd_57":"","fd_67":"","fd_77":"","fd_87":"","fd_97":"","fd_06":"","fd_16":"","fd_26":"","fd_36":"","fd_46":"","fd_56":"","fd_66":"","fd_76":"","fd_86":"","fd_96":"","fd_05":"","fd_15":"","fd_25":"","fd_35":"","fd_45":"","fd_55":"","fd_65":"","fd_75":"","fd_85":"","fd_95":"","fd_04":"","fd_14":"","fd_24":"","fd_34":"","fd_44":"","fd_54":"","fd_64":"","fd_74":"","fd_84":"","fd_94":"","fd_03":"","fd_13":"","fd_23":"","fd_33":"","fd_43":"","fd_53":"","fd_63":"","fd_73":"","fd_83":"","fd_93":"","fd_02":"","fd_12":"","fd_22":"","fd_32":"","fd_42":"","fd_52":"","fd_62":"","fd_72":"","fd_82":"","fd_92":"","fd_01":"","fd_11":"","fd_21":"","fd_31":"","fd_41":"","fd_51":"","fd_61":"","fd_71":"","fd_81":"","fd_91":"","fd_00":"","fd_10":"","fd_20":"","fd_30":"","fd_40":"","fd_50":"","fd_60":"","fd_70":"","fd_80":"","fd_90":"","di_09":"","di_19":"","di_29":"","di_39":"","di_49":"","di_59":"","di_69":"","di_79":"","di_89":"","di_99":"","di_08":"","di_18":"","di_28":"","di_38":"","di_48":"","di_58":"","di_68":"","di_78":"","di_88":"","di_98":"","di_07":"","di_17":"","di_27":"","di_37":"","di_47":"","di_57":"","di_67":"","di_77":"","di_87":"","di_97":"","di_06":"","di_16":"","di_26":"","di_36":"","di_46":"","di_56":"","di_66":"","di_76":"","di_86":"","di_96":"","di_05":"","di_15":"","di_25":"","di_35":"","di_45":"","di_55":"","di_65":"","di_75":"","di_85":"","di_95":"","di_04":"","di_14":"","di_24":"","di_34":"","di_44":"","di_54":"","di_64":"","di_74":"","di_84":"","di_94":"","di_03":"","di_13":"","di_23":"","di_33":"","di_43":"","di_53":"","di_63":"","di_73":"","di_83":"","di_93":"","di_02":"","di_12":"","di_22":"","di_32":"","di_42":"","di_52":"","di_62":"","di_72":"","di_82":"","di_92":"","di_01":"","di_11":"","di_21":"","di_31":"","di_41":"","di_51":"","di_61":"","di_71":"","di_81":"","di_91":"","di_00":"","di_10":"","di_20":"","di_30":"","di_40":"","di_50":"","di_60":"","di_70":"","di_80":"","di_90":"","ld_09":"","ld_19":"","ld_29":"","ld_39":"","ld_49":"","ld_59":"","ld_69":"","ld_79":"","ld_89":"","ld_99":"","ld_08":"","ld_18":"","ld_28":"","ld_38":"","ld_48":"","ld_58":"","ld_68":"","ld_78":"","ld_88":"","ld_98":"","ld_07":"","ld_17":"","ld_27":"","ld_37":"","ld_47":"","ld_57":"","ld_67":"","ld_77":"","ld_87":"","ld_97":"","ld_06":"","ld_16":"","ld_26":"","ld_36":"","ld_46":"","ld_56":"","ld_66":"","ld_76":"","ld_86":"","ld_96":"","ld_05":"","ld_15":"","ld_25":"","ld_35":"","ld_45":"","ld_55":"","ld_65":"","ld_75":"","ld_85":"","ld_95":"","ld_04":"","ld_14":"","ld_24":"","ld_34":"","ld_44":"","ld_54":"","ld_64":"","ld_74":"","ld_84":"","ld_94":"","ld_03":"","ld_13":"","ld_23":"","ld_33":"","ld_43":"","ld_53":"","ld_63":"","ld_73":"","ld_83":"","ld_93":"","ld_02":"","ld_12":"","ld_22":"","ld_32":"","ld_42":"","ld_52":"","ld_62":"","ld_72":"","ld_82":"","ld_92":"","ld_01":"","ld_11":"","ld_21":"","ld_31":"","ld_41":"","ld_51":"","ld_61":"","ld_71":"","ld_81":"","ld_91":"","ld_00":"","ld_10":"","ld_20":"","ld_30":"","ld_40":"","ld_50":"","ld_60":"","ld_70":"","ld_80":"","ld_90":"","actual_weft_count":"","article_code":"","aux_selvedges_closing_degrees":"","bottom_rapier_clamps":"","bottom_spreader_bars":"","central_selvedges_drawing_in":"","central_selvedges_ends_per_dent":"","central_selvedges_number_ends":"","central_selvedges_weave":"","central_selvedges_yarn_count":"","cutting_degrees":"","date":"","dorn_left_selvedges_drawing_in":"","dorn_left_selvedges_ends_per_dent":"","dorn_left_selvedges_number_ends":"","dorn_left_selvedges_weave":"","dorn_left_selvedges_yarn_count":"","draw_in_harness":"","draw_in_reed":"","fabric_width":"","first_heddle":"","first_heddle_1":"","first_heddle_guide":"","harness_configuration":"","horizontal_back_rest_roller":"","last_heddle":"","last_heddle_guide":"","left_main_selvedges_drawing_in":"","left_main_selvedges_ends_per_dent":"","left_main_selvedges_number_ends":"","left_main_selvedges_weave":"","left_main_selvedges_yarn_count":"","left_selvedges_drawing_in":"","left_selvedges_ends_per_dent":"","left_selvedges_number_ends":"","left_selvedges_weave":"","left_selvedges_yarn_count":"","loom_number":"","loom_type":"","number_ends_wo_selvedges":"","number_harnesses":"","pinch_roller_felt_type":"","press_roller_type":"","reed":"","reed_width":"","right_main_selvedges_drawing_in":"","right_main_selvedges_ends_per_dent":"","right_main_selvedges_number_ends":"","right_main_selvedges_weave":"","right_main_selvedges_yarn_count":"","right_selvedges_drawing_in":"","right_selvedges_ends_per_dent":"","right_selvedges_number_ends":"","right_selvedges_weave":"","right_selvedges_yarn_count":"","sand_roller_type":"","selvedges_type":"","shed_closing_degrees":"","speed":"","springs_type":"","style_number":"","temples_composition":"","upper_rapier_clamps":"","upper_spreader_bars":"","vertical_back_rest_roller":"","warp_tension":"","weave_pattern":"","weft_count_set_point":""}
-09-Jul-2019 15:58:44.34 : Column 5 : Revision, Row 3 : 2.0
-09-Jul-2019 15:58:44.34 : Column 6 : Product_Line, Row 3 : Protection
-09-Jul-2019 15:58:44.34 : Checking Row 4 . . . 
-09-Jul-2019 15:58:44.34 : Column 1 : Id, Row 4 : 7
-09-Jul-2019 15:58:44.36 : Column 2 : Spec_Type, Row 4 : Scouring Requirements
-09-Jul-2019 15:58:44.36 : Column 3 : Time_Stamp, Row 4 : 6/26/2019 2:52:22 PM
-09-Jul-2019 15:58:44.36 : Column 4 : Properties_Json, Row 4 : {"Recipe":"","Minimum Acceptable Width in Greige (inch)":"","Greige End Count":"","Greige Pick Count":"","Roll Direction":"","Entry Braking":"","Braking Force":"","Accumulator":"","Entry Nip (PSI)":"","Exit Nip (PSI)":"","Edge Guide":"","Vacuum Extractor System":"","Speed (YPM)":"","Imapacta #1 Temperature (F)":"","Imapacta #1 Steam":"","Imapacta #1 Dancer (PSI)":"","Imapacta #1 Nip (kN)":"","Imapacta #1 Chemical Wash":"","Saturator Temperature (F)":"","Saturator Steam":"","Saturator Dance (PSI)":"","Saturator Nip Pressure (kN)":"","Saturator Nip Position":"","Saturator Overflow / Manual Water Valve":"","Injecta Enable":"","Injecta Entry Water":"","Injecta Exit Water":"","Injecta Entry Steam":"","Injecta Exit Steam":"","Injecta Entry Recirculation":"","Injecta Exit Recirculation":"","Injecta Steam":"","Injecta Wash / Injecta Pump":"","Impacta #2 Temperature (F)":"","Impacta #2 Steam":"","Impacta #2 Dancer (PSI)":"","Impacta #2 Nip Pressure (kN)":"","Impacta #2 Nip Position":"","Washbox #1 Temperature (F)":"","Washbox #1 Dancer (PSI)":"","Washbox #1 Nip Pressure (kN)":"","Washbox #1 Nip Position":"","Washbox #1 Fill Level":"","Washbox #1 Spray Bars / Flow Setpoint":"","Washbox #2 Temperature (F)":"","Washbox #2 Dancer (PSI)":"","Washbox #2 Nip Pressure (kN)":"","Washbox #2 Nip Position":"","Washbox #2 Overflow":"","Washbox #2 Counter Flow":"","Washbox #2 Fill Level":"","Washbox #2 Spray Bars / Flow Setpoint":"","Cans Bypass":"","Cans Rewind Tension Setpoint (lbs)":"","Cans Rewind Taper Setpoint":"","Mix Tanks ":"","Drive Sections Impacta #1":"","Drive Sections Saturator":"","Drive Sections Injecta":"","Drive Sections Impacta #2":"","Drive Sections Washbox #1":"","Drive Sections Washbox #2":"","Drive Sections Can #1":"","Drive Sections Can #2":""}
-09-Jul-2019 15:58:44.36 : Column 5 : Revision, Row 4 : 1
-09-Jul-2019 15:58:44.36 : Column 6 : Product_Line, Row 4 : Protection
-09-Jul-2019 15:58:44.36 : Checking Row 5 . . . 
-09-Jul-2019 15:58:44.36 : Column 1 : Id, Row 5 : 8
-09-Jul-2019 15:58:44.37 : Column 2 : Spec_Type, Row 5 : Tenter Requirements
-09-Jul-2019 15:58:44.37 : Column 3 : Time_Stamp, Row 5 : 6/26/2019 3:16:22 PM
-09-Jul-2019 15:58:44.37 : Column 4 : Properties_Json, Row 5 : {"Weft Straightener Mode":"","A - Frame (Entry) Brake Tension / Air (PSI)":"","A - Frame (Entry) Center Fabric to Machine":"","Dip Tank Bypass if Dry Fabric":"","Dip Tank WRT Treatment":"","Dip Tank Pad Pressure Left Side":"","Dip Tank Pad Pressure Right Side":"","Swing Arms Clip Egde Guides":"","Swing Arms Clip Depth":"","Speeds Chain (YPM)":"","Speeds Entry Roll":"","Heat Zones Burner":"","Heat Zones Preheat":"","Heat Zones Zone #1 (F)":"","Heat Zones Zone #2 (F)":"","Heat Zones Zone #3 (F)":"","Heat Zones Zone #4 (F)":"","Exhaust Fans Main":"","Exhaust Fans Zone #1":"","Exhaust Fans Zone #2":"","Exhaust Fans Zone #3":"","Exhaust Fans Zone #4":"","Chain Width":"","Min. Overall Width Between Clips":"","Finished End Count":"","Finished Pick Count":"","Exit Section Stripper Roll":"","Exit Section Starting Core":"","Exit Section Winding Tension":"","Exit Section Winding Taper":"","Exit Section Taper Start":"","Exit Section Roll up on 6 inch cores":"","Exit Section Roll Length":"","Packaging Requirements":""}
-09-Jul-2019 15:58:44.37 : Column 5 : Revision, Row 5 : 1
-09-Jul-2019 15:58:44.37 : Column 6 : Product_Line, Row 5 : Protection
-09-Jul-2019 15:58:44.37 : Checking Row 6 . . . 
-09-Jul-2019 15:58:44.37 : Column 1 : Id, Row 6 : 9
-09-Jul-2019 15:58:44.37 : Column 2 : Spec_Type, Row 6 : Warping Requirements
-09-Jul-2019 15:58:44.37 : Column 3 : Time_Stamp, Row 6 : 7/3/2019 9:22:48 AM
-09-Jul-2019 15:58:44.37 : Column 4 : Properties_Json, Row 6 : {"Style":"","Customer":"","Width (CM)":"","Supplier":"","Yarn Type":"","Dtex":"","k1":"","Number of Ends":"","Warping Tension (cN)":"","Spring Color":"","S-Wrap":"","Warping Speed (m/min)":"","k2":"","Beaming Tension (N)":"","Beaming Speed (m/min)":"","Cross Winding (mm)":"","Beam Width (CM)":"","Dents/cm":"","Ends/dent":"","Notes":""}
-09-Jul-2019 15:58:44.37 : Column 5 : Revision, Row 6 : 2.0
-09-Jul-2019 15:58:44.37 : Column 6 : Product_Line, Row 6 : Protection
-09-Jul-2019 15:58:45.93 : ------------- Stopping Application
-09-Jul-2019 15:58:45.93 : Saving : runtime.log
+16-Jul-2019 16:54:05.62 : ------------- Starting Application
+16-Jul-2019 16:54:05.62 : Searching for user name . . . 
+16-Jul-2019 16:54:05.70 : Get all template types . . . 
+16-Jul-2019 16:54:05.71 : Listing all template types (spec Types) . . . 
+16-Jul-2019 16:54:36.12 : ------------- Restarting Application
+16-Jul-2019 16:54:36.13 : Get all template types . . . 
+16-Jul-2019 16:54:36.13 : Listing all template types (spec Types) . . . 
+16-Jul-2019 16:54:36.18 : --------- Start formViewSpecs ----------
+16-Jul-2019 16:55:13.03 : ------------- Restarting Application
+16-Jul-2019 16:55:13.03 : Get all template types . . . 
+16-Jul-2019 16:55:13.04 : Listing all template types (spec Types) . . . 
+16-Jul-2019 16:55:13.05 : Searching for GKE003369C0000DD specifications . . . 
+16-Jul-2019 16:55:13.08 : Succesfully retrieved specifications for : GKE003369C0000DD
+16-Jul-2019 16:55:13.08 : Printing Specification . . . 
+16-Jul-2019 16:55:16.35 : Printing Specification . . . 
+16-Jul-2019 16:55:22.18 : PDF Saved : S:\Data Manager\Specifications\GKE003369C0000DD_Weaving RBA_rev3
+16-Jul-2019 16:55:51.35 : --------- End formViewSpecs ----------
+16-Jul-2019 16:55:52.84 : ------------- Stopping Application
+16-Jul-2019 16:55:52.84 : Saving : runtime.log
+16-Jul-2019 16:55:52.85 : Saving : runtime.log
+16-Jul-2019 17:05:25.39 : ------------- Stopping Application
+16-Jul-2019 17:05:25.39 : Saving : runtime.log
+16-Jul-2019 17:05:25.40 : Saving : runtime.log

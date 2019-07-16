@@ -37,7 +37,7 @@ Function PushNewUser(new_user As Account) As Long
     PushNewUser = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    Logger.Log "SQL INSERT Error : DbPushFailException"
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
     PushNewUser = DB_PUSH_FAILURE
 End Function
 
@@ -78,7 +78,7 @@ Function PushTemplate(ByRef Template As SpecificationTemplate)
     PushTemplate = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    Logger.Log "SQL INSERT Error : DbPushFailException"
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
     PushTemplate = DB_PUSH_FAILURE
 End Function
 
@@ -97,7 +97,7 @@ Function UpdateTemplate(ByRef Template As SpecificationTemplate)
     UpdateTemplate = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    Logger.Log "SQL UPDATE Error : DbPushFailException"
+    Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
     UpdateTemplate = DB_PUSH_FAILURE
 End Function
 
@@ -118,7 +118,7 @@ Function PushSpec(ByRef spec As Specification, Optional tbl As String = "standar
     PushSpec = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    Logger.Log "SQL INSERT Error : DbPushFailException"
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
     PushSpec = DB_PUSH_FAILURE
 End Function
 
@@ -133,7 +133,7 @@ Function DeleteTemplate(ByRef Template As SpecificationTemplate) As Long
     DeleteTemplate = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
-    Logger.Log "SQL DELETE Error : DbDeleteFailException"
+    Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
     DeleteTemplate = DB_DELETE_FAILURE
 End Function
 
@@ -149,7 +149,7 @@ Function DeleteSpec(ByRef spec As Specification, Optional tbl As String = "stand
     DeleteSpec = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
-    Logger.Log "SQL DELETE Error : DbDeleteFailException"
+    Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
     DeleteSpec = DB_DELETE_FAILURE
 End Function
 
@@ -177,8 +177,8 @@ Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As St
     Dim record As DatabaseRecord
     Set record = New DatabaseRecord
     On Error GoTo NullRecordException
-    Logger.Log "-----------------------------------"
-    Logger.Log SQLstmt
+    Logger.Log "-----------------------------------", SqlLog
+    Logger.Log SQLstmt, SqlLog
     db.openDb path
     db.selectQry SQLstmt
     record.Data = db.Data
@@ -188,16 +188,16 @@ Private Function ExecuteSQLSelect(db As IDatabase, path As String, SQLstmt As St
     Set ExecuteSQLSelect = record
     Exit Function
 NullRecordException:
-    Logger.Log "SQL Select Error : NullRecordException!"
+    Logger.Log "SQL Select Error : NullRecordException!", SqlLog
     Set ExecuteSQLSelect = New DatabaseRecord
 End Function
 
 Private Sub ExecuteSQL(db As IDatabase, path As String, SQLstmt As String)
 ' Performs update or insert querys returns error on select.
-    Logger.Log "-----------------------------------"
-    Logger.Log SQLstmt
+    Logger.Log "-----------------------------------", SqlLog
+    Logger.Log SQLstmt, SqlLog
     If Left(SQLstmt, 6) = "SELECT" Then
-        Logger.Log ("Use ExecuteSQLSelect() for SELECT query")
+        Logger.Log "Use ExecuteSQLSelect() for SELECT query", SqlLog
         Exit Sub
     Else
         db.openDb (path)

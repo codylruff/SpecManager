@@ -29,7 +29,7 @@ Sub ShowProgress(ByVal ActionNumber As Long, _
                 ByVal TotalActions As Long, _
                 Optional ByVal StatusMessage As String = vbNullString, _
                 Optional ByVal CloseWhenDone As Boolean = True, _
-                Optional ByVal Title As String = vbNullString)
+                Optional ByVal title As String = vbNullString)
 
     DoEvents 'to ensure that the code to display the form gets executed
 
@@ -48,10 +48,10 @@ Sub ShowProgress(ByVal ActionNumber As Long, _
         Call CenterUserForm(ufProgress)
         
         'if the form is not already open, Show it
-        ufProgress.Show
+        ufProgress.show
         'set the title
-        If Not Title = vbNullString Then
-            ufProgress.Caption = Title
+        If Not title = vbNullString Then
+            ufProgress.Caption = title
         End If
         'then update the ActionNumber and Status Message
         Call ufProgress.UpdateForm(ActionNumber, TotalActions, StatusMessage)

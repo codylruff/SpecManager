@@ -4,7 +4,7 @@ Sub AllTests()
 ' End to end testings for the GUI and other hard to test functionality
     On Error GoTo TestFailedException
     Logger.ResetLog
-    Logger.Log "----------- Starting Test Suite -----------------"
+    Logger.Log "----------- Starting Test Suite -----------------", TestLog
     Utils.UnloadAllForms
     SpecManager.StartApp
     App.InitializeTestSuiteCredentials
@@ -18,7 +18,7 @@ Sub AllTests()
     ' TODO: This feature has not been implemented yet.
     App.DeInitializeTestSuiteCredentials
     Utils.UnloadAllForms
-    Logger.Log "----------- Test Suite Complete ------------------"
+    Logger.Log "----------- Test Suite Complete ------------------", TestLog
     Logger.ResetLog "tests"
     Exit Sub
 TestFailedException:
@@ -27,13 +27,13 @@ TestFailedException:
 End Sub
 
 Sub CreateTemplate_Test()
-    Logger.Log "------------- Start Create Template Test ---------"
+    Logger.Log "------------- Start Create Template Test ---------", TestLog
     ' 1. Main menu button to create template
     'GuiCommands.GoToMain
     SpecManager.RestartApp
     ' 2. Enter a template name "test_template"
-    formNewTemplateInput.cboProductLine.Value = "Test"
-    formNewTemplateInput.txtTemplateName.Value = "test_template"
+    formNewTemplateInput.cboProductLine.value = "Test"
+    formNewTemplateInput.txtTemplateName.value = "test_template"
     ' 3. Click the Submit button
     formNewTemplateInput.Continue
     ' 4. Change txtPropertyName = "test_property"
@@ -45,11 +45,11 @@ Sub CreateTemplate_Test()
     ' 7. Report pass / fail
     ' TODO: I am not sure how to report on this other than a crash.
     ' 8. Go to main menu
-    Logger.Log "------------- End Create Template Test ------------"
+    Logger.Log "------------- End Create Template Test ------------", TestLog
 End Sub
 
 Sub CreateSpecification_Test()
-    Logger.Log "------------- Start Create Specification Test ---------"
+    Logger.Log "------------- Start Create Specification Test ---------", TestLog
     ' 1. Main menu button to  create specification
     SpecManager.RestartApp
     ' 2. Select a template type from the combo box "test_template"
@@ -69,11 +69,11 @@ Sub CreateSpecification_Test()
     ' 9. Report pass / fail
     ' TODO: No idea how to do this yet
     ' 10. Go to main menu
-    Logger.Log "------------- End Create Specification Test ---------"
+    Logger.Log "------------- End Create Specification Test ---------", TestLog
 End Sub
 
 Sub ViewSpecification_AfterCreate_Test()
-    Logger.Log "------------- Start View Specification Test ---------"
+    Logger.Log "------------- Start View Specification Test ---------", TestLog
     ' 1. Main menu button to view specifications
     SpecManager.RestartApp
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
@@ -87,11 +87,11 @@ Sub ViewSpecification_AfterCreate_Test()
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
-    Logger.Log "------------- End View Specification Test(1) --------"
+    Logger.Log "------------- End View Specification Test(1) --------", TestLog
 End Sub
 
 Sub EditTemplate_Test()
-    Logger.Log "------------- Start Edit Template Test --------------"
+    Logger.Log "------------- Start Edit Template Test --------------", TestLog
     ' 1. Main menu button to edit template
     SpecManager.RestartApp
     ' 2. Select a template name from the combo box
@@ -115,11 +115,11 @@ Sub EditTemplate_Test()
     ' 11. Report pass / fail
     ' TODO:
     ' 12. Go to main menu
-    Logger.Log "------------- End Edit Template Test ----------------"
+    Logger.Log "------------- End Edit Template Test ----------------", TestLog
 End Sub
 
 Sub EditSpecification_Test()
-    Logger.Log "------------- Start Edit Specification Test ---------"
+    Logger.Log "------------- Start Edit Specification Test ---------", TestLog
     ' 1. Main menu button to edit specification
     SpecManager.RestartApp
     ' 2. Enter a material ID txtSAPcode(?) = "test_specification"
@@ -135,15 +135,15 @@ Sub EditSpecification_Test()
     ' 7. Save changes
     formSpecConfig.SaveChanges
     ' 8. Remove old specification from the archive
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.Item("to_archive"), "archived_specifications")
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.Item("to_archive"), "archived_specifications"), TestLog
     ' 9. Report pass / fail
     ' TODO:
     ' 10. Go to main menu
-    Logger.Log "------------- End Edit Specification Test -----------"
+    Logger.Log "------------- End Edit Specification Test -----------", TestLog
 End Sub
 
 Sub ViewSpecification_AfterEdit_Test()
-    Logger.Log "------------- Start View Specification Test ---------"
+    Logger.Log "------------- Start View Specification Test ---------", TestLog
     ' 1. Main menu button to view specifications
     SpecManager.RestartApp
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
@@ -158,23 +158,23 @@ Sub ViewSpecification_AfterEdit_Test()
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
     ' 7. Remove Spec
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec)
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), TestLog
     ' 8. Remove Spec Template
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_template)
-    Logger.Log "------------- End View Specification Test(2) ---------"
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_template), TestLog
+    Logger.Log "------------- End View Specification Test(2) ---------", TestLog
 End Sub
 
 Sub AccessControl_Test()
-    Logger.Log "------------- Start Access Control Test --------------"
+    Logger.Log "------------- Start Access Control Test --------------", TestLog
     SpecManager.RestartApp
-    Logger.Log "------------- End Access Control Test ----------------"
+    Logger.Log "------------- End Access Control Test ----------------", TestLog
 End Sub
 
 Public Sub TestPrintSheet()
     Dim ws As Worksheet
     SpecManager.StartApp
     Set ws = CreateNewSheet("test_print")
-    ws.Range("A1").Value = "0"
+    ws.Range("A1").value = "0"
     Utils.fncScreenUpdating State:=False
     ws.PrintOut ActivePrinter:=App.current_user.Settings.Item("default_printer")
     Utils.fncScreenUpdating State:=True
@@ -182,5 +182,18 @@ Public Sub TestPrintSheet()
     ws.Delete
     Application.DisplayAlerts = True
     SpecManager.RestartApp
+End Sub
+
+Public Sub TestKrish()
+    Dim ws As Worksheet
+    Set ws = shtRBA
+    fileName = PUBLIC_DIR & "\Specifications\" & "Test"
+    ws.ExportAsFixedFormat _
+        Type:=xlTypePDF, _
+        fileName:=fileName, _
+        Quality:=xlQualityStandard, _
+        IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, _
+        OpenAfterPublish:=True
 End Sub
 

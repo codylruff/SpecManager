@@ -20,6 +20,7 @@ Private Property Set fields(ByRef obj As Object)
     Set m_fields = obj
 End Property
 Public Property Get fields() As Object
+    On Error Resume Next
     If m_fields Is Nothing Then
        InitializeRecords
     End If
@@ -37,12 +38,12 @@ Public Property Get records() As VBA.Collection
 End Property
 
 Public Property Get Header() As Variant: Header = m_header: End Property
-Public Property Let Header(ByVal Value As Variant): m_header = Value: End Property
+Public Property Let Header(ByVal value As Variant): m_header = value: End Property
 Public Property Get Data() As Variant: Data = m_data: End Property
-Public Property Let Data(ByVal Value As Variant): m_data = Value: End Property
-Public Property Let Rows(Value As Long): rows_ = Value: End Property
+Public Property Let Data(ByVal value As Variant): m_data = value: End Property
+Public Property Let Rows(value As Long): rows_ = value: End Property
 Public Property Get Rows() As Long: Rows = rows_: End Property
-Public Property Let Columns(Value As Long): columns_ = Value: End Property
+Public Property Let Columns(value As Long): columns_ = value: End Property
 Public Property Get Columns() As Long: Columns = columns_: End Property
 
 Private Function InitializeRecords()
@@ -51,17 +52,20 @@ Private Function InitializeRecords()
     Dim coll As VBA.Collection
     Set coll = New VBA.Collection
     Dim i, j As Long
+    On Error GoTo ErrorHandler
     For j = 1 To Rows
         Set dict = Factory.CreateDictionary()
-        Logger.Log "Checking Row " & j & " . . . "
+        Logger.Log "Checking Row " & j & " . . . ", DebugLog
         For i = 1 To Columns
-        Logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & Data(j, i)
+        Logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & Data(j, i), DebugLog
             dict.Add Key:=Header(1, i), Item:=Data(j, i)
         Next i
         coll.Add dict
     Next j
     Set m_fields = dict
     Set m_records = coll
+ErrorHandler:
+    Exit Function
 End Function
 
 Private Sub Class_Initialize()

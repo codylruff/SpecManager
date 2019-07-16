@@ -15,26 +15,11 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     With App
-        'Set .current_template = SpecManager.GetTemplate(cboSelectSpecificationType.value)
-        '.current_template.SpecType = cboSelectSpecificationType.value
-        ' Set App.current_spec = New Specification
-        ' .current_spec.SpecType = .current_template.SpecType
-        ' .current_spec.Revision = 0#
-'        .current_template.GetProperty(Utils.ConvertToCamelCase( _
-'                cboSelectProperty.value)) = txtPropertyValue
         Set .current_spec.Properties = .current_template.Properties
         Set .current_spec.Tolerances = .current_template.Properties
         lblSpecInfo = "Material ID : " & .current_spec.MaterialId & vbNewLine & _
@@ -50,7 +35,7 @@ Private Sub cmdBack_Click()
 End Sub
 
 Private Sub cmdExportPdf_Click()
-    MsgBox "Functionality not implemented!"
+    PromptHandler.AccessDenied
 End Sub
 
 Private Sub cmdSaveChanges_Click()
@@ -59,10 +44,10 @@ Private Sub cmdSaveChanges_Click()
     ret_val = SpecManager.SaveNewSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
         Logger.Log "Data Access returned: " & ret_val
-        MsgBox "New Specification Was Not Saved. Contact Admin."
+        PromptHandler.Error "New Specification Was Not Saved"
     Else
         Logger.Log "Data Access returned: " & ret_val
-        MsgBox "New Specification Succesfully Saved."
+        PromptHandler.Success "New Specification Succesfully Saved."
     End If
 End Sub
 
@@ -82,7 +67,7 @@ Private Sub PopulateCboSelectProperty()
           .AddItem prop
         Next prop
     End With
-    txtPropertyValue.Value = vbNullString
+    txtPropertyValue.value = vbNullString
 End Sub
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
@@ -98,7 +83,7 @@ Sub Back()
 End Sub
 
 Sub ExportPdf()
-    MsgBox "Functionality not implemented!"
+    ' PASS
 End Sub
 
 Sub SaveChanges()
@@ -106,18 +91,20 @@ Sub SaveChanges()
     Dim ret_val As Long
     ret_val = SpecManager.SaveNewSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
         Logger.Log "Create Spec Fail"
+        PromptHandler.Error "Failed to Create Specification"
     Else
-        Logger.Log "Data Access returned: " & ret_val
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
         Logger.Log "Create Spec Pass"
+        PromptHandler.Success "Specification Created Successfully!"
     End If
 End Sub
 
 Sub SetProperty()
 ' This executes a set property command
     With App.current_spec
-        .GetProperty(cboSelectProperty.Value) = txtPropertyValue
+        .Properties(cboSelectProperty.value) = txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub

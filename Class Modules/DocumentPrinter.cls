@@ -30,6 +30,7 @@ Private Const FONT_REQUIRED          As String = "Wingdings"    ' Font used to d
 Private Const FONT_CRITICAL          As String = "Wingdings"    ' Font used to denote a critical test
 Private Const FONT_NOT_REQUIRED      As String = "Wingdings 2"  ' Font used to denote that a test is not-required
 Private Const FONT_DEFAULT           As String = "Calibri"      ' Font used by default
+Private Const DEFAULT_QC_SAMPLE      As String = "1.5"          ' Minimum protection qc sample size
 '----------------
 'CLASS VARIABLES
 '----------------
@@ -38,15 +39,15 @@ Private OutputHistory_  As VBA.Collection
 '------------
 ' AUTO-PROPERTIES
 '------------
-Public Property Set OutputHistory(Value As VBA.Collection): Set OutputHistory_ = Value: End Property
+Public Property Set OutputHistory(value As VBA.Collection): Set OutputHistory_ = value: End Property
 Public Property Get OutputHistory() As VBA.Collection: Set OutputHistory = OutputHistory_: End Property
-Public Property Set FormId(Value As MSForms.UserForm): Set FormId_ = Value: End Property
+Public Property Set FormId(value As MSForms.UserForm): Set FormId_ = value: End Property
 Public Property Get FormId() As MSForms.UserForm: Set FormId = FormId_: End Property
 Public Property Get CurrentText() As String
      CurrentText = Me.FormId.txtConsole.text
 End Property
-Public Property Let CurrentText(Value As String)
-    CurrentText = Value
+Public Property Let CurrentText(value As String)
+    CurrentText = value
 End Property
 '----------
 ' METHODS
@@ -173,7 +174,7 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     If specs_dict.Exists("Testing Requirements") Then
         qc_sample = specs_dict("Testing Requirements").GetProperty("QC Sample Length")
     Else
-        qc_sample = "1.5"
+        qc_sample = DEFAULT_QC_SAMPLE
     End If
     If specs_dict.Exists("Ballistic Testing Requirements") Then
         ballistic_sample = specs_dict("Ballistic Testing Requirements").GetProperty("Ballistic Sample Length")
@@ -193,6 +194,7 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
         Utils.Insert rng, spec.GetProperty(CStr(nr))
     Next nr
     On Error GoTo 0
+
 End Sub
 
 Private Sub LoadTestingRequirementsToSheet(spec As Specification, sht As Worksheet, prod_order As String, _
@@ -204,13 +206,25 @@ Private Sub LoadTestingRequirementsToSheet(spec As Specification, sht As Workshe
     If package_variant = WeavingTieBack Then
         For i = 2 To spec.Properties.Count
             With sht.Range("B" & i)
-                If .Value = Chr(CHAR_CRITICAL) Then
-                    .Value = Chr(CHAR_REQUIRED)
+                If .value = Chr(CHAR_CRITICAL) Then
+                    .value = Chr(CHAR_REQUIRED)
                     .Font.Name = FONT_REQUIRED
                 End If
             End With
         Next i
     End If
+    ' Add document legend
+    sht.Range("E2").value = "NOTES :"
+    sht.Range("E3").value = "Required At Start-Up = "
+    sht.Range("F3").value = Chr(CHAR_CRITICAL)
+    sht.Range("F3").Font.Name = FONT_CRITICAL
+    sht.Range("E4").value = "Required For Release = "
+    sht.Range("F4").value = Chr(CHAR_REQUIRED)
+    sht.Range("F4").Font.Name = FONT_REQUIRED
+    sht.Range("E5").value = "Test Not Required = "
+    sht.Range("F5").value = Chr(CHAR_NOT_REQUIRED)
+    sht.Range("F5").Font.Name = FONT_NOT_REQUIRED
+    sht.Columns("A:G").AutoFit
     ' Insert fabric construction image
     InsertImage sht, GetWeavePatternImagePath(spec.MaterialId), spec.Properties.Count + 4
 End Sub
@@ -247,20 +261,20 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     Application.ScreenUpdating = True
 End Sub
 
-Public Sub PrintObject(obj As Object)
+Public Sub PrintObjectToConsole(obj As Object)
 ' Print object to console
     Dim Key As Variant
     ' Clear the console
     FormId.txtConsole.text = vbNullString
-    'PrintLine obj.SpecType, obj.MaterialId
-    'PrintLine "Revision", obj.Revision
+    'WriteLine obj.SpecType, obj.MaterialId
+    'WriteLine "Revision", obj.Revision
     
     For Each Key In obj.Properties
         If ShouldPrint(CStr(Key)) Then
             If Not obj.Properties(CStr(Key)) = vbNullString Then
-                PrintLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
+                WriteLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
             Else
-                PrintLine CStr(Key), Chr(CHAR_NULL_VALUE)
+                WriteLine CStr(Key), Chr(CHAR_NULL_VALUE)
             End If
         End If
     Next Key
@@ -280,7 +294,7 @@ Public Function ShouldPrint(prop As String) As Boolean
 End Function
 
 Public Sub ListObjects(dict As Object)
-' Given a dictionary of specifications lists the specs by type in the console
+' Given a dictionary of documents, list the docs by type in the console
     Dim T As Variant
     For Each T In dict
         Me.FormId.txtConsole.text = FormId.txtConsole.text & CStr(T) & vbNewLine
@@ -303,7 +317,7 @@ Private Function FormatAscii(char As String) As String
     FormatAscii = char
 End Function
 
-Public Sub PrintLine(ParamArray var() As Variant)
+Public Sub WriteLine(ParamArray var() As Variant)
     Dim i As Integer
     Dim s As String
     Const Padding = 45
@@ -324,44 +338,104 @@ Private Sub Class_Initialize()
     Set OutputHistory = New VBA.Collection
 End Sub
 
+Private Sub PrintPropertyToSheet(ws As Worksheet, prop_name As Variant, prop_val As Variant, row As Integer)
+' Prints a given property to the worksheet
+    With ws
+        If Not prop_val = vbNullString Then
+            .Range("A" & row).value = CStr(prop_name) & " : "
+            .Range("A" & row).Font.Size = FONT_SIZE_PROPERTY
+            .Range("B" & row).value = prop_val
+            .Range("B" & row).Font.Size = FONT_SIZE_VALUE
+            .Range("B" & row).Font.Bold = True
+            .Range("B" & row).HorizontalAlignment = xlHAlignLeft
+            If prop_val = Chr(CHAR_REQUIRED) Then
+                .Range("B" & row).Font.Name = FONT_REQUIRED
+            ElseIf prop_val = Chr(CHAR_CRITICAL) Then
+                .Range("B" & row).Font.Name = FONT_CRITICAL
+            ElseIf prop_val = Chr(CHAR_NOT_REQUIRED) Then
+                .Range("B" & row).Font.Name = FONT_NOT_REQUIRED
+            Else
+                .Range("B" & row).Font.Name = FONT_DEFAULT
+            End If
+        Else
+            .Range("A" & row).value = CStr(prop_name)
+            .Range("A" & row).Font.Size = FONT_SIZE_PROPERTY
+            .Range("B" & row).value = Chr(CHAR_NULL_VALUE)
+            .Range("B" & row).Font.Size = FONT_SIZE_VALUE
+            .Range("B" & row).Font.Bold = True
+        End If
+    End With
+End Sub
+
 Private Sub LoadGenericSpecificationDocument(spec As Specification, sht As Worksheet, _
             prod_order As String, Optional i As Integer = 2)
 ' Handles all non-custom generic spec-docs
     Dim Key As Variant
-    With sht
         ' Clear any existing information from the sheet
-        .Cells.ClearContents
+        sht.Cells.ClearContents
         ' Spec Header
         InsertHeader sht, spec, prod_order
         InsertFooter sht
         ' Spec Properties
         For Each Key In spec.Properties
-            If Not spec.GetProperty(CStr(Key)) = vbNullString Then
-                .Range("A" & i).Value = CStr(Key) & " : "
-                .Range("A" & i).Font.Size = FONT_SIZE_PROPERTY
-                .Range("B" & i).Value = CStr(spec.GetProperty(CStr(Key)))
-                .Range("B" & i).Font.Size = FONT_SIZE_VALUE
-                .Range("B" & i).Font.Bold = True
-                .Range("B" & i).HorizontalAlignment = xlHAlignLeft
-                If spec.GetProperty(CStr(Key)) = Chr(CHAR_REQUIRED) Then
-                    .Range("B" & i).Font.Name = FONT_REQUIRED
-                ElseIf spec.GetProperty(CStr(Key)) = Chr(CHAR_CRITICAL) Then
-                    .Range("B" & i).Font.Name = FONT_CRITICAL
-                ElseIf spec.GetProperty(CStr(Key)) = Chr(CHAR_NOT_REQUIRED) Then
-                    .Range("B" & i).Font.Name = FONT_NOT_REQUIRED
-                Else
-                    .Range("B" & i).Font.Name = FONT_DEFAULT
-                End If
-            Else
-                .Range("A" & i).Value = CStr(Key)
-                .Range("A" & i).Font.Size = FONT_SIZE_PROPERTY
-                .Range("B" & i).Value = Chr(CHAR_NULL_VALUE)
-                .Range("B" & i).Font.Size = FONT_SIZE_VALUE
-                .Range("B" & i).Font.Bold = True
-            End If
+            PrintPropertyToSheet sht, Key, spec.GetProperty(CStr(Key)), i
+            ' If Not spec.GetProperty(CStr(Key)) = vbNullString Then
+            '     .Range("A" & i).value = CStr(Key) & " : "
+            '     .Range("A" & i).Font.Size = FONT_SIZE_PROPERTY
+            '     .Range("B" & i).value = CStr(spec.GetProperty(CStr(Key)))
+            '     .Range("B" & i).Font.Size = FONT_SIZE_VALUE
+            '     .Range("B" & i).Font.Bold = True
+            '     .Range("B" & i).HorizontalAlignment = xlHAlignLeft
+            '     If spec.GetProperty(CStr(Key)) = Chr(CHAR_REQUIRED) Then
+            '         .Range("B" & i).Font.Name = FONT_REQUIRED
+            '     ElseIf spec.GetProperty(CStr(Key)) = Chr(CHAR_CRITICAL) Then
+            '         .Range("B" & i).Font.Name = FONT_CRITICAL
+            '     ElseIf spec.GetProperty(CStr(Key)) = Chr(CHAR_NOT_REQUIRED) Then
+            '         .Range("B" & i).Font.Name = FONT_NOT_REQUIRED
+            '     Else
+            '         .Range("B" & i).Font.Name = FONT_DEFAULT
+            '     End If
+            ' Else
+            '     .Range("A" & i).value = CStr(Key)
+            '     .Range("A" & i).Font.Size = FONT_SIZE_PROPERTY
+            '     .Range("B" & i).value = Chr(CHAR_NULL_VALUE)
+            '     .Range("B" & i).Font.Size = FONT_SIZE_VALUE
+            '     .Range("B" & i).Font.Bold = True
+            ' End If
             i = i + 1
         Next Key
-        .Columns("A:G").AutoFit
-    End With
+        sht.Columns("A:G").AutoFit
+
 End Sub
 
+Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = vbNullString)
+' Exports the given ws as a PDF and saves it to S:\Data Manager\Specifications
+
+    On Error GoTo SaveFileError
+    ' Parse args
+    If destination_path = vbNullString Then
+        With App.current_spec
+            destination_path = PUBLIC_DIR & "\Specifications\" & .MaterialId & "_" & .SpecType & "_rev" & .Revision
+        End With
+    End If
+
+    ' If file already exists then load it.
+    If Utils.FileExists(destination_path & ".pdf") Then
+        ActiveWorkbook.FollowHyperlink destination_path & ".pdf"
+        Exit Sub
+    End If
+    If ws.Visible <> xlSheetVisible Then ws.Visible = xlSheetVisible
+    ws.ExportAsFixedFormat _
+        Type:=xlTypePDF, _
+        fileName:=destination_path, _
+        Quality:=xlQualityStandard, _
+        IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, _
+        OpenAfterPublish:=True
+    Logger.Log "PDF Saved : " & destination_path
+    ws.Visible = xlSheetHidden
+    Exit Sub
+    
+SaveFileError:
+    Logger.Log "Failed to save file PDF Fail"
+End Sub

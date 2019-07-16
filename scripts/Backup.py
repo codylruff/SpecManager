@@ -17,7 +17,7 @@ DESCRIPTION = """
               Create a timestamped SQLite database backup, and
               clean backups older than a defined number of days
               """
-NO_OF_DAYS = 15
+NO_OF_DAYS = 31
 
 def sqlite3_backup(sqlite_file, backup_dir):
     """Create timestamped database copy"""
@@ -63,11 +63,16 @@ def get_arguments():
                               'file should be saved')
     return parser.parse_args()
 
-if __name__ == "__main__":
+
+def main():
     #args = get_arguments()
     #sqlite3_backup(args.db_file, args.backup_dir)
     db_path = r'S:\Data Manager\Database\SAATI_Spec_Manager.db3'
     sqlite3_backup(db_path, r'c:\users\cruff\desktop\Database_Backups')
     sqlite3_backup(db_path, r'S:\Data Manager\Database\backups')               
-    #clean_data(r'c:\users\cruff\desktop\Database_Backups')
+    clean_data(r'c:\users\cruff\desktop\Database_Backups')
     print("\nBackup update has been successful.")
+
+
+if __name__ == "__main__":
+    main()

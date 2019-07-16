@@ -13,18 +13,19 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Option Explicit
 
 Private Sub cmdCopySpec_Click()
 ' Makes a copy of the current spec, with a new material id
     Dim new_material_id As String
     Dim ret_val As Long
-    new_material_id = InputBox("Enter a material id for copy?")
+    new_material_id = PromptHandler.UserInput(SingleLineText, "Material Id", "Enter a material id for copy?")
     ret_val = SpecManager.CopySpecification(App.current_spec, new_material_id)
     If ret_val = DB_PUSH_SUCCESS Then
-        MsgBox "Copied Successfully"
+        PromptHandler.Success "Copied Successfully"
     Else
-        MsgBox "Copy Failed"
+        PromptHandler.Error "Copy Failed"
     End If
 End Sub
 
@@ -38,7 +39,7 @@ End Sub
 
 Private Sub cmdMaterialSearch_Click()
     If txtMaterialId = vbNullString Or txtMaterialId = " " Then
-      MsgBox "Please enter a material id."
+      PromptHandler.Error "Please enter a material id."
       Exit Sub
    End If
     MaterialSearch
@@ -78,7 +79,7 @@ Private Sub PopulateCboSelectType()
     With cboSelectType
         For Each rev In App.specs
             .AddItem rev
-            .Value = rev
+            .value = rev
         Next rev
     End With
 End Sub
@@ -97,7 +98,7 @@ Private Sub PopulateCboSelectProperty()
             End If
         Next prop
     End With
-    txtPropertyValue.Value = vbNullString
+    txtPropertyValue.value = vbNullString
 End Sub
 
 Private Sub cmdClear_Click()
@@ -121,7 +122,7 @@ Sub MaterialSearch()
     SpecManager.PrintSpecification Me
     PopulateCboSelectProperty
     PopulateCboSelectType
-    cboSelectType.Value = App.current_spec.SpecType
+    cboSelectType.value = App.current_spec.SpecType
 End Sub
 
 Sub Back()
@@ -143,10 +144,10 @@ Sub SaveChanges()
     App.current_spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
     ret_val = SpecManager.SaveSpecification(App.current_spec, old_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
         Logger.Log "New Specification Was Not Saved. Contact Admin."
     Else
-        Logger.Log "Data Access returned: " & ret_val
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
         Logger.Log "New Specification Succesfully Saved."
     End If
 End Sub
@@ -154,19 +155,19 @@ End Sub
 Sub Submit()
 ' This executes a set property command
     ' Check for empty controls
-    If cboSelectProperty.Value = vbNullString Then Exit Sub
+    If cboSelectProperty.value = vbNullString Then Exit Sub
     ' Change the property desired
     With App.current_spec
-        .Properties(cboSelectProperty.Value) = txtPropertyValue
+        .Properties(cboSelectProperty.value) = txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub
 
 Sub SelectType()
     ' Check for empty controls
-    If cboSelectType.Value = vbNullString Then Exit Sub
+    If cboSelectType.value = vbNullString Then Exit Sub
     ' Select the specification desired
-    Set App.current_spec = App.specs.Item(cboSelectType.Value)
+    Set App.current_spec = App.specs.Item(cboSelectType.value)
     PopulateCboSelectProperty
     SpecManager.PrintSpecification Me
 End Sub
