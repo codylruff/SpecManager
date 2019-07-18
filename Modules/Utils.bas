@@ -161,6 +161,22 @@ Function GetLine(ParamArray var() As Variant) As String
     GetLine = s & vbNewLine
 End Function
 
+Function FormatTestResult(ParamArray var() As Variant) As String
+    Const Padding = 36
+    Dim i As Integer
+    Dim s As String
+    s = vbNullString
+    For i = LBound(var) To UBound(var)
+         If (i + 1) Mod 2 = 0 Then
+             s = s & var(i)
+         Else
+             s = s & Left$(var(i) & ":" & Space(Padding), Padding)
+         End If
+    Next
+    FormatTestResult = s
+End Function
+
+
 Function CreateNewSheet(shtName As String, Optional DeleteOldSheet As Boolean = False) As Worksheet
 'test
 ' Creates a new worksheet with the given name

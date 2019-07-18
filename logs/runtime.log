@@ -1,23 +1,59 @@
-16-Jul-2019 16:54:05.62 : ------------- Starting Application
-16-Jul-2019 16:54:05.62 : Searching for user name . . . 
-16-Jul-2019 16:54:05.70 : Get all template types . . . 
-16-Jul-2019 16:54:05.71 : Listing all template types (spec Types) . . . 
-16-Jul-2019 16:54:36.12 : ------------- Restarting Application
-16-Jul-2019 16:54:36.13 : Get all template types . . . 
-16-Jul-2019 16:54:36.13 : Listing all template types (spec Types) . . . 
-16-Jul-2019 16:54:36.18 : --------- Start formViewSpecs ----------
-16-Jul-2019 16:55:13.03 : ------------- Restarting Application
-16-Jul-2019 16:55:13.03 : Get all template types . . . 
-16-Jul-2019 16:55:13.04 : Listing all template types (spec Types) . . . 
-16-Jul-2019 16:55:13.05 : Searching for GKE003369C0000DD specifications . . . 
-16-Jul-2019 16:55:13.08 : Succesfully retrieved specifications for : GKE003369C0000DD
-16-Jul-2019 16:55:13.08 : Printing Specification . . . 
-16-Jul-2019 16:55:16.35 : Printing Specification . . . 
-16-Jul-2019 16:55:22.18 : PDF Saved : S:\Data Manager\Specifications\GKE003369C0000DD_Weaving RBA_rev3
-16-Jul-2019 16:55:51.35 : --------- End formViewSpecs ----------
-16-Jul-2019 16:55:52.84 : ------------- Stopping Application
-16-Jul-2019 16:55:52.84 : Saving : runtime.log
-16-Jul-2019 16:55:52.85 : Saving : runtime.log
-16-Jul-2019 17:05:25.39 : ------------- Stopping Application
-16-Jul-2019 17:05:25.39 : Saving : runtime.log
-16-Jul-2019 17:05:25.40 : Saving : runtime.log
+17-Jul-2019 16:41:47.96 : Searching for user name . . . 
+17-Jul-2019 16:41:47.98 : Get all template types . . . 
+17-Jul-2019 16:41:47.00 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.01 : --------- formNewTemplateInput ----------
+17-Jul-2019 16:41:48.01 : Template Input Pass
+17-Jul-2019 16:41:48.01 : --------- Start formCreateGeneric ----------
+17-Jul-2019 16:41:48.06 : Create Template Pass
+17-Jul-2019 16:41:48.06 : Get all template types . . . 
+17-Jul-2019 16:41:48.06 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.07 : --------- formNewSpecInput ----------
+17-Jul-2019 16:41:48.09 : Searching for test_template template . . . 
+17-Jul-2019 16:41:48.09 : Succesfully retrieved template for : test_template
+17-Jul-2019 16:41:48.09 : Spec Input Pass
+17-Jul-2019 16:41:48.11 : --------- formCreateSpec ----------
+17-Jul-2019 16:41:48.11 : Printing Specification . . . 
+17-Jul-2019 16:41:48.11 : Printing Specification . . . 
+17-Jul-2019 16:41:48.14 : Create Spec Pass
+17-Jul-2019 16:41:48.14 : Get all template types . . . 
+17-Jul-2019 16:41:48.15 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.17 : --------- Start formViewSpecs ----------
+17-Jul-2019 16:41:48.17 : ------------- Restarting Application
+17-Jul-2019 16:41:48.17 : Get all template types . . . 
+17-Jul-2019 16:41:48.18 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.18 : Searching for TEST_SPECIFICATION specifications . . . 
+17-Jul-2019 16:41:48.20 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+17-Jul-2019 16:41:48.20 : Printing Specification . . . 
+17-Jul-2019 16:41:48.20 : Get all template types . . . 
+17-Jul-2019 16:41:48.21 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.23 : --------- Start formEditTemplate ----------
+17-Jul-2019 16:41:48.23 : Searching for test_template template . . . 
+17-Jul-2019 16:41:48.25 : Succesfully retrieved template for : test_template
+17-Jul-2019 16:41:48.25 : Printing Template . . . 
+17-Jul-2019 16:41:48.25 : Printing Template . . . 
+17-Jul-2019 16:41:48.28 : Printing Template . . . 
+17-Jul-2019 16:41:48.32 : Get all template types . . . 
+17-Jul-2019 16:41:48.32 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.34 : --------- Start formSpecConfig ----------
+17-Jul-2019 16:41:48.34 : Searching for TEST_SPECIFICATION specifications . . . 
+17-Jul-2019 16:41:48.36 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+17-Jul-2019 16:41:48.36 : Printing Specification . . . 
+17-Jul-2019 16:41:48.36 : Printing Specification . . . 
+17-Jul-2019 16:41:48.48 : New Specification Succesfully Saved.
+17-Jul-2019 16:41:48.51 : Get all template types . . . 
+17-Jul-2019 16:41:48.53 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.54 : ------------- Restarting Application
+17-Jul-2019 16:41:48.54 : Get all template types . . . 
+17-Jul-2019 16:41:48.54 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.56 : Searching for TEST_SPECIFICATION specifications . . . 
+17-Jul-2019 16:41:48.57 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+17-Jul-2019 16:41:48.57 : Printing Specification . . . 
+17-Jul-2019 16:41:48.62 : Get all template types . . . 
+17-Jul-2019 16:41:48.62 : Listing all template types (spec Types) . . . 
+17-Jul-2019 16:41:48.64 : Searching for user name . . . 
+17-Jul-2019 16:41:48.67 : --------- End formSpecConfig ----------
+17-Jul-2019 16:41:48.68 : --------- End formEditTemplate ----------
+17-Jul-2019 16:41:48.68 : --------- End formViewSpecs ----------
+17-Jul-2019 16:41:48.70 : --------- End formCreateGeneric ----------
+17-Jul-2019 16:41:48.70 : Saving : runtime.log
+17-Jul-2019 16:41:48.71 : Saving : runtime.log

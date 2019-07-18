@@ -47,8 +47,8 @@ End Sub
 
 Sub Continue()
     If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
-        Logger.Log "Spec Input Pass", TestLog
+        Logger.Log "Spec Input Pass"
     Else
-        Logger.Log "Spec Input Fail", TestLog
+        Logger.Log "Spec Input Fail"
     End If
 End Sub

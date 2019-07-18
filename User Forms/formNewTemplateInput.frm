@@ -43,9 +43,9 @@ End Sub
 
 Sub Continue()
     If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
-        Logger.Log "Template Input Pass", TestLog
+        Logger.Log "Template Input Pass"
     Else
-        Logger.Log "Template Input Fail", TestLog
+        Logger.Log "Template Input Fail"
     End If
 End Sub
 

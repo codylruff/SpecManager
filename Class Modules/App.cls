@@ -34,6 +34,7 @@ Public printer As DocumentPrinter
 Public current_template As SpecificationTemplate
 Public TestingMode As Boolean
 
+
 ' Methods
 Sub Start()
     ' Log in with environ(username)
@@ -62,9 +63,11 @@ Public Sub InitializeTestSuiteCredentials()
     current_user.Name = "TestSuite"
     current_user.PrivledgeLevel = 25
     current_user.ProductLine = "Admin"
+    App.TestingMode = True
 End Sub
 
 Public Sub DeInitializeTestSuiteCredentials()
+    App.TestingMode = False
     Me.RefreshObjects
     Set current_user = AccessControl.Account_Initialize
 End Sub

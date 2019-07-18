@@ -1,4 +1,16 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
 Attribute VB_Name = "Logger"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Public Event LogChanged(log_text As String)
+
 '@exclude.json
 Option Explicit
 Private FSO As Object ' Declare a FileSystemObject.
@@ -50,6 +62,7 @@ Public Sub Log(text As String, Optional log_type As LogType = 0)
         If log_type = ImmediateLog Then
             Debug.Print Logger.printf("{0} : {1}", .Buffer(.Buffer.Count)(0), .Buffer(.Buffer.Count)(1))
         End If
+        Raise Event LogChanged(text)
     End With
 End Sub
 

@@ -1,36 +1,40 @@
 Attribute VB_Name = "Tests"
+Option Explicit
 
 Sub AllTests()
 ' End to end testings for the GUI and other hard to test functionality
-    On Error GoTo TestFailedException
-    Logger.ResetLog
-    Logger.Log "----------- Starting Test Suite -----------------", TestLog
+    On Error GoTo TestSuiteFailed
+    Logger.SetImmediateLog TestLog
+    Logger.Log "------------ Starting Test Suite ----------", TestLog
     Utils.UnloadAllForms
-    SpecManager.StartApp
+    App.Start
     App.InitializeTestSuiteCredentials
-    CreateTemplate_Test
-    CreateSpecification_Test
-    ViewSpecification_AfterCreate_Test
-    EditTemplate_Test
-    EditSpecification_Test
-    ViewSpecification_AfterEdit_Test
+    Logger.Log CreateTemplate_Test, TestLog
+    Logger.Log CreateSpecification_Test, TestLog
+    Logger.Log ViewSpecification_AfterCreate_Test, TestLog
+    Logger.Log EditTemplate_Test, TestLog
+    Logger.Log EditSpecification_Test, TestLog
+    Logger.Log ViewSpecification_AfterEdit_Test, TestLog
     ' Account Control
     ' TODO: This feature has not been implemented yet.
     App.DeInitializeTestSuiteCredentials
     Utils.UnloadAllForms
-    Logger.Log "----------- Test Suite Complete ------------------", TestLog
-    Logger.ResetLog "tests"
+    Logger.Log "------------- Test Suite Complete ---------", TestLog
+    Logger.Log "Test Suite Passed", TestLog
+    Logger.ResetLog TestLog
+    Logger.SetImmediateLog RuntimeLog
     Exit Sub
-TestFailedException:
-    Logger.ResetLog "tests"
-    MsgBox "Somethings wrong, please contact the administrator."
+TestSuiteFailed:
+    Logger.Log "Test Suite Failed", TestLog
+    Logger.ResetLog TestLog
+    Logger.SetImmediateLog RuntimeLog
+    'PromptHandler.Error "Somethings wrong, please contact the administrator."
 End Sub
 
-Sub CreateTemplate_Test()
-    Logger.Log "------------- Start Create Template Test ---------", TestLog
+Function CreateTemplate_Test() As String
+    On Error Goto TestFailed
     ' 1. Main menu button to create template
-    'GuiCommands.GoToMain
-    SpecManager.RestartApp
+    'GuiCommands.GoToMain   
     ' 2. Enter a template name "test_template"
     formNewTemplateInput.cboProductLine.value = "Test"
     formNewTemplateInput.txtTemplateName.value = "test_template"
@@ -45,13 +49,16 @@ Sub CreateTemplate_Test()
     ' 7. Report pass / fail
     ' TODO: I am not sure how to report on this other than a crash.
     ' 8. Go to main menu
-    Logger.Log "------------- End Create Template Test ------------", TestLog
-End Sub
+    CreateTemplate_Test = Utils.FormatTestResult("Create Template Test", "PASS")
+    Exit Function
+TestFailed:
+    CreateTemplate_Test = Utils.FormatTestResult("Create Template Test", "FAIL")
+End Function
 
-Sub CreateSpecification_Test()
-    Logger.Log "------------- Start Create Specification Test ---------", TestLog
+Function CreateSpecification_Test() As String
+    On Error Goto TestFailed
     ' 1. Main menu button to  create specification
-    SpecManager.RestartApp
+    App.RefreshObjects
     ' 2. Select a template type from the combo box "test_template"
     formNewSpecInput.cboSelectSpecificationType = "test_template"
     ' 3. Enter a material ID "test_specification"
@@ -69,13 +76,16 @@ Sub CreateSpecification_Test()
     ' 9. Report pass / fail
     ' TODO: No idea how to do this yet
     ' 10. Go to main menu
-    Logger.Log "------------- End Create Specification Test ---------", TestLog
-End Sub
+    CreateSpecification_Test = Utils.FormatTestResult("Create Specification Test", "PASS")
+    Exit Function
+TestFailed:
+    CreateSpecification_Test = Utils.FormatTestResult("Create Specification Test", "FAIL")
+End Function
 
-Sub ViewSpecification_AfterCreate_Test()
-    Logger.Log "------------- Start View Specification Test ---------", TestLog
+Function ViewSpecification_AfterCreate_Test() As String
+    On Error Goto TestFailed
     ' 1. Main menu button to view specifications
-    SpecManager.RestartApp
+    App.RefreshObjects
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
     formViewSpecs.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -87,13 +97,16 @@ Sub ViewSpecification_AfterCreate_Test()
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
-    Logger.Log "------------- End View Specification Test(1) --------", TestLog
-End Sub
+    ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "PASS")
+    Exit Function
+TestFailed:
+    ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "FAIL")
+End Function
 
-Sub EditTemplate_Test()
-    Logger.Log "------------- Start Edit Template Test --------------", TestLog
+Function EditTemplate_Test() As String
+    On Error Goto TestFailed
     ' 1. Main menu button to edit template
-    SpecManager.RestartApp
+    App.RefreshObjects
     ' 2. Select a template name from the combo box
     formEditTemplate.cboSelectTemplate = "test_template"
     ' 3. Click submit
@@ -115,13 +128,16 @@ Sub EditTemplate_Test()
     ' 11. Report pass / fail
     ' TODO:
     ' 12. Go to main menu
-    Logger.Log "------------- End Edit Template Test ----------------", TestLog
-End Sub
+    EditTemplate_Test = Utils.FormatTestResult("Edit Template Test", "PASS")
+    Exit Function
+TestFailed:
+    EditTemplate_Test = Utils.FormatTestResult("Edit Template Test", "FAIL")
+End Function
 
-Sub EditSpecification_Test()
-    Logger.Log "------------- Start Edit Specification Test ---------", TestLog
+Function EditSpecification_Test() As String
+    On Error Goto TestFailed
     ' 1. Main menu button to edit specification
-    SpecManager.RestartApp
+    App.RefreshObjects
     ' 2. Enter a material ID txtSAPcode(?) = "test_specification"
     formSpecConfig.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -135,17 +151,20 @@ Sub EditSpecification_Test()
     ' 7. Save changes
     formSpecConfig.SaveChanges
     ' 8. Remove old specification from the archive
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.Item("to_archive"), "archived_specifications"), TestLog
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.Item("to_archive"), "archived_specifications"), SqlLog
     ' 9. Report pass / fail
     ' TODO:
     ' 10. Go to main menu
-    Logger.Log "------------- End Edit Specification Test -----------", TestLog
-End Sub
+    EditSpecification_Test = Utils.FormatTestResult("Edit Specification Test", "PASS")
+    Exit Function
+TestFailed:
+    EditSpecification_Test = Utils.FormatTestResult("Edit Specification Test", "FAIL")
+End Function
 
-Sub ViewSpecification_AfterEdit_Test()
-    Logger.Log "------------- Start View Specification Test ---------", TestLog
+Function ViewSpecification_AfterEdit_Test() As String
+    On Error Goto TestFailed
     ' 1. Main menu button to view specifications
-    SpecManager.RestartApp
+    App.RefreshObjects
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
     formViewSpecs.txtMaterialId = "test_specification"
     ' 3. Click the search button
@@ -157,16 +176,19 @@ Sub ViewSpecification_AfterEdit_Test()
     ' 5. Report pass / fail
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
-    ' 7. Remove Spec
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), TestLog
-    ' 8. Remove Spec Template
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_template), TestLog
-    Logger.Log "------------- End View Specification Test(2) ---------", TestLog
-End Sub
+    ' 7. Remove Spec Template
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_spec.Template), SqlLog
+    ' 8. Remove Spec
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), SqlLog
+    ViewSpecification_AfterEdit_Test = Utils.FormatTestResult("View Specification After Edit Test", "PASS")
+    Exit Function
+TestFailed:
+    ViewSpecification_AfterEdit_Test = Utils.FormatTestResult("Create Specification After Edit Test", "FAIL")
+End Function
 
 Sub AccessControl_Test()
     Logger.Log "------------- Start Access Control Test --------------", TestLog
-    SpecManager.RestartApp
+    App.RefreshObjects
     Logger.Log "------------- End Access Control Test ----------------", TestLog
 End Sub
 
@@ -187,6 +209,7 @@ End Sub
 Public Sub TestKrish()
     Dim ws As Worksheet
     Set ws = shtRBA
+    Dim fileName As String
     fileName = PUBLIC_DIR & "\Specifications\" & "Test"
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
