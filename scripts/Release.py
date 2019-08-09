@@ -72,13 +72,13 @@ def copy_files_to_release_folder(repo_dir, release_dir):
     repo_config_dir = repo_dir + "/config"
     repo_libs_dir = repo_dir + "/libs"
     repo_logs_dir = repo_dir + "/logs"
-    repo_scripts_dir = repo_dir + "/scripts/startup"
+    repo_scripts_dir = repo_dir + "/scripts"
 
     # release directories
     release_config_dir = release_dir + "/config"
     release_libs_dir = release_dir + "/libs"
     release_logs_dir = release_dir + "/logs"
-    release_scripts_dir = release_dir + "/scripts/startup"
+    release_scripts_dir = release_dir + "/scripts"
 
     # copy from repo to release
     copy_tree(repo_config_dir, release_config_dir)

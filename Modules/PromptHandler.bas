@@ -18,7 +18,7 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
 ' Roll is first cut so if no then print all specifications
 '------------------------------------------------------------------------
     ' Prompt #1 : Is this a finishing order?
-    If question("Is this a finishing order?") Then
+    If App.current_spec.ProcessId = "Finishing" Then
         ' Prompt #2 : Is this the first loom cut?
         
         If question("Is this the first loom cut?") Then
@@ -34,19 +34,21 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
             ProtectionPlanningSequence = FinishingNoQC
             Exit Function
         End If
-    Else
+    ElseIf App.current_spec.ProcessId = "Weaving" Then
         ' Prompt #4 : Is this a straight tie-back?
         If question("Is this a straight tie-back?") Then
             ProtectionPlanningSequence = WeavingTieBack
         Else
             ProtectionPlanningSequence = WeavingStyleChange
         End If
+    Else
+        ProtectionPlanningSequence = Default
     End If
 
 End Function
 
 Private Function question(question_text As String) As Boolean
-    question = CBool(App.gDll.ShowDialogRich(question_text, vbYesNo, "Question"))
+    question = IIf(App.gDll.ShowDialog(question_text, vbYesNo, "Question", "Yes", "No") = vbYes, True, False)
 End Function
 
 Public Sub AccessDenied()
@@ -67,3 +69,25 @@ Public Function UserInput(input_type As InputBoxType, title_text As String, mess
     UserInput = App.gDll.CreateInputBox(input_type, title_text, message_text)
 End Function
 
+Public Function GetPassword() As String
+    GetPassword = CStr(UserInput(Password, "Access Control", "Enter Your Password :"))
+End Function
+
+Public Function ChangePassword() As String
+    Dim new_pass_1 As String
+    Dim new_pass_2 As String
+    new_pass_1 = "new_password_1"
+    new_pass_2 = "new_password_2"
+    While new_pass_1 <> new_pass_2
+        new_pass_1 = UserInput(Password, "Access Control", "Enter Your New Password :")
+        new_pass_2 = UserInput(Password, "Access Control", "Confirm Your New Password :")
+        If new_pass_1 <> new_pass_2 Then
+            PromptHandler.Error "Passwords don't match!"
+        End If
+    Wend
+    ' Return new password
+    ChangePassword = CStr(new_pass_1)
+    new_pass_1 = vbNullString
+    new_pass_2 = vbNullString
+    
+End Function

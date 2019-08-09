@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formCreateGeneric 
    Caption         =   "Create New Spec Type"
-   ClientHeight    =   7272
+   ClientHeight    =   7275
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9288
+   ClientTop       =   465
+   ClientWidth     =   9285
    OleObjectBlob   =   "formCreateGeneric.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -29,7 +29,7 @@ Sub Back()
 End Sub
 
 Private Sub UserForm_Initialize()
-    Logger.Log "--------- Start " & Me.Name & " ----------"
+    App.logger.Log "--------- Start " & Me.Name & " ----------"
     lblTemplateName = App.current_template.SpecType
     Set App.printer = Factory.CreateDocumentPrinter(Me)
 End Sub
@@ -47,26 +47,29 @@ Private Sub cmdSubmitTemplate_Click()
     Dim ret_val As Long
     ret_val = SpecManager.SaveSpecificationTemplate(App.current_template)
    If ret_val <> DB_PUSH_SUCCESS Then
-      Logger.Log "Data Access returned: " & ret_val, DebugLog
+        App.logger.Log "Data Access returned: " & ret_val, DebugLog
         PromptHandler.Error "New Specification Was Not Saved"
     Else
-        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
+        App.logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
         PromptHandler.Success "New Template Succesfully Saved."
+        Set App.templates = SpecManager.GetAllTemplates
     End If
+    
 End Sub
 
 Sub SubmitTemplate()
     Dim ret_val As Long
     ret_val = SpecManager.SaveSpecificationTemplate(App.current_template)
    If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val, DebugLog
-        Logger.Log "Create Template Fail"
+        App.logger.Log "Data Access returned: " & ret_val, DebugLog
+        App.logger.Log "Create Template Fail"
     Else
-        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
-        Logger.Log "Create Template Pass"
+        App.logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
+        App.logger.Log "Create Template Pass"
+        Set App.templates = SpecManager.GetAllTemplates
     End If
 End Sub
 
 Private Sub UserForm_Terminate()
-    Logger.Log "--------- End " & Me.Name & " ----------"
+    App.logger.Log "--------- End " & Me.Name & " ----------"
 End Sub

@@ -1,22 +1,25 @@
 Attribute VB_Name = "SpecManager"
 
 Public Sub StartApp()
-    Logger.Trace "Starting Application"
-    GuiCommands.ResetExcelGUI
     App.Start
+    GuiCommands.ResetExcelGUI
+    App.logger.Trace "Starting Application"
+    'App.current_user.ListenTo App.printer
 End Sub
 
 Public Sub RestartApp()
-    Logger.Trace "Restarting Application"
+    App.logger.Trace "Restarting Application"
     GuiCommands.ResetExcelGUI
     App.RefreshObjects
 End Sub
 
 Public Sub StopApp()
-    Logger.Trace "Stopping Application"
-    Logger.SaveLog
-    GuiCommands.ResetExcelGUI
+    On Error GoTo ResumeShutdown
+    App.logger.Trace "Stopping Application"
+    App.logger.SaveLog
     App.Shutdown
+ResumeShutdown:
+    GuiCommands.ResetExcelGUI
 End Sub
 
 Public Sub LoadExistingTemplate(template_type As String)
@@ -78,19 +81,19 @@ Function SearchForSpecifications(material_id As String) As Long
     Dim itms
     Set specs_dict = SpecManager.GetSpecifications(material_id)
     If specs_dict Is Nothing Then
-        Logger.Log "Could not find a standard for : " & material_id
+        App.logger.Log "Could not find a standard for : " & material_id
         SearchForSpecifications = SM_SEARCH_FAILURE
     Else
         Set App.specs = specs_dict
-        itms = App.specs.Items
+        itms = App.specs.items
         Set App.current_spec = itms(0)
         Set coll = New Collection
         For Each Key In App.specs
-            coll.Add App.specs.Item(Key)
+            coll.Add App.specs.item(Key)
         Next Key
-        Logger.Log "Succesfully retrieved specifications for : " & material_id
+        App.logger.Log "Succesfully retrieved specifications for : " & material_id
         ' If SpecManager.UpdateTemplateChanges Then
-        '     Logger.Log "Specs updated"
+        '     App.logger.Log "Specs updated"
         ' End If
         SearchForSpecifications = SM_SEARCH_SUCCESS
     End If
@@ -100,10 +103,10 @@ Function GetTemplate(template_type As String) As SpecificationTemplate
     Dim record As DatabaseRecord
     Set record = DataAccess.GetTemplateRecord(template_type)
     If Not record Is Nothing Then
-        Logger.Log "Succesfully retrieved template for : " & template_type
+        App.logger.Log "Succesfully retrieved template for : " & template_type
         Set GetTemplate = Factory.CreateTemplateFromRecord(record)
     Else
-        Logger.Log "Could not find a template for : " & template_type
+        App.logger.Log "Could not find a template for : " & template_type
         Set GetTemplate = Nothing
     End If
 
@@ -116,9 +119,9 @@ Function GetAllTemplates() As VBA.Collection
     Set coll = New VBA.Collection
     Set record = DataAccess.GetTemplateTypes
     ' obsoleted
-    Logger.Log "Listing all template types (spec Types) . . . "
+    App.logger.Log "Listing all template types (spec Types) . . . "
     For Each dict In record.records
-        coll.Add Item:=Factory.CreateTemplateFromDict(dict), Key:=dict.Item("Spec_Type")
+        coll.Add item:=Factory.CreateTemplateFromDict(dict), Key:=dict.item("Spec_Type")
     Next dict
     Set GetAllTemplates = coll
 End Function
@@ -131,18 +134,18 @@ Private Function UpdateTemplateChanges() As Boolean
     Dim spec As Specification
     Dim Template As SpecificationTemplate
     Dim old_spec As Specification
-    Logger.Log "Checking specifications for any template updates . . ."
+    App.logger.Log "Checking specifications for any template updates . . ."
     For Each T In App.specs
     Updated = False
-        Set spec = App.specs.Item(T)
+        Set spec = App.specs.item(T)
         Set old_spec = Factory.CopySpecification(spec)
         Set App.current_template = GetTemplate(spec.SpecType)
         For Each Key In App.current_template.Properties
             ' Checks for existence current template properites in previous spec
             If Not spec.Properties.Exists(Key) Then
                 ' Missing properties are added.
-                Logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
-                spec.Properties.Add Key:=Key, Item:=vbNullString
+                App.logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
+                spec.Properties.Add Key:=Key, item:=vbNullString
                 Updated = True
             End If
         Next Key
@@ -150,7 +153,7 @@ Private Function UpdateTemplateChanges() As Boolean
             ' Checks for existance of current_spec Properties in current_template.
             If Not App.current_template.Properties.Exists(Key) Then
                 ' Old properties are removed
-                Logger.Log "Removing : " & Key & " from " & spec.MaterialId & " properties list."
+                App.logger.Log "Removing : " & Key & " from " & spec.MaterialId & " properties list."
                 spec.Properties.Remove Key
                 Updated = True
             End If
@@ -159,11 +162,11 @@ Private Function UpdateTemplateChanges() As Boolean
             spec.Revision = CStr(CDbl(spec.Revision) + 1#)
             ret_val = SpecManager.SaveSpecification(spec, old_spec)
             If ret_val <> DB_PUSH_SUCCESS Then
-                Logger.Log "Data Access returned: " & ret_val, DebugLog
-                Logger.Log "New Specification Was Not Saved. Contact Admin."
+                App.logger.Log "Data Access returned: " & ret_val, DebugLog
+                App.logger.Log "New Specification Was Not Saved. Contact Admin."
             Else
-                Logger.Log "Data Access returned: " & ret_val, DebugLog
-                Logger.Log "New Specification Succesfully Saved."
+                App.logger.Log "Data Access returned: " & ret_val, DebugLog
+                App.logger.Log "New Specification Succesfully Saved."
             End If
         End If
     Next T
@@ -192,19 +195,19 @@ Function GetSpecifications(material_id As String) As Object
     Else
         For Each json_dict In json_coll
             Set spec = Factory.CreateSpecFromDict(json_dict)
-            specs_dict.Add json_dict.Item("Spec_Type"), spec
+            specs_dict.Add json_dict.item("Spec_Type"), spec
         Next json_dict
         Set GetSpecifications = specs_dict
     End If
     Exit Function
 NullSpecException:
-    Logger.Error "SpecManager.GetSpecifications()"
+    App.logger.Error "SpecManager.GetSpecifications()"
     Set GetSpecifications = Nothing
 End Function
 
 Sub ListSpecifications(frm As MSForms.UserForm)
 ' Lists the specifications currently selected in txtConsole for the given form
-    Logger.Log "Listing Specifications . . . "
+    App.logger.Log "Listing Specifications . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
     If Not App.specs Is Nothing Then
         App.printer.ListObjects App.specs
@@ -214,7 +217,7 @@ Sub ListSpecifications(frm As MSForms.UserForm)
 End Sub
 
 Sub PrintSpecification(frm As MSForms.UserForm)
-    Logger.Log "Printing Specification . . . "
+    App.logger.Log "Printing Specification . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
     If Not App.current_spec Is Nothing Then
         App.printer.PrintObjectToConsole App.current_spec
@@ -222,7 +225,7 @@ Sub PrintSpecification(frm As MSForms.UserForm)
 End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
-    Logger.Log "Printing Template . . . "
+    App.logger.Log "Printing Template . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
     App.printer.PrintObjectToConsole App.current_template
 End Sub
@@ -231,12 +234,42 @@ Public Sub UpdateSingleProperty(property_name As String, property_value As Varia
 ' Updates the value of a single property without the use of the UI. This should make Admin easier.
 End Sub
 
-Function CopySpecification(spec As Specification, material_id As String) As Long
+Public Sub ApplyTemplateChangesToSpecifications(spec_type As String, changes As Variant)
+' Apply template changes to all existing specs of that type
+    Dim specifications As VBA.Collection
+    Dim spec As Specification
+    Dim old_spec As Specification
+    Dim i As Integer
+    Set specifications = SelectAllSpecificationsByType(spec_type)
+    DataAccess.
+    For Each spec In specifications
+        Set old_spec = Factory.CopySpecification(spec)
+        For i=LBound(changes) To UBound(changes)
+            spec.AddProperty changes(i)
+        Next i
+        spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
+        App.loggger.log SpecManager.SaveSpecification(spec, old_spec), DebugLog
+    Next spec
+End Sub
+
+Private Function SelectAllSpecificationsByType(spec_type As String) As VBA.Collection
+    Dim record_coll As VBA.Collection
+    Dim record_dict As Object
+    Dim specifications As New VBA.Collection
+    Set record_dict = Factory.CreateDictionary
+    Set record_coll = DataAccess.SelectAllSpecifications(spec_type)
+    For Each record_dict In record_coll
+        specifications.Add Factory.CreateSpecFromDict(record_dict)
+    Next record_dict
+    Set SelectAllSpecificationsByType = specifications
+End Function
+
+Function CreateSpecificationFromCopy(spec As Specification, material_id As String) As Long
 ' Takes a material and makes a copy of it under a new material id
     Dim spec_copy As Specification
     Set spec_copy = Factory.CopySpecification(spec)
     spec_copy.MaterialId = material_id
-    CopySpecification = SaveNewSpecification(spec_copy)
+    CreateSpecificationFromCopy = SaveNewSpecification(spec_copy)
 End Function
 
 Function SaveNewSpecification(spec As Specification) As Long
@@ -334,7 +367,10 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Dim dict As Object
     Dim props As Variant
     RestartApp
-    Application.ScreenUpdating = False
+    
+    ' Turn on Performance Mode
+    App.PerformanceMode True
+
     Set dict = CreateObject("Scripting.Dictionary")
     Set ws = Utils.CreateNewSheet(spec_type & " Dump")
     Set dicts = DataAccess.SelectAllSpecifications(spec_type)
@@ -347,7 +383,10 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
         i = i + 1
     Next dict
     ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Columns.AutoFit
-    Application.ScreenUpdating = True
+    
+    ' Turn off Performance Mode
+    App.PerformanceMode False
+
 End Sub
 
 
@@ -376,7 +415,7 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
             spec_dict.Add "Revision", 1
             Set new_spec = Factory.CreateSpecFromDict(spec_dict)
             If DataAccess.PushSpec(new_spec) <> DB_PUSH_SUCCESS Then
-                Logger.Error "Error Writing : " & spec_dict.Item("Material_Id")
+                App.logger.Error "Error Writing : " & spec_dict.item("Material_Id")
                 Exit Sub
             End If
             
@@ -409,67 +448,6 @@ Public Sub CopyPropertiesFromFile()
     Next r
 End Sub
 
-Sub PrintPackage(doc_package As Object, package_variant As DocumentPackageVariant)
-' Print specs from the given doc_package (dictionary)
-    'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
-    Dim spec As Specification
-    Dim doc As Variant
-    Dim origCalcMode As xlCalculation
-
-    ' Toggle Gui Functions to speed up printing
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-    origCalcMode = Application.Calculation
-    Application.Calculation = xlCalculationManual
-
-    ' Print all the documents in the package
-    For Each doc In doc_package
-        Set spec = doc_package(doc)
-        With spec
-            ' Weaving RBA gets special treament here to include the checklist.
-            If .SpecType = "Weaving RBA" Then
-                Utils.PrintSheet ThisWorkbook.Sheets("Weaving RBA"), False
-                Utils.PrintSheet ThisWorkbook.Sheets(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), False
-            Else
-                Utils.PrintSheet ThisWorkbook.Sheets(.SpecType), True
-            End If
-        End With
-    Next doc
-
-    ' Toggle Gui Functions to speed up printing
-    GuiCommands.ResetExcelGUI
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-    Application.Calculation = origCalcMode
-
-End Sub
-
-Sub WriteAllDocuments(Optional order_number As String = vbNullString, Optional package_variant As DocumentPackageVariant = Default)
-' Write all specification docs to the correct worksheets / create worksheet if missing
-    Dim spec As Specification
-    Dim T As Variant
-    Dim origCalcMode As xlCalculation
-
-    ' Toggle Gui Functions to speed up printing
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-    origCalcMode = Application.Calculation
-    Application.Calculation = xlCalculationManual
-
-    For Each T In App.specs
-        Set spec = App.specs.Item(T)
-            App.printer.PrintObjectToSheet spec, _
-                        Utils.CreateNewSheet(spec.SpecType), _
-                        order_number, _
-                        package_variant
-    Next T
-    ' Toggle Gui Functions to speed up printing
-    GuiCommands.ResetExcelGUI
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-    Application.Calculation = origCalcMode
-End Sub
-
 Public Sub UpdateRBAFromSheet()
 ' This routine will update a specificaiton in the database
 ' with the parameters entered into the sheet.
@@ -491,10 +469,10 @@ Public Sub UpdateRBAFromSheet()
     spec.Revision = CStr(Range("revision").value + 1)
     For Each prop In spec.Properties
         spec.Properties(CStr(prop)) = Range(prop).value
-        Logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
+        App.logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
     Next prop
     ' Update the specification
-    Logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec), DebugLog
+    App.logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec), DebugLog
     App.Shutdown
     AccessControl.ConfigControl
 End Sub

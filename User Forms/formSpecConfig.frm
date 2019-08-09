@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formSpecConfig
    Caption         =   "Specification Control"
    ClientHeight    =   11868
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9816
+   ClientTop       =   465
+   ClientWidth     =   9810
    OleObjectBlob   =   "formSpecConfig.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -14,6 +14,17 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private Sub cmdCopySpec_Click()
@@ -21,7 +32,7 @@ Private Sub cmdCopySpec_Click()
     Dim new_material_id As String
     Dim ret_val As Long
     new_material_id = PromptHandler.UserInput(SingleLineText, "Material Id", "Enter a material id for copy?")
-    ret_val = SpecManager.CopySpecification(App.current_spec, new_material_id)
+    ret_val = SpecManager.CreateSpecificationFromCopy(App.current_spec, new_material_id)
     If ret_val = DB_PUSH_SUCCESS Then
         PromptHandler.Success "Copied Successfully"
     Else
@@ -34,7 +45,7 @@ Private Sub cmdSelectType_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
-    Logger.Log "--------- Start " & Me.Name & " ----------"
+    App.logger.Log "--------- Start " & Me.Name & " ----------"
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
@@ -114,7 +125,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    Logger.Log "--------- End " & Me.Name & " ----------"
+    App.logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
 Sub MaterialSearch()
@@ -144,11 +155,11 @@ Sub SaveChanges()
     App.current_spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
     ret_val = SpecManager.SaveSpecification(App.current_spec, old_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val, DebugLog
-        Logger.Log "New Specification Was Not Saved. Contact Admin."
+        App.logger.Log "Data Access returned: " & ret_val, DebugLog
+        App.logger.Log "New Specification Was Not Saved. Contact Admin."
     Else
-        Logger.Log "Data Access returned: " & ret_val, DebugLog
-        Logger.Log "New Specification Succesfully Saved."
+        App.logger.Log "Data Access returned: " & ret_val, DebugLog
+        App.logger.Log "New Specification Succesfully Saved."
     End If
 End Sub
 
@@ -158,7 +169,7 @@ Sub Submit()
     If cboSelectProperty.value = vbNullString Then Exit Sub
     ' Change the property desired
     With App.current_spec
-        .Properties(cboSelectProperty.value) = txtPropertyValue
+        .ChangeProperty cboSelectProperty.value, txtPropertyValue
     End With
     SpecManager.PrintSpecification Me
 End Sub
@@ -167,7 +178,7 @@ Sub SelectType()
     ' Check for empty controls
     If cboSelectType.value = vbNullString Then Exit Sub
     ' Select the specification desired
-    Set App.current_spec = App.specs.Item(cboSelectType.value)
+    Set App.current_spec = App.specs.item(cboSelectType.value)
     PopulateCboSelectProperty
     SpecManager.PrintSpecification Me
 End Sub

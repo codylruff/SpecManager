@@ -21,17 +21,22 @@ Private Declare Function UpdateWindow Lib "user32" (ByVal Hwnd As Long) As Long
 Private Declare Function IsWindow Lib "user32" (ByVal Hwnd As Long) As Long
 #End If
 ' -------------------------------------------------
-Public Function Contains(col As Collection, key As Variant) As Boolean
+Public Function Contains(col As Collection, Key As Variant) As Boolean
     Dim obj As Variant
 
     On Error GoTo err
 
     Contains = True
-    obj = col(key)
+    obj = col(Key)
     Exit Function
 
 err:
     Contains = False
+End Function
+
+Public Function SheetByName(sheet_name As String) As Worksheet
+' Returns a sheet from ThisWorkbook.Sheets by name
+    Set SheetByName = ThisWorkbook.Sheets(sheet_name)
 End Function
 
 Public Function FileExists(file_path As String) As Boolean
@@ -118,8 +123,8 @@ Function ConvertToCamelCase(s As String) As String
     End With
     Exit Function
 RegExError:
-    Err.Raise SM_REGEX_ERROR
-    Logger.Log "RegEx Error: ConvertToCamelCase", DebugLog
+    err.Raise SM_REGEX_ERROR
+    App.logger.Log "RegEx Error: ConvertToCamelCase", DebugLog
 End Function
 
 Function SplitCamelCase(sString As String, Optional sDelim As String = " ") As String
@@ -140,7 +145,7 @@ Error_Handler_Exit:
     Exit Function
  
 Error_Handler:
-    Logger.Log "RegEx Error: SplitCamelCase", DebugLog
+    App.logger.Log "RegEx Error: SplitCamelCase", DebugLog
     Resume Error_Handler_Exit
 End Function
 
@@ -180,7 +185,9 @@ End Function
 Function CreateNewSheet(shtName As String, Optional DeleteOldSheet As Boolean = False) As Worksheet
 'test
 ' Creates a new worksheet with the given name
-    Application.DisplayAlerts = False
+    ' Turn on Performance Mode
+    App.PerformanceMode True
+
     Dim Exists As Boolean, i As Integer
     With ThisWorkbook
         For i = 1 To Worksheets.Count
@@ -199,26 +206,23 @@ Function CreateNewSheet(shtName As String, Optional DeleteOldSheet As Boolean = 
         .Sheets.Add(After:=.Sheets(.Sheets.Count)).Name = shtName
     End With
     Set CreateNewSheet = ThisWorkbook.Sheets(shtName)
-    Application.DisplayAlerts = True
+    ' Turn off Performance Mode
+    App.PerformanceMode False
 End Function
 
 Function RemoveSheet(ws As Worksheet) As Boolean
 
     On Error GoTo ErrorHandler
-    Application.DisplayAlerts = False
+    ' Turn on Performance Mode
+    App.PerformanceMode True
     ws.Delete
-    Application.DisplayAlerts = True
+    ' Turn off Performance Mode
+    App.PerformanceMode False
     RemoveSheet = True
     Exit Function
 ErrorHandler:
     RemoveSheet = False
 End Function
-
-Sub ToggleExcelGui(B As Boolean)
-' Disables unpleasent ui effects
-    Application.ScreenUpdating = B
-    Application.DisplayAlerts = B
-End Sub
 
 Function CheckForEmpties(frm) As Boolean
 'Clears the values from a user form.
@@ -281,27 +285,6 @@ Public Function printf(mask As String, ParamArray tokens()) As String
     printf = mask
 End Function
 
-Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
-' Prints the sheet of the given name in the spec manager workbook
-    If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
-        ws.Visible = xlSheetVisible
-    End If
-    If App.current_user.Settings.Item("default_printer") = vbNullString Then
-        ChangeActivePrinter
-    End If
-    If FitToPage Then
-        If Application.PrintCommunication <> False Then Application.PrintCommunication = False
-        With ws.PageSetup
-            If .FitToPagesWide <> 1 Then .FitToPagesWide = 1
-            If .FitToPagesTall <> True Then .FitToPagesTall = True
-        End With
-        Application.PrintCommunication = True
-    End If
-    'fncScreenUpdating State:=False
-    ws.PrintOut ActivePrinter:=App.current_user.Settings.Item("default_printer")
-    'fncScreenUpdating State:=True
-End Sub
-
 Public Function ArrayLength(arr As Variant) As Long
 'test
     ArrayLength = UBound(arr) - LBound(arr) + 1
@@ -312,8 +295,8 @@ Sub ChangeActivePrinter()
 ' ChangeActivePrinter Macro
 
     Application.Dialogs(xlDialogPrinterSetup).show
-    Logger.Log "Setting default printer for Spec Manager : " & Application.ActivePrinter
-    App.current_user.Settings.Item("default_printer") = Application.ActivePrinter
+    App.logger.Log "Setting default printer for Spec Manager : " & Application.ActivePrinter
+    App.current_user.Settings.item("default_printer") = Application.ActivePrinter
     App.current_user.SaveUserJson
 '
 End Sub
@@ -335,11 +318,17 @@ End Function
 
 Sub SaveAll()
     Dim xWb As Workbook
+
+    ' Turn on Performance Mode
+    App.PerformanceMode True
+
     For Each xWb In Application.Workbooks
         If Not xWb.ReadOnly And Windows(xWb.Name).Visible Then
             xWb.Save
         End If
     Next
+    ' Turn off Performance Mode
+    App.PerformanceMode False
 End Sub
 
 Function TestForUnsavedChanges() As Boolean
@@ -382,36 +371,7 @@ End Sub
 
 Public Sub ToggleAutoRecover()
 ' This sub will switch the auto recover function on and off.
-
 End Sub
-
-#If Win64 Then
-Public Function fncScreenUpdating(State As Boolean, Optional Window_hWnd As LongPtr = 0)
-#Else
-Public Function fncScreenUpdating(State As Boolean, Optional Window_hWnd As Long = 0)
-#End If
-    Const WM_SETREDRAW = &HB
-    Const WM_PAINT = &HF
-    
-    If Window_hWnd = 0 Then
-        Window_hWnd = GetDesktopWindow()
-    Else
-        If IsWindow(Hwnd:=Window_hWnd) = False Then
-            Exit Function
-        End If
-    End If
-    
-    If State = True Then
-        Call SendMessage(Hwnd:=Window_hWnd, wMsg:=WM_SETREDRAW, wParam:=1, lParam:=0)
-        Call InvalidateRect(Hwnd:=Window_hWnd, lpRect:=0, bErase:=True)
-        Call UpdateWindow(Hwnd:=Window_hWnd)
-    
-    Else
-        Call SendMessage(Hwnd:=Window_hWnd, wMsg:=WM_SETREDRAW, wParam:=0, lParam:=0)
-    
-    End If
-
-End Function
 
 Sub CreateWorksheetScopedNameRanges()
 'PURPOSE: Create Worksheet Scoped versions of Workbook Scoped Named Ranges

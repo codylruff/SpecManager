@@ -36,6 +36,7 @@ Private Const DEFAULT_QC_SAMPLE      As String = "1.5"          ' Minimum protec
 '----------------
 Private FormId_         As MSForms.UserForm
 Private OutputHistory_  As VBA.Collection
+'Public Event DocumentPrinted(spec As Specification, work_order As String)
 '------------
 ' AUTO-PROPERTIES
 '------------
@@ -55,7 +56,7 @@ End Property
 Public Sub ClearConsole()
 ' Clears the console of any text
     Me.CurrentText = vbNullString
-    Logger.Log "Console Cleared"
+    App.logger.Log "Console Cleared"
 End Sub
 
 Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = vbNullString)
@@ -64,11 +65,12 @@ Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional produc
     Utils.ClearHeaderFooter ws, Header:=True, footer:=False
     ' Insert Header
     With ws.PageSetup
-        .LeftHeader = spec.SpecType & " (v" & spec.Template.Revision & ")" & Chr(10) & _
-                      spec.Template.ProductLine
-        .CenterHeader = "Material : " & spec.MaterialId & Chr(10) & _
-                        "Production Order : " & production_order
-        .RightHeader = "Revision : " & spec.Revision & Chr(10) & _
+        If .ScaleWithDocHeaderFooter = True Then .ScaleWithDocHeaderFooter = False
+        .LeftHeader = "&09" & spec.SpecType & " (v" & spec.Template.Revision & ")" & Chr(10) & _
+                      "Order No. : " & production_order
+        .CenterHeader = "&09Material : " & spec.MaterialId & Chr(10) & _
+                        spec.MaterialDescription
+        .RightHeader = "&09Revision : " & spec.Revision & Chr(10) & _
                        "Printed : " & CStr(Now())
     End With
 End Sub
@@ -85,6 +87,7 @@ Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = vbNull
     End If
     ' Insert Footer
     With ws.PageSetup
+        If .ScaleWithDocHeaderFooter = True Then .ScaleWithDocHeaderFooter = False
         .LeftFooter = leftFooterText
         .CenterFooter = disclaimer
         .RightFooter = rightFooterText
@@ -139,7 +142,7 @@ Private Function GetWeavePatternImagePath(material_id As String) As String
             End If
     End Select
 
-    Logger.Log "Inserting image : " & weave_id & ".jpg"
+    App.logger.Log "Inserting image : " & weave_id & ".jpg"
     GetWeavePatternImagePath = "S:\Data Manager\Specifications\weave-pattern\" & weave_id & ".jpg"
 
 End Function
@@ -183,6 +186,7 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     End If
     ' Insert values into worksheet
     Set spec = specs_dict("Weaving RBA")
+    Utils.Insert shtRBA.Range("material_description"), spec.MaterialDescription
     Utils.Insert shtRBA.Range("revision"), spec.Revision
     Utils.Insert shtRBA.Range("qc_sample_size"), qc_sample
     Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
@@ -236,14 +240,34 @@ Private Sub LoadBallisticTestingRequirementsToSheet(spec As Specification, sht A
     InsertImage sht, GetBallisticPackageImagePath, spec.Properties.Count + 4
 End Sub
 
+Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
+' Load Warping Requirements to sheet
+    Dim nr As Variant
+    Dim rng As Range
+    Dim ws As Worksheet
+    
+    Set ws = Utils.SheetByName("Warping Requirements")
+    Utils.Insert ws.Range("work_order"), prod_order
+    Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
+    
+    On Error Resume Next
+    For Each nr In spec.Properties
+        Set rng = ws.Range(CStr(nr))
+        Utils.Insert rng, spec.GetProperty(CStr(nr))
+    Next nr
+    On Error GoTo 0
+
+End Sub
+
 Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString, _
            Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
 ' Print object to specified worksheet starting in cell "A1"
     ' Disable updates to the gui during processing
-    Application.DisplayAlerts = False
-    Application.ScreenUpdating = False
+    App.PerformanceMode True
     ' This tree selects any specs which have an associated custom worksheet template
     Select Case spec.SpecType
+        Case "Warping Requirements"
+            LoadWarpingRequirements spec, prod_order
         Case "Weaving RBA"
             LoadRbaToSheet App.specs, prod_order
         Case "Testing Requirements"
@@ -256,9 +280,11 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
             ' Insert/Format body of the specification
             LoadGenericSpecificationDocument spec, sht, prod_order
     End Select
+    ' Log User Action
+    App.current_user.DocumentPrinted spec, prod_order
     ' Enable updates to the gui after processing
-    Application.DisplayAlerts = True
-    Application.ScreenUpdating = True
+    App.PerformanceMode False
+    
 End Sub
 
 Public Sub PrintObjectToConsole(obj As Object)
@@ -379,29 +405,6 @@ Private Sub LoadGenericSpecificationDocument(spec As Specification, sht As Works
         ' Spec Properties
         For Each Key In spec.Properties
             PrintPropertyToSheet sht, Key, spec.GetProperty(CStr(Key)), i
-            ' If Not spec.GetProperty(CStr(Key)) = vbNullString Then
-            '     .Range("A" & i).value = CStr(Key) & " : "
-            '     .Range("A" & i).Font.Size = FONT_SIZE_PROPERTY
-            '     .Range("B" & i).value = CStr(spec.GetProperty(CStr(Key)))
-            '     .Range("B" & i).Font.Size = FONT_SIZE_VALUE
-            '     .Range("B" & i).Font.Bold = True
-            '     .Range("B" & i).HorizontalAlignment = xlHAlignLeft
-            '     If spec.GetProperty(CStr(Key)) = Chr(CHAR_REQUIRED) Then
-            '         .Range("B" & i).Font.Name = FONT_REQUIRED
-            '     ElseIf spec.GetProperty(CStr(Key)) = Chr(CHAR_CRITICAL) Then
-            '         .Range("B" & i).Font.Name = FONT_CRITICAL
-            '     ElseIf spec.GetProperty(CStr(Key)) = Chr(CHAR_NOT_REQUIRED) Then
-            '         .Range("B" & i).Font.Name = FONT_NOT_REQUIRED
-            '     Else
-            '         .Range("B" & i).Font.Name = FONT_DEFAULT
-            '     End If
-            ' Else
-            '     .Range("A" & i).value = CStr(Key)
-            '     .Range("A" & i).Font.Size = FONT_SIZE_PROPERTY
-            '     .Range("B" & i).value = Chr(CHAR_NULL_VALUE)
-            '     .Range("B" & i).Font.Size = FONT_SIZE_VALUE
-            '     .Range("B" & i).Font.Bold = True
-            ' End If
             i = i + 1
         Next Key
         sht.Columns("A:G").AutoFit
@@ -432,10 +435,80 @@ Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = vbNullSt
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=True
-    Logger.Log "PDF Saved : " & destination_path
+    App.logger.Log "PDF Saved : " & destination_path
     ws.Visible = xlSheetHidden
     Exit Sub
     
 SaveFileError:
-    Logger.Log "Failed to save file PDF Fail"
+    App.logger.Log "Failed to save file PDF Fail"
+End Sub
+
+Public Sub WriteAllDocuments(Optional order_number As String = vbNullString, Optional package_variant As DocumentPackageVariant = Default)
+' Write all specification docs to the correct worksheets / create worksheet if missing
+    Dim spec As Specification
+    Dim T As Variant
+
+    ' Toggle Performance Mode
+    App.PerformanceMode True
+
+    For Each T In App.specs
+        Set spec = App.specs.item(T)
+            App.printer.PrintObjectToSheet spec, _
+                        Utils.CreateNewSheet(spec.SpecType), _
+                        order_number, _
+                        package_variant
+    Next T
+
+    ' Turn off Performance Mode
+    App.PerformanceMode False
+
+End Sub
+
+Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackageVariant)
+' Print specs from the given doc_package (dictionary)
+    'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
+    Dim spec As Specification
+    Dim doc As Variant
+
+    ' Toggle Performance Mode
+    App.PerformanceMode True
+
+    ' Print all the documents in the package
+    For Each doc In doc_package
+        Set spec = doc_package(doc)
+        With spec
+            ' Weaving RBA gets special treament here to include the checklist.
+            If .SpecType = "Weaving RBA" Then
+                App.printer.PrintSheet SheetByName("Weaving RBA"), FitToPage:=False
+                App.printer.PrintSheet SheetByName(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
+            Else
+                App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True
+            End If
+        End With
+    Next doc
+
+    
+    ' Turn off Performance Mode
+    GuiCommands.ResetExcelGUI
+    App.PerformanceMode False
+
+End Sub
+
+Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
+' Prints the sheet of the given name in the spec manager workbook
+    If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
+        ws.Visible = xlSheetVisible
+    End If
+    If App.current_user.Settings.item("default_printer") = vbNullString Then
+        ChangeActivePrinter
+    End If
+    If FitToPage Then
+        If Application.PrintCommunication <> False Then Application.PrintCommunication = False
+        With ws.PageSetup
+            If .FitToPagesWide <> 1 Then .FitToPagesWide = 1
+            If .FitToPagesTall <> True Then .FitToPagesTall = True
+        End With
+        Application.PrintCommunication = True
+    End If
+    ws.PrintOut ActivePrinter:=App.current_user.Settings.item("default_printer")
 End Sub

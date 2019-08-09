@@ -382,7 +382,7 @@ Public Function FN_IMAGE_LOAD(byteArr() As Byte, Optional SavePath As String) As
    Exit Function
 
 FN_IMAGE_LOAD_Error:
-    App.gMsg = Err.Description & ": in procedure KrishDll of Module KrishDll"
+    App.gMsg = err.Description & ": in procedure KrishDll of Module KrishDll"
     FN_IMAGE_LOAD = ""
 
 End Function
@@ -399,16 +399,16 @@ Public Function OpenFileReturnsArray(title As String, Filters As Variant, Option
     On Error Resume Next
     Dim FilePaths() As String
     Dim FiltersS() As String
-    Dim Item As Variant
+    Dim item As Variant
     
     If (IsNull(Filters)) Then
         FnArrayAddItem FiltersS, "All files |*.*"
     Else
-        For Each Item In Filters
-            If Item <> "" Then
-                FnArrayAddItem FiltersS, CStr(Item)
+        For Each item In Filters
+            If item <> "" Then
+                FnArrayAddItem FiltersS, CStr(item)
             End If
-        Next Item
+        Next item
         
     End If
     
@@ -429,16 +429,16 @@ Public Function OpenFileInlineFilterArray(title As String, Optional Filters As V
     On Error Resume Next
     Dim FilePaths() As String
     Dim FiltersS() As String
-    Dim Item As Variant
+    Dim item As Variant
     
     If (IsNull(Filters) Or IsMissing(Filters)) Then
         FnArrayAddItem FiltersS, "All files |*.*"
     Else
-        For Each Item In Filters
-            If Item <> "" Then
-                FnArrayAddItem FiltersS, CStr(Item)
+        For Each item In Filters
+            If item <> "" Then
+                FnArrayAddItem FiltersS, CStr(item)
             End If
-        Next Item
+        Next item
         
     End If
     FilePaths = DLL.Dialog.ShowDialogForFileArray(title, AllowMultipleFiles, FiltersS)
@@ -692,7 +692,7 @@ On Error GoTo EXIT_ROUTINE:
         Case 29
             sFormat = DLL.String.fn_string_format(iString, args(0), args(1), args(2), args(3), args(4), args(5), args(6), args(7), args(8), args(9), args(10), args(11), args(12), args(13), args(14), args(15), args(16), args(17), args(18), args(19), args(20), args(21), args(22), args(23), args(24), args(25), args(26), args(27), args(28), args(29))
     Case Else
-        Err.Raise "0", "DLL", "Too many parameters"
+        err.Raise "0", "DLL", "Too many parameters"
         Exit Function
     End Select
     

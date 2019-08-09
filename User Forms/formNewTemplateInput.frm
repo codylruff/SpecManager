@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formNewTemplateInput
    Caption         =   "Create New Template"
    ClientHeight    =   2952
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   4476
+   ClientTop       =   465
+   ClientWidth     =   4470
    OleObjectBlob   =   "formNewTemplateInput.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -15,8 +15,19 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
+
+
+
+
+
+
+
+
+
 Private Sub UserForm_Initialize()
-    Logger.Log "--------- " & Me.Name & " ----------"
+    App.logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboProductLine
 End Sub
 
@@ -43,9 +54,9 @@ End Sub
 
 Sub Continue()
     If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
-        Logger.Log "Template Input Pass"
+        App.logger.Log "Template Input Pass"
     Else
-        Logger.Log "Template Input Fail"
+        App.logger.Log "Template Input Fail"
     End If
 End Sub
 

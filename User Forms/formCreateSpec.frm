@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formCreateSpec
    Caption         =   "Specification Control"
    ClientHeight    =   10548
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9732
+   ClientTop       =   465
+   ClientWidth     =   9735
    OleObjectBlob   =   "formCreateSpec.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -15,10 +15,21 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
-    Logger.Log "--------- " & Me.Name & " ----------"
+    App.logger.Log "--------- " & Me.Name & " ----------"
     With App
         Set .current_spec.Properties = .current_template.Properties
         Set .current_spec.Tolerances = .current_template.Properties
@@ -43,10 +54,10 @@ Private Sub cmdSaveChanges_Click()
     Dim ret_val As Long
     ret_val = SpecManager.SaveNewSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val
+        App.logger.Log "Data Access returned: " & ret_val
         PromptHandler.Error "New Specification Was Not Saved"
     Else
-        Logger.Log "Data Access returned: " & ret_val
+        App.logger.Log "Data Access returned: " & ret_val
         PromptHandler.Success "New Specification Succesfully Saved."
     End If
 End Sub
@@ -91,12 +102,12 @@ Sub SaveChanges()
     Dim ret_val As Long
     ret_val = SpecManager.SaveNewSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val, DebugLog
-        Logger.Log "Create Spec Fail"
+        App.logger.Log "Data Access returned: " & ret_val, DebugLog
+        App.logger.Log "Create Spec Fail"
         PromptHandler.Error "Failed to Create Specification"
     Else
-        Logger.Log "Data Access returned: " & ret_val, DebugLog
-        Logger.Log "Create Spec Pass"
+        App.logger.Log "Data Access returned: " & ret_val, DebugLog
+        App.logger.Log "Create Spec Pass"
         PromptHandler.Success "Specification Created Successfully!"
     End If
 End Sub

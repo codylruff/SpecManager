@@ -82,7 +82,7 @@ Select Case NumberOfArrayDimensions(arr:=arr)
         ' the array without keys.
         ''''''''''''''''''''''''''''''
         For Ndx = LBound(arr) To UBound(arr)
-            coll.Add Item:=arr(Ndx)
+            coll.Add item:=arr(Ndx)
         Next Ndx
     
     Case 2
@@ -99,12 +99,12 @@ Select Case NumberOfArrayDimensions(arr:=arr)
                 ' Key is empty. Add to collection
                 ' without a key.
                 '''''''''''''''''''''''''''''''''
-                coll.Add Item:=arr(Ndx, 1)
+                coll.Add item:=arr(Ndx, 1)
             Else
                 '''''''''''''''''''''''''''''''''
                 ' Key is not empty. Add with key.
                 '''''''''''''''''''''''''''''''''
-                coll.Add Item:=arr(Ndx, 0), Key:=KeyVal
+                coll.Add item:=arr(Ndx, 0), Key:=KeyVal
             End If
         Next Ndx
     
@@ -169,7 +169,7 @@ End If
 '''''''''''''''''''''''''''''''''''
 On Error GoTo ErrH:
 For Ndx = LBound(arr, 1) To UBound(arr, 1)
-    dict.Add Key:=arr(Ndx, LBound(arr, 2) + 1), Item:=arr(Ndx, LBound(arr, 2))
+    dict.Add Key:=arr(Ndx, LBound(arr, 2) + 1), item:=arr(Ndx, LBound(arr, 2))
 Next Ndx
     
 '''''''''''''''''
@@ -326,7 +326,7 @@ For Ndx = 1 To coll.Count
     ' Call the user-supplied CreateDictionaryKeyFromCollectionItem
     ' function to get the Key to be used in the Dictionary.
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ItemKey = CreateDictionaryKeyFromCollectionItem(dict:=dict, Item:=ItemVar)
+    ItemKey = CreateDictionaryKeyFromCollectionItem(dict:=dict, item:=ItemVar)
     ''''''''''''''''''''''''''''''''
     ' ItemKey must not be spaces or
     ' an empty string.
@@ -349,7 +349,7 @@ For Ndx = 1 To coll.Count
     ' ItemKey does not exist in Dict, so add ItemVar to
     ' Dict with a key of ItemKey.
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    dict.Add Key:=ItemKey, Item:=ItemVar
+    dict.Add Key:=ItemKey, item:=ItemVar
 Next Ndx
 Set CollectionToDictionary = dict
 
@@ -357,7 +357,7 @@ End Function
 
 Private Function CreateDictionaryKeyFromCollectionItem( _
     dict As Object, _
-    Item As Variant) As String
+    item As Variant) As String
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' CreateDictionaryKeyFromCollectionItem
 ' This function is called by CollectionToDictionary to create
@@ -425,7 +425,7 @@ If StartCells.Cells.Count = 1 Then
     For Each V In coll
         If IsObject(V) = False Then
             DestRng.value = V
-            If DestRng.Row < DestRng.Parent.Rows.Count Then
+            If DestRng.row < DestRng.Parent.Rows.Count Then
                 Set DestRng = DestRng(2, 1)
             Else
                 CollectionToRange = False
@@ -471,7 +471,7 @@ If StartCells.Cells.Count = 2 Then
         For Each V In coll
             If IsObject(V) = False Then
                 DestRng.value = V
-                If DestRng.Row < StartCells.Parent.Rows.Count Then
+                If DestRng.row < StartCells.Parent.Rows.Count Then
                     Set DestRng = DestRng(2, 1)
                 Else
                     CollectionToRange = False
@@ -544,10 +544,10 @@ If StartCells.Cells.Count = 1 Then
     ' the collection moving downwards.
     '''''''''''''''''''''''''''''''''''''
     Set DestRng = StartCells
-    For Each V In dict.Items
+    For Each V In dict.items
         If IsObject(V) = False Then
             DestRng.value = V
-            If DestRng.Row < DestRng.Parent.Rows.Count Then
+            If DestRng.row < DestRng.Parent.Rows.Count Then
                 Set DestRng = DestRng(2, 1)
             Else
                 DictionaryToRange = False
@@ -571,7 +571,7 @@ If StartCells.Cells.Count = 2 Then
         ' across the row.
         '''''''''''''''''''''''''''''''''
         Set DestRng = StartCells.Cells(1, 1)
-        For Each V In dict.Items
+        For Each V In dict.items
             If IsObject(V) = False Then
                 DestRng.value = V
                 If DestRng.Column < StartCells.Parent.Columns.Count Then
@@ -590,10 +590,10 @@ If StartCells.Cells.Count = 2 Then
         ' down the column.
         '''''''''''''''''''''''''''''''''
         Set DestRng = StartCells.Cells(1, 1)
-        For Each V In dict.Items
+        For Each V In dict.items
             If IsObject(V) = False Then
                 DestRng.value = V
-                If DestRng.Row < StartCells.Parent.Rows.Count Then
+                If DestRng.row < StartCells.Parent.Rows.Count Then
                     Set DestRng = DestRng(2, 1)
                 Else
                     DictionaryToRange = False
@@ -611,7 +611,7 @@ End If
 '''''''''''''''''''''''''''''''''''''
 For Ndx = 1 To StartCells.Cells.Count
     If Ndx <= dict.Count Then
-        V = dict.Items(Ndx - 1)
+        V = dict.items(Ndx - 1)
         If IsObject(V) = False Then
             StartCells.Cells(Ndx).value = V
         End If
@@ -684,10 +684,10 @@ For Ndx = 0 To dict.Count - 1
     ' Test to see if the item in the Dict is
     ' an object. If so, use Set.
     '''''''''''''''''''''''''''''''''''''''''
-    If IsObject(dict.Items(Ndx)) = True Then
-        Set arr(Ndx, 1) = dict.Items(Ndx)
+    If IsObject(dict.items(Ndx)) = True Then
+        Set arr(Ndx, 1) = dict.items(Ndx)
     Else
-        arr(Ndx, 1) = dict.Items(Ndx)
+        arr(Ndx, 1) = dict.items(Ndx)
     End If
 
 Next Ndx
@@ -745,15 +745,15 @@ End If
 '''''''''''''''''''''''''''''''''
 On Error Resume Next
 For Ndx = 0 To dict.Count - 1
-    If IsObject(dict.Items(Ndx)) = True Then
-        Set ItemVar = dict.Items(Ndx)
+    If IsObject(dict.items(Ndx)) = True Then
+        Set ItemVar = dict.items(Ndx)
     Else
-        ItemVar = dict.Items(Ndx)
+        ItemVar = dict.items(Ndx)
     End If
     KeyVal = dict.keys(Ndx)
-    Err.Clear
-    coll.Add Item:=ItemVar, Key:=KeyVal
-    If Err.Number <> 0 Then
+    err.Clear
+    coll.Add item:=ItemVar, Key:=KeyVal
+    If err.Number <> 0 Then
         If StopOnDuplicateKey = True Then
             DictionaryToCollection = False
             Exit Function
@@ -779,7 +779,7 @@ Public Function KeyExistsInCollection(coll As VBA.Collection, KeyName As String)
     
     On Error Resume Next
     V = coll(KeyName)
-    Select Case Err.Number
+    Select Case err.Number
         Case 0
             KeyExistsInCollection = True
         Case 5, 438
@@ -789,9 +789,9 @@ Public Function KeyExistsInCollection(coll As VBA.Collection, KeyName As String)
             ' SET V to the item and retest the
             ' error code.
             ''''''''''''''''''''''''''''''''''''''
-            Err.Clear
+            err.Clear
             Set V = coll(KeyName)
-            Select Case Err.Number
+            Select Case err.Number
                 Case 0
                     KeyExistsInCollection = True
                 Case Else
@@ -894,7 +894,7 @@ Set coll = New VBA.Collection
 ' collection.
 '''''''''''''''''''''''''''''''''''''''''
 For Ndx = LBound(arr) To UBound(arr)
-    coll.Add Item:=arr(Ndx)
+    coll.Add item:=arr(Ndx)
 Next Ndx
 
 End Sub
@@ -1007,9 +1007,9 @@ For Each KRng In KeyRange.Cells
     End If
     If KeyExists = False Then
         If RangeAsObject = True Then
-            dict.Add Key:=KRng.text, Item:=ItemRange.Cells(ItemNdx)
+            dict.Add Key:=KRng.text, item:=ItemRange.Cells(ItemNdx)
         Else
-            dict.Add Key:=KRng.text, Item:=ItemRange.Cells(ItemNdx).text
+            dict.Add Key:=KRng.text, item:=ItemRange.Cells(ItemNdx).text
         End If
     End If
 Next KRng
@@ -1154,17 +1154,17 @@ For Each IRng In ItemRange.Cells
             ' Add with key.
             '''''''''''''''''''''''''
             If RangeAsObject = True Then
-                coll.Add Item:=IRng, Key:=KeyRange.Cells(KeyNdx)
+                coll.Add item:=IRng, Key:=KeyRange.Cells(KeyNdx)
             Else
-                coll.Add Item:=IRng.text, Key:=KeyRange.Cells(KeyNdx)
+                coll.Add item:=IRng.text, Key:=KeyRange.Cells(KeyNdx)
             End If
         Else
             '''''''''''''''''''''
             ' Add without key.
             If RangeAsObject = True Then
-                coll.Add Item:=IRng
+                coll.Add item:=IRng
             Else
-                coll.Add Item:=IRng.text
+                coll.Add item:=IRng.text
             End If
             '''''''''''''''''''''
             
@@ -1267,7 +1267,7 @@ If SortByKey = True Then
     ''''''''''''''''''''''''''''''''''''''''''''
     For Ndx = 0 To dict.Count - 1
         KeyValue = arr(Ndx)
-        TempDict.Add Key:=KeyValue, Item:=dict.Item(KeyValue)
+        TempDict.Add Key:=KeyValue, item:=dict.item(KeyValue)
     Next Ndx
     '''''''''''''''''''''''''''''''''
     ' Set the passed in Dict object
@@ -1293,9 +1293,9 @@ Else
     ReDim VTypes(0 To dict.Count - 1)
 
     For Ndx = 0 To dict.Count - 1
-        If (IsObject(dict.Items(Ndx)) = True) Or _
-            (IsArray(dict.Items(Ndx)) = True) Or _
-            VarType(dict.Items(Ndx)) = vbUserDefinedType Then
+        If (IsObject(dict.items(Ndx)) = True) Or _
+            (IsArray(dict.items(Ndx)) = True) Or _
+            VarType(dict.items(Ndx)) = vbUserDefinedType Then
             Debug.Print "***** ITEM IN DICTIONARY WAS OBJECT OR ARRAY OR UDT"
             Exit Sub
         End If
@@ -1307,8 +1307,8 @@ Else
         ' array. We'll use these values later to convert
         ' back to the proper data type for Item.
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            arr(Ndx) = dict.Items(Ndx) & vbNullChar & dict.keys(Ndx)
-            VTypes(Ndx) = VarType(dict.Items(Ndx))
+            arr(Ndx) = dict.items(Ndx) & vbNullChar & dict.keys(Ndx)
+            VTypes(Ndx) = VarType(dict.items(Ndx))
             
     Next Ndx
     ''''''''''''''''''''''''''''''''''
@@ -1375,7 +1375,7 @@ Else
         ' Finally, add the Item and Key to
         ' our TempDict dictionary.
         ''''''''''''''''''''''''''''''''''''''
-        TempDict.Add Key:=KeyValue, Item:=ItemValue
+        TempDict.Add Key:=KeyValue, item:=ItemValue
     Next Ndx
 End If
 

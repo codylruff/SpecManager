@@ -15,6 +15,13 @@ Option Explicit
     Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 #End If
 
+Private Type Settings
+    ScreenUpdating As Boolean
+    DisplayAlerts As Boolean
+    DisplayStatusBar As Boolean
+    Calculation As Long
+End Type
+
 ' Events
 Public Event BeforeRefresh()
 Public Event AfterRefresh()
@@ -33,12 +40,16 @@ Public specs As Object
 Public printer As DocumentPrinter
 Public current_template As SpecificationTemplate
 Public TestingMode As Boolean
-
+Private pPerformanceMode As Boolean
+Public logger As SystemLogger
+Private settings_ As Settings
 
 ' Methods
 Sub Start()
+    Set Me.logger = New SystemLogger
     ' Log in with environ(username)
     Set current_user = AccessControl.Account_Initialize
+    If current_user.FlaggedForPasswordChange Then AccessControl.ChangeSecret current_user
     ' Load user settings
     current_user.LoadUserJson
     ' Create global object instances for specs and templates
@@ -48,11 +59,11 @@ Sub Start()
     Set printer = New DocumentPrinter
     Set current_template = New SpecificationTemplate
     TestingMode = False
+    pPerformanceMode = False
 End Sub
 
 Public Sub RefreshObjects()
     Set current_spec = New Specification
-    Set templates = SpecManager.GetAllTemplates
     Set specs = CreateObject("Scripting.Dictionary")
     Set printer = New DocumentPrinter
     Set current_template = New SpecificationTemplate
@@ -79,7 +90,53 @@ Public Sub Shutdown()
     Set specs = Nothing
     Set printer = Nothing
     Set current_template = Nothing
-    Logger.SaveAllLogs
+    Me.logger.SaveAllLogs
+    Set Me.logger = Nothing
+End Sub
+
+Public Sub Restart()
+    Shutdown
+    Start
+End Sub
+
+Public Sub SaveSettings()
+    With Application
+        settings_.ScreenUpdating = .ScreenUpdating
+        settings_.DisplayAlerts = .DisplayAlerts
+        settings_.DisplayStatusBar = .DisplayStatusBar
+        settings_.Calculation = .Calculation
+    End With
+End Sub
+
+Public Sub PerformanceMode(enable As Boolean, Optional DisableEvents As Boolean = False)
+' This Sub turns off un-necessary gui functions to increase performance
+    If enable And Not pPerformanceMode Then
+        pPerformanceMode = True
+        logger.Log "Performance Mode : ON", RuntimeLog
+        ' Save current excel-gui settings
+        SaveSettings
+        ' Enabled performance mode
+        With Application
+            If .ScreenUpdating Then .ScreenUpdating = False
+            If .DisplayAlerts Then .DisplayAlerts = False
+            If .DisplayStatusBar Then .DisplayStatusBar = False
+            'If .EnableEvents And DisableEvents Then .EnableEvents = False
+            If .Calculation = xlCalculationAutomatic Then .Calculation = xlCalculationManual
+        End With
+    Else
+        If pPerformanceMode Then
+            pPerformanceMode = False
+            logger.Log "Performance Mode : OFF", RuntimeLog
+            With Application
+                .ScreenUpdating = settings_.ScreenUpdating
+                .DisplayAlerts = settings_.DisplayAlerts
+                .DisplayStatusBar = settings_.DisplayStatusBar
+                .Calculation = settings_.Calculation
+            End With
+        End If
+    End If
+
+    
 End Sub
 
 ' -----------------------

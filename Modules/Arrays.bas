@@ -1249,9 +1249,9 @@ ReDim Preserve InputArray(LBound(InputArray) To UBound(InputArray) + 1)
 ' at Index.
 '''''''''''''''''''''''''''''''''''''''''''''''
 On Error Resume Next
-Err.Clear
+err.Clear
 InputArray(UBound(InputArray)) = value
-If Err.Number <> 0 Then
+If err.Number <> 0 Then
     ''''''''''''''''''''''''''''''''''''''
     ' An error occurred, most likely
     ' an error 13, type mismatch.
@@ -1477,7 +1477,7 @@ End If
 ' Attempt to get the UBound of the array. If the array has not been allocated,
 ' an error will occur. Test Err.Number to see if an error occurred.
 N = UBound(arr, 1)
-If (Err.Number = 0) Then
+If (err.Number = 0) Then
     ''''''''''''''''''''''''''''''''''''''
     ' Under some circumstances, if an array
     ' is not allocated, Err.Number will be
@@ -1531,7 +1531,7 @@ End If
 LUBound = UBound(arr)
 
 On Error Resume Next
-Err.Clear
+err.Clear
 
 ' Attempt to increase the UBound of Arr and test the value of Err.Number.
 ' If Arr is a static array, either single- or multi-dimensional, we'll get a
@@ -1547,7 +1547,7 @@ Err.Clear
 
 ReDim Preserve arr(LBound(arr) To LUBound + 1)
 
-Select Case Err.Number
+Select Case err.Number
     Case C_ERR_NO_ERROR
         ' We successfully increased the UBound of Arr.
         ' Do a ReDim Preserve to restore the original UBound.
@@ -1586,7 +1586,7 @@ Public Function IsArrayEmpty(arr As Variant) As Boolean
 Dim LB As Long
 Dim UB As Long
 
-Err.Clear
+err.Clear
 On Error Resume Next
 If IsArray(arr) = False Then
     ' we weren't passed an array, return True
@@ -1596,7 +1596,7 @@ End If
 ' Attempt to get the UBound of the array. If the array is
 ' unallocated, an error will occur.
 UB = UBound(arr, 1)
-If (Err.Number <> 0) Then
+If (err.Number <> 0) Then
     IsArrayEmpty = True
 Else
     ''''''''''''''''''''''''''''''''''''''''''
@@ -1609,7 +1609,7 @@ Else
     ' see if LB > UB. If so, the array is not
     ' allocated.
     ''''''''''''''''''''''''''''''''''''''''''
-    Err.Clear
+    err.Clear
     LB = LBound(arr)
     If LB > UB Then
         IsArrayEmpty = True
@@ -2070,10 +2070,10 @@ On Error Resume Next
 Do
     Ndx = Ndx + 1
     Res = UBound(arr, Ndx)
-Loop Until Err.Number <> 0
+Loop Until err.Number <> 0
 
 NumberOfArrayDimensions = Ndx - 1
-Err.Clear
+err.Clear
 
 End Function
  

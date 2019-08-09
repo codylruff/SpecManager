@@ -20,7 +20,7 @@ Private Sub HideAllSheets(wb As Workbook)
             'Pass
         ElseIf ws.Visible = xlSheetVisible Then
             ws.Visible = xlSheetHidden
-            Logger.Log ws.Name & " was hidden."
+            App.logger.Log ws.Name & " was hidden."
         End If
     Next ws
 End Sub
@@ -49,6 +49,7 @@ End Sub
 Public Sub InitializeApplication()
     SpecManager.StartApp
     shtDeveloper.Visible = xlSheetVeryHidden
+    'formConsole.show vbModeless
     GoToMain
 End Sub
 
@@ -84,40 +85,12 @@ Public Sub ExportAll()
 
     lngNumberOfTasks = 4
     lngCounter = 0
-
-    Logger.ResetLog
-    lngCounter = lngCounter + 1
-    Call modProgress.ShowProgress( _
-        lngCounter, _
-        lngNumberOfTasks, _
-        "Creating a New Version...", _
-        False)
+    
+    App.Start
 
     directory = ThisWorkbook.path & "\"
     
-    lngCounter = lngCounter + 1
-    Call modProgress.ShowProgress( _
-        1, _
-        lngNumberOfTasks, _
-        "Saving...", _
-        False, _
-        "Spec Manager")
-    
-    Count = 0
-    
-    lngCounter = lngCounter + 1
-    Call modProgress.ShowProgress( _
-        lngCounter, _
-        lngNumberOfTasks, _
-        "Creating Directory...", _
-        False)
-    
-    lngCounter = lngCounter + 1
-    Call modProgress.ShowProgress( _
-        lngCounter, _
-        lngNumberOfTasks, _
-        "Exporting Code Modules...", _
-        False)
+
 
     For Each VBComponent In ActiveWorkbook.VBProject.VBComponents
         
@@ -139,16 +112,16 @@ Public Sub ExportAll()
             End Select
             
             On Error Resume Next
-            Err.Clear
+            err.Clear
             
             
             Call VBComponent.Export(path)
             
-            If Err.Number <> 0 Then
-                Logger.Log "Failed to export " & VBComponent.Name & " to " & path, ExportLog
+            If err.Number <> 0 Then
+                App.logger.Log "Failed to export " & VBComponent.Name & " to " & path, ExportLog
             Else
                 Count = Count + 1
-                Logger.Log "Exported " & Left$(VBComponent.Name & ":" & Space(Padding), Padding) & path, ExportLog
+                App.logger.Log "Exported " & Left$(VBComponent.Name & ":" & Space(Padding), Padding) & path, ExportLog
             End If
 
             On Error GoTo 0
@@ -156,15 +129,9 @@ Public Sub ExportAll()
 
     Next
     
-    lngCounter = lngCounter + 1
-    Call modProgress.ShowProgress( _
-        lngCounter, _
-        lngNumberOfTasks, _
-        "Finishing...", _
-        True)
         
-    Logger.Log "Export Complete.", ExportLog
-    Logger.ResetLog ExportLog
+    App.logger.Log "Export Complete.", ExportLog
+    App.logger.ResetLog ExportLog
 End Sub
 
 Public Sub CloseConfig()
@@ -226,11 +193,11 @@ Public Sub DocumentPrinterToPdf()
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=True
-    Logger.Log "PDF Saved : " & fileName
+    App.logger.Log "PDF Saved : " & fileName
     Exit Sub
     
 SaveFileError:
-    Logger.Log "Failed to save file PDF Fail"
+    App.logger.Log "Failed to save file PDF Fail"
 End Sub
 
 Public Sub DocumentPrinterToPdf_Test()
@@ -246,9 +213,9 @@ Public Sub DocumentPrinterToPdf_Test()
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=False
-    Logger.Log "PDF Saved : " & fileName, TestLog
+    App.logger.Log "PDF Saved : " & fileName, TestLog
     Exit Sub
     
 SaveFileError:
-    Logger.Log "Failed to save file PDF Fail", TestLog
+    App.logger.Log "Failed to save file PDF Fail", TestLog
 End Sub

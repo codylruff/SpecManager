@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formEditTemplate
    Caption         =   "Specification Control"
    ClientHeight    =   11868
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9816
+   ClientTop       =   465
+   ClientWidth     =   9810
    OleObjectBlob   =   "formEditTemplate.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,7 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Option Explicit
 
 Private Sub cmdAddProperty_Click()
@@ -34,6 +33,9 @@ Sub AddProperty()
     With App.current_template
         .AddProperty txtPropertyName.value
     End With
+    ' Apply Change to all existing specifications of spec type "template name"
+    ' TODO: Implement this feature.
+    ' Print the template to the screen
     SpecManager.PrintTemplate Me
     PopulateCboSelectProperty
 End Sub
@@ -45,7 +47,7 @@ Sub RemoveProperty()
 End Sub
 
 Private Sub UserForm_Initialize()
-    Logger.Log "--------- Start " & Me.Name & " ----------"
+    App.logger.Log "--------- Start " & Me.Name & " ----------"
     PopulateCboSelectTemplate
     Set App.printer = Factory.CreateDocumentPrinter(Me)
 End Sub
@@ -104,7 +106,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    Logger.Log "--------- End " & Me.Name & " ----------"
+    App.logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
 Sub SearchTemplates()
@@ -124,11 +126,11 @@ Sub SaveChanges()
     App.current_template.Revision = CStr(CDbl(App.current_template.Revision) + 1) & ".0"
     ret_val = SpecManager.UpdateSpecificationTemplate(App.current_template)
     If ret_val <> DB_PUSH_SUCCESS Then
-        Logger.Log "Data Access returned: " & ret_val, DebugLog
-        Logger.Log "Edit Template Fail"
+        App.logger.Log "Data Access returned: " & ret_val, DebugLog
+        App.logger.Log "Edit Template Fail"
         PromptHandler.Error "Update Failed, Contact Administrator."
     Else
-        Logger.Log "Data Access returned: " & ret_val, DebugLog
+        App.logger.Log "Data Access returned: " & ret_val, DebugLog
         PromptHandler.Success "Template Update Successful."
     End If
 End Sub

@@ -9,6 +9,7 @@ Public Enum LogType
     ExportLog = 4
     SqlLog = 5
     ErrorLog = 6
+    RevisionLog = 7
 End Enum
 
 Public Enum InputBoxType

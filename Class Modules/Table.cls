@@ -80,7 +80,7 @@ Public Sub CustomSort(sort_name As String, column_name As String)
     Dim C As Long
 
     If CustomSorters.Contains(sort_name) Then
-        Set sorter = CustomSorters.Item(sort_name)
+        Set sorter = CustomSorters.item(sort_name)
     Else
         Exit Sub
     End If

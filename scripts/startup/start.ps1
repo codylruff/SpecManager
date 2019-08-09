@@ -1,5 +1,5 @@
 # Include
-."..\include.ps1"
+.".\include.ps1"
 
 ###############################################
 #  GUI Script w/ progress bar for user to see #
@@ -38,11 +38,8 @@ $ErrorActionPreference = 'Stop'
 # ----------------------------------------------------------------------------------------------------
 # CHECK FOR UPDATE :
 # ----------------------------------------------------------------------------------------------------
-$tls12 = [Enum]::ToObject([Net.SecurityProtocolType], 3072)
 $SpecManagerDir = "$env:APPDATA\Spec-Manager"
 $ConfigDir = "$SpecManagerDir\config"
-$repo = "codylruff/SpecManager"
-$releases = "https://api.github.com/repos/$repo/releases"
 
 $Status.Text = "Checking for updates . . ."
 $Status.Refresh()
@@ -65,9 +62,6 @@ if ($tag -ne $local_version) {
     $Status.Text = "Removing Previous Version . . ."
     $Status.Refresh()
     Start-Sleep -Seconds 1
-    # Remove old installation
-    Remove-Item -LiteralPath $SpecManagerDir -Force -Recurse
-    New-Item $SpecManagerDir -ItemType Directory | Out-Null
     
     # Initialize variables
     $ZipFile = "$SpecManagerDir\spec-manager.zip"

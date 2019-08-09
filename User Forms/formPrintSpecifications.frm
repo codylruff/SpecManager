@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formPrintSpecifications
    Caption         =   "Spec-Manager "
    ClientHeight    =   6612
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   6684
+   ClientTop       =   465
+   ClientWidth     =   6690
    OleObjectBlob   =   "formPrintSpecifications.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 
 Option Explicit
 
@@ -29,10 +30,8 @@ Private Sub cmdPrintSpecifications_Click()
          Exit Sub
     End If
     prompt_result = PromptHandler.ProtectionPlanningSequence
-    SpecManager.WriteAllDocuments Me.txtProductionOrder, prompt_result
-    If Not App.TestingMode Then
-        PrintSelectedPackage prompt_result
-    End If
+    App.printer.WriteAllDocuments Me.txtProductionOrder, prompt_result
+    If Not App.TestingMode Then PrintSelectedPackage prompt_result
 End Sub
 
 Private Sub cmdSearch_Click()
@@ -45,7 +44,7 @@ Private Sub cmdSearch_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
-    Logger.Log "--------- Start " & Me.Name & " ----------"
+    App.logger.Log "--------- Start " & Me.Name & " ----------"
 End Sub
 
 Private Sub cmdBack_Click()
@@ -69,7 +68,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    Logger.Log "--------- End " & Me.Name & " ----------"
+    App.logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
 Sub MaterialSearch()
@@ -92,28 +91,28 @@ Sub PrintSelectedPackage(selected_package As DocumentPackageVariant)
     ' Select document package
     Select Case selected_package
         Case WeavingStyleChange
-            Logger.Log "Printing Weaving Style Change Package"
-            SpecManager.PrintPackage App.specs, selected_package
+            App.logger.Log "Printing Weaving Style Change Package"
+            App.printer.PrintPackage App.specs, selected_package
         Case WeavingTieBack
-            Logger.Log "Print Weaving Tie-Back Package"
-            SpecManager.PrintPackage App.specs, selected_package
+            App.logger.Log "Print Weaving Tie-Back Package"
+            App.printer.PrintPackage App.specs, selected_package
         Case FinishingWithQC
-            Logger.Log "Printing Finishing with QC Package"
-            SpecManager.PrintPackage App.specs, selected_package
+            App.logger.Log "Printing Finishing with QC Package"
+            App.printer.PrintPackage App.specs, selected_package
         Case FinishingNoQC
-            Logger.Log "Printing Finishing without QC Package"
-            SpecManager.PrintPackage DropKeys(App.specs, _
+            App.logger.Log "Printing Finishing without QC Package"
+            App.printer.PrintPackage DropKeys(App.specs, _
                         Array("Testing Requirements", "Ballistic Testing Requirements")), selected_package
-        Case Else
-            Logger.Log "Printing All Available Specs"
-            SpecManager.PrintPackage App.specs, selected_package
+        Case Default
+            App.logger.Log "Printing All Available Specs"
+            App.printer.PrintPackage App.specs, selected_package
     End Select
 
     
 End Sub
 
 Sub ExportPdf(Optional isTest As Boolean = False)
-    App.printer.PrintObjectToSheet App.specs.Item("Testing Requirements"), Utils.CreateNewSheet("pdf"), txtProductionOrder
+    App.printer.PrintObjectToSheet App.specs.item("Testing Requirements"), Utils.CreateNewSheet("pdf"), txtProductionOrder
     If isTest Then
         GuiCommands.DocumentPrinterToPdf_Test
     Else

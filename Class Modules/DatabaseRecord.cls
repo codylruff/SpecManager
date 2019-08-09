@@ -52,20 +52,24 @@ Private Function InitializeRecords()
     Dim coll As VBA.Collection
     Set coll = New VBA.Collection
     Dim i, j As Long
-    On Error GoTo ErrorHandler
+    On Error Resume Next
     For j = 1 To Rows
         Set dict = Factory.CreateDictionary()
-        Logger.Log "Checking Row " & j & " . . . ", DebugLog
+        App.logger.Log "Checking Row " & j & " . . . ", DebugLog
         For i = 1 To Columns
-        Logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & Data(j, i), DebugLog
-            dict.Add Key:=Header(1, i), Item:=Data(j, i)
+            App.logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & Data(j, i), DebugLog
+            If dict.Exists(Header(1, i)) Then
+                If dict(Header(1, i)).value = vbNullString Then
+                    dict.Add Key:=Header(1, i), item:=Data(j, i)
+                End If
+            Else
+                dict.Add Key:=Header(1, i), item:=Data(j, i)
+            End If
         Next i
         coll.Add dict
     Next j
     Set m_fields = dict
     Set m_records = coll
-ErrorHandler:
-    Exit Function
 End Function
 
 Private Sub Class_Initialize()

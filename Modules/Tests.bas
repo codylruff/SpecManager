@@ -1,40 +1,55 @@
 Attribute VB_Name = "Tests"
 Option Explicit
 
+Private pTestResults As New VBA.Collection
+
+Private Function GetTestResults() As String
+    Dim result As Variant
+    For Each result In pTestResults
+        If Not result Then
+            GetTestResults = "FAIL"
+            Exit Function
+        End If
+    Next result
+    GetTestResults = "PASS"
+End Function
+
 Sub AllTests()
 ' End to end testings for the GUI and other hard to test functionality
     On Error GoTo TestSuiteFailed
-    Logger.SetImmediateLog TestLog
-    Logger.Log "------------ Starting Test Suite ----------", TestLog
-    Utils.UnloadAllForms
     App.Start
+    App.logger.SetImmediateLog TestLog
+    App.logger.Log "------------ Starting Test Suite ----------", TestLog
+    Utils.UnloadAllForms
     App.InitializeTestSuiteCredentials
-    Logger.Log CreateTemplate_Test, TestLog
-    Logger.Log CreateSpecification_Test, TestLog
-    Logger.Log ViewSpecification_AfterCreate_Test, TestLog
-    Logger.Log EditTemplate_Test, TestLog
-    Logger.Log EditSpecification_Test, TestLog
-    Logger.Log ViewSpecification_AfterEdit_Test, TestLog
+    App.logger.Log CreateTemplate_Test, TestLog
+    App.logger.Log CreateSpecification_Test, TestLog
+    App.logger.Log ViewSpecification_AfterCreate_Test, TestLog
+    App.logger.Log EditTemplate_Test, TestLog
+    App.logger.Log EditSpecification_Test, TestLog
+    App.logger.Log ViewSpecification_AfterEdit_Test, TestLog
     ' Account Control
     ' TODO: This feature has not been implemented yet.
     App.DeInitializeTestSuiteCredentials
     Utils.UnloadAllForms
-    Logger.Log "------------- Test Suite Complete ---------", TestLog
-    Logger.Log "Test Suite Passed", TestLog
-    Logger.ResetLog TestLog
-    Logger.SetImmediateLog RuntimeLog
+    App.logger.Log "------------- Test Suite Complete ---------", TestLog
+    App.logger.Log "Test Suite " & GetTestResults, TestLog
+    App.logger.SaveAllLogs
+    App.logger.ResetLog TestLog
+    App.logger.SetImmediateLog RuntimeLog
     Exit Sub
 TestSuiteFailed:
-    Logger.Log "Test Suite Failed", TestLog
-    Logger.ResetLog TestLog
-    Logger.SetImmediateLog RuntimeLog
+    App.logger.Log "Test Suite " & GetTestResults, TestLog
+    App.logger.SaveAllLogs
+    App.logger.ResetLog TestLog
+    App.logger.SetImmediateLog RuntimeLog
     'PromptHandler.Error "Somethings wrong, please contact the administrator."
 End Sub
 
 Function CreateTemplate_Test() As String
-    On Error Goto TestFailed
+    On Error GoTo TestFailed
     ' 1. Main menu button to create template
-    'GuiCommands.GoToMain   
+    'GuiCommands.GoToMain
     ' 2. Enter a template name "test_template"
     formNewTemplateInput.cboProductLine.value = "Test"
     formNewTemplateInput.txtTemplateName.value = "test_template"
@@ -50,13 +65,15 @@ Function CreateTemplate_Test() As String
     ' TODO: I am not sure how to report on this other than a crash.
     ' 8. Go to main menu
     CreateTemplate_Test = Utils.FormatTestResult("Create Template Test", "PASS")
+    pTestResults.Add True
     Exit Function
 TestFailed:
+    pTestResults.Add False
     CreateTemplate_Test = Utils.FormatTestResult("Create Template Test", "FAIL")
 End Function
 
 Function CreateSpecification_Test() As String
-    On Error Goto TestFailed
+    On Error GoTo TestFailed
     ' 1. Main menu button to  create specification
     App.RefreshObjects
     ' 2. Select a template type from the combo box "test_template"
@@ -77,13 +94,15 @@ Function CreateSpecification_Test() As String
     ' TODO: No idea how to do this yet
     ' 10. Go to main menu
     CreateSpecification_Test = Utils.FormatTestResult("Create Specification Test", "PASS")
+    pTestResults.Add True
     Exit Function
 TestFailed:
+    pTestResults.Add False
     CreateSpecification_Test = Utils.FormatTestResult("Create Specification Test", "FAIL")
 End Function
 
 Function ViewSpecification_AfterCreate_Test() As String
-    On Error Goto TestFailed
+    On Error GoTo TestFailed
     ' 1. Main menu button to view specifications
     App.RefreshObjects
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
@@ -98,13 +117,15 @@ Function ViewSpecification_AfterCreate_Test() As String
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
     ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "PASS")
+    pTestResults.Add True
     Exit Function
 TestFailed:
+    pTestResults.Add False
     ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "FAIL")
 End Function
 
 Function EditTemplate_Test() As String
-    On Error Goto TestFailed
+    On Error GoTo TestFailed
     ' 1. Main menu button to edit template
     App.RefreshObjects
     ' 2. Select a template name from the combo box
@@ -129,13 +150,15 @@ Function EditTemplate_Test() As String
     ' TODO:
     ' 12. Go to main menu
     EditTemplate_Test = Utils.FormatTestResult("Edit Template Test", "PASS")
+    pTestResults.Add True
     Exit Function
 TestFailed:
+    pTestResults.Add False
     EditTemplate_Test = Utils.FormatTestResult("Edit Template Test", "FAIL")
 End Function
 
 Function EditSpecification_Test() As String
-    On Error Goto TestFailed
+    On Error GoTo TestFailed
     ' 1. Main menu button to edit specification
     App.RefreshObjects
     ' 2. Enter a material ID txtSAPcode(?) = "test_specification"
@@ -151,18 +174,20 @@ Function EditSpecification_Test() As String
     ' 7. Save changes
     formSpecConfig.SaveChanges
     ' 8. Remove old specification from the archive
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.Item("to_archive"), "archived_specifications"), SqlLog
+    App.logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.item("to_archive"), "archived_specifications"), SqlLog
     ' 9. Report pass / fail
     ' TODO:
     ' 10. Go to main menu
     EditSpecification_Test = Utils.FormatTestResult("Edit Specification Test", "PASS")
+    pTestResults.Add True
     Exit Function
 TestFailed:
+    pTestResults.Add False
     EditSpecification_Test = Utils.FormatTestResult("Edit Specification Test", "FAIL")
 End Function
 
 Function ViewSpecification_AfterEdit_Test() As String
-    On Error Goto TestFailed
+    On Error GoTo TestFailed
     ' 1. Main menu button to view specifications
     App.RefreshObjects
     ' 2. Enter a material ID txtMaterialId(?) = "test_specification"
@@ -177,33 +202,21 @@ Function ViewSpecification_AfterEdit_Test() As String
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
     ' 7. Remove Spec Template
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_spec.Template), SqlLog
+    App.logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_spec.Template), SqlLog
     ' 8. Remove Spec
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), SqlLog
+    App.logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), SqlLog
     ViewSpecification_AfterEdit_Test = Utils.FormatTestResult("View Specification After Edit Test", "PASS")
+    pTestResults.Add True
     Exit Function
 TestFailed:
+    pTestResults.Add False
     ViewSpecification_AfterEdit_Test = Utils.FormatTestResult("Create Specification After Edit Test", "FAIL")
 End Function
 
 Sub AccessControl_Test()
-    Logger.Log "------------- Start Access Control Test --------------", TestLog
+    App.logger.Log "------------- Start Access Control Test --------------", TestLog
     App.RefreshObjects
-    Logger.Log "------------- End Access Control Test ----------------", TestLog
-End Sub
-
-Public Sub TestPrintSheet()
-    Dim ws As Worksheet
-    SpecManager.StartApp
-    Set ws = CreateNewSheet("test_print")
-    ws.Range("A1").value = "0"
-    Utils.fncScreenUpdating State:=False
-    ws.PrintOut ActivePrinter:=App.current_user.Settings.Item("default_printer")
-    Utils.fncScreenUpdating State:=True
-    Application.DisplayAlerts = False
-    ws.Delete
-    Application.DisplayAlerts = True
-    SpecManager.RestartApp
+    App.logger.Log "------------- End Access Control Test ----------------", TestLog
 End Sub
 
 Public Sub TestKrish()
@@ -220,3 +233,22 @@ Public Sub TestKrish()
         OpenAfterPublish:=True
 End Sub
 
+Public Sub ProtectionPlanningSequence_Tests()
+    App.Start
+    With App.logger
+        .SetImmediateLog TestLog
+        .Log "Protection Planning Prompt Sequence", TestLog
+        PromptHandler.Success "weaving style change"
+        .Log IIf(PromptHandler.ProtectionPlanningSequence = WeavingStyleChange, "PASS", "FAIL"), TestLog
+        PromptHandler.Success "weaving tie-back"
+        .Log IIf(PromptHandler.ProtectionPlanningSequence = WeavingTieBack, "PASS", "FAIL"), TestLog
+        PromptHandler.Success "finishing first roll not isotex bound"
+        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingWithQC, "PASS", "FAIL"), TestLog
+        PromptHandler.Success "finishing second roll"
+        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
+        PromptHandler.Success "finishing first roll + isotex bound"
+        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
+        .SaveAllLogs
+        .SetImmediateLog RuntimeLog
+    End With
+End Sub

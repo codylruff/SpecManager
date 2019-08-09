@@ -209,7 +209,7 @@ Public Property Get IDatabase_NumColumns() As Long: IDatabase_NumColumns = m_qty
 ' opens a database x64
 Public Sub IDatabase_openDb(sqliPath As String)
   If sqliPath = vbNullString Or Len(Dir(sqliPath)) = 0 Then
-    Err.Raise 1, "Database not found", "Please select a valid file address"
+    err.Raise 1, "Database not found", "Please select a valid file address"
     Exit Sub
   End If
   dbPath = sqliPath
@@ -259,7 +259,7 @@ Private Function initQuery(q_comand As initType, ByRef myStmtHandle As Long, dbP
 
     If q_comand = executa Then
     RetVal = SQLite3PrepareV2(myDbHandle, ssql, myStmtHandle)
-    If msgErro <> SQLITE_DONE Then Err.Raise 1, "Database not found", "Database command error " & msgErro
+    If msgErro <> SQLITE_DONE Then err.Raise 1, "Database not found", "Database command error " & msgErro
     ElseIf q_comand = getRows Then
     m_qtyRows = getRowsCount(myStmtHandle)
     ElseIf q_comand = getColumns Then
@@ -357,7 +357,7 @@ Public Function SQLite3Initialize(Optional ByVal libDir As String) As Long
     If hSQLiteLibrary = 0 Then
         hSQLiteLibrary = LoadLibrary(libDir + "SQLite3.dll")
         If hSQLiteLibrary = 0 Then
-            Debug.Print "SQLite3Initialize Error Loading " + libDir + "SQLite3.dll : ", Err.LastDllError
+            Debug.Print "SQLite3Initialize Error Loading " + libDir + "SQLite3.dll : ", err.LastDllError
             SQLite3Initialize = SQLITE_INIT_ERROR
             Exit Function
         End If
@@ -368,7 +368,7 @@ Public Function SQLite3Initialize(Optional ByVal libDir As String) As Long
     If hSQLiteStdCallLibrary = 0 Then
         hSQLiteStdCallLibrary = LoadLibrary(libDir + "SQLite3_StdCall.dll")
         If hSQLiteStdCallLibrary = 0 Then
-            Debug.Print "SQLite3Initialize Error Loading " + libDir + "SQLite3_StdCall.dll : ", Err.LastDllError
+            Debug.Print "SQLite3Initialize Error Loading " + libDir + "SQLite3_StdCall.dll : ", err.LastDllError
             SQLite3Initialize = SQLITE_INIT_ERROR
             Exit Function
         End If
@@ -382,14 +382,14 @@ Public Sub SQLite3Free()
         refCount = FreeLibrary(hSQLiteStdCallLibrary)
         hSQLiteStdCallLibrary = 0
         If refCount = 0 Then
-            Debug.Print "SQLite3Free Error Freeing SQLite3_StdCall.dll:", refCount, Err.LastDllError
+            Debug.Print "SQLite3Free Error Freeing SQLite3_StdCall.dll:", refCount, err.LastDllError
         End If
     End If
     If hSQLiteLibrary <> 0 Then
         refCount = FreeLibrary(hSQLiteLibrary)
         hSQLiteLibrary = 0
         If refCount = 0 Then
-            Debug.Print "SQLite3Free Error Freeing SQLite3.dll:", refCount, Err.LastDllError
+            Debug.Print "SQLite3Free Error Freeing SQLite3.dll:", refCount, err.LastDllError
         End If
     End If
 End Sub
@@ -750,7 +750,7 @@ Function Utf8PtrToString(ByVal pUtf8String As Long) As String
     Utf8PtrToString = String(cSize - 1, "*") ' and a termintating null char.
     RetVal = MultiByteToWideChar(CP_UTF8, 0, pUtf8String, -1, StrPtr(Utf8PtrToString), cSize)
     If RetVal = 0 Then
-        Debug.Print "Utf8PtrToString Error:", Err.LastDllError
+        Debug.Print "Utf8PtrToString Error:", err.LastDllError
         Exit Function
     End If
 End Function
@@ -768,7 +768,7 @@ Function StringToUtf8Bytes(ByVal str As String) As Variant
     ReDim buf(bSize)
     RetVal = WideCharToMultiByte(CP_UTF8, 0, StrPtr(str), -1, VarPtr(buf(0)), bSize, 0, 0)
     If RetVal = 0 Then
-        Debug.Print "StringToUtf8Bytes Error:", Err.LastDllError
+        Debug.Print "StringToUtf8Bytes Error:", err.LastDllError
         Exit Function
     End If
     StringToUtf8Bytes = buf

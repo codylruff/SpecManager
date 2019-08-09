@@ -8,7 +8,12 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+
+' Events
 Public Event PropertyAdded()
+Public Event PropertyChanged()
+Public Event SpecificationSaved()
+
 ' Properties dictionary
 Public Properties   As Object
 Public Tolerances   As Object
@@ -19,6 +24,8 @@ Private MaterialId_ As String
 Private IsStandard_ As Boolean
 Private IsLatest_   As Boolean
 Private Template_   As SpecificationTemplate
+Private MaterialDescription_ As String
+Private ProcessId_  As String
 ' Template
 Public Property Set Template(obj As SpecificationTemplate)
     Set Template_ = obj
@@ -36,7 +43,10 @@ Public Property Let SpecType(value As String): SpecType_ = value: End Property
 Public Property Get SpecType() As String: SpecType = SpecType_: End Property
 Public Property Get MaterialId() As String: MaterialId = MaterialId_: End Property
 Public Property Let MaterialId(value As String): MaterialId_ = UCase(value): End Property
-
+Public Property Get MaterialDescription() As String: MaterialDescription = MaterialDescription_: End Property
+Public Property Let MaterialDescription(val As String): MaterialDescription_ = val: End Property
+Public Property Get ProcessId() As String: ProcessId = ProcessId_: End Property
+Public Property Let ProcessId(value As String): ProcessId_ = value: End Property
 
 ' METHODS---
 Public Function GetProperty(property As String) As Variant
@@ -51,19 +61,21 @@ Public Sub AddProperty(property As String, tolerance As Variant)
 ' Adds a property to the list of properties
     Me.Properties.Add property, vbNullString
     Me.Tolerances.Add property, tolerance
-    'RaiseEvent PropertyAdded
+    RaiseEvent PropertyAdded
 End Sub
 
-Public Sub JsonToObject(properties_json As String, tolerances_json As String, material_id As String, spec_type As String, Revision_ As String)
+Public Sub ChangeProperty(property As Variant, new_val As Variant)
+' Use this procedure to change a property raising the property changed event.
+    Dim old_value As Variant
+    old_value = Me.Properties(property)
+    Me.Properties(property) = new_val
+    'RaiseEvent PropertyChanged(property, old_val, new_val)
+End Sub
+
+Public Sub JsonToObject(properties_json As String, tolerances_json As String)
 ' Map json to the spec
     Set Properties = JsonVBA.ParseJson(properties_json)
     Set Tolerances = JsonVBA.ParseJson(tolerances_json)
-    MaterialId = material_id
-    SpecType = spec_type
-    Revision = Revision_
-    ' Properties.Add key:="Material_Id", Item:=Me.MaterialId
-    ' Properties.Add key:="Spec_Type", Item:=Me.SpecType
-    ' Properties.Add key:="Revision", Item:=Me.Revision
 End Sub
 
 Public Function PropertiesJson() As String
@@ -103,7 +115,7 @@ Public Function ToArray() As Variant
     arr(2) = Me.Revision
     i = 2
     For Each prop In Me.Properties
-        arr(i) = Properties.Item(prop)
+        arr(i) = Properties.item(prop)
         i = i + 1
     Next prop
     ToArray = arr

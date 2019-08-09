@@ -156,7 +156,7 @@ Public Function FN_GET_UUID() As String
    Exit Function
 
 FN_GET_UUID_Error:
-    App.gMsg = Err.Description & ": in procedure FN_GET_UUID of Module mod_system_"
-    App.gDll.ShowDialogRich "Error " & Err.Number & " (" & App.gMsg & ")", vbExclamation
+    App.gMsg = err.Description & ": in procedure FN_GET_UUID of Module mod_system_"
+    App.gDll.ShowDialogRich "Error " & err.Number & " (" & App.gMsg & ")", vbExclamation
 End Function
 

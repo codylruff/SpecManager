@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formViewSpecs
    Caption         =   "Specification Control"
    ClientHeight    =   7044
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   9816
+   ClientTop       =   465
+   ClientWidth     =   9810
    OleObjectBlob   =   "formViewSpecs.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,6 +13,17 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
+
+
+
+
+
+
+
+
+
 
 
 Option Explicit
@@ -26,7 +37,7 @@ Private Sub cmdSelectType_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
-    Logger.Log "--------- Start " & Me.Name & " ----------"
+    App.logger.Log "--------- Start " & Me.Name & " ----------"
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
@@ -63,7 +74,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    Logger.Log "--------- End " & Me.Name & " ----------"
+    App.logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
 Private Sub PopulateCboSelectType()
@@ -94,7 +105,7 @@ Sub Back()
 End Sub
 
 Sub SelectType()
-    Set App.current_spec = App.specs.Item(cboSelectType.value)
+    Set App.current_spec = App.specs.item(cboSelectType.value)
     SpecManager.PrintSpecification Me
 End Sub
 

@@ -1,9 +1,9 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formMainMenu 
    Caption         =   "SAATI Spec-Manager"
-   ClientHeight    =   4656
-   ClientLeft      =   48
-   ClientTop       =   408
+   ClientHeight    =   4650
+   ClientLeft      =   45
+   ClientTop       =   405
    ClientWidth     =   5520
    OleObjectBlob   =   "formMainMenu.frx":0000
    StartUpPosition =   1  'CenterOwner
@@ -13,6 +13,17 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -29,7 +40,7 @@ Private Sub cmdCreateSpecification_Click()
 ' Form to create a new specification based on an existing template. Admin required
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        App.logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
         PromptHandler.AccessDenied
         Exit Sub
     End If
@@ -41,7 +52,7 @@ Private Sub cmdCreateTemplate_Click()
 ' Form to create a new template specification. Admin required.
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        App.logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
         PromptHandler.AccessDenied
         Exit Sub
     End If
@@ -63,7 +74,7 @@ Private Sub cmdEditTemplates_Click()
 ' Form to edit an existing specification template. Admin required.
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        App.logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
         PromptHandler.AccessDenied
         Exit Sub
     End If
@@ -88,7 +99,7 @@ Private Sub cmdEditSpecifications_Click()
 ' Form to edit an existing specification. Admin required
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        App.logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
         PromptHandler.AccessDenied
         Exit Sub
     End If

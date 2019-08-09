@@ -12,14 +12,16 @@ Public Const SM_SEARCH_AGAIN       As Long = 3
 Public Const SM_REGEX_ERROR        As Long = 4
 
 ' DATABASE ERROR DESCRIPTIONS:
-Public Const DB_PUSH_SUCCESS       As Long = 0
-Public Const DB_PUSH_FAILURE       As Long = 1
-Public Const DB_DELETE_SUCCESS     As Long = 2
-Public Const DB_DELETE_FAILURE     As Long = 3
-Public Const DB_SELECT_SUCCESS     As Long = 4
-Public Const DB_SELECT_FAILURE     As Long = 5
-Public Const DB_PUSH_DENIED        As Long = 6
-Public Const DB_DELETE_DENIED      As Long = 7
+Public Const DB_PUSH_SUCCESS            As Long = 0
+Public Const DB_PUSH_FAILURE            As Long = 1
+Public Const DB_DELETE_SUCCESS          As Long = 2
+Public Const DB_DELETE_FAILURE          As Long = 3
+Public Const DB_SELECT_SUCCESS          As Long = 4
+Public Const DB_SELECT_FAILURE          As Long = 5
+Public Const DB_PUSH_DENIED             As Long = 6
+Public Const DB_DELETE_DENIED           As Long = 7
+Public Const DB_TRANSACTION_FAILURE     As Long = 8
+Public Const DB_TRANSACTION_SUCCESS     As Long = 9
 
 ' ACCOUNT PRIVLEDGE LEVELS
 Public Const USER_MANAGER          As Long = 21
