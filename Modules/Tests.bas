@@ -252,3 +252,10 @@ Public Sub ProtectionPlanningSequence_Tests()
         .SetImmediateLog RuntimeLog
     End With
 End Sub
+
+Public Sub SqlTransaction_Tests()
+    App.Start
+    SpecManager.ApplyTemplateChangesToSpecifications "Transaction Test", Array("Change 1", "Change 2")
+    App.logger.SaveAllLogs
+    App.Shutdown
+End Sub

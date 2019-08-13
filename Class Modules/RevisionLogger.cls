@@ -13,6 +13,7 @@ Private pRevisionLog As Object
 Private pBuffer As VBA.Collection
 
 Private WithEvents pSpecification As Specification
+Attribute pSpecification.VB_VarHelpID = -1
 
 Public Sub RecordAction()
     ' PASS

@@ -239,17 +239,19 @@ Public Sub ApplyTemplateChangesToSpecifications(spec_type As String, changes As 
     Dim specifications As VBA.Collection
     Dim spec As Specification
     Dim old_spec As Specification
-    Dim i As Integer
+    Dim i As Long
+    Dim transaction As SqlTransaction
     Set specifications = SelectAllSpecificationsByType(spec_type)
-    DataAccess.
+    Set transaction = DataAccess.BeginTransaction
     For Each spec In specifications
         Set old_spec = Factory.CopySpecification(spec)
-        For i=LBound(changes) To UBound(changes)
-            spec.AddProperty changes(i)
+        For i = LBound(changes) To UBound(changes)
+            spec.AddProperty CStr(changes(i)), vbNullString
         Next i
         spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
-        App.loggger.log SpecManager.SaveSpecification(spec, old_spec), DebugLog
+        App.logger.Log SpecManager.SaveSpecification(spec, old_spec, transaction), DebugLog
     Next spec
+    App.logger.Log transaction.Commit, DebugLog
 End Sub
 
 Private Function SelectAllSpecificationsByType(spec_type As String) As VBA.Collection
@@ -280,23 +282,35 @@ Function SaveNewSpecification(spec As Specification) As Long
     End If
 End Function
 
-Function SaveSpecification(spec As Specification, old_spec As Specification) As Long
+Function SaveSpecification(spec As Specification, old_spec As Specification, Optional transaction As SqlTransaction) As Long
     If ManagerOrAdmin Then
-        If ArchiveSpecification(old_spec) = DB_DELETE_SUCCESS Then
-            SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        If Utils.IsNothing(transaction) Then
+            If ArchiveSpecification(old_spec) = DB_DELETE_SUCCESS Then
+                SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+            Else
+                SaveSpecification = DB_PUSH_DENIED
+            End If
         Else
-            SaveSpecification = DB_PUSH_DENIED
+            If ArchiveSpecification(old_spec, transaction) = DB_DELETE_SUCCESS Then
+                SaveSpecification = IIf(DataAccess.PushSpec(spec, "standard_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+            Else
+                SaveSpecification = DB_PUSH_DENIED
+            End If
         End If
     Else
         SaveSpecification = DB_PUSH_DENIED
     End If
 End Function
 
-Function ArchiveSpecification(old_spec As Specification) As Long
+Function ArchiveSpecification(old_spec As Specification, Optional transaction As SqlTransaction) As Long
 ' Archives the last spec in order to make room for the new one.
     Dim ret_val As Long
     ' 1. Insert old version into archived_specifications
-    ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    If Utils.IsNothing(transaction) Then
+        ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    Else
+        ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+    End If
     ' 2. Delete old version from standard_specifications
     If ret_val = DB_PUSH_SUCCESS Then
         ArchiveSpecification = IIf(DeleteSpecification(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)

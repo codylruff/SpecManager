@@ -86,7 +86,7 @@ Public Sub ExportAll()
     lngNumberOfTasks = 4
     lngCounter = 0
     
-    App.Start
+    'App.Start
 
     directory = ThisWorkbook.path & "\"
     

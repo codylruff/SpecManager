@@ -1,21 +1,21 @@
-09-Aug-2019 09:19:43.55 : Searching for user name . . . 
-09-Aug-2019 09:19:43.59 : Get all template types . . . 
-09-Aug-2019 09:19:43.61 : Listing all template types (spec Types) . . . 
-09-Aug-2019 09:19:43.63 : ------------- Starting Application
-09-Aug-2019 09:19:48.51 : ------------- Restarting Application
-09-Aug-2019 09:19:48.55 : --------- Start formViewSpecs ----------
-09-Aug-2019 09:19:55.23 : ------------- Restarting Application
-09-Aug-2019 09:19:55.23 : Searching for GHE00415H60070DB specifications . . . 
-09-Aug-2019 09:19:55.34 : Succesfully retrieved specifications for : GHE00415H60070DB
-09-Aug-2019 09:19:55.34 : Printing Specification . . . 
-09-Aug-2019 09:20:02.61 : Printing Specification . . . 
-09-Aug-2019 09:20:09.75 : --------- End formViewSpecs ----------
-09-Aug-2019 09:20:11.02 : ------------- Restarting Application
-09-Aug-2019 09:20:11.05 : --------- Start formSpecConfig ----------
-09-Aug-2019 09:20:13.45 : Searching for GHE00415H60070DB specifications . . . 
-09-Aug-2019 09:20:13.56 : Succesfully retrieved specifications for : GHE00415H60070DB
-09-Aug-2019 09:20:13.56 : Printing Specification . . . 
-09-Aug-2019 09:20:22.15 : --------- End formSpecConfig ----------
-09-Aug-2019 09:20:28.73 : ------------- Stopping Application
-09-Aug-2019 09:20:28.73 : Saving : runtime.log
-09-Aug-2019 09:20:28.74 : Saving : runtime.log
+13-Aug-2019 16:20:23.01 : Connection established.
+13-Aug-2019 16:20:23.01 : Searching for user name . . . 
+13-Aug-2019 16:20:23.01 : Connection established.
+13-Aug-2019 16:20:23.01 : Get all template types . . . 
+13-Aug-2019 16:20:23.02 : Listing all template types (spec Types) . . . 
+13-Aug-2019 16:20:23.02 : Developer was hidden.
+13-Aug-2019 16:20:23.04 : testing was hidden.
+13-Aug-2019 16:20:23.04 : Database Query was hidden.
+13-Aug-2019 16:20:23.04 : pdf was hidden.
+13-Aug-2019 16:20:23.04 : Warping Requirements was hidden.
+13-Aug-2019 16:20:23.04 : Weaving RBA was hidden.
+13-Aug-2019 16:20:23.04 : RBA Template Change Log was hidden.
+13-Aug-2019 16:20:23.04 : RbaParser was hidden.
+13-Aug-2019 16:20:23.04 : Testing Requirements was hidden.
+13-Aug-2019 16:20:23.04 : Ballistic Testing Requirements was hidden.
+13-Aug-2019 16:20:23.04 : Changeover was hidden.
+13-Aug-2019 16:20:23.04 : Tie-in was hidden.
+13-Aug-2019 16:20:23.04 : ------------- Starting Application
+13-Aug-2019 16:27:54.79 : ------------- Stopping Application
+13-Aug-2019 16:27:54.79 : Saving : runtime.log
+13-Aug-2019 16:27:54.80 : Saving : runtime.log

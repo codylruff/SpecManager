@@ -140,8 +140,15 @@ Function CreateDatabaseRecord() As DatabaseRecord
     Set CreateDatabaseRecord = record
 End Function
 
-Function CreateSQLiteDatabase() As SQLiteDatabase
+Function CreateSQLiteDatabase(path As String) As SQLiteDatabase
 ' Creates a SQLite Database object
     Dim sqlite: Set sqlite = New SQLiteDatabase
     Set CreateSQLiteDatabase = sqlite
+End Function
+
+Function CreateSqlTransaction(path As String) As SqlTransaction
+' Creates a sqlite transaction object
+    Dim sql_trans: Set sql_trans = New SqlTransaction
+    sql_trans.Connect path
+    Set CreateSqlTransaction = sql_trans
 End Function

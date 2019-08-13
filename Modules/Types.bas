@@ -1,6 +1,13 @@
 Attribute VB_Name = "Types"
 Option Explicit
 
+Public Type DataTable
+    FirstColumn As String
+    LastColumn As String
+    FirstRow As Long
+    LastRow As Long
+End Type
+
 Public Type UserAction
     User As String
     Time_Stamp As String

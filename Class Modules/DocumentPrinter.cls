@@ -44,12 +44,8 @@ Public Property Set OutputHistory(value As VBA.Collection): Set OutputHistory_ =
 Public Property Get OutputHistory() As VBA.Collection: Set OutputHistory = OutputHistory_: End Property
 Public Property Set FormId(value As MSForms.UserForm): Set FormId_ = value: End Property
 Public Property Get FormId() As MSForms.UserForm: Set FormId = FormId_: End Property
-Public Property Get CurrentText() As String
-     CurrentText = Me.FormId.txtConsole.text
-End Property
-Public Property Let CurrentText(value As String)
-    CurrentText = value
-End Property
+Public Property Get CurrentText() As String: CurrentText = Me.FormId.txtConsole.text: End Property
+Public Property Let CurrentText(value As String): CurrentText = value: End Property
 '----------
 ' METHODS
 '----------

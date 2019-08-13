@@ -21,6 +21,38 @@ Private Declare Function UpdateWindow Lib "user32" (ByVal Hwnd As Long) As Long
 Private Declare Function IsWindow Lib "user32" (ByVal Hwnd As Long) As Long
 #End If
 ' -------------------------------------------------
+Public Function GetLastRow(sht As Worksheet, start_column As String, start_row As Long) As Long
+' Returns the last populated row in a range of data
+        Dim current_cell As Range
+        Dim i As Long
+        Set current_cell = sht.Range(start_column & start_row)
+        i = start_row
+        Do Until IsEmpty(current_cell)
+            Set current_cell = Range(start_column & i)
+            i = i + 1
+        Loop
+        GetLastRow = i
+End Function
+
+Public Sub CopyRange(src_sht As Worksheet, dest_sht As Worksheet, src_address As String, dest_address As String)
+' Copies from one range to another
+    src_sht.Range(src_address).Copy destination:=dest_sht.Range(dest_address)
+End Sub
+
+Public Function GetRangeAddress(sht As Worksheet, first_cell As Variant, last_cell As Variant) As String
+' Creates a range from the top left cell and bottom right cells.
+    GetRangeAddress = sht.Range(first_cell, last_cell).Address
+End Function
+
+Public Function IsNothing(obj As Object) As Boolean
+' Returns true if the object is unitialized
+    If obj Is Nothing Then
+        IsNothing = True
+    Else
+        IsNothing = False
+    End If
+End Function
+
 Public Function Contains(col As Collection, Key As Variant) As Boolean
     Dim obj As Variant
 

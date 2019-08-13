@@ -178,7 +178,6 @@ Private hSQLiteStdCallLibrary As Long
 ' -------------------------------------------------------------------------------------
 ' -------------------------------------------------------------------------------------
 '@Folder("Classes")
-Implements IDatabase
 '----------------------------------
 Private m_header As Variant
 Private m_data As Variant
@@ -199,15 +198,15 @@ Public Property Get dbPath() As Variant:  dbPath = m_dbPath: End Property
 Private Property Let dbPath(ByVal vNewValue As Variant): m_dbPath = vNewValue: End Property
 '================================================================
 ' public properties
-Public Property Get IDatabase_header() As Variant: IDatabase_header = m_header: End Property
-Public Property Get IDatabase_data() As Variant: IDatabase_data = m_data: End Property
+Public Property Get header() As Variant: header = m_header: End Property
+Public Property Get data() As Variant: data = m_data: End Property
 Public Property Get qtyRows() As Long: qtyRows = m_qtyRows: End Property
 Public Property Get qtyColumns() As Long: qtyColumns = m_qtyColumns: End Property
-Public Property Get IDatabase_NumRows() As Long: IDatabase_NumRows = m_qtyRows: End Property
-Public Property Get IDatabase_NumColumns() As Long: IDatabase_NumColumns = m_qtyColumns: End Property
+Public Property Get NumRows() As Long: NumRows = m_qtyRows: End Property
+Public Property Get NumColumns() As Long: NumColumns = m_qtyColumns: End Property
 '================================================================
 ' opens a database x64
-Public Sub IDatabase_openDb(sqliPath As String)
+Public Sub openDb(sqliPath As String)
   If sqliPath = vbNullString Or Len(Dir(sqliPath)) = 0 Then
     err.Raise 1, "Database not found", "Please select a valid file address"
     Exit Sub
@@ -216,7 +215,7 @@ Public Sub IDatabase_openDb(sqliPath As String)
 End Sub
 
 ' Execute sql statement x64
-Public Sub IDatabase_execute(ssql As String)
+Public Sub execute(ssql As String)
     #If Win64 Then
     Dim myStmtHandle As LongPtr
     #Else
@@ -226,7 +225,7 @@ Public Sub IDatabase_execute(ssql As String)
 End Sub
 
 ' Execute select statement x64
-Public Sub IDatabase_selectQry(ssql As String)
+Public Sub selectQry(ssql As String)
     #If Win64 Then
     Dim myStmtHandle As LongPtr
     #Else
