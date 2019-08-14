@@ -74,7 +74,7 @@ Function ExecuteSQLSelect(SQLstmt As String) As DatabaseRecord
     With Me.DbConnection
         .selectQry SQLstmt
         record.Data = .Data
-        record.Header = .Header
+        record.header = .header
         record.Rows = .NumRows
         record.Columns = .NumColumns
     End With
@@ -94,7 +94,7 @@ Sub ExecuteSQL(SQLstmt As String)
         Exit Sub
     Else
         'db.openDb (path)
-        Me.DbConnection.Execute SQLstmt
+        Me.DbConnection.execute SQLstmt
     End If
 End Sub
 

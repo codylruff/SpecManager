@@ -16,7 +16,6 @@ Public Event SpecificationSaved()
 
 ' Properties dictionary
 Public Properties   As Object
-Public Tolerances   As Object
 ' FIELDS and PROPERTIES---
 Private SpecType_   As String
 Private Revision_   As String
@@ -57,10 +56,9 @@ Public Function GetProperty(property As String) As Variant
     End If
 End Function
 
-Public Sub AddProperty(property As String, tolerance As Variant)
+Public Sub AddProperty(property As String)
 ' Adds a property to the list of properties
     Me.Properties.Add property, vbNullString
-    Me.Tolerances.Add property, tolerance
     RaiseEvent PropertyAdded
 End Sub
 
@@ -72,10 +70,9 @@ Public Sub ChangeProperty(property As Variant, new_val As Variant)
     'RaiseEvent PropertyChanged(property, old_val, new_val)
 End Sub
 
-Public Sub JsonToObject(properties_json As String, tolerances_json As String)
+Public Sub JsonToObject(properties_json As String)
 ' Map json to the spec
     Set Properties = JsonVBA.ParseJson(properties_json)
-    Set Tolerances = JsonVBA.ParseJson(tolerances_json)
 End Sub
 
 Public Function PropertiesJson() As String
@@ -83,11 +80,7 @@ Public Function PropertiesJson() As String
     PropertiesJson = JsonVBA.ConvertToJson(Me.Properties)
 End Function
 
-Public Function TolerancesJson() As String
-    TolerancesJson = JsonVBA.ConvertToJson(Me.Tolerances)
-End Function
-
-Public Function Header() As Variant
+Public Function header() As Variant
     Dim arr() As String
     Dim i As Long
     Dim prop As Variant
@@ -101,7 +94,7 @@ Public Function Header() As Variant
         arr(i) = CStr(prop)
         i = i + 1
     Next prop
-    Header = arr
+    header = arr
 End Function
 
 Public Function ToArray() As Variant
@@ -125,11 +118,9 @@ End Function
 Private Sub Class_Initialize()
     Set Template = New SpecificationTemplate
     Set Properties = CreateObject("Scripting.Dictionary")
-    Set Tolerances = CreateObject("Scripting.Dictionary")
 End Sub
 ' Deconstructor
 Private Sub Class_Terminate()
     Set Template = Nothing
     Set Properties = Nothing
-    Set Tolerances = Nothing
 End Sub

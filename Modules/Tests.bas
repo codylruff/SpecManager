@@ -28,6 +28,8 @@ Sub AllTests()
     App.logger.Log EditTemplate_Test, TestLog
     App.logger.Log EditSpecification_Test, TestLog
     App.logger.Log ViewSpecification_AfterEdit_Test, TestLog
+    ' Delete test template
+    App.logger.Log "Delete Test Template Returned : " & Tests.DeleteTestTemplate, TestLog
     ' Account Control
     ' TODO: This feature has not been implemented yet.
     App.DeInitializeTestSuiteCredentials
@@ -259,3 +261,20 @@ Public Sub SqlTransaction_Tests()
     App.logger.SaveAllLogs
     App.Shutdown
 End Sub
+
+Function DeleteTestTemplate() As Long
+' Deletes a record
+    Dim SQLstmt As String
+    Dim transaction As SqlTransaction
+    On Error GoTo DbDeleteFailException
+    Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
+    ' Create SQL statement from objects
+    SQLstmt = "DELETE FROM template_specifications " & _
+              "WHERE Spec_Type ='test_template' AND Revision ='3.0'"
+    transaction.ExecuteSQL (SQLstmt)
+    DeleteTestTemplate = DB_DELETE_SUCCESS
+    Exit Function
+DbDeleteFailException:
+    App.logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
+    DeleteTestTemplate = DB_DELETE_FAILURE
+End Function

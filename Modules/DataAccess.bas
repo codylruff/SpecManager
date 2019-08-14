@@ -10,9 +10,7 @@ Function PushUserAction(action As UserAction, Optional trans As SqlTransaction) 
     Dim transaction As SqlTransaction
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     SQLstmt = "INSERT INTO user_actions " & _
               "(User, Time_Stamp, Action_Description, Work_Order, Material_Id, Spec_Type, Spec_Revision) " & _
@@ -24,7 +22,7 @@ Function PushUserAction(action As UserAction, Optional trans As SqlTransaction) 
                       "'" & action.spec.SpecType & "', " & _
                       "'" & action.spec.Revision & "')"
 
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     PushUserAction = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -37,9 +35,7 @@ Function GetSpecification(ByVal material_id As String, ByVal spec_type As String
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     App.logger.Log "Searching for " & spec_type & " : " & material_id
     SQLstmt = "SELECT * FROM standard_specifications " & _
@@ -47,7 +43,7 @@ Function GetSpecification(ByVal material_id As String, ByVal spec_type As String
               "WHERE standard_specifications.Material_Id ='" & material_id & _
               "' AND " & "standard_specifications.Spec_Type ='" & spec_type & "'"
 
-    Set GetSpecification = transaction.ExecuteSQLSelect(SQLstmt)
+    Set GetSpecification = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
 Function GetUser(ByVal Name As String, Optional trans As SqlTransaction) As DatabaseRecord
@@ -55,16 +51,14 @@ Function GetUser(ByVal Name As String, Optional trans As SqlTransaction) As Data
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
     App.logger.Log "Searching for user name . . . "
     SQLstmt = "SELECT * FROM user_privledges " & _
               "WHERE Name ='" & Name & "'"
 
-    Set GetUser = transaction.ExecuteSQLSelect(SQLstmt)
+    Set GetUser = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
 Function FlagUserForSecretChange(Name As String, Optional trans As SqlTransaction) As Long
@@ -72,16 +66,14 @@ Function FlagUserForSecretChange(Name As String, Optional trans As SqlTransactio
     Dim transaction As SqlTransaction
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
     App.logger.Log "Updating user secret . . . "
     SQLstmt = "UPDATE user_privledges " & _
               "SET New_Secret_Required = " & 1 & _
               " WHERE Name ='" & Name & "'"
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     FlagUserForSecretChange = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -95,9 +87,7 @@ Function ChangeUserSecret(Name As String, new_secret As String, Optional trans A
     Dim transaction As SqlTransaction
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
     App.logger.Log "Updating user secret . . . "
@@ -105,7 +95,7 @@ Function ChangeUserSecret(Name As String, new_secret As String, Optional trans A
               "SET Secret ='" & new_secret & "', New_Secret_Required = " & 0 & _
               " WHERE Name ='" & Name & "'"
     
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     ChangeUserSecret = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -118,9 +108,7 @@ Function PushNewUser(new_user As Account, Optional trans As SqlTransaction) As L
     Dim transaction As SqlTransaction
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     SQLstmt = "INSERT INTO user_privledges " & _
               "(Name, Privledge_Level, Product_Line) " & _
@@ -128,7 +116,7 @@ Function PushNewUser(new_user As Account, Optional trans As SqlTransaction) As L
                       "'" & new_user.PrivledgeLevel & "', " & _
                       "'" & new_user.ProductLine & "')"
 
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     PushNewUser = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -140,16 +128,14 @@ Function GetTemplateRecord(ByRef spec_type As String, Optional trans As SqlTrans
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
     App.logger.Log "Searching for " & spec_type & " template . . . "
     SQLstmt = "SELECT * FROM template_specifications" & _
               " WHERE Spec_Type= '" & spec_type & "'"
 
-    Set GetTemplateRecord = transaction.ExecuteSQLSelect(SQLstmt)
+    Set GetTemplateRecord = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
 Function GetSpecificationRecords(ByRef MaterialId As String, Optional trans As SqlTransaction) As DatabaseRecord
@@ -157,9 +143,7 @@ Function GetSpecificationRecords(ByRef MaterialId As String, Optional trans As S
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
     App.logger.Log "Searching for " & MaterialId & " specifications . . . "
@@ -167,7 +151,7 @@ Function GetSpecificationRecords(ByRef MaterialId As String, Optional trans As S
               "LEFT JOIN materials ON standard_specifications.Material_Id = materials.Material_Id " & _
               "WHERE standard_specifications.Material_Id= '" & MaterialId & "'"
               
-    Set GetSpecificationRecords = transaction.ExecuteSQLSelect(SQLstmt)
+    Set GetSpecificationRecords = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
 Function PushTemplate(ByRef Template As SpecificationTemplate, Optional trans As SqlTransaction)
@@ -176,9 +160,7 @@ Function PushTemplate(ByRef Template As SpecificationTemplate, Optional trans As
     Dim transaction As SqlTransaction
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' Create SQL statement from objects
     SQLstmt = "INSERT INTO template_specifications " & _
@@ -188,7 +170,7 @@ Function PushTemplate(ByRef Template As SpecificationTemplate, Optional trans As
                       "'" & Template.Revision & "', " & _
                       "'" & Template.SpecType & "', " & _
                       "'" & Template.ProductLine & "')"
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     PushTemplate = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -202,9 +184,7 @@ Function UpdateTemplate(ByRef Template As SpecificationTemplate, Optional trans 
     Dim transaction As SqlTransaction
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' Create SQL statement from objects
     SQLstmt = "UPDATE template_specifications " & _
@@ -213,7 +193,7 @@ Function UpdateTemplate(ByRef Template As SpecificationTemplate, Optional trans 
               "Properties_Json ='" & Template.PropertiesJson & "', " & _
               "Revision ='" & Template.Revision & "' " & _
               "WHERE Spec_Type ='" & Template.SpecType & "'"
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     UpdateTemplate = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -227,20 +207,17 @@ Function PushSpec(ByRef spec As Specification, Optional tbl As String = "standar
     Dim transaction As SqlTransaction
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' Create SQL statement from objects
     SQLstmt = "INSERT INTO " & tbl & " " & _
-              "(Material_Id, Time_Stamp, Properties_Json, Tolerances_Json, Revision, Spec_Type) " & _
+              "(Material_Id, Time_Stamp, Properties_Json, Revision, Spec_Type) " & _
               "VALUES ('" & spec.MaterialId & "', " & _
                       "'" & CStr(Now()) & "', " & _
                       "'" & spec.PropertiesJson & "', " & _
-                      "'" & spec.TolerancesJson & "', " & _
                       "'" & spec.Revision & "', " & _
                       "'" & spec.SpecType & "')"
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     PushSpec = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
@@ -254,14 +231,12 @@ Function DeleteTemplate(ByRef Template As SpecificationTemplate, Optional trans 
     Dim transaction As SqlTransaction
     On Error GoTo DbDeleteFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' Create SQL statement from objects
     SQLstmt = "DELETE FROM template_specifications " & _
               "WHERE Spec_Type ='" & Template.SpecType & "' AND Revision ='" & Template.Revision & "'"
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     DeleteTemplate = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
@@ -275,15 +250,13 @@ Function DeleteSpec(ByRef spec As Specification, Optional tbl As String = "stand
     Dim transaction As SqlTransaction
     On Error GoTo DbDeleteFailException
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' Create SQL statement from objects
     SQLstmt = "DELETE FROM " & tbl & " " & _
               "WHERE Material_Id ='" & spec.MaterialId & "' AND Revision ='" & spec.Revision & "'" & _
               " AND Spec_Type ='" & spec.SpecType & "'"
-    transaction.ExecuteSQL (SQLstmt)
+    trans.ExecuteSQL (SQLstmt)
     DeleteSpec = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
@@ -295,14 +268,12 @@ Function GetTemplateTypes(Optional trans As SqlTransaction) As DatabaseRecord
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
     App.logger.Log "Get all template types . . . "
     SQLstmt = "SELECT * FROM template_specifications"
-    Set GetTemplateTypes = transaction.ExecuteSQLSelect(SQLstmt)
+    Set GetTemplateTypes = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
 Function SelectAllSpecifications(spec_type As String, Optional trans As SqlTransaction) As VBA.Collection
@@ -310,14 +281,12 @@ Function SelectAllSpecifications(spec_type As String, Optional trans As SqlTrans
     Dim transaction As SqlTransaction
     Dim record As DatabaseRecord
     If Utils.IsNothing(trans) Then
-        Set transaction = Factory.CreateSqlTransaction(DATABASE_PATH)
-    Else
-        Set transaction = trans
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
     'App.logger.Log "Selecting all specifications . . . "
     SQLstmt = "SELECT * FROM standard_specifications WHERE Spec_Type ='" & spec_type & "'"
-    Set record = transaction.ExecuteSQLSelect(SQLstmt)
+    Set record = trans.ExecuteSQLSelect(SQLstmt)
     Set SelectAllSpecifications = record.records
 End Function
 
@@ -332,7 +301,7 @@ Public Function BeginTransaction(Optional path As String) As SqlTransaction
     End If
 End Function
 
-' Function transaction.ExecuteSQLSelect(DatabaseRecord
+' Function trans.ExecuteSQLSelect(DatabaseRecord
 ' ' Returns an table like array
 '     Dim record As DatabaseRecord
 '     Set record = New DatabaseRecord
@@ -345,14 +314,14 @@ End Function
 '     record.Header = db.Header
 '     record.Rows = db.NumRows
 '     record.Columns = db.NumColumns
-'     Set transaction.ExecuteSQLSelect ption:
+'     Set trans.ExecuteSQLSelect ption:
 '     App.logger.Log "SQL Select Error : NullRecordException!", SqlLog
-'     Set transaction.ExecuteSQLSelect ecuteSQL(ByRef db As IDatabase, SQLstmt As String)
+'     Set trans.ExecuteSQLSelect ecuteSQL(ByRef db As IDatabase, SQLstmt As String)
 ' ' Performs update or insert querys returns error on select.
 '     App.logger.Log "-----------------------------------", SqlLog
 '     App.logger.Log SQLstmt, SqlLog
 '     If Left(SQLstmt, 6) = "SELECT" Then
-'         App.logger.Log "Use transaction.ExecuteSQLSelect(b
+'         App.logger.Log "Use trans.ExecuteSQLSelect(b
 '     Else
 '         'db.openDb (path)
 '         db.Execute (SQLstmt)

@@ -33,7 +33,7 @@ Function CreateSpecificationFromJsonFile(path As String) As Specification
     Set FSO = CreateObject("Scripting.FileSystemObject")
     Debug.Print FSO.GetBaseName(path)
     Set spec = CreateSpecification
-    spec.JsonToObject JsonVBA.ReadJsonFileToString(path), vbNullString
+    spec.JsonToObject JsonVBA.ReadJsonFileToString(path)
     spec.MaterialId = FSO.GetBaseName(path)
     spec.SpecType = "Weaving RBA"
     spec.Revision = "1.0"
@@ -50,7 +50,7 @@ Function CopySpecification(spec As Specification) As Specification
     Set spec_copy = New Specification
     On Error Resume Next
     With spec
-        spec_copy.JsonToObject .PropertiesJson, .TolerancesJson
+        spec_copy.JsonToObject .PropertiesJson
         spec_copy.MaterialId = .MaterialId
         spec_copy.SpecType = .SpecType
         spec_copy.Revision = .Revision
@@ -87,7 +87,7 @@ Function CreateSpecificationFromRecord(record As DatabaseRecord) As Specificatio
         spec_.ProcessId = .item("Process_Id")
         spec_.SpecType = .item("Spec_Type")
         spec_.Revision = CStr(.item("Revision"))
-        spec_.JsonToObject .item("Properties_Json"), .item("Tolerances_Json")
+        spec_.JsonToObject .item("Properties_Json")
     End With
     Set CreateSpecificationFromRecord = spec_
 End Function
@@ -112,7 +112,7 @@ Function CreateSpecFromDict(dict As Object) As Specification
         spec_.ProcessId = .item("Process_Id")
         spec.SpecType = .item("Spec_Type")
         spec.Revision = CStr(.item("Revision"))
-        spec.JsonToObject .item("Properties_Json"), .item("Tolerances_Json")
+        spec.JsonToObject .item("Properties_Json")
     End With
     Set spec.Template = Factory.CopyTemplate(App.templates(spec.SpecType))
     Set CreateSpecFromDict = spec

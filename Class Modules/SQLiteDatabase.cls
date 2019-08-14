@@ -199,7 +199,7 @@ Private Property Let dbPath(ByVal vNewValue As Variant): m_dbPath = vNewValue: E
 '================================================================
 ' public properties
 Public Property Get header() As Variant: header = m_header: End Property
-Public Property Get data() As Variant: data = m_data: End Property
+Public Property Get Data() As Variant: Data = m_data: End Property
 Public Property Get qtyRows() As Long: qtyRows = m_qtyRows: End Property
 Public Property Get qtyColumns() As Long: qtyColumns = m_qtyColumns: End Property
 Public Property Get NumRows() As Long: NumRows = m_qtyRows: End Property

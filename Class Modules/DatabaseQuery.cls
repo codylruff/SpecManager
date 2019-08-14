@@ -36,11 +36,11 @@ Public Function ConnectToDataSource(path As String) As Long
     ConnectToDataSource = 0
 End Function
 
-Public Function Execute() As Long
+Public Function execute() As Long
     If sql.Select.Count = 0 Then
-        Execute = ExecuteSQL(SQLstmt)
+        execute = ExecuteSQL(SQLstmt)
     Else
-        Execute = ExecuteSQLSelect(SQLstmt)
+        execute = ExecuteSQLSelect(SQLstmt)
     End If
 End Function
 
@@ -73,7 +73,7 @@ Private Function ExecuteSQLSelect(SQLstmt As String) As Long
     source.selectQry SQLstmt
     With Recordset
         .Data = source.Data
-        .Header = source.Header
+        .header = source.header
         .Rows = source.NumRows
         .Columns = source.NumColumns
     End With

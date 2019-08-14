@@ -58,7 +58,7 @@ End Sub
 Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = vbNullString)
 ' Header Content and formatting for Spec Docs
     ' Clear Header
-    Utils.ClearHeaderFooter ws, Header:=True, footer:=False
+    Utils.ClearHeaderFooter ws, header:=True, footer:=False
     ' Insert Header
     With ws.PageSetup
         If .ScaleWithDocHeaderFooter = True Then .ScaleWithDocHeaderFooter = False
@@ -75,7 +75,7 @@ Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = vbNull
             Optional leftFooterText = vbNullString, Optional rightFooterText = vbNullString)
 ' Footer Content and formatting for Spec Docs
     'Clear footer
-    Utils.ClearHeaderFooter ws, Header:=False, footer:=True
+    Utils.ClearHeaderFooter ws, header:=False, footer:=True
     ' Initialize disclaimer text
     If disclaimer = vbNullString Then
         disclaimer = "This document is the property of SAATI Americas - " & _

@@ -1,21 +1,64 @@
-13-Aug-2019 16:20:23.01 : Connection established.
-13-Aug-2019 16:20:23.01 : Searching for user name . . . 
-13-Aug-2019 16:20:23.01 : Connection established.
-13-Aug-2019 16:20:23.01 : Get all template types . . . 
-13-Aug-2019 16:20:23.02 : Listing all template types (spec Types) . . . 
-13-Aug-2019 16:20:23.02 : Developer was hidden.
-13-Aug-2019 16:20:23.04 : testing was hidden.
-13-Aug-2019 16:20:23.04 : Database Query was hidden.
-13-Aug-2019 16:20:23.04 : pdf was hidden.
-13-Aug-2019 16:20:23.04 : Warping Requirements was hidden.
-13-Aug-2019 16:20:23.04 : Weaving RBA was hidden.
-13-Aug-2019 16:20:23.04 : RBA Template Change Log was hidden.
-13-Aug-2019 16:20:23.04 : RbaParser was hidden.
-13-Aug-2019 16:20:23.04 : Testing Requirements was hidden.
-13-Aug-2019 16:20:23.04 : Ballistic Testing Requirements was hidden.
-13-Aug-2019 16:20:23.04 : Changeover was hidden.
-13-Aug-2019 16:20:23.04 : Tie-in was hidden.
-13-Aug-2019 16:20:23.04 : ------------- Starting Application
-13-Aug-2019 16:27:54.79 : ------------- Stopping Application
-13-Aug-2019 16:27:54.79 : Saving : runtime.log
-13-Aug-2019 16:27:54.80 : Saving : runtime.log
+14-Aug-2019 12:58:19.00 : Connection established.
+14-Aug-2019 12:58:19.00 : Searching for user name . . . 
+14-Aug-2019 12:58:19.02 : Connection established.
+14-Aug-2019 12:58:19.02 : Get all template types . . . 
+14-Aug-2019 12:58:19.02 : Listing all template types (spec Types) . . . 
+14-Aug-2019 12:58:19.04 : --------- formNewTemplateInput ----------
+14-Aug-2019 12:58:19.04 : Template Input Pass
+14-Aug-2019 12:58:19.05 : --------- Start formCreateGeneric ----------
+14-Aug-2019 12:58:19.05 : Connection established.
+14-Aug-2019 12:58:19.08 : Create Template Pass
+14-Aug-2019 12:58:19.08 : Connection established.
+14-Aug-2019 12:58:19.08 : Get all template types . . . 
+14-Aug-2019 12:58:19.08 : Listing all template types (spec Types) . . . 
+14-Aug-2019 12:58:19.10 : --------- formNewSpecInput ----------
+14-Aug-2019 12:58:19.11 : Connection established.
+14-Aug-2019 12:58:19.11 : Searching for test_template template . . . 
+14-Aug-2019 12:58:19.11 : Succesfully retrieved template for : test_template
+14-Aug-2019 12:58:19.11 : Spec Input Pass
+14-Aug-2019 12:58:19.11 : --------- formCreateSpec ----------
+14-Aug-2019 12:58:19.11 : Printing Specification . . . 
+14-Aug-2019 12:58:19.11 : Printing Specification . . . 
+14-Aug-2019 12:58:19.11 : Connection established.
+14-Aug-2019 12:58:19.14 : Create Spec Pass
+14-Aug-2019 12:58:19.16 : --------- Start formViewSpecs ----------
+14-Aug-2019 12:58:19.16 : ------------- Restarting Application
+14-Aug-2019 12:58:19.16 : Connection established.
+14-Aug-2019 12:58:19.16 : Searching for TEST_SPECIFICATION specifications . . . 
+14-Aug-2019 12:58:19.18 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+14-Aug-2019 12:58:19.18 : Printing Specification . . . 
+14-Aug-2019 12:58:19.18 : --------- Start formEditTemplate ----------
+14-Aug-2019 12:58:19.18 : Connection established.
+14-Aug-2019 12:58:19.18 : Searching for test_template template . . . 
+14-Aug-2019 12:58:19.18 : Succesfully retrieved template for : test_template
+14-Aug-2019 12:58:19.18 : Printing Template . . . 
+14-Aug-2019 12:58:19.19 : Printing Template . . . 
+14-Aug-2019 12:58:19.19 : Connection established.
+14-Aug-2019 12:58:19.22 : Printing Template . . . 
+14-Aug-2019 12:58:19.22 : Connection established.
+14-Aug-2019 12:58:19.25 : --------- Start formSpecConfig ----------
+14-Aug-2019 12:58:19.25 : Connection established.
+14-Aug-2019 12:58:19.25 : Searching for TEST_SPECIFICATION specifications . . . 
+14-Aug-2019 12:58:19.27 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+14-Aug-2019 12:58:19.27 : Printing Specification . . . 
+14-Aug-2019 12:58:19.27 : Printing Specification . . . 
+14-Aug-2019 12:58:19.27 : Connection established.
+14-Aug-2019 12:58:19.30 : Connection established.
+14-Aug-2019 12:58:19.33 : Connection established.
+14-Aug-2019 12:58:19.36 : New Specification Succesfully Saved.
+14-Aug-2019 12:58:19.36 : Connection established.
+14-Aug-2019 12:58:19.39 : ------------- Restarting Application
+14-Aug-2019 12:58:19.39 : Connection established.
+14-Aug-2019 12:58:19.39 : Searching for TEST_SPECIFICATION specifications . . . 
+14-Aug-2019 12:58:19.41 : Succesfully retrieved specifications for : TEST_SPECIFICATION
+14-Aug-2019 12:58:19.41 : Printing Specification . . . 
+14-Aug-2019 12:58:19.41 : Connection established.
+14-Aug-2019 12:58:19.41 : Connection established.
+14-Aug-2019 12:58:19.44 : Connection established.
+14-Aug-2019 12:58:19.47 : Connection established.
+14-Aug-2019 12:58:19.47 : Searching for user name . . . 
+14-Aug-2019 12:58:19.49 : --------- End formSpecConfig ----------
+14-Aug-2019 12:58:19.49 : --------- End formEditTemplate ----------
+14-Aug-2019 12:58:19.50 : --------- End formViewSpecs ----------
+14-Aug-2019 12:58:19.52 : --------- End formCreateGeneric ----------
+14-Aug-2019 12:58:19.52 : Saving : runtime.log

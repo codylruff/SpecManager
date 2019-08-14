@@ -246,12 +246,12 @@ Public Sub ApplyTemplateChangesToSpecifications(spec_type As String, changes As 
     For Each spec In specifications
         Set old_spec = Factory.CopySpecification(spec)
         For i = LBound(changes) To UBound(changes)
-            spec.AddProperty CStr(changes(i)), vbNullString
+            spec.AddProperty CStr(changes(i))
         Next i
         spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
         App.logger.Log SpecManager.SaveSpecification(spec, old_spec, transaction), DebugLog
     Next spec
-    App.logger.Log transaction.Commit, DebugLog
+    'App.logger.Log transaction.Commit, DebugLog
 End Sub
 
 Private Function SelectAllSpecificationsByType(spec_type As String) As VBA.Collection
@@ -305,16 +305,22 @@ End Function
 Function ArchiveSpecification(old_spec As Specification, Optional transaction As SqlTransaction) As Long
 ' Archives the last spec in order to make room for the new one.
     Dim ret_val As Long
-    ' 1. Insert old version into archived_specifications
     If Utils.IsNothing(transaction) Then
+        ' 1. Insert old version into archived_specifications
         ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        ' 2. Delete old version from standard_specifications
+        If ret_val = DB_PUSH_SUCCESS Then
+            ArchiveSpecification = IIf(DeleteSpecification(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+        End If
     Else
+        ' 1. Insert old version into archived_specifications
         ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        ' 2. Delete old version from standard_specifications
+        If ret_val = DB_PUSH_SUCCESS Then
+            ArchiveSpecification = IIf(DeleteSpecification(old_spec, "standard_specifications", transaction) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+        End If
     End If
-    ' 2. Delete old version from standard_specifications
-    If ret_val = DB_PUSH_SUCCESS Then
-        ArchiveSpecification = IIf(DeleteSpecification(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
-    End If
+    
 End Function
 
 Function SaveSpecificationTemplate(Template As SpecificationTemplate) As Long
@@ -341,9 +347,13 @@ Function DeleteSpecificationTemplate(Template As SpecificationTemplate) As Long
     End If
 End Function
 
-Function DeleteSpecification(spec As Specification, Optional tbl As String = "standard_specifications") As Long
+Function DeleteSpecification(spec As Specification, Optional tbl As String = "standard_specifications", Optional trans As SqlTransaction) As Long
     If App.current_user.PrivledgeLevel = USER_ADMIN Then
-        DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+        If IsNothing(trans) Then
+            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+        Else
+            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, tbl, trans) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+        End If
     Else
         DeleteSpecification = DB_DELETE_DENIED
     End If
@@ -371,7 +381,6 @@ Function InitializeNewSpecification()
         .current_spec.SpecType = .current_template.SpecType
         .current_spec.Revision = "1.0"
         Set .current_spec.Properties = .current_template.Properties
-        Set .current_spec.Tolerances = .current_template.Properties
     End With
 End Function
 
@@ -392,7 +401,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     For Each dict In dicts
         Set App.current_spec = Factory.CreateSpecFromDict(dict)
         props = App.current_spec.ToArray
-        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).value = App.current_spec.Header
+        If i = 2 Then ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).value = App.current_spec.header
         ws.Range(Cells(i, 1), Cells(i, ArrayLength(props))).value = props
         i = i + 1
     Next dict
@@ -423,7 +432,6 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
             json_string = JsonVBA.ConvertToJson(dict)
             .Cells(i, num_cols + start_col).value = json_string
             spec_dict.Add "Properties_Json", json_string
-            spec_dict.Add "Tolerances_Json", "{}"
             spec_dict.Add "Material_Id", .Cells(i, 1).value
             spec_dict.Add "Spec_Type", .Cells(i, 2).value
             spec_dict.Add "Revision", 1

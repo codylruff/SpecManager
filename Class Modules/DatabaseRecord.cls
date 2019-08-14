@@ -37,8 +37,8 @@ Public Property Get records() As VBA.Collection
     Set records = m_records
 End Property
 
-Public Property Get Header() As Variant: Header = m_header: End Property
-Public Property Let Header(ByVal value As Variant): m_header = value: End Property
+Public Property Get header() As Variant: header = m_header: End Property
+Public Property Let header(ByVal value As Variant): m_header = value: End Property
 Public Property Get Data() As Variant: Data = m_data: End Property
 Public Property Let Data(ByVal value As Variant): m_data = value: End Property
 Public Property Let Rows(value As Long): rows_ = value: End Property
@@ -57,13 +57,13 @@ Private Function InitializeRecords()
         Set dict = Factory.CreateDictionary()
         App.logger.Log "Checking Row " & j & " . . . ", DebugLog
         For i = 1 To Columns
-            App.logger.Log "Column " & i & " : " & Header(1, i) & ", Row " & j & " : " & Data(j, i), DebugLog
-            If dict.Exists(Header(1, i)) Then
-                If dict(Header(1, i)).value = vbNullString Then
-                    dict.Add Key:=Header(1, i), item:=Data(j, i)
+            App.logger.Log "Column " & i & " : " & header(1, i) & ", Row " & j & " : " & Data(j, i), DebugLog
+            If dict.Exists(header(1, i)) Then
+                If dict(header(1, i)).value = vbNullString Then
+                    dict.Add Key:=header(1, i), item:=Data(j, i)
                 End If
             Else
-                dict.Add Key:=Header(1, i), item:=Data(j, i)
+                dict.Add Key:=header(1, i), item:=Data(j, i)
             End If
         Next i
         coll.Add dict

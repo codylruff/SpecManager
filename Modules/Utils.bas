@@ -36,7 +36,7 @@ End Function
 
 Public Sub CopyRange(src_sht As Worksheet, dest_sht As Worksheet, src_address As String, dest_address As String)
 ' Copies from one range to another
-    src_sht.Range(src_address).Copy destination:=dest_sht.Range(dest_address)
+    src_sht.Range(src_address).Copy Destination:=dest_sht.Range(dest_address)
 End Sub
 
 Public Function GetRangeAddress(sht As Worksheet, first_cell As Variant, last_cell As Variant) As String
@@ -288,10 +288,10 @@ Sub UnloadAllForms(Optional dummyVariable As Byte)
     Next
 End Sub
 
-Sub UpdateTable(shtName As String, tblName As String, Header As String, val)
+Sub UpdateTable(shtName As String, tblName As String, header As String, val)
 'Adds an entry at the bottom of specified column header.
     Dim rng As Range
-    Set rng = Sheets(shtName).Range(tblName & "[" & Header & "]")
+    Set rng = Sheets(shtName).Range(tblName & "[" & header & "]")
     rng.End(xlDown).Offset(1, 0).value = val
 End Sub
 
@@ -379,11 +379,11 @@ Public Function AskUser(question As String) As Boolean
 End Function
 
 Public Sub ClearHeaderFooter(ws As Worksheet, _
-           Optional Header As Boolean = True, Optional footer As Boolean = True)
+           Optional header As Boolean = True, Optional footer As Boolean = True)
 ' Clears the contents of header and footer (optionally select one or the other)
     
     ' Clear Header
-    If Header Then
+    If header Then
         With ws.PageSetup
             .LeftHeader = vbNullString
             .CenterHeader = vbNullString
