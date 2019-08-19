@@ -15,25 +15,10 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub UserForm_Initialize()
-    App.logger.Log "--------- " & Me.Name & " ----------"
+    Logger.Log "--------- " & Me.Name & " ----------"
     With App
         Set .current_spec.Properties = .current_template.Properties
         lblSpecInfo = "Material ID : " & .current_spec.MaterialId & vbNewLine & _
@@ -57,10 +42,10 @@ Private Sub cmdSaveChanges_Click()
     Dim ret_val As Long
     ret_val = SpecManager.SaveNewSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
-        App.logger.Log "Data Access returned: " & ret_val
+        Logger.Log "Data Access returned: " & ret_val
         PromptHandler.Error "New Specification Was Not Saved"
     Else
-        App.logger.Log "Data Access returned: " & ret_val
+        Logger.Log "Data Access returned: " & ret_val
         PromptHandler.Success "New Specification Succesfully Saved."
     End If
 End Sub
@@ -105,12 +90,12 @@ Sub SaveChanges()
     Dim ret_val As Long
     ret_val = SpecManager.SaveNewSpecification(App.current_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
-        App.logger.Log "Create Spec Fail"
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
+        Logger.Log "Create Spec Fail"
         PromptHandler.Error "Failed to Create Specification"
     Else
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
-        App.logger.Log "Create Spec Pass"
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
+        Logger.Log "Create Spec Pass"
         PromptHandler.Success "Specification Created Successfully!"
     End If
 End Sub

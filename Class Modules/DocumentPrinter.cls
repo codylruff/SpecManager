@@ -52,7 +52,7 @@ Public Property Let CurrentText(value As String): CurrentText = value: End Prope
 Public Sub ClearConsole()
 ' Clears the console of any text
     Me.CurrentText = vbNullString
-    App.logger.Log "Console Cleared"
+    Logger.Log "Console Cleared"
 End Sub
 
 Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = vbNullString)
@@ -138,7 +138,7 @@ Private Function GetWeavePatternImagePath(material_id As String) As String
             End If
     End Select
 
-    App.logger.Log "Inserting image : " & weave_id & ".jpg"
+    Logger.Log "Inserting image : " & weave_id & ".jpg"
     GetWeavePatternImagePath = "S:\Data Manager\Specifications\weave-pattern\" & weave_id & ".jpg"
 
 End Function
@@ -277,7 +277,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
             LoadGenericSpecificationDocument spec, sht, prod_order
     End Select
     ' Log User Action
-    App.current_user.DocumentPrinted spec, prod_order
+    ActionLog.DocumentPrinted spec, prod_order
     ' Enable updates to the gui after processing
     App.PerformanceMode False
     
@@ -431,12 +431,12 @@ Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = vbNullSt
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=True
-    App.logger.Log "PDF Saved : " & destination_path
+    Logger.Log "PDF Saved : " & destination_path
     ws.Visible = xlSheetHidden
     Exit Sub
     
 SaveFileError:
-    App.logger.Log "Failed to save file PDF Fail"
+    Logger.Log "Failed to save file PDF Fail"
 End Sub
 
 Public Sub WriteAllDocuments(Optional order_number As String = vbNullString, Optional package_variant As DocumentPackageVariant = Default)

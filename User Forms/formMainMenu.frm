@@ -32,6 +32,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub cmdConfig_Click()
@@ -44,7 +47,7 @@ Private Sub cmdCreateSpecification_Click()
 ' Form to create a new specification based on an existing template. Admin required
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        App.logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
         PromptHandler.AccessDenied
         Exit Sub
     End If
@@ -56,7 +59,7 @@ Private Sub cmdCreateTemplate_Click()
 ' Form to create a new template specification. Admin required.
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        App.logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
         PromptHandler.AccessDenied
         Exit Sub
     End If
@@ -78,7 +81,7 @@ Private Sub cmdEditTemplates_Click()
 ' Form to edit an existing specification template. Admin required.
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        App.logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
         PromptHandler.AccessDenied
         Exit Sub
     End If
@@ -103,7 +106,7 @@ Private Sub cmdEditSpecifications_Click()
 ' Form to edit an existing specification. Admin required
     SpecManager.RestartApp
     If App.current_user.PrivledgeLevel <> USER_ADMIN Then
-        App.logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
+        Logger.Log App.current_user.Name & " attempted access to a restricted function.", UserLog
         PromptHandler.AccessDenied
         Exit Sub
     End If

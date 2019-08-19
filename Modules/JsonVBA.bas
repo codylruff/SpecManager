@@ -178,7 +178,7 @@ Function GetJsonValue(ByVal file_path As String, ByVal Key As String) As Variant
     GetJsonValue = JsonVBA.GetJsonObject(file_path).item(Key)
     Exit Function
 ExceptionHandler:
-    App.logger.Error "JsonVBA.GetJsonValue()"
+    Logger.Error "JsonVBA.GetJsonValue()"
     GetJsonValue = vbNullString
 End Function
 ''
@@ -204,7 +204,7 @@ Function GetJsonObject(ByVal file_path As String) As Object
     Set GetJsonObject = JsonVBA.ParseJson(jsonText)
     Exit Function
 ExceptionHandler:
-    App.logger.Error "JsonVBA.GetJsonObject()"
+    Logger.Error "JsonVBA.GetJsonObject()"
     Set GetJsonObject = Nothing
 End Function
 
@@ -222,7 +222,7 @@ Function ReadJsonFileToString(ByVal file_path As String) As String
     ReadJsonFileToString = jsonText
     Exit Function
 ExceptionHandler:
-    App.logger.Error "JsonVBA.ReadJsonFileToString()"
+    Logger.Error "JsonVBA.ReadJsonFileToString()"
     ReadJsonFileToString = vbNullString
 End Function
 ''
@@ -251,7 +251,7 @@ Function WriteJsonObject(ByVal file_path As String, ByRef json_object As Object,
     Exit Function
 
 ExceptionHandler:
-    App.logger.Error "JsonVBA.WriteJsonObject()"
+    Logger.Error "JsonVBA.WriteJsonObject()"
     WriteJsonObject = -1
 End Function
 ''
@@ -1000,7 +1000,7 @@ Public Function ParseUtc(utc_UtcDate As Date) As Date
     Exit Function
 
 utc_ErrorHandling:
-    err.Raise 10011, "UtcConverter.ParseUtc", "UTC parsing error: " & err.Number & " - " & err.Description
+    err.Raise 10011, "UtcConverter.ParseUtc", "UTC parsing error: " & err.Number & " - " & err.description
 End Function
 
 ''
@@ -1029,7 +1029,7 @@ Public Function ConvertToUtc(utc_LocalDate As Date) As Date
     Exit Function
 
 utc_ErrorHandling:
-    err.Raise 10012, "UtcConverter.ConvertToUtc", "UTC conversion error: " & err.Number & " - " & err.Description
+    err.Raise 10012, "UtcConverter.ConvertToUtc", "UTC conversion error: " & err.Number & " - " & err.description
 End Function
 
 ''
@@ -1107,7 +1107,7 @@ Public Function ParseIso(utc_IsoString As String) As Date
     Exit Function
 
 utc_ErrorHandling:
-    err.Raise 10013, "UtcConverter.ParseIso", "ISO 8601 parsing error for " & utc_IsoString & ": " & err.Number & " - " & err.Description
+    err.Raise 10013, "UtcConverter.ParseIso", "ISO 8601 parsing error for " & utc_IsoString & ": " & err.Number & " - " & err.description
 End Function
 
 ''
@@ -1126,7 +1126,7 @@ Public Function ConvertToIso(utc_LocalDate As Date) As String
     Exit Function
 
 utc_ErrorHandling:
-    err.Raise 10014, "UtcConverter.ConvertToIso", "ISO 8601 conversion error: " & err.Number & " - " & err.Description
+    err.Raise 10014, "UtcConverter.ConvertToIso", "ISO 8601 conversion error: " & err.Number & " - " & err.description
 End Function
 
 ' ============================================= '

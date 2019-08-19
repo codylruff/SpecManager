@@ -17,6 +17,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Private WithEvents pLogger As SystemLogger
 Attribute pLogger.VB_VarHelpID = -1
 
@@ -36,7 +39,7 @@ Private Sub txtInput_Enter()
 End Sub
 
 Private Sub UserForm_Initialize()
-    Me.ListenTo App.logger
+    Me.ListenTo App.Logger
 End Sub
 
 Private Sub UserForm_Terminate()
@@ -54,7 +57,7 @@ Private Sub ParseConsoleCommand(command As String)
     Exit Sub
 ErrorHandler:
     txtInput.text = vbNullString
-    App.logger.Log "Function Unknown"
+    Logger.Log "Function Unknown"
 End Sub
 
 Sub Back()

@@ -30,6 +30,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub cmdPrint_Click()
@@ -41,7 +44,7 @@ Private Sub cmdSelectType_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
-    App.logger.Log "--------- Start " & Me.Name & " ----------"
+    Logger.Log "--------- Start " & Me.Name & " ----------"
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
@@ -78,7 +81,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    App.logger.Log "--------- End " & Me.Name & " ----------"
+    Logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
 Private Sub PopulateCboSelectType()

@@ -12,19 +12,6 @@ Function CreateSpecification() As Specification
     Set CreateSpecification = New Specification
 End Function
 
-Function CreateUserAction(user_name As String, action_description As String, spec As Specification, Optional work_order As String) As UserAction
-' Creates a user action for logging into the database.
-    Dim action As UserAction
-    With action
-        .User = user_name
-        .Time_Stamp = Format(CStr(Now()), "dd-MMM-yyyy HH:nn:ss")
-        .Description = action_description
-        .work_order = work_order
-        Set .spec = spec
-    End With
-    CreateUserAction = action
-End Function
-
 Function CreateSpecificationFromJsonFile(path As String) As Specification
 ' Generate a specification object from a json file.
     Dim spec As Specification
@@ -41,7 +28,7 @@ Function CreateSpecificationFromJsonFile(path As String) As Specification
     Set CreateSpecificationFromJsonFile = spec
     Exit Function
 ErrorHandler:
-    App.logger.Log "File could not be read.", ErrorLog
+    Logger.Log "File could not be read.", ErrorLog
     Exit Function
 End Function
 

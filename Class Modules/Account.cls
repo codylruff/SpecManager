@@ -9,18 +9,12 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-'Private WithEvents pDocumentPrinter As DocumentPrinter
-
 Public PrivledgeLevel           As Long
 Public ProductLine              As String
 Private Name_                   As String
 Public Settings                 As Object
-Public SecretSHA1              As String
+Public SecretSHA1               As String
 Public FlaggedForPasswordChange As Boolean
-
-'Public Sub ListenTo(printer As DocumentPrinter)
-'    Set pDocumentPrinter = App.printer
-'End Sub
 
 Public Property Let Name(value As String)
     Name_ = UCase(value)
@@ -79,16 +73,4 @@ End Sub
 ' Deconstructor
 Private Sub Class_Terminate()
     Set Settings = Nothing
-End Sub
-
-Public Sub DocumentPrinted(spec As Specification, work_order As String)
-    Dim ret_val As Long
-    ret_val = DataAccess.PushUserAction(Factory.CreateUserAction(Me.Name, "Document Printed", spec, work_order))
-    If ret_val <> DB_PUSH_SUCCESS Then
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
-        App.logger.Log "Action Was Not Saved!"
-    Else
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
-        App.logger.Log "Action Succesfully Saved."
-    End If
 End Sub

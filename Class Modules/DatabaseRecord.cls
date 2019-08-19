@@ -55,9 +55,9 @@ Private Function InitializeRecords()
     On Error Resume Next
     For j = 1 To Rows
         Set dict = Factory.CreateDictionary()
-        App.logger.Log "Checking Row " & j & " . . . ", DebugLog
+        Logger.Log "Checking Row " & j & " . . . ", DebugLog
         For i = 1 To Columns
-            App.logger.Log "Column " & i & " : " & header(1, i) & ", Row " & j & " : " & Data(j, i), DebugLog
+            Logger.Log "Column " & i & " : " & header(1, i) & ", Row " & j & " : " & Data(j, i), DebugLog
             If dict.Exists(header(1, i)) Then
                 If dict(header(1, i)).value = vbNullString Then
                     dict.Add Key:=header(1, i), item:=Data(j, i)

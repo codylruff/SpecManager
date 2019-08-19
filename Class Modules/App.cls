@@ -29,29 +29,28 @@ Public Event BeforeStart()
 Public Event AfterStart()
 Public Event BeforeShutdown()
 ' Fields
-Public gDll        As New KrishDll
-Public gMsg         As String
-Public gAppGuid     As String
-Public version As String
-Public current_user As Account
-Public current_spec As Specification
-Public templates As VBA.Collection
-Public specs As Object
-Public printer As DocumentPrinter
-Public current_template As SpecificationTemplate
-Public TestingMode As Boolean
-Private pPerformanceMode As Boolean
-Public logger As SystemLogger
-Private settings_ As Settings
+Public gDll                 As New KrishDll
+Public gMsg                 As String
+Public gAppGuid             As String
+Public version              As String
+Public current_user         As Account
+Public current_spec         As Specification
+Public templates            As VBA.Collection
+Public specs                As Object
+Public printer              As DocumentPrinter
+Public current_template     As SpecificationTemplate
+Public TestingMode          As Boolean
+Private pPerformanceMode    As Boolean
+Private settings_           As Settings
 
 ' Methods
 Sub Start()
-    Set Me.logger = New SystemLogger
     ' Log in with environ(username)
     Set current_user = AccessControl.Account_Initialize
     If current_user.FlaggedForPasswordChange Then AccessControl.ChangeSecret current_user
     ' Load user settings
     current_user.LoadUserJson
+    ActionLog.LogUserAction "Logged In"
     ' Create global object instances for specs and templates
     Set current_spec = New Specification
     Set templates = SpecManager.GetAllTemplates
@@ -84,14 +83,16 @@ Public Sub DeInitializeTestSuiteCredentials()
 End Sub
 
 Public Sub Shutdown()
-    If Not current_user Is Nothing Then current_user.SaveUserJson
+    ActionLog.LogUserAction "Logged Out"
+    If Not current_user Is Nothing Then
+        current_user.SaveUserJson
+    End If
     Set current_user = Nothing
     Set current_spec = Nothing
     Set specs = Nothing
     Set printer = Nothing
     Set current_template = Nothing
-    Me.logger.SaveAllLogs
-    Set Me.logger = Nothing
+    Logger.SaveAllLogs
 End Sub
 
 Public Sub Restart()
@@ -112,7 +113,7 @@ Public Sub PerformanceMode(enable As Boolean, Optional DisableEvents As Boolean 
 ' This Sub turns off un-necessary gui functions to increase performance
     If enable And Not pPerformanceMode Then
         pPerformanceMode = True
-        logger.Log "Performance Mode : ON", RuntimeLog
+        Logger.Log "Performance Mode : ON", RuntimeLog
         ' Save current excel-gui settings
         SaveSettings
         ' Enabled performance mode
@@ -126,7 +127,7 @@ Public Sub PerformanceMode(enable As Boolean, Optional DisableEvents As Boolean 
     Else
         If pPerformanceMode Then
             pPerformanceMode = False
-            logger.Log "Performance Mode : OFF", RuntimeLog
+            Logger.Log "Performance Mode : OFF", RuntimeLog
             With Application
                 .ScreenUpdating = settings_.ScreenUpdating
                 .DisplayAlerts = settings_.DisplayAlerts

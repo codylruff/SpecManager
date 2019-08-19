@@ -53,7 +53,7 @@ Public Sub LoadNewRBA()
     'progress_bar = App.gDll.SetProgressBar(progress_bar, 3, "Task 3/4")
     Dim spec As Specification
     Set spec = CreateSpecification
-    spec.JsonToObject json_string, "{}"
+    spec.JsonToObject json_string
     spec.MaterialId = material_number
     spec.SpecType = "Weaving RBA"
     spec.Revision = "1.0"

@@ -17,6 +17,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub cmdAddProperty_Click()
@@ -51,7 +54,7 @@ Sub RemoveProperty()
 End Sub
 
 Private Sub UserForm_Initialize()
-    App.logger.Log "--------- Start " & Me.Name & " ----------"
+    Logger.Log "--------- Start " & Me.Name & " ----------"
     PopulateCboSelectTemplate
     Set App.printer = Factory.CreateDocumentPrinter(Me)
 End Sub
@@ -110,7 +113,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    App.logger.Log "--------- End " & Me.Name & " ----------"
+    Logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
 Sub SearchTemplates()
@@ -130,11 +133,11 @@ Sub SaveChanges()
     App.current_template.Revision = CStr(CDbl(App.current_template.Revision) + 1) & ".0"
     ret_val = SpecManager.UpdateSpecificationTemplate(App.current_template)
     If ret_val <> DB_PUSH_SUCCESS Then
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
-        App.logger.Log "Edit Template Fail"
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
+        Logger.Log "Edit Template Fail"
         PromptHandler.Error "Update Failed, Contact Administrator."
     Else
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
         PromptHandler.Success "Template Update Successful."
     End If
 End Sub

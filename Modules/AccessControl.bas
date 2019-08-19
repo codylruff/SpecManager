@@ -6,10 +6,10 @@ Function Account_Initialize(Optional user_name As String) As Account
     If user_name = vbNullString Then
         Set User = GetPrivledges(UCase(VBA.Environ("Username")))
         If User Is Nothing Then
-            App.logger.Log "Creating new user " & VBA.Environ("Username"), UserLog
+            Logger.Log "Creating new user " & VBA.Environ("Username"), UserLog
             Set Account_Initialize = AccessControl.AutoAddNewUser
         Else
-            App.logger.Log "Selected User : {" & User.ToString & "}", UserLog
+            Logger.Log "Selected User : {" & User.ToString & "}", UserLog
             Set Account_Initialize = User
         End If
     Else
@@ -20,8 +20,8 @@ End Function
 Function GetPrivledges(Name As String) As Account
     Dim User As Account
     Dim record As DatabaseRecord
+
     Set record = DataAccess.GetUser(Name)
-    ' obsoleted
     If record.Rows = 0 Then
         Set GetPrivledges = Nothing
     Else
@@ -46,7 +46,7 @@ Function AutoAddNewUser() As Account
     new_user.ProductLine = "User"
     new_user.ChangeSetting "product_line", "User"
     new_user.SaveUserJson
-    App.logger.Log DataAccess.PushNewUser(new_user), UserLog
+    Logger.Log DataAccess.PushNewUser(new_user), UserLog
     Set AutoAddNewUser = new_user
 End Function
 

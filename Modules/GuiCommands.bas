@@ -20,7 +20,7 @@ Private Sub HideAllSheets(wb As Workbook)
             'Pass
         ElseIf ws.Visible = xlSheetVisible Then
             ws.Visible = xlSheetHidden
-            App.logger.Log ws.Name & " was hidden."
+            Logger.Log ws.Name & " was hidden."
         End If
     Next ws
 End Sub
@@ -90,8 +90,9 @@ Public Sub ExportAll()
 
     directory = ThisWorkbook.path & "\"
     
-
-
+    Logger.ResetLog ExportLog
+    Logger.SetLogLevel LOG_ALL
+    Logger.Log "Exporting Files . . . ", RuntimeLog
     For Each VBComponent In ActiveWorkbook.VBProject.VBComponents
         
         If VBComponent.Type <> Document Then
@@ -118,10 +119,10 @@ Public Sub ExportAll()
             Call VBComponent.Export(path)
             
             If err.Number <> 0 Then
-                App.logger.Log "Failed to export " & VBComponent.Name & " to " & path, ExportLog
+                Logger.Log "Failed to export " & VBComponent.Name & " to " & path, ExportLog
             Else
                 Count = Count + 1
-                App.logger.Log "Exported " & Left$(VBComponent.Name & ":" & Space(Padding), Padding) & path, ExportLog
+                Logger.Log "Exported " & Left$(VBComponent.Name & ":" & Space(Padding), Padding) & path, ExportLog
             End If
 
             On Error GoTo 0
@@ -129,9 +130,10 @@ Public Sub ExportAll()
 
     Next
     
-        
-    App.logger.Log "Export Complete.", ExportLog
-    App.logger.ResetLog ExportLog
+    Logger.Log "Export Success", RuntimeLog
+    Logger.Log "Export Complete.", ExportLog
+    Logger.SaveLog ExportLog
+    Logger.SetLogLevel LOG_LOW
 End Sub
 
 Public Sub CloseConfig()
@@ -193,11 +195,11 @@ Public Sub DocumentPrinterToPdf()
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=True
-    App.logger.Log "PDF Saved : " & fileName
+    Logger.Log "PDF Saved : " & fileName
     Exit Sub
     
 SaveFileError:
-    App.logger.Log "Failed to save file PDF Fail"
+    Logger.Log "Failed to save file PDF Fail"
 End Sub
 
 Public Sub DocumentPrinterToPdf_Test()
@@ -213,9 +215,9 @@ Public Sub DocumentPrinterToPdf_Test()
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
         OpenAfterPublish:=False
-    App.logger.Log "PDF Saved : " & fileName, TestLog
+    Logger.Log "PDF Saved : " & fileName, TestLog
     Exit Sub
     
 SaveFileError:
-    App.logger.Log "Failed to save file PDF Fail", TestLog
+    Logger.Log "Failed to save file PDF Fail", TestLog
 End Sub

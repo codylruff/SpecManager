@@ -5,28 +5,21 @@ Option Explicit
 'DESCRIPTION: Data Access Module
 '===================================
 
-Function PushUserAction(action As UserAction, Optional trans As SqlTransaction) As Long
-    Dim SQLstmt As String
+Function PushUserAction(action_string As String, Optional trans As SqlTransaction) As Long
     Dim transaction As SqlTransaction
+    Dim SQLstmt As String
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     SQLstmt = "INSERT INTO user_actions " & _
-              "(User, Time_Stamp, Action_Description, Work_Order, Material_Id, Spec_Type, Spec_Revision) " & _
-              "VALUES ('" & action.User & "', " & _
-                      "'" & action.Time_Stamp & "', " & _
-                      "'" & action.Description & "', " & _
-                      "'" & action.work_order & "', " & _
-                      "'" & action.spec.MaterialId & "', " & _
-                      "'" & action.spec.SpecType & "', " & _
-                      "'" & action.spec.Revision & "')"
-
+            "(User, Time_Stamp, Action_Description, Work_Order, Material_Id, Spec_Type, Spec_Revision) " & _
+            "VALUES (" & action_string & ")"
     trans.ExecuteSQL (SQLstmt)
     PushUserAction = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    App.logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
     PushUserAction = DB_PUSH_FAILURE
 End Function
 
@@ -37,7 +30,7 @@ Function GetSpecification(ByVal material_id As String, ByVal spec_type As String
     If Utils.IsNothing(trans) Then
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
-    App.logger.Log "Searching for " & spec_type & " : " & material_id
+    Logger.Log "Searching for " & spec_type & " : " & material_id
     SQLstmt = "SELECT * FROM standard_specifications " & _
               "LEFT JOIN materials ON standard_specifications.Material_Id = materials.Material_Id " & _
               "WHERE standard_specifications.Material_Id ='" & material_id & _
@@ -54,7 +47,7 @@ Function GetUser(ByVal Name As String, Optional trans As SqlTransaction) As Data
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
-    App.logger.Log "Searching for user name . . . "
+    Logger.Log "Searching for user name . . . "
     SQLstmt = "SELECT * FROM user_privledges " & _
               "WHERE Name ='" & Name & "'"
 
@@ -69,7 +62,7 @@ Function FlagUserForSecretChange(Name As String, Optional trans As SqlTransactio
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
-    App.logger.Log "Updating user secret . . . "
+    Logger.Log "Updating user secret . . . "
     SQLstmt = "UPDATE user_privledges " & _
               "SET New_Secret_Required = " & 1 & _
               " WHERE Name ='" & Name & "'"
@@ -77,7 +70,7 @@ Function FlagUserForSecretChange(Name As String, Optional trans As SqlTransactio
     FlagUserForSecretChange = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    App.logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
+    Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
     FlagUserForSecretChange = DB_PUSH_FAILURE
 End Function
 
@@ -90,7 +83,7 @@ Function ChangeUserSecret(Name As String, new_secret As String, Optional trans A
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
-    App.logger.Log "Updating user secret . . . "
+    Logger.Log "Updating user secret . . . "
     SQLstmt = "UPDATE user_privledges " & _
               "SET Secret ='" & new_secret & "', New_Secret_Required = " & 0 & _
               " WHERE Name ='" & Name & "'"
@@ -99,7 +92,7 @@ Function ChangeUserSecret(Name As String, new_secret As String, Optional trans A
     ChangeUserSecret = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    App.logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
+    Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
     ChangeUserSecret = DB_PUSH_FAILURE
 End Function
 
@@ -120,7 +113,7 @@ Function PushNewUser(new_user As Account, Optional trans As SqlTransaction) As L
     PushNewUser = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    App.logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
     PushNewUser = DB_PUSH_FAILURE
 End Function
 
@@ -131,7 +124,7 @@ Function GetTemplateRecord(ByRef spec_type As String, Optional trans As SqlTrans
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
-    App.logger.Log "Searching for " & spec_type & " template . . . "
+    Logger.Log "Searching for " & spec_type & " template . . . "
     SQLstmt = "SELECT * FROM template_specifications" & _
               " WHERE Spec_Type= '" & spec_type & "'"
 
@@ -146,7 +139,7 @@ Function GetSpecificationRecords(ByRef MaterialId As String, Optional trans As S
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
-    App.logger.Log "Searching for " & MaterialId & " specifications . . . "
+    Logger.Log "Searching for " & MaterialId & " specifications . . . "
     SQLstmt = "SELECT * FROM  standard_specifications " & _
               "LEFT JOIN materials ON standard_specifications.Material_Id = materials.Material_Id " & _
               "WHERE standard_specifications.Material_Id= '" & MaterialId & "'"
@@ -174,7 +167,7 @@ Function PushTemplate(ByRef Template As SpecificationTemplate, Optional trans As
     PushTemplate = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    App.logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
     PushTemplate = DB_PUSH_FAILURE
 End Function
 
@@ -197,7 +190,7 @@ Function UpdateTemplate(ByRef Template As SpecificationTemplate, Optional trans 
     UpdateTemplate = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    App.logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
+    Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
     UpdateTemplate = DB_PUSH_FAILURE
 End Function
 
@@ -221,7 +214,7 @@ Function PushSpec(ByRef spec As Specification, Optional tbl As String = "standar
     PushSpec = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    App.logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
     PushSpec = DB_PUSH_FAILURE
 End Function
 
@@ -240,7 +233,7 @@ Function DeleteTemplate(ByRef Template As SpecificationTemplate, Optional trans 
     DeleteTemplate = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
-    App.logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
+    Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
     DeleteTemplate = DB_DELETE_FAILURE
 End Function
 
@@ -260,7 +253,7 @@ Function DeleteSpec(ByRef spec As Specification, Optional tbl As String = "stand
     DeleteSpec = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
-    App.logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
+    Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
     DeleteSpec = DB_DELETE_FAILURE
 End Function
 
@@ -271,7 +264,7 @@ Function GetTemplateTypes(Optional trans As SqlTransaction) As DatabaseRecord
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
-    App.logger.Log "Get all template types . . . "
+    Logger.Log "Get all template types . . . "
     SQLstmt = "SELECT * FROM template_specifications"
     Set GetTemplateTypes = trans.ExecuteSQLSelect(SQLstmt)
 End Function
@@ -284,7 +277,7 @@ Function SelectAllSpecifications(spec_type As String, Optional trans As SqlTrans
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
-    'App.logger.Log "Selecting all specifications . . . "
+    'Logger.Log "Selecting all specifications . . . "
     SQLstmt = "SELECT * FROM standard_specifications WHERE Spec_Type ='" & spec_type & "'"
     Set record = trans.ExecuteSQLSelect(SQLstmt)
     Set SelectAllSpecifications = record.records
@@ -306,8 +299,8 @@ End Function
 '     Dim record As DatabaseRecord
 '     Set record = New DatabaseRecord
 '     On Error GoTo NullRecordException
-'     App.logger.Log "-----------------------------------", SqlLog
-'     App.logger.Log SQLstmt, SqlLog
+'     Logger.Log "-----------------------------------", SqlLog
+'     Logger.Log SQLstmt, SqlLog
 '     'db.openDb path
 '     db.selectQry SQLstmt
 '     record.Data = db.Data
@@ -315,13 +308,13 @@ End Function
 '     record.Rows = db.NumRows
 '     record.Columns = db.NumColumns
 '     Set trans.ExecuteSQLSelect ption:
-'     App.logger.Log "SQL Select Error : NullRecordException!", SqlLog
+'     Logger.Log "SQL Select Error : NullRecordException!", SqlLog
 '     Set trans.ExecuteSQLSelect ecuteSQL(ByRef db As IDatabase, SQLstmt As String)
 ' ' Performs update or insert querys returns error on select.
-'     App.logger.Log "-----------------------------------", SqlLog
-'     App.logger.Log SQLstmt, SqlLog
+'     Logger.Log "-----------------------------------", SqlLog
+'     Logger.Log SQLstmt, SqlLog
 '     If Left(SQLstmt, 6) = "SELECT" Then
-'         App.logger.Log "Use trans.ExecuteSQLSelect(b
+'         Logger.Log "Use trans.ExecuteSQLSelect(b
 '     Else
 '         'db.openDb (path)
 '         db.Execute (SQLstmt)

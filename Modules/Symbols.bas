@@ -28,11 +28,6 @@ Public Const USER_MANAGER          As Long = 21
 Public Const USER_READONLY         As Long = 20
 Public Const USER_ADMIN            As Long = 25
 
-' LOG VERBOSITY LEVELS
-Public Const LOG_CRIT              As Long = 0
-Public Const LOG_DEBUG             As Long = 1
-Public Const LOG_ALL               As Long = 2
-
 ' Returned from SQLite3Initialize
 Public Const SQLITE_INIT_OK     As Long = 0
 Public Const SQLITE_INIT_ERROR  As Long = 1

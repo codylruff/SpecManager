@@ -156,7 +156,7 @@ Function ConvertToCamelCase(s As String) As String
     Exit Function
 RegExError:
     err.Raise SM_REGEX_ERROR
-    App.logger.Log "RegEx Error: ConvertToCamelCase", DebugLog
+    Logger.Log "RegEx Error: ConvertToCamelCase", DebugLog
 End Function
 
 Function SplitCamelCase(sString As String, Optional sDelim As String = " ") As String
@@ -177,7 +177,7 @@ Error_Handler_Exit:
     Exit Function
  
 Error_Handler:
-    App.logger.Log "RegEx Error: SplitCamelCase", DebugLog
+    Logger.Log "RegEx Error: SplitCamelCase", DebugLog
     Resume Error_Handler_Exit
 End Function
 
@@ -327,7 +327,7 @@ Sub ChangeActivePrinter()
 ' ChangeActivePrinter Macro
 
     Application.Dialogs(xlDialogPrinterSetup).show
-    App.logger.Log "Setting default printer for Spec Manager : " & Application.ActivePrinter
+    Logger.Log "Setting default printer for Spec Manager : " & Application.ActivePrinter
     App.current_user.Settings.item("default_printer") = Application.ActivePrinter
     App.current_user.SaveUserJson
 '

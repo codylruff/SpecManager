@@ -30,8 +30,11 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Private Sub UserForm_Initialize()
-    App.logger.Log "--------- " & Me.Name & " ----------"
+    Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboProductLine
 End Sub
 
@@ -58,9 +61,9 @@ End Sub
 
 Sub Continue()
     If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
-        App.logger.Log "Template Input Pass"
+        Logger.Log "Template Input Pass"
     Else
-        App.logger.Log "Template Input Fail"
+        Logger.Log "Template Input Fail"
     End If
 End Sub
 

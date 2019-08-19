@@ -18,6 +18,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private template_name As String
@@ -33,7 +36,7 @@ Sub Back()
 End Sub
 
 Private Sub UserForm_Initialize()
-    App.logger.Log "--------- Start " & Me.Name & " ----------"
+    Logger.Log "--------- Start " & Me.Name & " ----------"
     lblTemplateName = App.current_template.SpecType
     Set App.printer = Factory.CreateDocumentPrinter(Me)
 End Sub
@@ -51,10 +54,10 @@ Private Sub cmdSubmitTemplate_Click()
     Dim ret_val As Long
     ret_val = SpecManager.SaveSpecificationTemplate(App.current_template)
    If ret_val <> DB_PUSH_SUCCESS Then
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
         PromptHandler.Error "New Specification Was Not Saved"
     Else
-        App.logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
+        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
         PromptHandler.Success "New Template Succesfully Saved."
         Set App.templates = SpecManager.GetAllTemplates
     End If
@@ -65,15 +68,15 @@ Sub SubmitTemplate()
     Dim ret_val As Long
     ret_val = SpecManager.SaveSpecificationTemplate(App.current_template)
    If ret_val <> DB_PUSH_SUCCESS Then
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
-        App.logger.Log "Create Template Fail"
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
+        Logger.Log "Create Template Fail"
     Else
-        App.logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
-        App.logger.Log "Create Template Pass"
+        Logger.Log "Data Access returned: " & ret_val & ", New Template Succesfully Saved.", DebugLog
+        Logger.Log "Create Template Pass"
         Set App.templates = SpecManager.GetAllTemplates
     End If
 End Sub
 
 Private Sub UserForm_Terminate()
-    App.logger.Log "--------- End " & Me.Name & " ----------"
+    Logger.Log "--------- End " & Me.Name & " ----------"
 End Sub

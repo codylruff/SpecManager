@@ -1,15 +1,24 @@
 Attribute VB_Name = "Enums"
 Option Explicit
 
+' LOG TYPES
 Public Enum LogType
     RuntimeLog = 0
     UserLog = 1
-    TestLog = 2
-    DebugLog = 3
-    ExportLog = 4
-    SqlLog = 5
-    ErrorLog = 6
-    RevisionLog = 7
+    ErrorLog = 3
+    TestLog = 4
+    DebugLog = 5
+    SqlLog = 6
+    ExportLog = 7
+    RevisionLog = 8
+End Enum
+
+' LOG VERBOSITY LEVELS
+Public Enum LogLevel
+    LOG_LOW  = 3
+    LOG_TEST = 4
+    LOG_DEBUG = 6 
+    LOG_ALL  = 8
 End Enum
 
 Public Enum InputBoxType

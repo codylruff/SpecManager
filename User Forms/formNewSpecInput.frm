@@ -21,10 +21,13 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
-    App.logger.Log "--------- " & Me.Name & " ----------"
+    Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboSelectSpecType
 End Sub
 
@@ -65,8 +68,8 @@ End Sub
 
 Sub Continue()
     If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
-        App.logger.Log "Spec Input Pass"
+        Logger.Log "Spec Input Pass"
     Else
-        App.logger.Log "Spec Input Fail"
+        Logger.Log "Spec Input Fail"
     End If
 End Sub

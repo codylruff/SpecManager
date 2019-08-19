@@ -29,6 +29,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub cmdCopySpec_Click()
@@ -49,7 +52,7 @@ Private Sub cmdSelectType_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
-    App.logger.Log "--------- Start " & Me.Name & " ----------"
+    Logger.Log "--------- Start " & Me.Name & " ----------"
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
@@ -129,7 +132,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    App.logger.Log "--------- End " & Me.Name & " ----------"
+    Logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
 Sub MaterialSearch()
@@ -159,11 +162,11 @@ Sub SaveChanges()
     App.current_spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
     ret_val = SpecManager.SaveSpecification(App.current_spec, old_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
-        App.logger.Log "New Specification Was Not Saved. Contact Admin."
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
+        Logger.Log "New Specification Was Not Saved. Contact Admin."
     Else
-        App.logger.Log "Data Access returned: " & ret_val, DebugLog
-        App.logger.Log "New Specification Succesfully Saved."
+        Logger.Log "Data Access returned: " & ret_val, DebugLog
+        Logger.Log "New Specification Succesfully Saved."
     End If
 End Sub
 

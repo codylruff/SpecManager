@@ -67,8 +67,8 @@ Private Function ExecuteSQLSelect(SQLstmt As String) As Long
 ' Returns an table like array
     Set Recordset = New DatabaseRecord
     On Error GoTo NullRecordException
-    App.logger.Log "-----------------------------------"
-    App.logger.Log SQLstmt
+    Logger.Log "-----------------------------------"
+    Logger.Log SQLstmt
     source.openDb db_path
     source.selectQry SQLstmt
     With Recordset
@@ -80,7 +80,7 @@ Private Function ExecuteSQLSelect(SQLstmt As String) As Long
     ExecuteSQLSelect = 0
     Exit Function
 NullRecordException:
-    App.logger.Log "SQL Select Error : NullRecordException!"
+    Logger.Log "SQL Select Error : NullRecordException!"
     ExecuteSQLSelect = -1
 End Function
 

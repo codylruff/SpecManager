@@ -11,8 +11,7 @@ Option Explicit
 
 ' Events
 Public Event PropertyAdded()
-Public Event PropertyChanged()
-Public Event SpecificationSaved()
+Public Event PropertyChanged(property As Variant, old_val As Variant, new_val As Variant)
 
 ' Properties dictionary
 Public Properties   As Object
@@ -59,15 +58,14 @@ End Function
 Public Sub AddProperty(property As String)
 ' Adds a property to the list of properties
     Me.Properties.Add property, vbNullString
-    RaiseEvent PropertyAdded
 End Sub
 
 Public Sub ChangeProperty(property As Variant, new_val As Variant)
 ' Use this procedure to change a property raising the property changed event.
-    Dim old_value As Variant
-    old_value = Me.Properties(property)
+    Dim old_val As Variant
+    old_val = Me.Properties(property)
     Me.Properties(property) = new_val
-    'RaiseEvent PropertyChanged(property, old_val, new_val)
+    RaiseEvent PropertyChanged(property, old_val, new_val)
 End Sub
 
 Public Sub JsonToObject(properties_json As String)

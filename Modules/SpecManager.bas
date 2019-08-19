@@ -3,20 +3,20 @@ Attribute VB_Name = "SpecManager"
 Public Sub StartApp()
     App.Start
     GuiCommands.ResetExcelGUI
-    App.logger.Trace "Starting Application"
+    Logger.Trace "Starting Application"
     'App.current_user.ListenTo App.printer
 End Sub
 
 Public Sub RestartApp()
-    App.logger.Trace "Restarting Application"
+    Logger.Trace "Restarting Application"
     GuiCommands.ResetExcelGUI
     App.RefreshObjects
 End Sub
 
 Public Sub StopApp()
     On Error GoTo ResumeShutdown
-    App.logger.Trace "Stopping Application"
-    App.logger.SaveLog
+    Logger.Trace "Stopping Application"
+    Logger.SaveLog
     App.Shutdown
 ResumeShutdown:
     GuiCommands.ResetExcelGUI
@@ -81,7 +81,7 @@ Function SearchForSpecifications(material_id As String) As Long
     Dim itms
     Set specs_dict = SpecManager.GetSpecifications(material_id)
     If specs_dict Is Nothing Then
-        App.logger.Log "Could not find a standard for : " & material_id
+        Logger.Log "Could not find a standard for : " & material_id
         SearchForSpecifications = SM_SEARCH_FAILURE
     Else
         Set App.specs = specs_dict
@@ -91,9 +91,9 @@ Function SearchForSpecifications(material_id As String) As Long
         For Each Key In App.specs
             coll.Add App.specs.item(Key)
         Next Key
-        App.logger.Log "Succesfully retrieved specifications for : " & material_id
+        Logger.Log "Succesfully retrieved specifications for : " & material_id
         ' If SpecManager.UpdateTemplateChanges Then
-        '     App.logger.Log "Specs updated"
+        '     Logger.Log "Specs updated"
         ' End If
         SearchForSpecifications = SM_SEARCH_SUCCESS
     End If
@@ -103,10 +103,10 @@ Function GetTemplate(template_type As String) As SpecificationTemplate
     Dim record As DatabaseRecord
     Set record = DataAccess.GetTemplateRecord(template_type)
     If Not record Is Nothing Then
-        App.logger.Log "Succesfully retrieved template for : " & template_type
+        Logger.Log "Succesfully retrieved template for : " & template_type
         Set GetTemplate = Factory.CreateTemplateFromRecord(record)
     Else
-        App.logger.Log "Could not find a template for : " & template_type
+        Logger.Log "Could not find a template for : " & template_type
         Set GetTemplate = Nothing
     End If
 
@@ -119,7 +119,7 @@ Function GetAllTemplates() As VBA.Collection
     Set coll = New VBA.Collection
     Set record = DataAccess.GetTemplateTypes
     ' obsoleted
-    App.logger.Log "Listing all template types (spec Types) . . . "
+    Logger.Log "Listing all template types (spec Types) . . . "
     For Each dict In record.records
         coll.Add item:=Factory.CreateTemplateFromDict(dict), Key:=dict.item("Spec_Type")
     Next dict
@@ -134,7 +134,7 @@ Private Function UpdateTemplateChanges() As Boolean
     Dim spec As Specification
     Dim Template As SpecificationTemplate
     Dim old_spec As Specification
-    App.logger.Log "Checking specifications for any template updates . . ."
+    Logger.Log "Checking specifications for any template updates . . ."
     For Each T In App.specs
     Updated = False
         Set spec = App.specs.item(T)
@@ -144,7 +144,7 @@ Private Function UpdateTemplateChanges() As Boolean
             ' Checks for existence current template properites in previous spec
             If Not spec.Properties.Exists(Key) Then
                 ' Missing properties are added.
-                App.logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
+                Logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
                 spec.Properties.Add Key:=Key, item:=vbNullString
                 Updated = True
             End If
@@ -153,7 +153,7 @@ Private Function UpdateTemplateChanges() As Boolean
             ' Checks for existance of current_spec Properties in current_template.
             If Not App.current_template.Properties.Exists(Key) Then
                 ' Old properties are removed
-                App.logger.Log "Removing : " & Key & " from " & spec.MaterialId & " properties list."
+                Logger.Log "Removing : " & Key & " from " & spec.MaterialId & " properties list."
                 spec.Properties.Remove Key
                 Updated = True
             End If
@@ -162,11 +162,11 @@ Private Function UpdateTemplateChanges() As Boolean
             spec.Revision = CStr(CDbl(spec.Revision) + 1#)
             ret_val = SpecManager.SaveSpecification(spec, old_spec)
             If ret_val <> DB_PUSH_SUCCESS Then
-                App.logger.Log "Data Access returned: " & ret_val, DebugLog
-                App.logger.Log "New Specification Was Not Saved. Contact Admin."
+                Logger.Log "Data Access returned: " & ret_val, DebugLog
+                Logger.Log "New Specification Was Not Saved. Contact Admin."
             Else
-                App.logger.Log "Data Access returned: " & ret_val, DebugLog
-                App.logger.Log "New Specification Succesfully Saved."
+                Logger.Log "Data Access returned: " & ret_val, DebugLog
+                Logger.Log "New Specification Succesfully Saved."
             End If
         End If
     Next T
@@ -201,13 +201,13 @@ Function GetSpecifications(material_id As String) As Object
     End If
     Exit Function
 NullSpecException:
-    App.logger.Error "SpecManager.GetSpecifications()"
+    Logger.Error "SpecManager.GetSpecifications()"
     Set GetSpecifications = Nothing
 End Function
 
 Sub ListSpecifications(frm As MSForms.UserForm)
 ' Lists the specifications currently selected in txtConsole for the given form
-    App.logger.Log "Listing Specifications . . . "
+    Logger.Log "Listing Specifications . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
     If Not App.specs Is Nothing Then
         App.printer.ListObjects App.specs
@@ -217,7 +217,7 @@ Sub ListSpecifications(frm As MSForms.UserForm)
 End Sub
 
 Sub PrintSpecification(frm As MSForms.UserForm)
-    App.logger.Log "Printing Specification . . . "
+    Logger.Log "Printing Specification . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
     If Not App.current_spec Is Nothing Then
         App.printer.PrintObjectToConsole App.current_spec
@@ -225,7 +225,7 @@ Sub PrintSpecification(frm As MSForms.UserForm)
 End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
-    App.logger.Log "Printing Template . . . "
+    Logger.Log "Printing Template . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
     App.printer.PrintObjectToConsole App.current_template
 End Sub
@@ -249,9 +249,9 @@ Public Sub ApplyTemplateChangesToSpecifications(spec_type As String, changes As 
             spec.AddProperty CStr(changes(i))
         Next i
         spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
-        App.logger.Log SpecManager.SaveSpecification(spec, old_spec, transaction), DebugLog
+        Logger.Log SpecManager.SaveSpecification(spec, old_spec, transaction), DebugLog
     Next spec
-    'App.logger.Log transaction.Commit, DebugLog
+    'Logger.Log transaction.Commit, DebugLog
 End Sub
 
 Private Function SelectAllSpecificationsByType(spec_type As String) As VBA.Collection
@@ -280,6 +280,8 @@ Function SaveNewSpecification(spec As Specification) As Long
     Else
         SaveNewSpecification = DB_PUSH_DENIED
     End If
+
+    ActionLog.CrudOnSpecification spec, "Created New Specification"
 End Function
 
 Function SaveSpecification(spec As Specification, old_spec As Specification, Optional transaction As SqlTransaction) As Long
@@ -300,6 +302,7 @@ Function SaveSpecification(spec As Specification, old_spec As Specification, Opt
     Else
         SaveSpecification = DB_PUSH_DENIED
     End If
+    ActionLog.CrudOnSpecification spec, "Revised Specification"
 End Function
 
 Function ArchiveSpecification(old_spec As Specification, Optional transaction As SqlTransaction) As Long
@@ -320,7 +323,7 @@ Function ArchiveSpecification(old_spec As Specification, Optional transaction As
             ArchiveSpecification = IIf(DeleteSpecification(old_spec, "standard_specifications", transaction) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
         End If
     End If
-    
+    'ActionLog.CrudOnSpecification old_spec, "Archived Specification"
 End Function
 
 Function SaveSpecificationTemplate(Template As SpecificationTemplate) As Long
@@ -329,6 +332,7 @@ Function SaveSpecificationTemplate(Template As SpecificationTemplate) As Long
     Else
         SaveSpecificationTemplate = DB_PUSH_DENIED
     End If
+    ActionLog.CrudOnTemplate Template, "Created New Template"
 End Function
 
 Function UpdateSpecificationTemplate(Template As SpecificationTemplate) As Long
@@ -337,6 +341,7 @@ Function UpdateSpecificationTemplate(Template As SpecificationTemplate) As Long
     Else
         UpdateSpecificationTemplate = DB_PUSH_DENIED
     End If
+    ActionLog.CrudOnTemplate Template, "Revised Template"
 End Function
 
 Function DeleteSpecificationTemplate(Template As SpecificationTemplate) As Long
@@ -345,6 +350,7 @@ Function DeleteSpecificationTemplate(Template As SpecificationTemplate) As Long
     Else
         DeleteSpecificationTemplate = DB_DELETE_DENIED
     End If
+    ActionLog.CrudOnTemplate Template, "Deleted Template"
 End Function
 
 Function DeleteSpecification(spec As Specification, Optional tbl As String = "standard_specifications", Optional trans As SqlTransaction) As Long
@@ -357,6 +363,7 @@ Function DeleteSpecification(spec As Specification, Optional tbl As String = "st
     Else
         DeleteSpecification = DB_DELETE_DENIED
     End If
+    ActionLog.CrudOnSpecification spec, "Deleted Specification"
 End Function
 
 Private Function ManagerOrAdmin() As Boolean
@@ -413,7 +420,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
 End Sub
 
 
-Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet, Optional start_row As Integer = 2, Optional start_col As Integer = 1)
+Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws As Worksheet, Optional start_row As Integer = 2, Optional start_col As Integer = 1)
 ' Create a column at the end of a table and fill it with a json string represent each row.
     Dim dict As Object
     Dim i As Integer
@@ -437,10 +444,10 @@ Public Sub TableToJson(num_rows As Integer, num_cols As Integer, ws As Worksheet
             spec_dict.Add "Revision", 1
             Set new_spec = Factory.CreateSpecFromDict(spec_dict)
             If DataAccess.PushSpec(new_spec) <> DB_PUSH_SUCCESS Then
-                App.logger.Error "Error Writing : " & spec_dict.item("Material_Id")
+                Logger.Error "Error Writing : " & spec_dict.item("Material_Id")
                 Exit Sub
             End If
-            
+            ActionLog.CrudOnSpecification new_spec, "Created New Specification"
         Next i
         
     End With
@@ -448,9 +455,9 @@ End Sub
 
 Public Sub EntireTableToJson()
 ' Converts each row in the table to json format, then loads it into the specs db
-    TableToJson num_rows:=44, _
+    MassCreateSpecifications num_rows:=44, _
                 num_cols:=19, _
-                ws:=ActiveWorkbook.Sheets("Warping Requirements"), _
+                ws:=ActiveWorkbook.Sheets("testing"), _
                 start_col:=3
 End Sub
 
@@ -491,10 +498,10 @@ Public Sub UpdateRBAFromSheet()
     spec.Revision = CStr(Range("revision").value + 1)
     For Each prop In spec.Properties
         spec.Properties(CStr(prop)) = Range(prop).value
-        App.logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
+        Logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
     Next prop
     ' Update the specification
-    App.logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec), DebugLog
+    Logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec), DebugLog
     App.Shutdown
     AccessControl.ConfigControl
 End Sub

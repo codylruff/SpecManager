@@ -19,6 +19,9 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -48,7 +51,7 @@ Private Sub cmdSearch_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
-    App.logger.Log "--------- Start " & Me.Name & " ----------"
+    Logger.Log "--------- Start " & Me.Name & " ----------"
 End Sub
 
 Private Sub cmdBack_Click()
@@ -72,7 +75,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub UserForm_Terminate()
-    App.logger.Log "--------- End " & Me.Name & " ----------"
+    Logger.Log "--------- End " & Me.Name & " ----------"
 End Sub
 
 Sub MaterialSearch()
@@ -95,20 +98,20 @@ Sub PrintSelectedPackage(selected_package As DocumentPackageVariant)
     ' Select document package
     Select Case selected_package
         Case WeavingStyleChange
-            App.logger.Log "Printing Weaving Style Change Package"
+            Logger.Log "Printing Weaving Style Change Package"
             App.printer.PrintPackage App.specs, selected_package
         Case WeavingTieBack
-            App.logger.Log "Print Weaving Tie-Back Package"
+            Logger.Log "Print Weaving Tie-Back Package"
             App.printer.PrintPackage App.specs, selected_package
         Case FinishingWithQC
-            App.logger.Log "Printing Finishing with QC Package"
+            Logger.Log "Printing Finishing with QC Package"
             App.printer.PrintPackage App.specs, selected_package
         Case FinishingNoQC
-            App.logger.Log "Printing Finishing without QC Package"
+            Logger.Log "Printing Finishing without QC Package"
             App.printer.PrintPackage DropKeys(App.specs, _
                         Array("Testing Requirements", "Ballistic Testing Requirements")), selected_package
         Case Default
-            App.logger.Log "Printing All Available Specs"
+            Logger.Log "Printing All Available Specs"
             App.printer.PrintPackage App.specs, selected_package
     End Select
 

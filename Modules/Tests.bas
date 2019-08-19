@@ -1,7 +1,7 @@
 Attribute VB_Name = "Tests"
 Option Explicit
 
-Private pTestResults As New VBA.Collection
+Private pTestResults As VBA.Collection
 
 Private Function GetTestResults() As String
     Dim result As Variant
@@ -14,37 +14,49 @@ Private Function GetTestResults() As String
     GetTestResults = "PASS"
 End Function
 
+Private Sub ResetTestResults()
+    Set pTestResults = New VBA.Collection
+End Sub
+
 Sub AllTests()
 ' End to end testings for the GUI and other hard to test functionality
     On Error GoTo TestSuiteFailed
+    ResetTestResults
     App.Start
-    App.logger.SetImmediateLog TestLog
-    App.logger.Log "------------ Starting Test Suite ----------", TestLog
-    Utils.UnloadAllForms
-    App.InitializeTestSuiteCredentials
-    App.logger.Log CreateTemplate_Test, TestLog
-    App.logger.Log CreateSpecification_Test, TestLog
-    App.logger.Log ViewSpecification_AfterCreate_Test, TestLog
-    App.logger.Log EditTemplate_Test, TestLog
-    App.logger.Log EditSpecification_Test, TestLog
-    App.logger.Log ViewSpecification_AfterEdit_Test, TestLog
-    ' Delete test template
-    App.logger.Log "Delete Test Template Returned : " & Tests.DeleteTestTemplate, TestLog
-    ' Account Control
-    ' TODO: This feature has not been implemented yet.
-    App.DeInitializeTestSuiteCredentials
-    Utils.UnloadAllForms
-    App.logger.Log "------------- Test Suite Complete ---------", TestLog
-    App.logger.Log "Test Suite " & GetTestResults, TestLog
-    App.logger.SaveAllLogs
-    App.logger.ResetLog TestLog
-    App.logger.SetImmediateLog RuntimeLog
+    With Logger
+        .SetLogLevel LOG_TEST
+        .SetImmediateLog TestLog
+        .Log "------------ Starting Test Suite ----------", TestLog
+        Utils.UnloadAllForms
+        App.InitializeTestSuiteCredentials
+        .Log CreateTemplate_Test, TestLog
+        .Log CreateSpecification_Test, TestLog
+        .Log ViewSpecification_AfterCreate_Test, TestLog
+        .Log EditTemplate_Test, TestLog
+        .Log EditSpecification_Test, TestLog
+        .Log ViewSpecification_AfterEdit_Test, TestLog
+        ' Delete test template
+        .Log "Delete Test Template Returned : " & Tests.DeleteTestTemplate, TestLog
+        ' Account Control
+        ' TODO: This feature has not been implemented yet.
+        App.DeInitializeTestSuiteCredentials
+        Utils.UnloadAllForms
+        .Log "------------- Test Suite Complete ---------", TestLog
+        .Log "Test Suite " & GetTestResults, TestLog
+        .SaveAllLogs
+        .ResetLog TestLog
+        .SetImmediateLog RuntimeLog
+        .SetLogLevel LOG_LOW
+    End With
     Exit Sub
 TestSuiteFailed:
-    App.logger.Log "Test Suite " & GetTestResults, TestLog
-    App.logger.SaveAllLogs
-    App.logger.ResetLog TestLog
-    App.logger.SetImmediateLog RuntimeLog
+    With Logger
+        .Log "Test Suite " & GetTestResults, TestLog
+        .SaveAllLogs
+        .ResetLog TestLog
+        .SetImmediateLog RuntimeLog
+        .SetLogLevel LOG_LOW
+    End With
     'PromptHandler.Error "Somethings wrong, please contact the administrator."
 End Sub
 
@@ -176,7 +188,7 @@ Function EditSpecification_Test() As String
     ' 7. Save changes
     formSpecConfig.SaveChanges
     ' 8. Remove old specification from the archive
-    App.logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.item("to_archive"), "archived_specifications"), SqlLog
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.item("to_archive"), "archived_specifications"), SqlLog
     ' 9. Report pass / fail
     ' TODO:
     ' 10. Go to main menu
@@ -204,9 +216,9 @@ Function ViewSpecification_AfterEdit_Test() As String
     ' TODO: No idea how to do this yet.
     ' 6. Go to main menu
     ' 7. Remove Spec Template
-    App.logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_spec.Template), SqlLog
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_spec.Template), SqlLog
     ' 8. Remove Spec
-    App.logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), SqlLog
+    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), SqlLog
     ViewSpecification_AfterEdit_Test = Utils.FormatTestResult("View Specification After Edit Test", "PASS")
     pTestResults.Add True
     Exit Function
@@ -216,9 +228,9 @@ TestFailed:
 End Function
 
 Sub AccessControl_Test()
-    App.logger.Log "------------- Start Access Control Test --------------", TestLog
+    Logger.Log "------------- Start Access Control Test --------------", TestLog
     App.RefreshObjects
-    App.logger.Log "------------- End Access Control Test ----------------", TestLog
+    Logger.Log "------------- End Access Control Test ----------------", TestLog
 End Sub
 
 Public Sub TestKrish()
@@ -237,7 +249,8 @@ End Sub
 
 Public Sub ProtectionPlanningSequence_Tests()
     App.Start
-    With App.logger
+    With Logger
+        .SetLogLevel LOG_TEST
         .SetImmediateLog TestLog
         .Log "Protection Planning Prompt Sequence", TestLog
         PromptHandler.Success "weaving style change"
@@ -252,13 +265,14 @@ Public Sub ProtectionPlanningSequence_Tests()
         .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
         .SaveAllLogs
         .SetImmediateLog RuntimeLog
+        .SetLogLevel LOG_LOW
     End With
 End Sub
 
 Public Sub SqlTransaction_Tests()
     App.Start
     SpecManager.ApplyTemplateChangesToSpecifications "Transaction Test", Array("Change 1", "Change 2")
-    App.logger.SaveAllLogs
+    Logger.SaveAllLogs
     App.Shutdown
 End Sub
 
@@ -275,6 +289,6 @@ Function DeleteTestTemplate() As Long
     DeleteTestTemplate = DB_DELETE_SUCCESS
     Exit Function
 DbDeleteFailException:
-    App.logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
+    Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
     DeleteTestTemplate = DB_DELETE_FAILURE
 End Function

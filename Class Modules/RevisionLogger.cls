@@ -5,7 +5,7 @@ END
 Attribute VB_Name = "RevisionLogger"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
+Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
@@ -24,8 +24,7 @@ Public Sub ListenTo(spec As Specification)
 End Sub
 
 Private Sub pSpecification_PropertyChanged(property As Variant, old_val As Variant, new_val As Variant)
-      pBuffer.Add "Changed : " & CStr(property) & _
-                  ", " & CStr(old_val) & " --> " & CStr(new_val)
+      Logger.Log "Changed : " & CStr(property) & ", " & CStr(old_val) & " --> " & CStr(new_val)
 End Sub
 
 Private Sub Class_Initialize()

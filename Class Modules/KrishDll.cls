@@ -382,7 +382,7 @@ Public Function FN_IMAGE_LOAD(byteArr() As Byte, Optional SavePath As String) As
    Exit Function
 
 FN_IMAGE_LOAD_Error:
-    App.gMsg = err.Description & ": in procedure KrishDll of Module KrishDll"
+    App.gMsg = err.description & ": in procedure KrishDll of Module KrishDll"
     FN_IMAGE_LOAD = ""
 
 End Function

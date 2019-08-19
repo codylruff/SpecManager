@@ -23,22 +23,22 @@ Public Sub Connect(path As String)
 ' Connect to sqlite database
     If ConnectionString_ = vbNullString Then
         DbConnection.openDb path
-        App.logger.Log "Connection established."
+        Logger.Log "Connection established.", SqlLog
         ConnectionString = path
     Else
-        App.logger.Log "Connection already established."
+        Logger.Log "Connection already established.", SqlLog
     End If
 End Sub
 
 Public Function Begin() As Long
 ' Begin a transaction in sqlite
     On Error GoTo DbTransactionFailException
-    App.logger.Log "Starting SQL Transaction", SqlLog
+    Logger.Log "Starting SQL Transaction", SqlLog
     ExecuteSQL "BEGIN TRANSACTION"
-    App.logger.Log "SQL Transaction Initialized", SqlLog
+    Logger.Log "SQL Transaction Initialized", SqlLog
     Begin = DB_TRANSACTION_SUCCESS
 DbTransactionFailException:
-    App.logger.Log "SQL BEGIN Error : DbTransactionFailException", SqlLog
+    Logger.Log "SQL BEGIN Error : DbTransactionFailException", SqlLog
     Begin = DB_TRANSACTION_FAILURE
 End Function
 
@@ -46,10 +46,10 @@ Public Function Rollback() As Long
 ' Begin a transaction in sqlite
     On Error GoTo DbTransactionFailException
     ExecuteSQL "ROLLBACK TRANSACTION"
-    App.logger.Log "SQL Transaction Rolled Back", SqlLog
+    Logger.Log "SQL Transaction Rolled Back", SqlLog
     Rollback = DB_TRANSACTION_SUCCESS
 DbTransactionFailException:
-    App.logger.Log "SQL ROLLBACK Error : DbTransactionFailException", SqlLog
+    Logger.Log "SQL ROLLBACK Error : DbTransactionFailException", SqlLog
     Rollback = DB_TRANSACTION_FAILURE
 End Function
 
@@ -57,10 +57,10 @@ Public Function Commit() As Long
 ' Begin a transaction in sqlite
     On Error GoTo DbTransactionFailException
     ExecuteSQL "COMMIT TRANSACTION"
-    App.logger.Log "SQL Transaction Commited", SqlLog
+    Logger.Log "SQL Transaction Commited", SqlLog
     Commit = DB_TRANSACTION_SUCCESS
 DbTransactionFailException:
-    App.logger.Log "SQL COMMIT Error : DbTransactionFailException", SqlLog
+    Logger.Log "SQL COMMIT Error : DbTransactionFailException", SqlLog
     Commit = DB_TRANSACTION_FAILURE
 End Function
 
@@ -69,8 +69,8 @@ Function ExecuteSQLSelect(SQLstmt As String) As DatabaseRecord
     Dim record As DatabaseRecord
     Set record = New DatabaseRecord
     On Error GoTo NullRecordException
-    App.logger.Log "-----------------------------------", SqlLog
-    App.logger.Log SQLstmt, SqlLog
+    Logger.Log "-----------------------------------", SqlLog
+    Logger.Log SQLstmt, SqlLog
     With Me.DbConnection
         .selectQry SQLstmt
         record.Data = .Data
@@ -81,16 +81,16 @@ Function ExecuteSQLSelect(SQLstmt As String) As DatabaseRecord
     Set ExecuteSQLSelect = record
     Exit Function
 NullRecordException:
-    App.logger.Log "SQL Select Error : NullRecordException!", SqlLog
+    Logger.Log "SQL Select Error : NullRecordException!", SqlLog
     Set ExecuteSQLSelect = New DatabaseRecord
 End Function
 
 Sub ExecuteSQL(SQLstmt As String)
 ' Performs update or insert querys returns error on select.
-    App.logger.Log "-----------------------------------", SqlLog
-    App.logger.Log SQLstmt, SqlLog
+    Logger.Log "-----------------------------------", SqlLog
+    Logger.Log SQLstmt, SqlLog
     If Left(SQLstmt, 6) = "SELECT" Then
-        App.logger.Log "Use ExecuteSQLSelect() for SELECT query", SqlLog
+        Logger.Log "Use ExecuteSQLSelect() for SELECT query", SqlLog
         Exit Sub
     Else
         'db.openDb (path)
@@ -107,4 +107,5 @@ End Sub
 ' Deconstructor
 Private Sub Class_Terminate()
     Set DbConnection = Nothing
+    Logger.Log "Connection Terminated.", SqlLog
 End Sub
