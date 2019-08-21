@@ -19,6 +19,16 @@ Private Type UserAction
     Revision As String
 End Type
 
+Private log_enabled As Boolean
+
+Public Sub Enable(): log_enabled = True: End Sub
+Public Sub Disable(): log_enabled = False: End Sub
+
+Private Sub Class_Initialize()
+' Constructor
+    Enable
+End Sub
+
 Private Function ToString(action As UserAction) As String
     ToString = "'" & action.User & "', " & _
                "'" & action.Time_Stamp & "', " & _
@@ -35,6 +45,7 @@ End Property
 
 Public Sub DocumentPrinted(spec As Specification, work_order As String)
     Dim ret_val As Long
+    If Not log_enabled Then Exit Sub
     With spec
         VerifyActionLogged DataAccess.PushUserAction(ToString(CreateUserAction(Username, "Document Printed", _
                                                     .MaterialId, .SpecType, .Revision, work_order)))
@@ -43,12 +54,14 @@ End Sub
 
 Public Sub LogUserAction(Optional description As String)
 ' Generic User Action description only
+    If Not log_enabled Then Exit Sub
     VerifyActionLogged DataAccess.PushUserAction(ToString(CreateUserAction(Username, description)))
 End Sub
 
 
 Public Sub CrudOnSpecification(spec As Specification, message As String)
 ' Log any crud operation on a specification
+    If Not log_enabled Then Exit Sub
     With spec
         VerifyActionLogged DataAccess.PushUserAction(ToString(CreateUserAction(Username, message, .MaterialId, .SpecType, .Revision)))
     End With
@@ -56,6 +69,7 @@ End Sub
 
 Public Sub CrudOnTemplate(Template As SpecificationTemplate, message As String)
 ' Log any crud operation on a template
+    If Not log_enabled Then Exit Sub
     With Template
         VerifyActionLogged DataAccess.PushUserAction(ToString(CreateUserAction(Username, message, "Template", .SpecType, .Revision)))
     End With

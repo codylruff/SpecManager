@@ -4,6 +4,24 @@ Option Explicit
 '===================================
 'DESCRIPTION: Data Access Module
 '===================================
+Function PushIQueryable(obj As IQueryable, Optional trans As SqlTransaction) As Long
+' Push an object, that implements the IQueryable interface, to the database
+    Dim transaction As SqlTransaction
+    Dim SQLstmt As String
+    On Error GoTo DbPushFailException
+    If Utils.IsNothing(trans) Then
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
+    End If
+    SQLstmt = "INSERT INTO user_actions " & _
+            "(" & obj.GetValueLabels & ") " & _
+            "VALUES (" & obj.GetValues & ")"
+    trans.ExecuteSQL (SQLstmt)
+    PushIQueryable = DB_PUSH_SUCCESS
+    Exit Function
+DbPushFailException:
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
+    PushIQueryable = DB_PUSH_FAILURE
+End Function
 
 Function PushUserAction(action_string As String, Optional trans As SqlTransaction) As Long
     Dim transaction As SqlTransaction

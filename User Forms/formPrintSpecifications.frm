@@ -38,7 +38,7 @@ Private Sub cmdPrintSpecifications_Click()
     End If
     prompt_result = PromptHandler.ProtectionPlanningSequence
     App.printer.WriteAllDocuments Me.txtProductionOrder, prompt_result
-    If Not App.TestingMode Then PrintSelectedPackage prompt_result
+    If Not App.TestingMode Then PrintSelectedPackage(prompt_result)
 End Sub
 
 Private Sub cmdSearch_Click()

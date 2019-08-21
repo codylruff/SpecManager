@@ -50,7 +50,6 @@ Sub Start()
     If current_user.FlaggedForPasswordChange Then AccessControl.ChangeSecret current_user
     ' Load user settings
     current_user.LoadUserJson
-    ActionLog.LogUserAction "Logged In"
     ' Create global object instances for specs and templates
     Set current_spec = New Specification
     Set templates = SpecManager.GetAllTemplates
@@ -74,16 +73,17 @@ Public Sub InitializeTestSuiteCredentials()
     current_user.PrivledgeLevel = 25
     current_user.ProductLine = "Admin"
     App.TestingMode = True
+    ActionLog.Disable
 End Sub
 
 Public Sub DeInitializeTestSuiteCredentials()
     App.TestingMode = False
     Me.RefreshObjects
+    ActionLog.Enable
     Set current_user = AccessControl.Account_Initialize
 End Sub
 
 Public Sub Shutdown()
-    ActionLog.LogUserAction "Logged Out"
     If Not current_user Is Nothing Then
         current_user.SaveUserJson
     End If

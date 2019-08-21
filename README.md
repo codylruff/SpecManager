@@ -1,4 +1,4 @@
-# Spec-Manager Features v1.3.12
+# Spec-Manager Features v1.3.13
 
 * <b>CRUD ops on specification templates</b>
     1. Archive old revisions after making changes

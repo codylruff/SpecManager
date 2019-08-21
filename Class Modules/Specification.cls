@@ -9,6 +9,8 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+Implements IQueryable
+
 ' Events
 Public Event PropertyAdded()
 Public Event PropertyChanged(property As Variant, old_val As Variant, new_val As Variant)
@@ -122,3 +124,12 @@ Private Sub Class_Terminate()
     Set Template = Nothing
     Set Properties = Nothing
 End Sub
+
+' IQueryable Methods
+Function IQueryable_GetValueLabels() As String
+    IQueryable_GetValueLabels = vbNullString
+End Function
+
+Function IQueryable_GetValues() As String
+    IQueryable_GetValues = vbNullString
+End Function

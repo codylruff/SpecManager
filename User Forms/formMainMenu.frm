@@ -72,6 +72,7 @@ Private Sub cmdDatabaseQuery_Click()
 End Sub
 
 Private Sub cmdExit_Click()
+    ActionLog.LogUserAction "Logged Out"
     SpecManager.StopApp
     GuiCommands.UnloadAllForms
     'GuiCommands.ExitApp
