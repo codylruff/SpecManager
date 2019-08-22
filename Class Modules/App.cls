@@ -79,7 +79,7 @@ End Sub
 Public Sub DeInitializeTestSuiteCredentials()
     App.TestingMode = False
     Me.RefreshObjects
-    ActionLog.Enable
+    ActionLog.enable
     Set current_user = AccessControl.Account_Initialize
 End Sub
 

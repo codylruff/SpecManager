@@ -46,7 +46,7 @@ Function AutoAddNewUser() As Account
     new_user.ProductLine = "User"
     new_user.ChangeSetting "product_line", "User"
     new_user.SaveUserJson
-    Logger.Log DataAccess.PushNewUser(new_user), UserLog
+    Logger.Log DataAccess.PushIQueryable(new_user, "user_privledges"), UserLog
     Set AutoAddNewUser = new_user
 End Function
 

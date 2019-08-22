@@ -32,7 +32,7 @@ Public Sub LoadNewRBA()
     Dim material_number As String
     Dim json_string As String
     Dim progress_bar As Long
-    App.Start
+    'App.Start
     file_path = SelectRBAFile
     'progress_bar = App.gDll.ShowProgressBar(4)
     ' Task 1

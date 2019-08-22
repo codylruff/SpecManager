@@ -276,7 +276,7 @@ End Function
 
 Function SaveNewSpecification(spec As Specification) As Long
     If ManagerOrAdmin Then
-        SaveNewSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        SaveNewSpecification = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
         SaveNewSpecification = DB_PUSH_DENIED
     End If
@@ -288,13 +288,13 @@ Function SaveSpecification(spec As Specification, old_spec As Specification, Opt
     If ManagerOrAdmin Then
         If Utils.IsNothing(transaction) Then
             If ArchiveSpecification(old_spec) = DB_DELETE_SUCCESS Then
-                SaveSpecification = IIf(DataAccess.PushSpec(spec) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+                SaveSpecification = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
             Else
                 SaveSpecification = DB_PUSH_DENIED
             End If
         Else
             If ArchiveSpecification(old_spec, transaction) = DB_DELETE_SUCCESS Then
-                SaveSpecification = IIf(DataAccess.PushSpec(spec, "standard_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+                SaveSpecification = IIf(DataAccess.PushIQueryable(spec, "standard_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
             Else
                 SaveSpecification = DB_PUSH_DENIED
             End If
@@ -310,14 +310,14 @@ Function ArchiveSpecification(old_spec As Specification, Optional transaction As
     Dim ret_val As Long
     If Utils.IsNothing(transaction) Then
         ' 1. Insert old version into archived_specifications
-        ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        ret_val = IIf(DataAccess.PushIQueryable(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
         ' 2. Delete old version from standard_specifications
         If ret_val = DB_PUSH_SUCCESS Then
             ArchiveSpecification = IIf(DeleteSpecification(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
         End If
     Else
         ' 1. Insert old version into archived_specifications
-        ret_val = IIf(DataAccess.PushSpec(old_spec, "archived_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        ret_val = IIf(DataAccess.PushIQueryable(old_spec, "archived_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
         ' 2. Delete old version from standard_specifications
         If ret_val = DB_PUSH_SUCCESS Then
             ArchiveSpecification = IIf(DeleteSpecification(old_spec, "standard_specifications", transaction) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
@@ -328,7 +328,7 @@ End Function
 
 Function SaveSpecificationTemplate(Template As SpecificationTemplate) As Long
     If ManagerOrAdmin Then
-        SaveSpecificationTemplate = IIf(DataAccess.PushTemplate(Template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        SaveSpecificationTemplate = IIf(DataAccess.PushIQueryable(Template, "template_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
     Else
         SaveSpecificationTemplate = DB_PUSH_DENIED
     End If
@@ -368,11 +368,16 @@ End Function
 
 Private Function ManagerOrAdmin() As Boolean
 ' Test to see if the current account has the manager privledges.
+    On Error GoTo ErrorHandler
     If App.current_user.ProductLine = App.current_template.ProductLine Or App.current_user.ProductLine = "Admin" Then
         ManagerOrAdmin = True
     Else
         ManagerOrAdmin = False
     End If
+ErrorHandler:
+    Dim account As Account
+    Set account = AccessControl.Account_Initialize
+    ManagerOrAdmin = IIf(account.ProductLine = "Admin", True, False) 
 End Function
 
 Private Function MaterialInputValidation(material_id As String) As String
@@ -443,7 +448,7 @@ Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws
             spec_dict.Add "Spec_Type", .Cells(i, 2).value
             spec_dict.Add "Revision", 1
             Set new_spec = Factory.CreateSpecFromDict(spec_dict)
-            If DataAccess.PushSpec(new_spec) <> DB_PUSH_SUCCESS Then
+            If DataAccess.PushIQueryable(new_spec, "standard_specifications") <> DB_PUSH_SUCCESS Then
                 Logger.Error "Error Writing : " & spec_dict.item("Material_Id")
                 Exit Sub
             End If

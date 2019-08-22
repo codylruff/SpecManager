@@ -276,8 +276,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
             ' Insert/Format body of the specification
             LoadGenericSpecificationDocument spec, sht, prod_order
     End Select
-    ' Log User Action
-    ActionLog.DocumentPrinted spec, prod_order
+    
     ' Enable updates to the gui after processing
     App.PerformanceMode False
     
@@ -460,7 +459,7 @@ Public Sub WriteAllDocuments(Optional order_number As String = vbNullString, Opt
 
 End Sub
 
-Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackageVariant)
+Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackageVariant, Optional work_order As String)
 ' Print specs from the given doc_package (dictionary)
     'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
     Dim spec As Specification
@@ -472,11 +471,13 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     ' Print all the documents in the package
     For Each doc In doc_package
         Set spec = doc_package(doc)
+        ' Log User Action
+        ActionLog.DocumentPrinted spec, work_order
         With spec
             ' Weaving RBA gets special treament here to include the checklist.
             If .SpecType = "Weaving RBA" Then
                 App.printer.PrintSheet SheetByName("Weaving RBA"), FitToPage:=False
-                ActionLog.LogUserAction IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover") & "Checklist Printed"
+                ActionLog.LogUserAction IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover") & " Checklist Printed"
                 App.printer.PrintSheet SheetByName(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
             Else
                 App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True

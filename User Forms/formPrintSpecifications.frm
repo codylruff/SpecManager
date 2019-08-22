@@ -14,14 +14,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -38,7 +30,7 @@ Private Sub cmdPrintSpecifications_Click()
     End If
     prompt_result = PromptHandler.ProtectionPlanningSequence
     App.printer.WriteAllDocuments Me.txtProductionOrder, prompt_result
-    If Not App.TestingMode Then PrintSelectedPackage(prompt_result)
+    If Not App.TestingMode Then PrintSelectedPackage (prompt_result)
 End Sub
 
 Private Sub cmdSearch_Click()
@@ -99,20 +91,20 @@ Sub PrintSelectedPackage(selected_package As DocumentPackageVariant)
     Select Case selected_package
         Case WeavingStyleChange
             Logger.Log "Printing Weaving Style Change Package"
-            App.printer.PrintPackage App.specs, selected_package
+            App.printer.PrintPackage App.specs, selected_package, txtProductionOrder
         Case WeavingTieBack
             Logger.Log "Print Weaving Tie-Back Package"
-            App.printer.PrintPackage App.specs, selected_package
+            App.printer.PrintPackage App.specs, selected_package, txtProductionOrder
         Case FinishingWithQC
             Logger.Log "Printing Finishing with QC Package"
-            App.printer.PrintPackage App.specs, selected_package
+            App.printer.PrintPackage App.specs, selected_package, txtProductionOrder
         Case FinishingNoQC
             Logger.Log "Printing Finishing without QC Package"
             App.printer.PrintPackage DropKeys(App.specs, _
-                        Array("Testing Requirements", "Ballistic Testing Requirements")), selected_package
+                        Array("Testing Requirements", "Ballistic Testing Requirements")), selected_package, txtProductionOrder
         Case Default
             Logger.Log "Printing All Available Specs"
-            App.printer.PrintPackage App.specs, selected_package
+            App.printer.PrintPackage App.specs, selected_package, txtProductionOrder
     End Select
 
     

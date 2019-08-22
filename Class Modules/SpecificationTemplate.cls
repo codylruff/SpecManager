@@ -8,6 +8,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+
+Implements IQueryable
+
 '----------------
 'CLASS VARIABLES
 '----------------
@@ -54,3 +57,16 @@ End Sub
 Private Sub Class_Terminate()
     Set Properties = Nothing
 End Sub
+
+' IQueryable Methods
+Function IQueryable_GetValueLabels() As String
+    IQueryable_GetValueLabels = "Time_Stamp, Properties_Json, Revision, Spec_Type, Product_Line"
+End Function
+
+Function IQueryable_GetValues() As String
+    IQueryable_GetValues = "'" & CStr(Now()) & "'," & _
+                           "'" & Me.PropertiesJson & "', " & _
+                           "'" & Me.Revision & "', " & _
+                           "'" & Me.SpecType & "', " & _
+                           "'" & Me.ProductLine & "'"
+End Function

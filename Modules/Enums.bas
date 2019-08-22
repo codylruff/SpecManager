@@ -15,10 +15,10 @@ End Enum
 
 ' LOG VERBOSITY LEVELS
 Public Enum LogLevel
-    LOG_LOW  = 3
+    LOG_LOW = 3
     LOG_TEST = 4
-    LOG_DEBUG = 6 
-    LOG_ALL  = 8
+    LOG_DEBUG = 6
+    LOG_ALL = 8
 End Enum
 
 Public Enum InputBoxType

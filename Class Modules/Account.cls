@@ -9,6 +9,8 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+Implements IQueryable
+
 Public PrivledgeLevel           As Long
 Public ProductLine              As String
 Private Name_                   As String
@@ -74,3 +76,14 @@ End Sub
 Private Sub Class_Terminate()
     Set Settings = Nothing
 End Sub
+
+' IQueryable Methods
+Function IQueryable_GetValueLabels() As String
+    IQueryable_GetValueLabels = "Name, Privledge_Level, Product_Line"
+End Function
+
+Function IQueryable_GetValues() As String
+    IQueryable_GetValues = "'" & Me.Name & "', " & _
+                           "'" & Me.PrivledgeLevel & "', " & _
+                           "'" & Me.ProductLine & "'"
+End Function

@@ -33,10 +33,7 @@ End Property
 Public Property Get Template() As SpecificationTemplate
     Set Template = Template_
 End Property
-Public Property Let IsStandard(value As Boolean): IsStandard_ = value: End Property
-Public Property Get IsStandard() As Boolean: IsStandard = IIf(IsStandard_ = Null, False, IsStandard_): End Property
-Public Property Let IsLatest(value As Boolean): IsLatest_ = value: End Property
-Public Property Get IsLatest() As Boolean: IsLatest = IIf(IsLatest_ = Null, False, IsLatest_): End Property
+
 Public Property Let Revision(value As String): Revision_ = value: End Property
 Public Property Get Revision() As String: Revision = Revision_: End Property
 Public Property Let SpecType(value As String): SpecType_ = value: End Property
@@ -45,8 +42,8 @@ Public Property Get MaterialId() As String: MaterialId = MaterialId_: End Proper
 Public Property Let MaterialId(value As String): MaterialId_ = UCase(value): End Property
 Public Property Get MaterialDescription() As String: MaterialDescription = MaterialDescription_: End Property
 Public Property Let MaterialDescription(val As String): MaterialDescription_ = val: End Property
-Public Property Get ProcessId() As String: ProcessId = ProcessId_: End Property
 Public Property Let ProcessId(value As String): ProcessId_ = value: End Property
+Public Property Get ProcessId() As String: ProcessId = ProcessId_: End Property
 
 ' METHODS---
 Public Function GetProperty(property As String) As Variant
@@ -127,9 +124,13 @@ End Sub
 
 ' IQueryable Methods
 Function IQueryable_GetValueLabels() As String
-    IQueryable_GetValueLabels = vbNullString
+    IQueryable_GetValueLabels = "Material_Id, Time_Stamp, Properties_Json, Revision, Spec_Type"
 End Function
 
 Function IQueryable_GetValues() As String
-    IQueryable_GetValues = vbNullString
+    IQueryable_GetValues = "'" & Me.MaterialId & "', " & _
+                           "'" & CStr(Now()) & "', " & _
+                           "'" & Me.PropertiesJson & "', " & _
+                           "'" & Me.Revision & "', " & _
+                           "'" & Me.SpecType & "'"
 End Function
