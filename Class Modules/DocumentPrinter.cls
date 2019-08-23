@@ -8,7 +8,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-'@Folder("Classes")
 '====================================
 'CLASS DESCRIPTION:
 ' Takes a user form and text box name
@@ -34,25 +33,226 @@ Private Const DEFAULT_QC_SAMPLE      As String = "1.5"          ' Minimum protec
 '----------------
 'CLASS VARIABLES
 '----------------
-Private FormId_         As MSForms.UserForm
-Private OutputHistory_  As VBA.Collection
-'Public Event DocumentPrinted(spec As Specification, work_order As String)
-'------------
+Private FormId_  As MSForms.UserForm
+Public Event DocumentPrinted(spec As Specification, work_order As String)
+'-----------------
 ' AUTO-PROPERTIES
-'------------
+'-----------------
 Public Property Set OutputHistory(value As VBA.Collection): Set OutputHistory_ = value: End Property
 Public Property Get OutputHistory() As VBA.Collection: Set OutputHistory = OutputHistory_: End Property
 Public Property Set FormId(value As MSForms.UserForm): Set FormId_ = value: End Property
 Public Property Get FormId() As MSForms.UserForm: Set FormId = FormId_: End Property
 Public Property Get CurrentText() As String: CurrentText = Me.FormId.txtConsole.text: End Property
 Public Property Let CurrentText(value As String): CurrentText = value: End Property
-'----------
-' METHODS
-'----------
+'----------------
+' PUBLIC METHODS
+'----------------
 Public Sub ClearConsole()
 ' Clears the console of any text
     Me.CurrentText = vbNullString
     Logger.Log "Console Cleared"
+End Sub
+
+Public Sub WriteLine(ParamArray var() As Variant)
+' Writes a line to the txtconsole control of the MSForm.
+    Dim i As Integer
+    Dim s As String
+    Const Padding = 45
+    s = vbNullString
+    For i = LBound(var) To UBound(var)
+         If (i + 1) Mod 2 = 0 Then
+             s = s & var(i)
+         Else
+             s = s & Left$(var(i) & ":" & Space(Padding), Padding)
+         End If
+    Next
+    Me.FormId.txtConsole.text = FormId.txtConsole.text & s & vbNewLine
+End Sub
+
+Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString, _
+           Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
+' Print object to specified worksheet starting in cell "A1"
+    ' Disable updates to the gui during processing
+    App.PerformanceMode True
+    ' This tree selects any specs which have an associated custom worksheet template
+    Select Case spec.SpecType
+        Case "Warping Requirements"
+            LoadWarpingRequirements spec, prod_order
+        Case "Weaving RBA"
+            LoadRbaToSheet App.specs, prod_order
+        Case "Testing Requirements"
+            LoadTestingRequirementsToSheet spec, sht, prod_order, package_variant
+        Case "Ballistic Testing Requirements"
+            LoadBallisticTestingRequirementsToSheet spec, sht, prod_order
+        Case Else
+            ' All specifications which do not have a custom worksheet template
+            ' will be handled by this case.
+            ' Insert/Format body of the specification
+            LoadGenericSpecificationDocument spec, sht, prod_order
+    End Select
+    
+    ' Enable updates to the gui after processing
+    App.PerformanceMode False
+    
+End Sub
+
+Public Sub PrintObjectToConsole(obj As Object)
+' Print object to console
+    Dim Key As Variant
+    ' Clear the console
+    FormId.txtConsole.text = vbNullString
+    'WriteLine obj.SpecType, obj.MaterialId
+    'WriteLine "Revision", obj.Revision
+    
+    For Each Key In obj.Properties
+        If ShouldPrint(CStr(Key)) Then
+            If Not obj.Properties(CStr(Key)) = vbNullString Then
+                WriteLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
+            Else
+                WriteLine CStr(Key), Chr(CHAR_NULL_VALUE)
+            End If
+        End If
+    Next Key
+End Sub
+
+Public Function ShouldPrint(prop As String) As Boolean
+' Acts as a filter for values that are difficult to visualize in tabular form
+    If Left(prop, 3) = "fd_" Then
+        ShouldPrint = False
+    ElseIf Left(prop, 3) = "di_" Then
+        ShouldPrint = False
+    ElseIf Left(prop, 3) = "ld_" Then
+        ShouldPrint = False
+    Else
+        ShouldPrint = True
+    End If
+End Function
+
+Public Sub ListObjects(dict As Object)
+' Given a dictionary of documents, list the docs by type in the console
+    Dim T As Variant
+    For Each T In dict
+        Me.FormId.txtConsole.text = FormId.txtConsole.text & CStr(T) & vbNewLine
+    Next T
+End Sub
+
+Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = vbNullString)
+' Exports the given ws as a PDF and saves it to S:\Data Manager\Specifications
+
+    On Error GoTo SaveFileError
+    ' Parse args
+    If destination_path = vbNullString Then
+        With App.current_spec
+            destination_path = PUBLIC_DIR & "\Specifications\" & .MaterialId & "_" & .SpecType & "_rev" & .Revision
+        End With
+    End If
+
+    ' If file already exists then load it.
+    If Utils.FileExists(destination_path & ".pdf") Then
+        ActiveWorkbook.FollowHyperlink destination_path & ".pdf"
+        Exit Sub
+    End If
+    If ws.Visible <> xlSheetVisible Then ws.Visible = xlSheetVisible
+    ws.ExportAsFixedFormat _
+        Type:=xlTypePDF, _
+        fileName:=destination_path, _
+        Quality:=xlQualityStandard, _
+        IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, _
+        OpenAfterPublish:=True
+    Logger.Log "PDF Saved : " & destination_path
+    ws.Visible = xlSheetHidden
+    Exit Sub
+    
+SaveFileError:
+    Logger.Log "Failed to save file PDF Fail"
+End Sub
+
+Public Sub WriteAllDocuments(Optional order_number As String = vbNullString, Optional package_variant As DocumentPackageVariant = Default)
+' Write all specification docs to the correct worksheets / create worksheet if missing
+    Dim spec As Specification
+    Dim T As Variant
+
+    ' Toggle Performance Mode
+    App.PerformanceMode True
+
+    For Each T In App.specs
+        Set spec = App.specs.item(T)
+            App.printer.PrintObjectToSheet spec, _
+                        Utils.CreateNewSheet(spec.SpecType), _
+                        order_number, _
+                        package_variant
+    Next T
+
+    ' Turn off Performance Mode
+    App.PerformanceMode False
+
+End Sub
+
+Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackageVariant, Optional work_order As String)
+' Print specs from the given doc_package (dictionary)
+    'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
+    Dim spec As Specification
+    Dim doc As Variant
+
+    ' Toggle Performance Mode
+    App.PerformanceMode True
+
+    ' Print all the documents in the package
+    For Each doc In doc_package
+        Set spec = doc_package(doc)
+        ' Log User Action
+        ActionLog.DocumentPrinted spec, work_order
+        With spec
+            ' Weaving RBA gets special treament here to include the checklist.
+            If .SpecType = "Weaving RBA" Then
+                App.printer.PrintSheet SheetByName("Weaving RBA"), FitToPage:=False
+                ActionLog.LogUserAction IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover") & " Checklist Printed"
+                App.printer.PrintSheet SheetByName(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
+            Else
+                App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True, work_order
+            End If
+        End With
+    Next doc
+
+    ' Turn off Performance Mode
+    GuiCommands.ResetExcelGUI
+    App.PerformanceMode False
+
+End Sub
+
+Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False, Optional work_order As String)
+' Prints the sheet of the given name in the spec manager workbook
+    If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
+        ws.Visible = xlSheetVisible
+    End If
+    If App.current_user.Settings.item("default_printer") = vbNullString Then
+        ChangeActivePrinter
+    End If
+    If FitToPage Then
+        If Application.PrintCommunication <> False Then Application.PrintCommunication = False
+        With ws.PageSetup
+            If .FitToPagesWide <> 1 Then .FitToPagesWide = 1
+            If .FitToPagesTall <> True Then .FitToPagesTall = True
+        End With
+        Application.PrintCommunication = True
+    End If
+    ws.PrintOut ActivePrinter:=App.current_user.Settings.item("default_printer")
+End Sub
+
+'-----------------
+' PRIVATE METHODS
+'-----------------
+Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet)
+' Loads a spec to a custom worksheet for printing.
+    Dim nr As Variant
+    Dim rng As Range
+    On Error Resume Next
+    For Each nr In spec.Properties
+        Set rng = customer_sheet.Range(CStr(nr))
+        Utils.Insert rng, spec.GetProperty(CStr(nr))
+    Next nr
+    On Error GoTo 0
 End Sub
 
 Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = vbNullString)
@@ -164,8 +364,6 @@ End Sub
 
 Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
 ' Load values from rba properties into cooresponding named range
-    Dim nr As Variant
-    Dim rng As Range
     Dim spec As Specification
     Dim qc_sample As String
     Dim ballistic_sample As String
@@ -188,12 +386,9 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
     Utils.Insert shtRBA.Range("work_order"), prod_order
     Utils.Insert shtRBA.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
-    On Error Resume Next
-    For Each nr In spec.Properties
-        Set rng = shtRBA.Range(CStr(nr))
-        Utils.Insert rng, spec.GetProperty(CStr(nr))
-    Next nr
-    On Error GoTo 0
+    
+    LoadCustomSheet spec, shtRBA
+        
 
 End Sub
 
@@ -255,73 +450,6 @@ Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
 
 End Sub
 
-Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString, _
-           Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
-' Print object to specified worksheet starting in cell "A1"
-    ' Disable updates to the gui during processing
-    App.PerformanceMode True
-    ' This tree selects any specs which have an associated custom worksheet template
-    Select Case spec.SpecType
-        Case "Warping Requirements"
-            LoadWarpingRequirements spec, prod_order
-        Case "Weaving RBA"
-            LoadRbaToSheet App.specs, prod_order
-        Case "Testing Requirements"
-            LoadTestingRequirementsToSheet spec, sht, prod_order, package_variant
-        Case "Ballistic Testing Requirements"
-            LoadBallisticTestingRequirementsToSheet spec, sht, prod_order
-        Case Else
-            ' All specifications which do not have a custom worksheet template
-            ' will be handled by this case.
-            ' Insert/Format body of the specification
-            LoadGenericSpecificationDocument spec, sht, prod_order
-    End Select
-    
-    ' Enable updates to the gui after processing
-    App.PerformanceMode False
-    
-End Sub
-
-Public Sub PrintObjectToConsole(obj As Object)
-' Print object to console
-    Dim Key As Variant
-    ' Clear the console
-    FormId.txtConsole.text = vbNullString
-    'WriteLine obj.SpecType, obj.MaterialId
-    'WriteLine "Revision", obj.Revision
-    
-    For Each Key In obj.Properties
-        If ShouldPrint(CStr(Key)) Then
-            If Not obj.Properties(CStr(Key)) = vbNullString Then
-                WriteLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
-            Else
-                WriteLine CStr(Key), Chr(CHAR_NULL_VALUE)
-            End If
-        End If
-    Next Key
-End Sub
-
-Public Function ShouldPrint(prop As String) As Boolean
-' Acts as a filter for values that are difficult to visualize in tabular form
-    If Left(prop, 3) = "fd_" Then
-        ShouldPrint = False
-    ElseIf Left(prop, 3) = "di_" Then
-        ShouldPrint = False
-    ElseIf Left(prop, 3) = "ld_" Then
-        ShouldPrint = False
-    Else
-        ShouldPrint = True
-    End If
-End Function
-
-Public Sub ListObjects(dict As Object)
-' Given a dictionary of documents, list the docs by type in the console
-    Dim T As Variant
-    For Each T In dict
-        Me.FormId.txtConsole.text = FormId.txtConsole.text & CStr(T) & vbNewLine
-    Next T
-End Sub
-
 Private Function FormatAscii(char As String) As String
 
     If char = Chr(CHAR_REQUIRED) Then
@@ -337,27 +465,6 @@ Private Function FormatAscii(char As String) As String
     End If
     FormatAscii = char
 End Function
-
-Public Sub WriteLine(ParamArray var() As Variant)
-    Dim i As Integer
-    Dim s As String
-    Const Padding = 45
-    s = vbNullString
-    For i = LBound(var) To UBound(var)
-         If (i + 1) Mod 2 = 0 Then
-             s = s & var(i)
-         Else
-             s = s & Left$(var(i) & ":" & Space(Padding), Padding)
-         End If
-    Next
-    OutputHistory.Add s
-    Me.FormId.txtConsole.text = FormId.txtConsole.text & s & vbNewLine
-End Sub
-
-Private Sub Class_Initialize()
-' Constructor
-    Set OutputHistory = New VBA.Collection
-End Sub
 
 Private Sub PrintPropertyToSheet(ws As Worksheet, prop_name As Variant, prop_val As Variant, row As Integer)
 ' Prints a given property to the worksheet
@@ -406,107 +513,4 @@ Private Sub LoadGenericSpecificationDocument(spec As Specification, sht As Works
 
 End Sub
 
-Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = vbNullString)
-' Exports the given ws as a PDF and saves it to S:\Data Manager\Specifications
 
-    On Error GoTo SaveFileError
-    ' Parse args
-    If destination_path = vbNullString Then
-        With App.current_spec
-            destination_path = PUBLIC_DIR & "\Specifications\" & .MaterialId & "_" & .SpecType & "_rev" & .Revision
-        End With
-    End If
-
-    ' If file already exists then load it.
-    If Utils.FileExists(destination_path & ".pdf") Then
-        ActiveWorkbook.FollowHyperlink destination_path & ".pdf"
-        Exit Sub
-    End If
-    If ws.Visible <> xlSheetVisible Then ws.Visible = xlSheetVisible
-    ws.ExportAsFixedFormat _
-        Type:=xlTypePDF, _
-        fileName:=destination_path, _
-        Quality:=xlQualityStandard, _
-        IncludeDocProperties:=True, _
-        IgnorePrintAreas:=False, _
-        OpenAfterPublish:=True
-    Logger.Log "PDF Saved : " & destination_path
-    ws.Visible = xlSheetHidden
-    Exit Sub
-    
-SaveFileError:
-    Logger.Log "Failed to save file PDF Fail"
-End Sub
-
-Public Sub WriteAllDocuments(Optional order_number As String = vbNullString, Optional package_variant As DocumentPackageVariant = Default)
-' Write all specification docs to the correct worksheets / create worksheet if missing
-    Dim spec As Specification
-    Dim T As Variant
-
-    ' Toggle Performance Mode
-    App.PerformanceMode True
-
-    For Each T In App.specs
-        Set spec = App.specs.item(T)
-            App.printer.PrintObjectToSheet spec, _
-                        Utils.CreateNewSheet(spec.SpecType), _
-                        order_number, _
-                        package_variant
-    Next T
-
-    ' Turn off Performance Mode
-    App.PerformanceMode False
-
-End Sub
-
-Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackageVariant, Optional work_order As String)
-' Print specs from the given doc_package (dictionary)
-    'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
-    Dim spec As Specification
-    Dim doc As Variant
-
-    ' Toggle Performance Mode
-    App.PerformanceMode True
-
-    ' Print all the documents in the package
-    For Each doc In doc_package
-        Set spec = doc_package(doc)
-        ' Log User Action
-        ActionLog.DocumentPrinted spec, work_order
-        With spec
-            ' Weaving RBA gets special treament here to include the checklist.
-            If .SpecType = "Weaving RBA" Then
-                App.printer.PrintSheet SheetByName("Weaving RBA"), FitToPage:=False
-                ActionLog.LogUserAction IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover") & " Checklist Printed"
-                App.printer.PrintSheet SheetByName(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
-            Else
-                App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True
-            End If
-        End With
-    Next doc
-
-    
-    ' Turn off Performance Mode
-    GuiCommands.ResetExcelGUI
-    App.PerformanceMode False
-
-End Sub
-
-Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
-' Prints the sheet of the given name in the spec manager workbook
-    If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
-        ws.Visible = xlSheetVisible
-    End If
-    If App.current_user.Settings.item("default_printer") = vbNullString Then
-        ChangeActivePrinter
-    End If
-    If FitToPage Then
-        If Application.PrintCommunication <> False Then Application.PrintCommunication = False
-        With ws.PageSetup
-            If .FitToPagesWide <> 1 Then .FitToPagesWide = 1
-            If .FitToPagesTall <> True Then .FitToPagesTall = True
-        End With
-        Application.PrintCommunication = True
-    End If
-    ws.PrintOut ActivePrinter:=App.current_user.Settings.item("default_printer")
-End Sub
