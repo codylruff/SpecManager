@@ -34,7 +34,7 @@ Private Const DEFAULT_QC_SAMPLE      As String = "1.5"          ' Minimum protec
 'CLASS VARIABLES
 '----------------
 Private FormId_  As MSForms.UserForm
-Public Event DocumentPrinted(spec As Specification, work_order As String)
+'Public Event DocumentPrinted(spec As Specification, work_order As String)
 '-----------------
 ' AUTO-PROPERTIES
 '-----------------
