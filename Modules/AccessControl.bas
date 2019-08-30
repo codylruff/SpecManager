@@ -87,18 +87,16 @@ Private Function CheckSecret(User As Account) As Boolean
     CheckSecret = IIf(User.GetSecret = GetSHA1Hash(PromptHandler.GetPassword), True, False)
 End Function
 
-Public Sub CreateNewAdmin(existing_admin_user_name As String)
+Public Sub CreateNewAdmin()
 ' Creates or changes the admin password.
-    Dim existing_admin As Account
-    Dim new_admin As Account
-
-    Set existing_admin = Account_Initialize(existing_admin_user_name)
-    If CheckSecret(existing_admin) Then
-        Set new_admin = Account_Initialize(PromptHandler.UserInput( _
-            SingleLineText, "Access Control", "Enter user-name for new admin account :"))
-        new_admin.FlaggedForPasswordChange = True
+    Dim new_admin As String
+    SpecManager.StartApp
+    If CheckSecret(App.current_user) Then
+        new_admin = PromptHandler.UserInput( _
+            SingleLineText, "Access Control", "Enter user-name for new admin account :")
     End If
-    App.Restart
+    DataAccess.FlagUserForSecretChange new_admin
+    SpecManager.StopApp
 End Sub
 
 Public Sub ChangeSecret(User As Account)

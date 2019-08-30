@@ -16,6 +16,7 @@ Public Sub ParseAll(Optional material_keyword As String = "code")
     ws.Visible = True
     Dim arrFiles As Variant
     arrFiles = Utils.GetFiles(pfilters:=Array("xls", "xlsx"))
+    On Error Resume Next
     For r = LBound(arrFiles) To UBound(arrFiles)
         Set json_object = ParsePsf(CStr(arrFiles(r)))
         ' Clean data by removing units and filling in missing values

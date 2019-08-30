@@ -93,6 +93,7 @@ Public Sub ExportAll()
     
     Logger.ResetLog ExportLog
     Logger.SetLogLevel LOG_ALL
+    Logger.SetImmediateLog ExportLog
     Logger.Log "Exporting Files . . . ", RuntimeLog
     For Each VBComponent In ActiveWorkbook.VBProject.VBComponents
         
@@ -131,8 +132,9 @@ Public Sub ExportAll()
 
     Next
     
-    Logger.Log "Export Success", RuntimeLog
+    Logger.Log "Export Complete", RuntimeLog
     Logger.Log "Export Complete.", ExportLog
+    Logger.SetImmediateLog RuntimeLog
     Logger.SaveLog ExportLog
     Logger.SetLogLevel LOG_LOW
 End Sub

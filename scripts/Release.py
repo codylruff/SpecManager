@@ -125,8 +125,7 @@ def create_release(repo_dir, version, secret, user_name):
     repo = g.get_repo('codylruff/SpecManager')
     rel_name = 'Version : ' + version
     rel_message = input('Enter a message for the release : ')
-    rel = repo.create_git_release('v' + version, rel_name, rel_message, target_commitish='master-')
-    print(rel.author)
+    rel = repo.create_git_release('v' + version, rel_name, rel_message, target_commitish='v'+ version)
     asset_path = repo_dir + '/bin/spec-manager-v' + version + '.zip'
     rel.upload_asset(asset_path, '', 'application/zip')
 
