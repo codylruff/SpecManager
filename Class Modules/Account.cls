@@ -59,11 +59,11 @@ Private Sub CreateSettingsJson()
     End If
     With Settings
         .Add "name", Environ("Username")
-        .Add "default_printer", vbNullString
-        .Add "default_log_level", vbNullString
-        .Add "privledge_level", vbNullString
-        .Add "product_line", vbNullString
-        .Add "repo_path", vbNullString
+        .Add "default_printer", nullstr
+        .Add "default_log_level", nullstr
+        .Add "privledge_level", nullstr
+        .Add "product_line", nullstr
+        .Add "repo_path", nullstr
     End With
 End Sub
 

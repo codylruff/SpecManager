@@ -94,7 +94,7 @@ Select Case NumberOfArrayDimensions(arr:=arr)
         '''''''''''''''''''''''''''''
         For Ndx = LBound(arr, 1) To UBound(arr, 1)
             KeyVal = arr(Ndx, 1)
-            If Trim(KeyVal) = vbNullString Then
+            If Trim(KeyVal) = nullstr Then
                 '''''''''''''''''''''''''''''''''
                 ' Key is empty. Add to collection
                 ' without a key.
@@ -331,7 +331,7 @@ For Ndx = 1 To coll.Count
     ' ItemKey must not be spaces or
     ' an empty string.
     ''''''''''''''''''''''''''''''''
-    If Trim(ItemKey) = vbNullString Then
+    If Trim(ItemKey) = nullstr Then
         Set CollectionToDictionary = Nothing
         Exit Function
     End If
@@ -373,7 +373,7 @@ Dim ItemKey As String
 ''''''''''''''''''''''''''''''''''''''''''
 ' Your code to set ItemKey to the
 ' appropriate string value. ItemKey
-' must not be all spaces or vbNullString.
+' must not be all spaces or nullstr.
 ''''''''''''''''''''''''''''''''''''''''''
 
 CreateDictionaryKeyFromCollectionItem = ItemKey
@@ -1194,7 +1194,7 @@ Public Sub SortDictionary(dict As Object, _
 ' Dictionary may be Object as well as simple variables.
 '
 ' If sort by key is True, all element of the Dictionary
-' must have a non-blank Key value. If Key is vbNullString
+' must have a non-blank Key value. If Key is nullstr
 ' the procedure will terminate.
 '
 ' By defualt, sorting is done in Ascending order. You can

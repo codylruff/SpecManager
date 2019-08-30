@@ -25,6 +25,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -58,7 +60,7 @@ Private Sub cmdContinue_Click()
 '        Exit Sub
 '    End If
     material_id = UCase(Utils.RemoveWhiteSpace(txtSpecName.value))
-    If SpecManager.NewSpecificationInput(selection, material_id) <> vbNullString Then
+    If SpecManager.NewSpecificationInput(selection, material_id) <> nullstr Then
         Unload Me
         formCreateSpec.show vbModeless
     Else
@@ -68,7 +70,7 @@ Private Sub cmdContinue_Click()
 End Sub
 
 Sub Continue()
-    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> vbNullString Then
+    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> nullstr Then
         Logger.Log "Spec Input Pass"
     Else
         Logger.Log "Spec Input Fail"

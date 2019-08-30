@@ -40,7 +40,7 @@ Public Function IsBlank(arg As Variant) As Boolean
         Case vbNull
             IsBlank = True
         Case vbString
-            IsBlank = (arg = VBA.vbNullString Or arg = vbNullChar)
+            IsBlank = (arg = nullstr Or arg = vbNullChar)
         Case vbObject
             IsBlank = (arg Is Nothing)
         Case Else

@@ -34,6 +34,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub cmdPrint_Click()
@@ -123,7 +125,7 @@ Sub PrintConsole()
     Dim spec As Specification
     Dim T As Variant
     Dim new_sht As Worksheet
-    If Me.txtConsole.text = vbNullString Then
+    If Me.txtConsole.text = nullstr Then
         PromptHandler.Error "There is nothing to print!"
     Else
         ' Print the specs one at a time to the default printer

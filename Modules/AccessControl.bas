@@ -3,7 +3,7 @@ Option Explicit
 
 Function Account_Initialize(Optional user_name As String) As Account
     Dim User As Account
-    If user_name = vbNullString Then
+    If user_name = nullstr Then
         Set User = GetPrivledges(UCase(VBA.Environ("Username")))
         If User Is Nothing Then
             Logger.Log "Creating new user " & VBA.Environ("Username"), UserLog

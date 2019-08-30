@@ -14,7 +14,7 @@ Public Function Tests() As TestSuite
     With Tests.Test("RemoveWhiteSpace(target As String) As String should remove all whitespace from given string")
         Set Test = Suite.Test("should pass")
         With Test
-            .IsEqual SAATI_Data_Manager.Utils.RemoveWhiteSpace(" "), vbNullString
+            .IsEqual SAATI_Data_Manager.Utils.RemoveWhiteSpace(" "), nullstr
             .IsEqual SAATI_Data_Manager.Utils.RemoveWhiteSpace(" 1 A !"), "1A!"
         End With
         

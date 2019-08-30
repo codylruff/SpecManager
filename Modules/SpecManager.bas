@@ -31,7 +31,7 @@ Public Sub LoadExistingTemplate(template_type As String)
 End Sub
 
 Function NewSpecificationInput(template_type As String, spec_name As String) As String
-    If template_type <> vbNullString Then
+    If template_type <> nullstr Then
         LoadExistingTemplate template_type
         With App
         Set .current_spec = New Specification
@@ -41,7 +41,7 @@ Function NewSpecificationInput(template_type As String, spec_name As String) As 
         End With
         NewSpecificationInput = spec_name
     Else
-        NewSpecificationInput = vbNullString
+        NewSpecificationInput = nullstr
     End If
 End Function
 
@@ -53,7 +53,7 @@ End Function
 Sub MaterialInput(material_id As String)
 ' Takes user input for material search
     Dim ret_val As Long
-    If material_id = vbNullString Then
+    If material_id = nullstr Then
         ' You must enter a material id before clicking search
         PromptHandler.Error "Specification not found!"
         Exit Sub
@@ -145,7 +145,7 @@ Private Function UpdateTemplateChanges() As Boolean
             If Not spec.Properties.Exists(Key) Then
                 ' Missing properties are added.
                 Logger.Log "Adding : " & Key & " to " & spec.MaterialId & " properties list."
-                spec.Properties.Add Key:=Key, item:=vbNullString
+                spec.Properties.Add Key:=Key, item:=nullstr
                 Updated = True
             End If
         Next Key
@@ -375,9 +375,9 @@ Private Function ManagerOrAdmin() As Boolean
         ManagerOrAdmin = False
     End If
 ErrorHandler:
-    Dim account As Account
-    Set account = AccessControl.Account_Initialize
-    ManagerOrAdmin = IIf(account.ProductLine = "Admin", True, False) 
+    Dim Account As Account
+    Set Account = AccessControl.Account_Initialize
+    ManagerOrAdmin = IIf(Account.ProductLine = "Admin", True, False)
 End Function
 
 Private Function MaterialInputValidation(material_id As String) As String
@@ -477,7 +477,7 @@ Public Sub CopyPropertiesFromFile()
     For r = 2 To 58
         style_number = Mid(ws.Cells(r, 1), 6, 3)
         json_file_path = ThisWorkbook.path & "\RBAs\" & style_number & ".json"
-        json_string = Replace(JsonVBA.ReadJsonFileToString(json_file_path), "NaN", vbNullString)
+        json_string = Replace(JsonVBA.ReadJsonFileToString(json_file_path), "NaN", nullstr)
         ws.Cells(r, 2).value = json_string
     Next r
 End Sub

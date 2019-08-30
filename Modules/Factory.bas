@@ -56,7 +56,7 @@ Function CopyTemplate(temp As SpecificationTemplate) As SpecificationTemplate
     Set CopyTemplate = temp_copy
 End Function
 
-Function CreateNewTemplate(Optional template_name As String = vbNullString) As SpecificationTemplate
+Function CreateNewTemplate(Optional template_name As String = nullstr) As SpecificationTemplate
     Dim Template As SpecificationTemplate
     Set Template = New SpecificationTemplate
     Template.SpecType = template_name

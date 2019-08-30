@@ -27,9 +27,9 @@ Option Explicit ' Always a good idea to use this
 '========================================================================
 Sub ShowProgress(ByVal ActionNumber As Long, _
                 ByVal TotalActions As Long, _
-                Optional ByVal StatusMessage As String = vbNullString, _
+                Optional ByVal StatusMessage As String = nullstr, _
                 Optional ByVal CloseWhenDone As Boolean = True, _
-                Optional ByVal title As String = vbNullString)
+                Optional ByVal title As String = nullstr)
 
     DoEvents 'to ensure that the code to display the form gets executed
 
@@ -50,7 +50,7 @@ Sub ShowProgress(ByVal ActionNumber As Long, _
         'if the form is not already open, Show it
         ufProgress.show
         'set the title
-        If Not title = vbNullString Then
+        If Not title = nullstr Then
             ufProgress.Caption = title
         End If
         'then update the ActionNumber and Status Message

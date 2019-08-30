@@ -1036,7 +1036,7 @@ Public Function DeleteArrayElement(InputArray As Variant, ElementNumber As Long,
 ' right of the deleted element to the left. If InputArray is a dynamic array, and the
 ' ResizeDynamic parameter is True, the array will be resized one element smaller. Otherwise,
 ' the right-most entry in the array is set to the default value appropriate to the data
-' type of the array (0, vbNullString, Empty, or Nothing). If the array is an array of Variant
+' type of the array (0, nullstr, Empty, or Nothing). If the array is an array of Variant
 ' types, the default data type is the data type of the last element in the array.
 ' The function returns True if the elememt was successfully deleted, or False if an error
 ' occurrred. This procedure works only on single-dimensional
@@ -1117,7 +1117,7 @@ Select Case VType
     Case vbByte, vbInteger, vbLong, vbSingle, vbDouble, vbDate, vbCurrency, vbDecimal
         InputArray(UBound(InputArray)) = 0
     Case vbString
-        InputArray(UBound(InputArray)) = vbNullString
+        InputArray(UBound(InputArray)) = nullstr
     Case vbArray, vbVariant, vbEmpty, vbError, vbNull, vbUserDefinedType
         InputArray(UBound(InputArray)) = Empty
     Case vbBoolean
@@ -1167,7 +1167,7 @@ Select Case NumberOfArrayDimensions(arr:=InputArray)
 End Select
 
 For Ndx = LBound(InputArray) To UBound(InputArray)
-    If InputArray(Ndx) <> vbNullString Then
+    If InputArray(Ndx) <> nullstr Then
         FirstNonEmptyStringIndexInArray = Ndx
         Exit Function
     End If
@@ -1289,7 +1289,7 @@ Public Function IsArrayAllDefault(InputArray As Variant) As Boolean
 '   Variable Type           Value
 '   -------------           -------------------
 '   Variant                 Empty
-'   String                  vbNullString
+'   String                  nullstr
 '   Numeric                 0
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Dim Ndx As Long
@@ -1325,7 +1325,7 @@ Select Case VarType(InputArray)
     Case vbArray + vbVariant
         DefaultValue = Empty
     Case vbArray + vbString
-        DefaultValue = vbNullString
+        DefaultValue = nullstr
     Case Is > vbArray
         DefaultValue = 0
 End Select
@@ -1802,7 +1802,7 @@ Public Function IsVariantArrayConsistent(arr As Variant) As Boolean
 ' vbEmpty) that element is skipped and not used in the comparison. The
 ' reasoning behind this is that an empty variable will return the
 ' data type of the variable to which it is assigned (e.g., it will
-' return vbNullString to a String and 0 to a Double).
+' return nullstr to a String and 0 to a Double).
 '
 ' The function does not support arrays of User Defined Types.
 '
@@ -2028,14 +2028,14 @@ End If
 
 
 ''''''''''''''''''''''''''''''''''''''''''''''''
-' Loop through the array, swapping vbNullStrings
+' Loop through the array, swapping nullstrs
 ' at the beginning with values at the end.
 ''''''''''''''''''''''''''''''''''''''''''''''''
 NonEmptyNdx = FirstNonEmptyNdx
 For Ndx = LBound(InputArray) To UBound(InputArray)
-    If InputArray(Ndx) = vbNullString Then
+    If InputArray(Ndx) = nullstr Then
         InputArray(Ndx) = InputArray(NonEmptyNdx)
-        InputArray(NonEmptyNdx) = vbNullString
+        InputArray(NonEmptyNdx) = nullstr
         NonEmptyNdx = NonEmptyNdx + 1
         If NonEmptyNdx > UBound(InputArray) Then
             Exit For
@@ -2044,10 +2044,10 @@ For Ndx = LBound(InputArray) To UBound(InputArray)
 Next Ndx
 ''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Set entires (Ndx+1) to UBound(InputArray) to
-' vbNullStrings.
+' nullstrs.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''
 For Ndx2 = Ndx + 1 To UBound(InputArray)
-    InputArray(Ndx2) = vbNullString
+    InputArray(Ndx2) = nullstr
 Next Ndx2
 MoveEmptyStringsToEndOfArray = True
 
@@ -2132,7 +2132,7 @@ Public Function ResetVariantArrayToDefaults(InputArray As Variant) As Boolean
 ' This resets all the elements of an array of Variants back to their appropriate
 ' default values. The elements of the array may be of mixed types (e.g., some Longs,
 ' some Objects, some Strings, etc). Each data type will be set to the appropriate
-' default value (0, vbNullString, Empty, or Nothing). It returns True if the
+' default value (0, nullstr, Empty, or Nothing). It returns True if the
 ' array was set to defautls, or False if an error occurred. InputArray must be
 ' an allocated single-dimensional array. This function differs from the Erase
 ' function in that it preserves the original data types, while Erase sets every
@@ -2665,7 +2665,7 @@ Else
         Case vbSingle
             Variable = CSng(0)
         Case vbString
-            Variable = vbNullString
+            Variable = nullstr
         Case vbUserDefinedType
             '''''''''''''''''''''''''''''''''
             ' User-Defined-Types cannot be
@@ -2781,7 +2781,7 @@ Public Function VectorsToArray(arr As Variant, ParamArray Vectors()) As Boolean
 ' If the Vectors are of differing sizes, Arr is sized to hold the
 ' maximum number of elements in a Vector. The procedure Erases the
 ' Arr array, so when it is reallocated with Redim, all elements will
-' be the reset to their default value (0 or vbNullString or Empty).
+' be the reset to their default value (0 or nullstr or Empty).
 ' Unused elements in the new array will remain the default value for
 ' that data type.
 '

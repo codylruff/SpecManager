@@ -292,3 +292,10 @@ DbDeleteFailException:
     Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
     DeleteTestTemplate = DB_DELETE_FAILURE
 End Function
+
+Public Sub GetFiles_Test()
+    Dim file As Variant
+    For Each file In Utils.GetFiles(pfilters:=Array("csv"))
+        Debug.Print file
+    Next file
+End Sub

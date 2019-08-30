@@ -14,6 +14,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
+
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -35,7 +37,7 @@ End Sub
 
 Private Sub cmdSearch_Click()
     ' Check for any white space and remove it
-    If Utils.RemoveWhiteSpace(txtMaterialId) = vbNullString Then
+    If Utils.RemoveWhiteSpace(txtMaterialId) = nullstr Then
        PromptHandler.Error "Please enter a material id."
        Exit Sub
     End If
@@ -74,7 +76,7 @@ Sub MaterialSearch()
     SpecManager.RestartApp
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.ListSpecifications Me
-    If Me.txtConsole.text = vbNullString Then
+    If Me.txtConsole.text = nullstr Then
         Me.txtConsole.text = "No specifications are available for this code."
     End If
 End Sub

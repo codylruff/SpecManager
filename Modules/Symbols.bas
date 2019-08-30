@@ -4,6 +4,7 @@ Option Explicit
 Public Const PUBLIC_DIR               As String = "S:\Data Manager"
 Public Const SM_PATH                  As String = "C:\Users\"
 Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+Public Const nullstr                  As String = vbNullString
 
 ' SPEC MANAGER ERROR DESCRIPTIONS:
 Public Const SM_SEARCH_SUCCESS     As Long = 0

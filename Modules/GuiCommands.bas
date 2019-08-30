@@ -173,7 +173,7 @@ Public Sub ClearForm(frm)
     For Each ctl In frm.Controls
         Select Case VBA.TypeName(ctl)
             Case "TextBox"
-                ctl.text = vbNullString
+                ctl.text = nullstr
             Case "CheckBox", "OptionButton", "ToggleButton"
                 ctl.value = False
             Case "ComboBox", "ListBox"

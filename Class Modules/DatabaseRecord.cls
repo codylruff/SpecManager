@@ -59,7 +59,7 @@ Private Function InitializeRecords()
         For i = 1 To Columns
             Logger.Log "Column " & i & " : " & header(1, i) & ", Row " & j & " : " & Data(j, i), DebugLog
             If dict.Exists(header(1, i)) Then
-                If dict(header(1, i)).value = vbNullString Then
+                If dict(header(1, i)).value = nullstr Then
                     dict.Add Key:=header(1, i), item:=Data(j, i)
                 End If
             Else

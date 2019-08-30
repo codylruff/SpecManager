@@ -16,6 +16,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -67,7 +69,7 @@ Private Sub PopulateCboSelectProperty()
           .AddItem prop
         Next prop
     End With
-    txtPropertyValue.value = vbNullString
+    txtPropertyValue.value = nullstr
 End Sub
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)

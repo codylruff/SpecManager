@@ -21,7 +21,7 @@ End Property
 
 Public Sub Connect(path As String)
 ' Connect to sqlite database
-    If ConnectionString_ = vbNullString Then
+    If ConnectionString_ = nullstr Then
         DbConnection.openDb path
         Logger.Log "Connection established.", SqlLog
         ConnectionString = path

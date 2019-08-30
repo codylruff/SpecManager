@@ -21,6 +21,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub cmdAddProperty_Click()
@@ -93,8 +95,8 @@ Private Sub PopulateCboSelectProperty()
           .AddItem Utils.SplitCamelCase(CStr(prop))
         Next prop
     End With
-    txtPropertyName.value = vbNullString
-    cboSelectProperty.value = vbNullString
+    txtPropertyName.value = nullstr
+    cboSelectProperty.value = nullstr
 End Sub
 
 Private Sub PopulateCboSelectTemplate()

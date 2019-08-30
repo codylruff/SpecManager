@@ -87,7 +87,7 @@ Public Function ChangePassword() As String
     Wend
     ' Return new password
     ChangePassword = CStr(new_pass_1)
-    new_pass_1 = vbNullString
-    new_pass_2 = vbNullString
+    new_pass_1 = nullstr
+    new_pass_2 = nullstr
     
 End Function

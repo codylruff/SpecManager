@@ -34,6 +34,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboProductLine
@@ -45,8 +47,8 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub cmdContinue_Click()
-    If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
-        If cboProductLine.value <> vbNullString Then
+    If SpecManager.TemplateInput(txtTemplateName.value) <> nullstr Then
+        If cboProductLine.value <> nullstr Then
             App.current_template.ProductLine = cboProductLine.value
         Else
             PromptHandler.Error "Please select a product line!"
@@ -61,7 +63,7 @@ Private Sub cmdContinue_Click()
 End Sub
 
 Sub Continue()
-    If SpecManager.TemplateInput(txtTemplateName.value) <> vbNullString Then
+    If SpecManager.TemplateInput(txtTemplateName.value) <> nullstr Then
         Logger.Log "Template Input Pass"
     Else
         Logger.Log "Template Input Fail"

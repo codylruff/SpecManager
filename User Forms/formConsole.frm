@@ -21,6 +21,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Private WithEvents pLogger As SystemLogger
 Attribute pLogger.VB_VarHelpID = -1
 
@@ -54,10 +56,10 @@ Private Sub ParseConsoleCommand(command As String)
     Else
         Application.Run command
     End If
-    txtInput.text = vbNullString
+    txtInput.text = nullstr
     Exit Sub
 ErrorHandler:
-    txtInput.text = vbNullString
+    txtInput.text = nullstr
     Logger.Log "Function Unknown"
 End Sub
 

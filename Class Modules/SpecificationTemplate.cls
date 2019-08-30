@@ -30,7 +30,7 @@ Public Property Get SpecType() As String: SpecType = SpecType_: End Property
 '--METHODS--'
 Public Sub AddProperty(property As String)
 ' Adds a property to the list of properties
-    Me.Properties.Add property, vbNullString
+    Me.Properties.Add property, nullstr
 End Sub
 
 Public Sub RemoveProperty(property As String)

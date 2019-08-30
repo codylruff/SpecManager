@@ -45,7 +45,7 @@ Public Function execute() As Long
 End Function
 
 Private Function BuildSqlQuery() As Boolean
-    SqlQuery = vbNullString
+    SqlQuery = nullstr
     
     If sql.SelectAll Then
         Append “SELECT * From” & sql.From”

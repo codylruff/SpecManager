@@ -33,6 +33,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub cmdCopySpec_Click()
@@ -57,7 +59,7 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub cmdMaterialSearch_Click()
-    If txtMaterialId = vbNullString Or txtMaterialId = " " Then
+    If txtMaterialId = nullstr Or txtMaterialId = " " Then
       PromptHandler.Error "Please enter a material id."
       Exit Sub
    End If
@@ -117,7 +119,7 @@ Private Sub PopulateCboSelectProperty()
             End If
         Next prop
     End With
-    txtPropertyValue.value = vbNullString
+    txtPropertyValue.value = nullstr
 End Sub
 
 Private Sub cmdClear_Click()
@@ -174,7 +176,7 @@ End Sub
 Sub Submit()
 ' This executes a set property command
     ' Check for empty controls
-    If cboSelectProperty.value = vbNullString Then Exit Sub
+    If cboSelectProperty.value = nullstr Then Exit Sub
     ' Change the property desired
     With App.current_spec
         .ChangeProperty cboSelectProperty.value, txtPropertyValue
@@ -184,7 +186,7 @@ End Sub
 
 Sub SelectType()
     ' Check for empty controls
-    If cboSelectType.value = vbNullString Then Exit Sub
+    If cboSelectType.value = nullstr Then Exit Sub
     ' Select the specification desired
     Set App.current_spec = App.specs.item(cboSelectType.value)
     PopulateCboSelectProperty

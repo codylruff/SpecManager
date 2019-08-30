@@ -21,6 +21,46 @@ Private Declare Function UpdateWindow Lib "user32" (ByVal Hwnd As Long) As Long
 Private Declare Function IsWindow Lib "user32" (ByVal Hwnd As Long) As Long
 #End If
 ' -------------------------------------------------
+Public Function GetFiles(Optional dir_path As String, Optional pfilters As Variant) As Variant
+' Given a dir return an array of file names
+    Dim arr() As String
+    Dim file As Variant
+    Dim i As Long
+    Dim result As Integer
+    Dim fDialog As FileDialog
+
+    'IMPORTANT!
+    Set fDialog = Application.FileDialog(3)
+    fDialog.AllowMultiSelect = True
+    
+    'Optional FileDialog properties
+    fDialog.title = "Select files"
+    If dir_path = nullstr Then dir_path = "C:\Users\cruff"
+    fDialog.InitialFileName = dir_path
+
+    'Optional: Add filters
+    fDialog.Filters.Clear
+    If Not IsMissing(pfilters) Then
+        Dim filters_string As String
+        For i = LBound(pfilters) To UBound(pfilters)
+            filters_string = filters_string & "*." & pfilters(i) & "; "
+        Next i
+        If UBound(pfilters) < 3 Then filters_string = Replace(filters_string, ";", nullstr)
+        fDialog.Filters.Add "Custom", filters_string, 1
+    End If
+    'Show the dialog. -1 means success!
+    If fDialog.show = -1 Then
+        i = 0
+        ReDim arr(CLng(fDialog.SelectedItems.Count))
+        For Each file In fDialog.SelectedItems
+            arr(i) = CStr(file)
+            i = i + 1
+        Next file
+    End If
+    GetFiles = arr
+
+End Function
+
 Public Function GetLastRow(sht As Worksheet, start_column As String, start_row As Long) As Long
 ' Returns the last populated row in a range of data
         Dim current_cell As Range
@@ -81,7 +121,7 @@ Public Function CleanString(ByVal target As String, find_strings As Variant, Opt
     Dim clean_string As String
     clean_string = target
     For i = LBound(find_strings) To UBound(find_strings)
-        clean_string = Replace(clean_string, find_strings(i), vbNullString)
+        clean_string = Replace(clean_string, find_strings(i), nullstr)
     Next i
     If clean_string <> target Then
         CleanString = IIf(remove_whitespace, Utils.RemoveWhiteSpace(clean_string), clean_string)
@@ -139,7 +179,7 @@ Public Function RemoveWhiteSpace(target As String) As String
         .Pattern = "\s"
         .MultiLine = True
         .Global = True
-        RemoveWhiteSpace = .Replace(target, vbNullString)
+        RemoveWhiteSpace = .Replace(target, nullstr)
     End With
 End Function
 
@@ -186,7 +226,7 @@ Function GetLine(ParamArray var() As Variant) As String
     Const Padding = 25
     Dim i As Integer
     Dim s As String
-    s = vbNullString
+    s = nullstr
     'If FormId.txtConsole = Nothing Then Exit Sub
     For i = LBound(var) To UBound(var)
          If (i + 1) Mod 2 = 0 Then
@@ -202,7 +242,7 @@ Function FormatTestResult(ParamArray var() As Variant) As String
     Const Padding = 36
     Dim i As Integer
     Dim s As String
-    s = vbNullString
+    s = nullstr
     For i = LBound(var) To UBound(var)
          If (i + 1) Mod 2 = 0 Then
              s = s & var(i)
@@ -262,14 +302,14 @@ Function CheckForEmpties(frm) As Boolean
     For Each ctl In frm.Controls
         Select Case VBA.TypeName(ctl)
             Case "TextBox"
-                If ctl.value = vbNullString Then
+                If ctl.value = nullstr Then
                     MsgBox "All boxes must be filed.", vbExclamation, "Input Error"
                     ctl.SetFocus
                     CheckForEmpties = True
                     Exit Function
                 End If
             Case "ComboBox"
-                If ctl.value = vbNullString Then
+                If ctl.value = nullstr Then
                     MsgBox "Make a selection from the drop down menu.", vbExclamation, "Input Error"
                     ctl.SetFocus
                     CheckForEmpties = True
@@ -385,17 +425,17 @@ Public Sub ClearHeaderFooter(ws As Worksheet, _
     ' Clear Header
     If header Then
         With ws.PageSetup
-            .LeftHeader = vbNullString
-            .CenterHeader = vbNullString
-            .RightHeader = vbNullString
+            .LeftHeader = nullstr
+            .CenterHeader = nullstr
+            .RightHeader = nullstr
         End With
     End If
     ' Clear Footer
     If footer Then
         With ws.PageSetup
-            .LeftFooter = vbNullString
-            .CenterFooter = vbNullString
-            .RightFooter = vbNullString
+            .LeftFooter = nullstr
+            .CenterFooter = nullstr
+            .RightFooter = nullstr
         End With
     End If
 

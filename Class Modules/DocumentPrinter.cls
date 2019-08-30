@@ -38,8 +38,6 @@ Private FormId_  As MSForms.UserForm
 '-----------------
 ' AUTO-PROPERTIES
 '-----------------
-Public Property Set OutputHistory(value As VBA.Collection): Set OutputHistory_ = value: End Property
-Public Property Get OutputHistory() As VBA.Collection: Set OutputHistory = OutputHistory_: End Property
 Public Property Set FormId(value As MSForms.UserForm): Set FormId_ = value: End Property
 Public Property Get FormId() As MSForms.UserForm: Set FormId = FormId_: End Property
 Public Property Get CurrentText() As String: CurrentText = Me.FormId.txtConsole.text: End Property
@@ -49,7 +47,7 @@ Public Property Let CurrentText(value As String): CurrentText = value: End Prope
 '----------------
 Public Sub ClearConsole()
 ' Clears the console of any text
-    Me.CurrentText = vbNullString
+    Me.CurrentText = nullstr
     Logger.Log "Console Cleared"
 End Sub
 
@@ -58,7 +56,7 @@ Public Sub WriteLine(ParamArray var() As Variant)
     Dim i As Integer
     Dim s As String
     Const Padding = 45
-    s = vbNullString
+    s = nullstr
     For i = LBound(var) To UBound(var)
          If (i + 1) Mod 2 = 0 Then
              s = s & var(i)
@@ -69,7 +67,7 @@ Public Sub WriteLine(ParamArray var() As Variant)
     Me.FormId.txtConsole.text = FormId.txtConsole.text & s & vbNewLine
 End Sub
 
-Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = vbNullString, _
+Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = nullstr, _
            Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
 ' Print object to specified worksheet starting in cell "A1"
     ' Disable updates to the gui during processing
@@ -100,13 +98,13 @@ Public Sub PrintObjectToConsole(obj As Object)
 ' Print object to console
     Dim Key As Variant
     ' Clear the console
-    FormId.txtConsole.text = vbNullString
+    FormId.txtConsole.text = nullstr
     'WriteLine obj.SpecType, obj.MaterialId
     'WriteLine "Revision", obj.Revision
     
     For Each Key In obj.Properties
         If ShouldPrint(CStr(Key)) Then
-            If Not obj.Properties(CStr(Key)) = vbNullString Then
+            If Not obj.Properties(CStr(Key)) = nullstr Then
                 WriteLine CStr(Key), FormatAscii(obj.Properties(CStr(Key)))
             Else
                 WriteLine CStr(Key), Chr(CHAR_NULL_VALUE)
@@ -136,12 +134,12 @@ Public Sub ListObjects(dict As Object)
     Next T
 End Sub
 
-Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = vbNullString)
+Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = nullstr)
 ' Exports the given ws as a PDF and saves it to S:\Data Manager\Specifications
 
     On Error GoTo SaveFileError
     ' Parse args
-    If destination_path = vbNullString Then
+    If destination_path = nullstr Then
         With App.current_spec
             destination_path = PUBLIC_DIR & "\Specifications\" & .MaterialId & "_" & .SpecType & "_rev" & .Revision
         End With
@@ -168,7 +166,7 @@ SaveFileError:
     Logger.Log "Failed to save file PDF Fail"
 End Sub
 
-Public Sub WriteAllDocuments(Optional order_number As String = vbNullString, Optional package_variant As DocumentPackageVariant = Default)
+Public Sub WriteAllDocuments(Optional order_number As String = nullstr, Optional package_variant As DocumentPackageVariant = Default)
 ' Write all specification docs to the correct worksheets / create worksheet if missing
     Dim spec As Specification
     Dim T As Variant
@@ -210,7 +208,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
                 ActionLog.LogUserAction IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover") & " Checklist Printed"
                 App.printer.PrintSheet SheetByName(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
             Else
-                App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True, work_order
+                App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True, work_order:=work_order
             End If
         End With
     Next doc
@@ -226,7 +224,7 @@ Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False, Op
     If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
         ws.Visible = xlSheetVisible
     End If
-    If App.current_user.Settings.item("default_printer") = vbNullString Then
+    If App.current_user.Settings.item("default_printer") = nullstr Then
         ChangeActivePrinter
     End If
     If FitToPage Then
@@ -249,13 +247,13 @@ Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet)
     Dim rng As Range
     On Error Resume Next
     For Each nr In spec.Properties
-        Set rng = customer_sheet.Range(CStr(nr))
+        Set rng = custom_sheet.Range(CStr(nr))
         Utils.Insert rng, spec.GetProperty(CStr(nr))
     Next nr
     On Error GoTo 0
 End Sub
 
-Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = vbNullString)
+Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = nullstr)
 ' Header Content and formatting for Spec Docs
     ' Clear Header
     Utils.ClearHeaderFooter ws, header:=True, footer:=False
@@ -271,13 +269,13 @@ Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional produc
     End With
 End Sub
 
-Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = vbNullString, _
-            Optional leftFooterText = vbNullString, Optional rightFooterText = vbNullString)
+Private Sub InsertFooter(ws As Worksheet, Optional disclaimer As String = nullstr, _
+            Optional leftFooterText = nullstr, Optional rightFooterText = nullstr)
 ' Footer Content and formatting for Spec Docs
     'Clear footer
     Utils.ClearHeaderFooter ws, header:=False, footer:=True
     ' Initialize disclaimer text
-    If disclaimer = vbNullString Then
+    If disclaimer = nullstr Then
         disclaimer = "This document is the property of SAATI Americas - " & _
                      "Printed and/or Unsigned Copies Are Uncontrolled."
     End If
@@ -460,7 +458,7 @@ Private Function FormatAscii(char As String) As String
         char = "X"
     ElseIf IsNumeric(Left(char, 1)) Then
         ' Pass
-    ElseIf char = vbNullString Then
+    ElseIf char = nullstr Then
         char = Chr(CHAR_NULL_VALUE)
     End If
     FormatAscii = char
@@ -469,7 +467,7 @@ End Function
 Private Sub PrintPropertyToSheet(ws As Worksheet, prop_name As Variant, prop_val As Variant, row As Integer)
 ' Prints a given property to the worksheet
     With ws
-        If Not prop_val = vbNullString Then
+        If Not prop_val = nullstr Then
             .Range("A" & row).value = CStr(prop_name) & " : "
             .Range("A" & row).Font.Size = FONT_SIZE_PROPERTY
             .Range("B" & row).value = prop_val

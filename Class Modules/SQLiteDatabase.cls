@@ -207,7 +207,7 @@ Public Property Get NumColumns() As Long: NumColumns = m_qtyColumns: End Propert
 '================================================================
 ' opens a database x64
 Public Sub openDb(sqliPath As String)
-  If sqliPath = vbNullString Or Len(Dir(sqliPath)) = 0 Then
+  If sqliPath = nullstr Or Len(Dir(sqliPath)) = 0 Then
     err.Raise 1, "Database not found", "Please select a valid file address"
     Exit Sub
   End If
@@ -288,7 +288,7 @@ Private Sub getQryValue(ByVal stmtHandle As Long)
       k = k + 1
       For i = 0 To Me.qtyColumns - 1
         colName = SQLite3ColumnName(stmtHandle, i)
-        If arrheader(1, i + 1) = vbNullString Then arrheader(1, i + 1) = colName
+        If arrheader(1, i + 1) = nullstr Then arrheader(1, i + 1) = colName
         colType = SQLite3ColumnType(stmtHandle, i)
         colTypeName = TypeName(colType)
         colValue = ColumnValue(stmtHandle, i, colType)

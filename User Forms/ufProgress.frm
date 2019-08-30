@@ -46,6 +46,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub cmdAbort_Click()
@@ -56,7 +58,7 @@ Private Sub cmdAbort_Click()
 End Sub
 
 Sub UpdateForm(ByVal ActionNumber As Long, ByVal TotalActions As Long, _
-                Optional ByVal StatusMessage As String = vbNullString)
+                Optional ByVal StatusMessage As String = nullstr)
     'Declare Sub level Variables
     Dim strStatus As String
     'Preparing the Status Message

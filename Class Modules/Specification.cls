@@ -50,13 +50,13 @@ Public Function GetProperty(property As String) As Variant
     If Me.Properties.Exists(property) Then
         GetProperty = Me.Properties(property)
     Else
-        GetProperty = vbNullString
+        GetProperty = nullstr
     End If
 End Function
 
 Public Sub AddProperty(property As String)
 ' Adds a property to the list of properties
-    Me.Properties.Add property, vbNullString
+    Me.Properties.Add property, nullstr
 End Sub
 
 Public Sub ChangeProperty(property As Variant, new_val As Variant)
