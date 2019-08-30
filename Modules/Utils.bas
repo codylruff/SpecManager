@@ -28,14 +28,14 @@ Public Function GetFiles(Optional dir_path As String, Optional pfilters As Varia
     Dim i As Long
     Dim result As Integer
     Dim fDialog As FileDialog
-
+    On Error Resume Next
     'IMPORTANT!
     Set fDialog = Application.FileDialog(3)
     fDialog.AllowMultiSelect = True
     
     'Optional FileDialog properties
     fDialog.title = "Select files"
-    If dir_path = nullstr Then dir_path = "C:\Users\cruff"
+    If dir_path = nullstr Then dir_path = "C:\Users\cruff\documents\projects\source"
     fDialog.InitialFileName = dir_path
 
     'Optional: Add filters
@@ -43,10 +43,14 @@ Public Function GetFiles(Optional dir_path As String, Optional pfilters As Varia
     If Not IsMissing(pfilters) Then
         Dim filters_string As String
         For i = LBound(pfilters) To UBound(pfilters)
-            filters_string = filters_string & "*." & pfilters(i) & "; "
+            If i = UBound(pfilters) Then
+                filters_string = filters_string & "*." & pfilters(i)
+            Else
+                filters_string = filters_string & "*." & pfilters(i) & "; "
+            End If
         Next i
-        If UBound(pfilters) < 3 Then filters_string = Replace(filters_string, ";", nullstr)
-        fDialog.Filters.Add "Custom", filters_string, 1
+        If i < 2 Then filters_string = Replace(filters_string, ";", nullstr)
+        fDialog.Filters.Add "Custom", filters_string
     End If
     'Show the dialog. -1 means success!
     If fDialog.show = -1 Then
@@ -140,6 +144,7 @@ Public Function DropKeys(ByRef dict As Object, keys As Variant) As Object
 End Function
 
 Public Function OpenWorkbook(path) As Workbook
+    On Error Resume Next
     Set OpenWorkbook = Workbooks.Open(path, 0)
 End Function
 
