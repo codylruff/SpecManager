@@ -217,16 +217,16 @@ Sub ListSpecifications(frm As MSForms.UserForm)
 End Sub
 
 Sub PrintSpecification(frm As MSForms.UserForm)
-    Logger.Log "Printing Specification . . . "
-    Set App.printer = Factory.CreateDocumentPrinter(frm)
+    Logger.Log "Writing Specification to Console. . . "
+    Set App.printer.FormId = frm
     If Not App.current_spec Is Nothing Then
         App.printer.PrintObjectToConsole App.current_spec
     End If
 End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
-    Logger.Log "Printing Template . . . "
-    Set App.printer = Factory.CreateDocumentPrinter(frm)
+    Logger.Log "Writing Template to Console . . . "
+    Set App.printer.FormId = frm
     App.printer.PrintObjectToConsole App.current_template
 End Sub
 
@@ -374,6 +374,8 @@ Private Function ManagerOrAdmin() As Boolean
     Else
         ManagerOrAdmin = False
     End If
+    ManagerOrAdmin = True
+    Exit Function
 ErrorHandler:
     Dim Account As Account
     Set Account = AccessControl.Account_Initialize
@@ -401,13 +403,13 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Dim dicts As Collection
     Dim dict As Object
     Dim props As Variant
-    RestartApp
+    'RestartApp
     
     ' Turn on Performance Mode
     App.PerformanceMode True
 
     Set dict = CreateObject("Scripting.Dictionary")
-    Set ws = Utils.CreateNewSheet(spec_type & " Dump")
+    Set ws = Utils.CreateNewSheet(spec_type & " Dump " & Format(CStr(Now()), "dd-mm-yy"), True)
     Set dicts = DataAccess.SelectAllSpecifications(spec_type)
     i = 2
     For Each dict In dicts
@@ -423,7 +425,6 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     App.PerformanceMode False
 
 End Sub
-
 
 Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws As Worksheet, Optional start_row As Integer = 2, Optional start_col As Integer = 1)
 ' Create a column at the end of a table and fill it with a json string represent each row.

@@ -439,12 +439,7 @@ Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
     
-    On Error Resume Next
-    For Each nr In spec.Properties
-        Set rng = ws.Range(CStr(nr))
-        Utils.Insert rng, spec.GetProperty(CStr(nr))
-    Next nr
-    On Error GoTo 0
+    LoadCustomSheet spec, ws
 
 End Sub
 

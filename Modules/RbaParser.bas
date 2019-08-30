@@ -6,6 +6,7 @@ Option Explicit
 Public Sub ParseAll(Optional material_keyword As String = "code")
     Dim material_number As String
     Dim json_string As String
+    Dim k As Long
     Dim json_object As Object
     Dim json_file_path As String
     Dim prop As Variant
@@ -13,25 +14,29 @@ Public Sub ParseAll(Optional material_keyword As String = "code")
     Dim wb As Workbook
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Sheets("FormParser")
-    ws.Visible = True
-    Dim arrFiles As Variant
-    arrFiles = Utils.GetFiles(pfilters:=Array("xls", "xlsx"))
-    On Error Resume Next
-    For r = LBound(arrFiles) To UBound(arrFiles)
-        Set json_object = ParsePsf(CStr(arrFiles(r)))
-        ' Clean data by removing units and filling in missing values
-        For Each prop In json_object
-            ' If IsNumeric(Left(json_object(prop), 1)) Then
-            '     json_object.item(prop) = Utils.CleanString(json_object(prop), _
-            '             Array(Chr(34),), _
-            '             True)
-            ' End If
-            If json_object.item(prop) = Chr(34) Then json_object.item(prop) = Chr(34) + Chr(34)
-        Next prop
-        Cells(r, 1) = json_object(material_keyword)
-        json_string = JsonVBA.ConvertToJson(json_object)
-        ws.Cells(r, 2).value = json_string
-    Next r
+    With ws
+        .Visible = True
+        Dim arrFiles As Variant
+        arrFiles = Utils.GetFiles(pfilters:=Array("xls", "xlsx"))
+        For r = 1 To UBound(arrFiles) - 1
+            Set json_object = ParsePsf(CStr(arrFiles(r)))
+            ' Clean data by removing units and filling in missing values
+            k = 2
+            .Cells(r, 1).value = json_object(material_keyword)
+            For Each prop In json_object
+                If json_object.item(prop) = Chr(34) Then json_object.item(prop) = Chr(34) + Chr(34)
+                If r = 1 Then
+                    .Cells(1, k).value = CStr(prop)
+                    .Cells(r + 1, k).value = json_object(prop)
+                Else
+                    .Cells(r, k).value = json_object(prop)
+                End If
+                 k = k + 1
+            Next prop
+            json_string = JsonVBA.ConvertToJson(json_object)
+            .Cells(r, k + 1).value = json_string
+        Next r
+    End With
 End Sub
 
 Public Sub LoadNewRBA()
@@ -132,7 +137,7 @@ Public Function ParsePsf(path As String) As Object
     ' Turn on Performance Mode
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
-
+    Debug.Print "Parsing PSF @ " & path
     Dim ret_val As Long
     Set wb = OpenWorkbook(path)
     DeleteNames wb

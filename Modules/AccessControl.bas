@@ -66,6 +66,7 @@ Public Sub ConfigControl()
         End If
         ' Show all worksheets
         GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
+        ThisWorkbook.Sheets("Administrator").Activate
         ' Turn off Performance Mode
         App.PerformanceMode False
     End If
