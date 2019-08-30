@@ -13,29 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdPrint_Click()
@@ -138,7 +115,7 @@ Sub ExportPdf(Optional isTest As Boolean = False)
         App.printer.PrintObjectToSheet App.current_spec, Sheets("pdf")
         GuiCommands.DocumentPrinterToPdf_Test
     Else
-        App.printer.PrintObjectToSheet App.current_spec, Sheets(App.current_spec.SpecType)
+        App.printer.PrintObjectToSheet App.current_spec, Utils.CreateNewSheet(App.current_spec.SpecType)
         App.printer.ToPDF Sheets(App.current_spec.SpecType)
     End If
 End Sub
