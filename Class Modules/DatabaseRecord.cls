@@ -46,6 +46,10 @@ Public Property Get Rows() As Long: Rows = rows_: End Property
 Public Property Let Columns(value As Long): columns_ = value: End Property
 Public Property Get Columns() As Long: Columns = columns_: End Property
 
+public function At(row_id As Long, column_id As Long) As Variant
+    At = m_data(row_id, column_id)
+end function
+
 Private Function InitializeRecords()
 ' Returns a dictionary representation of this object
     Dim dict As Object
