@@ -23,6 +23,39 @@ DbPushFailException:
     PushIQueryable = DB_PUSH_FAILURE
 End Function
 
+Function PushValue(ByVal key_name As String, ByVal key_id As Variant, ByVal column_name As String, ByVal column_value As Variant, Table As String, Optional trans As SqlTransaction) As Long
+' Push a value to the database
+    Dim transaction As SqlTransaction
+    Dim SQLstmt As String
+    On Error GoTo DbPushFailException
+    If Utils.IsNothing(trans) Then
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
+    End If
+    SQLstmt = "INSERT INTO " & Table & _
+            "(" & key_name & ", " & column_name & ") " & _
+            "VALUES ('" & key_id & "', '" & column_value & "')"
+    trans.ExecuteSQL (SQLstmt)
+    PushValue = DB_PUSH_SUCCESS
+    Exit Function
+DbPushFailException:
+    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
+    PushValue = DB_PUSH_FAILURE
+End Function
+
+Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal column_name As String, ByVal tbl As String, Optional trans As SqlTransaction) As DatabaseRecord
+' Gets a single specifcation from the database
+    Dim SQLstmt As String
+    Dim transaction As SqlTransaction
+    If Utils.IsNothing(trans) Then
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
+    End If
+    Logger.Log "Searching for " & column_name & ", for : " & key_id
+    SQLstmt = "SELECT " & column_name & " FROM " & tbl & _
+              "WHERE " & key_name & " ='" & key_id & "'"
+
+    Set GetColumn = trans.ExecuteSQLSelect(SQLstmt)
+End Function
+
 Function GetSpecification(ByVal material_id As String, ByVal spec_type As String, Optional trans As SqlTransaction) As DatabaseRecord
 ' Gets a single specifcation from the database
     Dim SQLstmt As String
