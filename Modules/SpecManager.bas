@@ -274,14 +274,38 @@ Function CreateSpecificationFromCopy(spec As Specification, material_id As Strin
     CreateSpecificationFromCopy = SaveNewSpecification(spec_copy)
 End Function
 
+Function GetMaterialDescription(material_id As String) As Variant
+' Retrieve material description from the database.
+    GetMaterialDescription = DataAccess.GetColumn("Material_Id", material_id, "Description", "materials").Data
+End Function
+
+Function AddNewMaterialDescription(material_id As String, description As String) As Long
+' If a material description does not exist create it.
+    If GetMaterialDescription(material_id) = Empty Then
+        AddNewMaterialDescription = DataAccess.PushValue("Material_Id", material_id, "Description", description, "materials")
+    Else
+        AddNewMaterialDescription = SM_MATERIAL_EXISTS
+    End If
+End Function
+
 Function SaveNewSpecification(spec As Specification) As Long
+    Dim ret_val As Long
     If ManagerOrAdmin Then
-        SaveNewSpecification = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        If DataAccess.GetSpecification(spec.MaterialId, spec.SpecType).records.Count = 0 Then
+            ret_val = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+            ActionLog.CrudOnSpecification spec, "Created New Specification"
+            If GetMaterialDescription(spec.MaterialId) = Empty Then
+                SaveNewSpecification = AddNewMaterialDescription(spec.MaterialId, CStr(PromptHandler.UserInput(SingleLineText, "Material Description: " & spec.MaterialId, "Enter Material Description :")))
+                Exit Function
+            End If
+            SaveNewSpecification = ret_val
+        Else
+            SaveNewSpecification = SM_MATERIAL_EXISTS
+        End If
     Else
         SaveNewSpecification = DB_PUSH_DENIED
     End If
 
-    ActionLog.CrudOnSpecification spec, "Created New Specification"
 End Function
 
 Function SaveSpecification(spec As Specification, old_spec As Specification, Optional transaction As SqlTransaction) As Long

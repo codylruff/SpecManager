@@ -299,3 +299,27 @@ Public Sub GetFiles_Test()
         Debug.Print file
     Next file
 End Sub
+
+Function CreateTestSpec() As Specification
+    Dim test_spec As Specification
+    
+    Set test_spec = Factory.CreateSpecification
+    With test_spec
+        .MaterialId = "TEST_SPECIFICATION"
+        .AddProperty "Test Property"
+        .SpecType = "TEST"
+    End With
+    
+    Set CreateTestSpec = test_spec
+End Function
+
+Public Sub AddNewMaterialDescription_Test()
+    Dim test_spec As Specification
+    App.Start
+    App.InitializeTestSuiteCredentials
+    Set test_spec = CreateTestSpec
+    Logger.Log SpecManager.SaveNewSpecification(test_spec)
+    SpecManager.DeleteSpecification test_spec
+    App.DeInitializeTestSuiteCredentials
+    App.Shutdown
+End Sub
