@@ -64,25 +64,25 @@ DbTransactionFailException:
     Commit = DB_TRANSACTION_FAILURE
 End Function
 
-Function ExecuteSQLSelect(SQLstmt As String) As DatabaseRecord
+Function ExecuteSQLSelect(SQLstmt As String) As DataFrame
 ' Returns an table like array
-    Dim record As DatabaseRecord
-    Set record = New DatabaseRecord
+    Dim df As DataFrame
+    Set df = New DataFrame
     On Error GoTo NullRecordException
     Logger.Log "-----------------------------------", SqlLog
     Logger.Log SQLstmt, SqlLog
     With Me.DbConnection
         .selectQry SQLstmt
-        record.Data = .Data
-        record.header = .header
-        record.Rows = .NumRows
-        record.Columns = .NumColumns
+        df.Data = .Data
+        df.header = .header
+        df.Rows = .NumRows
+        df.Columns = .NumColumns
     End With
-    Set ExecuteSQLSelect = record
+    Set ExecuteSQLSelect = df
     Exit Function
 NullRecordException:
     Logger.Log "SQL Select Error : NullRecordException!", SqlLog
-    Set ExecuteSQLSelect = New DatabaseRecord
+    Set ExecuteSQLSelect = New DataFrame
 End Function
 
 Sub ExecuteSQL(SQLstmt As String)

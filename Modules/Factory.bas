@@ -64,11 +64,11 @@ Function CreateNewTemplate(Optional template_name As String = nullstr) As Specif
     Set CreateNewTemplate = Template
 End Function
 
-Function CreateSpecificationFromRecord(record As DatabaseRecord) As Specification
+Function CreateSpecificationFromRecord(df As DataFrame) As Specification
     Dim spec_ As Specification
     Set spec_ = New Specification
     On Error Resume Next
-    With record.records(1)
+    With df.records(1)
         spec_.MaterialId = .item("Material_Id")
         spec_.MaterialDescription = .item("Description")
         spec_.ProcessId = .item("Process_Id")
@@ -79,11 +79,11 @@ Function CreateSpecificationFromRecord(record As DatabaseRecord) As Specificatio
     Set CreateSpecificationFromRecord = spec_
 End Function
 
-Function CreateTemplateFromRecord(record As DatabaseRecord) As SpecificationTemplate
+Function CreateTemplateFromRecord(df As DataFrame) As SpecificationTemplate
     Dim Template As SpecificationTemplate
     Set Template = New SpecificationTemplate
     ' obsoleted
-    With record.records(1)
+    With df.records(1)
         Template.JsonToObject .item("Properties_Json"), .item("Spec_Type"), .item("Revision"), .item("Product_Line")
     End With
     Set CreateTemplateFromRecord = Template
@@ -121,10 +121,10 @@ Function CreateDocumentPrinter(frm As UserForm) As DocumentPrinter
     Set CreateDocumentPrinter = obj
 End Function
 
-Function CreateDatabaseRecord() As DatabaseRecord
+Function CreateDatabaseRecord() As DataFrame
 ' Creates a database record object
-    Dim record: Set record = New DatabaseRecord
-    Set CreateDatabaseRecord = record
+    Dim df: Set df = New DataFrame
+    Set CreateDatabaseRecord = df
 End Function
 
 Function CreateSQLiteDatabase(path As String) As SQLiteDatabase

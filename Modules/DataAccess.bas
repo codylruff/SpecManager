@@ -42,7 +42,7 @@ DbPushFailException:
     PushValue = DB_PUSH_FAILURE
 End Function
 
-Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal column_name As String, ByVal tbl As String, Optional trans As SqlTransaction) As DatabaseRecord
+Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal column_name As String, ByVal tbl As String, Optional trans As SqlTransaction) As DataFrame
 ' Gets a single specifcation from the database
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -56,7 +56,7 @@ Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal colum
     Set GetColumn = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
-Function GetSpecification(ByVal material_id As String, ByVal spec_type As String, Optional trans As SqlTransaction) As DatabaseRecord
+Function GetSpecification(ByVal material_id As String, ByVal spec_type As String, Optional trans As SqlTransaction) As DataFrame
 ' Gets a single specifcation from the database
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -72,7 +72,7 @@ Function GetSpecification(ByVal material_id As String, ByVal spec_type As String
     Set GetSpecification = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
-Function GetUser(ByVal Name As String, Optional trans As SqlTransaction) As DatabaseRecord
+Function GetUser(ByVal Name As String, Optional trans As SqlTransaction) As DataFrame
 ' Get a user from the database
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -129,7 +129,7 @@ DbPushFailException:
     ChangeUserSecret = DB_PUSH_FAILURE
 End Function
 
-Function GetTemplateRecord(ByRef spec_type As String, Optional trans As SqlTransaction) As DatabaseRecord
+Function GetTemplateRecord(ByRef spec_type As String, Optional trans As SqlTransaction) As DataFrame
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
     If Utils.IsNothing(trans) Then
@@ -143,7 +143,7 @@ Function GetTemplateRecord(ByRef spec_type As String, Optional trans As SqlTrans
     Set GetTemplateRecord = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
-Function GetSpecificationRecords(ByRef MaterialId As String, Optional trans As SqlTransaction) As DatabaseRecord
+Function GetSpecificationRecords(ByRef MaterialId As String, Optional trans As SqlTransaction) As DataFrame
 ' Get a record(s) from the database
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -221,7 +221,7 @@ DbDeleteFailException:
     DeleteSpec = DB_DELETE_FAILURE
 End Function
 
-Function GetTemplateTypes(Optional trans As SqlTransaction) As DatabaseRecord
+Function GetTemplateTypes(Optional trans As SqlTransaction) As DataFrame
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
     If Utils.IsNothing(trans) Then
@@ -236,15 +236,15 @@ End Function
 Function SelectAllSpecifications(spec_type As String, Optional trans As SqlTransaction) As VBA.Collection
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
-    Dim record As DatabaseRecord
+    Dim df As DataFrame
     If Utils.IsNothing(trans) Then
         Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
     End If
     ' build the sql query
     'Logger.Log "Selecting all specifications . . . "
     SQLstmt = "SELECT * FROM standard_specifications WHERE Spec_Type ='" & spec_type & "'"
-    Set record = trans.ExecuteSQLSelect(SQLstmt)
-    Set SelectAllSpecifications = record.records
+    Set df = trans.ExecuteSQLSelect(SQLstmt)
+    Set SelectAllSpecifications = df.records
 End Function
 
 Public Function BeginTransaction(Optional path As String) As SqlTransaction
@@ -258,19 +258,19 @@ Public Function BeginTransaction(Optional path As String) As SqlTransaction
     End If
 End Function
 
-' Function trans.ExecuteSQLSelect(DatabaseRecord
+' Function trans.ExecuteSQLSelect(DataFrame
 ' ' Returns an table like array
-'     Dim record As DatabaseRecord
-'     Set record = New DatabaseRecord
+'     Dim df As DataFrame
+'     Set df = New DataFrame
 '     On Error GoTo NullRecordException
 '     Logger.Log "-----------------------------------", SqlLog
 '     Logger.Log SQLstmt, SqlLog
 '     'db.openDb path
 '     db.selectQry SQLstmt
-'     record.Data = db.Data
-'     record.Header = db.Header
-'     record.Rows = db.NumRows
-'     record.Columns = db.NumColumns
+'     df.Data = db.Data
+'     df.Header = db.Header
+'     df.Rows = db.NumRows
+'     df.Columns = db.NumColumns
 '     Set trans.ExecuteSQLSelect ption:
 '     Logger.Log "SQL Select Error : NullRecordException!", SqlLog
 '     Set trans.ExecuteSQLSelect ecuteSQL(ByRef db As IDatabase, SQLstmt As String)

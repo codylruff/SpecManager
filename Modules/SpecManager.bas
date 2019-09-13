@@ -100,11 +100,11 @@ Function SearchForSpecifications(material_id As String) As Long
 End Function
 
 Function GetTemplate(template_type As String) As SpecificationTemplate
-    Dim record As DatabaseRecord
-    Set record = DataAccess.GetTemplateRecord(template_type)
-    If Not record Is Nothing Then
+    Dim df As DataFrame
+    Set df = DataAccess.GetTemplateRecord(template_type)
+    If Not df Is Nothing Then
         Logger.Log "Succesfully retrieved template for : " & template_type
-        Set GetTemplate = Factory.CreateTemplateFromRecord(record)
+        Set GetTemplate = Factory.CreateTemplateFromRecord(df)
     Else
         Logger.Log "Could not find a template for : " & template_type
         Set GetTemplate = Nothing
@@ -113,14 +113,14 @@ Function GetTemplate(template_type As String) As SpecificationTemplate
 End Function
 
 Function GetAllTemplates() As VBA.Collection
-    Dim record As DatabaseRecord
+    Dim df As DataFrame
     Dim dict As Object
     Dim coll As VBA.Collection
     Set coll = New VBA.Collection
-    Set record = DataAccess.GetTemplateTypes
+    Set df = DataAccess.GetTemplateTypes
     ' obsoleted
     Logger.Log "Listing all template types (spec Types) . . . "
-    For Each dict In record.records
+    For Each dict In df.records
         coll.Add item:=Factory.CreateTemplateFromDict(dict), Key:=dict.item("Spec_Type")
     Next dict
     Set GetAllTemplates = coll
@@ -181,12 +181,12 @@ Function GetSpecifications(material_id As String) As Object
     Dim spec As Specification
     Dim rev As String
     Dim Key As Variant
-    Dim record As DatabaseRecord
+    Dim df As DataFrame
 
     On Error GoTo NullSpecException
 
-    Set record = DataAccess.GetSpecificationRecords(MaterialInputValidation(material_id))
-    Set json_coll = record.records
+    Set df = DataAccess.GetSpecificationRecords(MaterialInputValidation(material_id))
+    Set json_coll = df.records
     Set specs_dict = Factory.CreateDictionary
     
     If json_coll.Count = 0 Then

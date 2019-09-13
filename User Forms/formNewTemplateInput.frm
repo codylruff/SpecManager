@@ -36,6 +36,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Private Sub UserForm_Initialize()
     Logger.Log "--------- " & Me.Name & " ----------"
     PopulateCboProductLine

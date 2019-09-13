@@ -19,18 +19,18 @@ End Function
 
 Function GetPrivledges(Name As String) As Account
     Dim User As Account
-    Dim record As DatabaseRecord
+    Dim df As DataFrame
 
-    Set record = DataAccess.GetUser(Name)
-    If record.Rows = 0 Then
+    Set df = DataAccess.GetUser(Name)
+    If df.Rows = 0 Then
         Set GetPrivledges = Nothing
     Else
         Set User = New Account
-        User.Name = record.records(1).item("Name")
-        User.PrivledgeLevel = record.records(1).item("Privledge_Level")
-        User.ProductLine = record.records(1).item("Product_Line")
-        User.SecretSHA1 = record.records(1).item("Secret")
-        User.FlaggedForPasswordChange = IIf(record.records(1).item("New_Secret_Required") = 0, False, True)
+        User.Name = df.records(1).item("Name")
+        User.PrivledgeLevel = df.records(1).item("Privledge_Level")
+        User.ProductLine = df.records(1).item("Product_Line")
+        User.SecretSHA1 = df.records(1).item("Secret")
+        User.FlaggedForPasswordChange = IIf(df.records(1).item("New_Secret_Required") = 0, False, True)
         Set GetPrivledges = User
     End If
 End Function
