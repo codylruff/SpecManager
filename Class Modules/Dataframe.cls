@@ -46,9 +46,27 @@ Public Property Get Rows() As Long: Rows = rows_: End Property
 Public Property Let Columns(value As Long): columns_ = value: End Property
 Public Property Get Columns() As Long: Columns = columns_: End Property
 
-public function At(row_id As Long, column_id As Long) As Variant
+Public Function At(row_id As Long, column_id As Long) As Variant
     At = m_data(row_id, column_id)
-end function
+End Function
+
+Public Function ToString() As String
+    Dim print_string As String
+    Dim prop As Variant
+    Dim i As Long
+    Dim k As Long
+    print_string = nullstr
+    For Each prop In header
+        print_string = Utils.printf(print_string & " {0} {1}", " |", CStr(prop))
+    Next prop
+    print_string = print_string & vbNewLine
+    For i = 1 To UBound(Data, 1)
+        For k = 1 To UBound(Data, 2)
+            print_string = Utils.printf(print_string & " {0} {1}", " |", CStr(At(i, k)))
+        Next k
+    Next i
+    ToString = print_string
+End Function
 
 Private Function InitializeRecords()
 ' Returns a dictionary representation of this object
@@ -78,5 +96,8 @@ End Function
 
 Private Sub Class_Initialize()
     Set m_fields = CreateObject("Scripting.Dictionary")
+End Sub
 
+Private Sub Class_Terminate()
+    Set m_fields = Nothing
 End Sub

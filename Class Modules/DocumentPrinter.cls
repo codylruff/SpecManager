@@ -444,7 +444,7 @@ Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
 End Sub
 
 Private Function FormatAscii(char As String) As String
-
+' Convert from ascii character to text representation (according to test reqs.)
     If char = Chr(CHAR_REQUIRED) Then
         char = "Required"
     ElseIf char = Chr(CHAR_CRITICAL) Then
@@ -459,9 +459,26 @@ Private Function FormatAscii(char As String) As String
     FormatAscii = char
 End Function
 
+Private Function ConvertToAscii(char As String) As String
+' Convert from text representation (according to test reqs.) to ascii character
+    If char = "Required" Then
+        char = Chr(CHAR_REQUIRED)
+    ElseIf char = "Critical" Then
+        char = Chr(CHAR_CRITICAL)
+    ElseIf char = "Not Required" Then
+        char = Chr(CHAR_NOT_REQUIRED)
+    ElseIf IsNumeric(Left(char, 1)) Then
+        ' Pass
+    ElseIf char = Chr(CHAR_NULL_VALUE) Then
+        char = nullstr
+    End If
+    ConvertToAscii = char
+End Function
+
 Private Sub PrintPropertyToSheet(ws As Worksheet, prop_name As Variant, prop_val As Variant, row As Integer)
 ' Prints a given property to the worksheet
     With ws
+        prop_val = ConvertToAscii(CStr(prop_val))
         If Not prop_val = nullstr Then
             .Range("A" & row).value = CStr(prop_name) & " : "
             .Range("A" & row).Font.Size = FONT_SIZE_PROPERTY

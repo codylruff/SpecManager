@@ -10,10 +10,21 @@ Attribute VB_Exposed = False
 Option Explicit
 
 ' Interface to extract sql information
+' Public Property Let SubIdentifiers(value As Variant)
+' End Property
+' Public Property Get SubIdentifiers() As String
+' End Property
+' Public Property Let Identifier(value As Variant)
+' End Property
+' Public Property Get Identifier() As String
+' End Property
+
+
 Function GetValueLabels() As String
 End Function
 
 Function GetValues() As String
 End Function
+
 
 

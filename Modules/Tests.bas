@@ -323,3 +323,13 @@ Public Sub AddNewMaterialDescription_Test()
     App.DeInitializeTestSuiteCredentials
     App.Shutdown
 End Sub
+
+Public Sub SelectAllWhere_Test()
+    Dim df As DataFrame
+    Dim coll As VBA.Collection
+    Dim spec As Specification
+    Dim dict As Object
+    Set dict = Factory.CreateDictionary
+    Set df = DataAccess.SelectAllWhere(Array("Spec_Type"), Array("Testing Requirements"), "standard_specifications")
+    Debug.Print df.ToString
+End Sub

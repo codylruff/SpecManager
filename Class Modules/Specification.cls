@@ -64,7 +64,7 @@ Public Sub ChangeProperty(property As Variant, new_val As Variant)
     Dim old_val As Variant
     old_val = Me.Properties(property)
     Me.Properties(property) = new_val
-    RaiseEvent PropertyChanged(property, old_val, new_val)
+    'RaiseEvent PropertyChanged(property, old_val, new_val)
 End Sub
 
 Public Sub JsonToObject(properties_json As String)
@@ -109,6 +109,20 @@ Public Function ToArray() As Variant
         i = i + 1
     Next prop
     ToArray = arr
+End Function
+
+Public Function ToString() As String
+    Dim print_string As String
+    Dim prop As Variant
+    print_string = nullstr
+    For Each prop In header
+        print_string = Utils.printf(print_string & " {0} {1}", " |", CStr(prop))
+    Next prop
+    print_string = print_string & vbNewLine
+    For Each prop In ToArray
+        print_string = Utils.printf(print_string & " {0} {1}", " |", CStr(prop))
+    Next prop
+    ToString = print_string
 End Function
 
 ' Constructor
