@@ -177,7 +177,6 @@ End Function
 Function GetSpecifications(material_id As String) As Object
     Dim json_dict As Object
     Dim specs_dict As Object
-    Dim json_coll As VBA.Collection
     Dim spec As Specification
     Dim rev As String
     Dim Key As Variant
@@ -186,14 +185,13 @@ Function GetSpecifications(material_id As String) As Object
     On Error GoTo NullSpecException
 
     Set df = DataAccess.GetSpecificationRecords(MaterialInputValidation(material_id))
-    Set json_coll = df.records
     Set specs_dict = Factory.CreateDictionary
     
-    If json_coll.Count = 0 Then
+    If df.records.Count = 0 Then
         Set GetSpecifications = Nothing
         Exit Function
     Else
-        For Each json_dict In json_coll
+        For Each json_dict In df.records
             Set spec = Factory.CreateSpecFromDict(json_dict)
             specs_dict.Add json_dict.item("Spec_Type"), spec
         Next json_dict
@@ -458,7 +456,7 @@ Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws
     Dim json_string As String
     Dim new_spec As Specification
     Dim spec_dict As Object
-
+    App.Start
     With ws
         For i = start_row To num_rows
             Set dict = Factory.CreateDictionary
@@ -473,14 +471,23 @@ Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws
             spec_dict.Add "Spec_Type", .Cells(i, 2).value
             spec_dict.Add "Revision", 1
             Set new_spec = Factory.CreateSpecFromDict(spec_dict)
-            If DataAccess.PushIQueryable(new_spec, "standard_specifications") <> DB_PUSH_SUCCESS Then
-                Logger.Error "Error Writing : " & spec_dict.item("Material_Id")
-                Exit Sub
+            ret_val = SpecManager.SaveNewSpecification(new_spec)
+            If ret_val = DB_PUSH_SUCCESS Then
+                PromptHandler.Success "New Specification Saved."
+            ElseIf ret_val = SM_MATERIAL_EXISTS Then
+                PromptHandler.Error "Material Already Exists."
+            Else
+                PromptHandler.Error "Specification Not Saved."
             End If
+            ' If DataAccess.PushIQueryable(new_spec, "standard_specifications") <> DB_PUSH_SUCCESS Then
+            '     Logger.Error "Error Writing : " & spec_dict.item("Material_Id")
+            '     Exit Sub
+            ' End If
             ActionLog.CrudOnSpecification new_spec, "Created New Specification"
         Next i
         
     End With
+    App.Shutdown
 End Sub
 
 Public Sub EntireTableToJson()
