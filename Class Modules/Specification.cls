@@ -69,7 +69,19 @@ End Sub
 
 Public Sub JsonToObject(properties_json As String)
 ' Map json to the spec
-    Set Properties = JsonVBA.ParseJson(properties_json)
+    Dim props_temp As Object
+    Set props_temp = JsonVBA.ParseJson(properties_json)
+    If Not IsNothing(Me.Template) Then
+        Set Me.Properties = Template.Properties
+        On Error Resume Next
+        For Each prop In Me.Properties
+            Me.Properties(prop) = props_temp(prop)
+        Next prop
+        On Error Goto 0
+    Else
+        Set Me.Properties = props_temp
+    End If
+
 End Sub
 
 Public Function PropertiesJson() As String

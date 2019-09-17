@@ -74,6 +74,7 @@ Function CreateSpecificationFromRecord(df As DataFrame) As Specification
         spec_.ProcessId = .item("Process_Id")
         spec_.SpecType = .item("Spec_Type")
         spec_.Revision = CStr(.item("Revision"))
+    Set spec_.Template = Factory.CopyTemplate(App.templates(spec_.SpecType))
         spec_.JsonToObject .item("Properties_Json")
     End With
     Set CreateSpecificationFromRecord = spec_
@@ -99,9 +100,9 @@ Function CreateSpecFromDict(dict As Object) As Specification
         spec_.ProcessId = .item("Process_Id")
         spec.SpecType = .item("Spec_Type")
         spec.Revision = CStr(.item("Revision"))
+    Set spec.Template = Factory.CopyTemplate(App.templates(spec.SpecType))
         spec.JsonToObject .item("Properties_Json")
     End With
-    Set spec.Template = Factory.CopyTemplate(App.templates(spec.SpecType))
     Set CreateSpecFromDict = spec
 End Function
 
