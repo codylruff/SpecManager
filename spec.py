@@ -1,3 +1,5 @@
+import json
+
 class spec():
     
     def __init__(self, material_id, process_id, properties):
@@ -9,4 +11,4 @@ class spec():
         self.properties[property_name] = value
 
     def get_properties_json():
-        return 
+        return json.dumps(self.properties)
