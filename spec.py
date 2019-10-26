@@ -1,6 +1,6 @@
 import json
 
-class spec():
+class Spec():
     
     def __init__(self, material_id, spec_template, properties):
         self.material_id = material_id
