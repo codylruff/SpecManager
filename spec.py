@@ -2,9 +2,9 @@ import json
 
 class spec():
     
-    def __init__(self, material_id, process_id, properties):
+    def __init__(self, material_id, spec_template, properties):
         self.material_id = material_id
-        self.process_id = process_id
+        self.spec_template = spec_template
         self.properties = properties
 
     def change_property(property_name, value):
@@ -12,3 +12,9 @@ class spec():
 
     def get_properties_json():
         return json.dumps(self.properties)
+
+    def get_process_id():
+        return self.spec_template.process_id
+
+    def get_spec_type():
+        return self.spec_template.spec_type
