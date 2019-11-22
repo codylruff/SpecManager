@@ -37,7 +37,7 @@ function SpecManagerShortcut($MainDir) {
     $ShortCut.Description = "Spec-Manager Shortcut";
     $shortcut.IconLocation="$MainDir\Spec-Manager.ico"
     $ShortCut.WindowStyle = 7
-    $Shortcut.WorkingDirectory ="$SpecManagerDir\scripts\startup"
+    $Shortcut.WorkingDirectory ="$MainDir\scripts\startup"
     $ShortCut.Save()
 }
 

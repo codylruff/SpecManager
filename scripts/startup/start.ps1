@@ -38,6 +38,7 @@ $ErrorActionPreference = 'Stop'
 # ----------------------------------------------------------------------------------------------------
 # CHECK FOR UPDATE :
 # ----------------------------------------------------------------------------------------------------
+$StagingDir = "$env:LOCALAPPDATA\Temp"
 $SpecManagerDir = "$env:APPDATA\Spec-Manager"
 $ConfigDir = "$SpecManagerDir\config"
 

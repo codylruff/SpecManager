@@ -21,6 +21,17 @@ Private Declare Function UpdateWindow Lib "user32" (ByVal Hwnd As Long) As Long
 Private Declare Function IsWindow Lib "user32" (ByVal Hwnd As Long) As Long
 #End If
 ' -------------------------------------------------
+Function ArrayContains(arr As Variant, item As Variant) As Boolean
+' Checks for an item within the given array and returns true or false.
+    Dim i As Long
+    For i = 0 To UBound(arr)
+        If arr(i) = item Then
+            ArrayContains = True
+            Exit Function
+        End If
+    Next i
+End Function
+
 Public Function GetFiles(Optional dir_path As String, Optional pfilters As Variant) As Variant
 ' Given a dir return an array of file names
     Dim arr() As String
@@ -445,6 +456,36 @@ Public Sub ClearHeaderFooter(ws As Worksheet, _
     End If
 
 End Sub
+
+Public Function GetNames(wb As Workbook, Optional ws As String) As Variant
+' Returns an array of names for the given workbook/worksheet
+    Dim arr() As String
+    Dim arr_len As Long
+    Dim nm As Variant
+    Dim i As Long
+    i = 0
+    On Error Resume Next
+    If ws = nullstr Then
+        arr_len = wb.Names.Count
+        ReDim arr(arr_len, 1)
+        For Each nm In wb.Names
+            arr(i, 0) = Split(nm.Name, "!")(1)
+            arr(i, 1) = wb.Range(nm.Name).value
+            i = i + 1
+        Next nm
+    Else
+        arr_len = wb.Sheets(ws).Names.Count
+        ReDim arr(arr_len, 1)
+        For Each nm In wb.Sheets(ws).Names
+            arr(i, 0) = Split(nm.Name, "!")(1)
+            arr(i, 1) = CStr(wb.Sheets(ws).Range(nm.Name).value)
+            i = i + 1
+        Next nm
+    End If
+    On Error GoTo 0
+    GetNames = arr
+
+End Function
 
 Public Sub ToggleAutoRecover()
 ' This sub will switch the auto recover function on and off.

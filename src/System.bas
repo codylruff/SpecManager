@@ -160,3 +160,36 @@ FN_GET_UUID_Error:
     App.gDll.ShowDialogRich "Error " & err.Number & " (" & App.gMsg & ")", vbExclamation
 End Function
 
+Public Function VSImport() As String
+    
+    Dim path As String
+    Dim VerNum As String
+    Dim strFile As String
+    Dim wb As Workbook
+    
+    Set wb = ThisWorkbook
+    
+    DoEvents
+    
+    On Error GoTo ImportFail
+    
+    path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
+    strFile = Dir(path & "*.frm*")
+    
+    Do While Len(strFile) > 0
+        Debug.Print strFile
+        wb.VBProject.VBComponents.Import path & strFile
+        strFile = Dir
+    Loop
+    
+    VSImport = "Import Successful!"
+    Exit Function
+
+ImportFail:
+    VSImport = "Import Failed"
+End Function
+
+' (Module: Messages.bas)
+Public Function SayHi(Name As Variant) As String
+  SayHi = "Howdy " & Name & "!"
+End Function

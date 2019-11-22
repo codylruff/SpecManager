@@ -269,6 +269,7 @@ Function CreateSpecificationFromCopy(spec As Specification, material_id As Strin
     Dim spec_copy As Specification
     Set spec_copy = Factory.CopySpecification(spec)
     spec_copy.MaterialId = material_id
+    spec_copy.Revision = 1
     CreateSpecificationFromCopy = SaveNewSpecification(spec_copy)
 End Function
 
@@ -292,7 +293,7 @@ Function SaveNewSpecification(spec As Specification) As Long
         If DataAccess.GetSpecification(spec.MaterialId, spec.SpecType).records.Count = 0 Then
             ret_val = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
             ActionLog.CrudOnSpecification spec, "Created New Specification"
-            If GetMaterialDescription(spec.MaterialId) = Empty Then
+            If IsEmpty(GetMaterialDescription(spec.MaterialId)) Then
                 SaveNewSpecification = AddNewMaterialDescription(spec.MaterialId, CStr(PromptHandler.UserInput(SingleLineText, "Material Description: " & spec.MaterialId, "Enter Material Description :")))
                 Exit Function
             End If
@@ -543,4 +544,17 @@ Public Sub UpdateRBAFromSheet()
     AccessControl.ConfigControl
 End Sub
 
-
+Public Function BuildBallisticTestSpec(material_id As String, package_length_inches As Double, fabric_width_inches As Double, conditioned_weight_gsm As Double, target_psf As Double) As BallisticPackage
+    Dim spec As Specification
+    Dim package As BallisticPackage
+    Set package = Factory.CreateBallisticPackage(package_length_inches, fabric_width_inches, conditioned_weight_gsm, target_psf)
+    Set spec = Factory.CreateSpecification
+    With spec
+        .MaterialId = material_id
+        .SpecType = "Ballistic Testing Requirements"
+        .Revision = 1
+        .CreateFromTestingPlan package
+    End With
+    'SaveNewSpecification spec
+    Set BuildBallisticTestSpec = package
+End Function

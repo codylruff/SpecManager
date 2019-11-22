@@ -85,6 +85,12 @@ Public Sub JsonToObject(properties_json As String)
 
 End Sub
 
+Public Sub CreateFromTestingPlan(testing_plan As ITestingPlan)
+' Sets the spec properties equal to those of a testing plan object.
+    Set Me.Template = testing_plan.GetTemplate
+    Me.JsonToObject testing_plan.GetPropertiesJson
+End Sub
+
 Public Function PropertiesJson() As String
 ' Store spec Properties dictionary as json
     PropertiesJson = JsonVBA.ConvertToJson(Me.Properties)
@@ -140,7 +146,6 @@ End Function
 
 ' Constructor
 Private Sub Class_Initialize()
-    Set Template = New SpecificationTemplate
     Set Properties = CreateObject("Scripting.Dictionary")
 End Sub
 ' Deconstructor

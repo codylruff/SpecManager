@@ -196,6 +196,9 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     ' Toggle Performance Mode
     App.PerformanceMode True
 
+    ' Print special requirements document if needed. Specials should print out on top!
+    If CheckForSpecialRequirements(spec.MaterialId) Then App.printer.PrintSheet SheetByName(spec.MaterialId)
+    
     ' Print all the documents in the package
     For Each doc In doc_package
         Set spec = doc_package(doc)
@@ -212,7 +215,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
             End If
         End With
     Next doc
-
+    
     ' Turn off Performance Mode
     GuiCommands.ResetExcelGUI
     App.PerformanceMode False
@@ -241,15 +244,31 @@ End Sub
 '-----------------
 ' PRIVATE METHODS
 '-----------------
-Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet)
+Private Function CheckForSpecialRequirements(material_id As String) As Boolean
+' Checks for special documents to print with the package.
+    Dim specials
+    ' Specials are defined here (This should be the name of the sheet to print as well):
+    specials = Array("GTW006901000T0DC")
+    ' Compare agaisnt specials here
+    CheckForSpecialRequirements = Utils.ArrayContains(specials, material_id)
+End Function
+
+Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet, Optional names_map As Object)
 ' Loads a spec to a custom worksheet for printing.
     Dim nr As Variant
     Dim rng As Range
     On Error Resume Next
-    For Each nr In spec.Properties
-        Set rng = custom_sheet.Range(CStr(nr))
-        Utils.Insert rng, spec.GetProperty(CStr(nr))
-    Next nr
+    If IsNothing(names_map) Then
+        For Each nr In spec.Properties
+            Set rng = custom_sheet.Range(CStr(nr))
+            Utils.Insert rng, spec.GetProperty(CStr(nr))
+        Next nr
+    Else
+        For Each nr In spec.Properties
+            Set rng = custom_sheet.Range(CStr(names_map(nr)))
+            Utils.Insert rng, spec.GetProperty(CStr(nr))
+        Next nr
+    End If
     On Error GoTo 0
 End Sub
 
@@ -434,12 +453,15 @@ Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
     Dim nr As Variant
     Dim rng As Range
     Dim ws As Worksheet
-    
+    Dim names_map As Object
+
     Set ws = Utils.SheetByName("Warping Requirements")
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
-    
-    LoadCustomSheet spec, ws
+    Set names_map = JsonVBA.ParseJson("{""Style"":""style"",""Customer"":""customer"",""Width (CM)"":""width"",""Supplier"":""yarn_supplier"",""Yarn Type"":""yarn_type"",""Dtex"":""dtex"",""Number of Ends"":""number_of_ends"",""Warping Tension (cN)"":""warping_tension"",""Spring Color"":""spring_color"",""S-Wrap"":""s_wrap"",""Warping Speed (m/min)"":""warping_speed"",""Beaming Tension (N)"":""beaming_tension"",""Beaming Speed (m/min)"":""beaming_speed"",""Cross Winding (mm)"":""cross_winding"",""Beam Width (CM)"":""beam_width"",""Dents/cm"":""dents_per_cm"",""Ends/dent"":""ends_per_dent"",""Notes"":""notes""}")
+    spec.ChangeProperty "k1", nullstr
+    spec.ChangeProperty "k2", nullstr
+    LoadCustomSheet spec, ws, names_map
 
 End Sub
 

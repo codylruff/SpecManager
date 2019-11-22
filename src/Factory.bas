@@ -1,4 +1,15 @@
 Attribute VB_Name = "Factory"
+Function CreateBallisticPackage(package_length_inches As Double, fabric_width_inches As Double, conditioned_weight_gsm As Double, target_psf As Double) As BallisticPackage
+    Dim package As BallisticPackage
+    Set package = New BallisticPackage
+    With package
+        .PackageLengthInches = package_length_inches
+        .FabricWidthInches = fabric_width_inches
+        .ConditionedWeight = conditioned_weight_gsm
+        .TargetPsf = target_psf
+    End With
+    Set CreateBallisticPackage = package
+End Function
 
 Function CreateDictionary() As Object
     Set CreateDictionary = CreateObject("Scripting.Dictionary")
@@ -37,6 +48,7 @@ Function CopySpecification(spec As Specification) As Specification
     Set spec_copy = New Specification
     On Error Resume Next
     With spec
+        Set spec_copy.Template = .Template
         spec_copy.JsonToObject .PropertiesJson
         spec_copy.MaterialId = .MaterialId
         spec_copy.SpecType = .SpecType
@@ -97,7 +109,7 @@ Function CreateSpecFromDict(dict As Object) As Specification
     With dict
         spec.MaterialId = .item("Material_Id")
         spec.MaterialDescription = .item("Description")
-        spec_.ProcessId = .item("Process_Id")
+        spec.ProcessId = .item("Process_Id")
         spec.SpecType = .item("Spec_Type")
         spec.Revision = CStr(.item("Revision"))
     Set spec.Template = Factory.CopyTemplate(App.templates(spec.SpecType))

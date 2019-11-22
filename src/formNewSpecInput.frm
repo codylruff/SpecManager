@@ -32,6 +32,12 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
+
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -60,7 +66,7 @@ Private Sub cmdContinue_Click()
 '    If selection = "Weaving RBA" Then
 '        ' For the weaving rba a base file must be selected to load.
 '        Unload Me
-'        RbaParser.LoadNewRBA
+'        DocumentParser.LoadNewRBA
 '        GuiCommands.GoToMain
 '        Exit Sub
 '    End If

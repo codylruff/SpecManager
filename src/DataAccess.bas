@@ -19,7 +19,8 @@ Function PushIQueryable(ByRef obj As IQueryable, Table As String, Optional ByRef
     PushIQueryable = DB_PUSH_SUCCESS
     Exit Function
 DbPushFailException:
-    Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
+    Logger.Log "SQL INSERT Error : DbPushFailException", RuntimeLog
+    Logger.Log SQLstmt, RuntimeLog
     PushIQueryable = DB_PUSH_FAILURE
 End Function
 
@@ -51,7 +52,7 @@ Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal colum
     End If
     Logger.Log "Searching for " & column_name & ", for : " & key_id
     SQLstmt = "SELECT " & column_name & " FROM " & tbl & _
-              "WHERE " & key_name & " ='" & key_id & "'"
+              " WHERE " & key_name & " ='" & key_id & "'"
 
     Set GetColumn = trans.ExecuteSQLSelect(SQLstmt)
 End Function
