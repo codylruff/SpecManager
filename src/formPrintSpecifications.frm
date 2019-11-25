@@ -13,20 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -42,8 +28,13 @@ Private Sub cmdPrintSpecifications_Click()
          Exit Sub
     End If
     prompt_result = PromptHandler.ProtectionPlanningSequence
-    App.printer.WriteAllDocuments Me.txtProductionOrder, prompt_result
-    If Not App.TestingMode Then PrintSelectedPackage (prompt_result)
+    If Not App.TestingMode Then
+        App.printer.WriteAllDocuments Me.txtProductionOrder, prompt_result
+        PrintSelectedPackage prompt_result
+    Else
+        Logger.Log CStr(prompt_result)
+    End If
+    
 End Sub
 
 Private Sub cmdSearch_Click()
