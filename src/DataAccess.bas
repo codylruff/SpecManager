@@ -282,3 +282,24 @@ Public Function BeginTransaction(Optional path As String) As SqlTransaction
         Set BeginTransaction = Nothing
     End If
 End Function
+
+Function UpdateValue(ByVal key_name As String, ByVal key_id As Variant, ByVal column_name As String, ByVal column_value As Variant, Table As String, Optional ByRef trans As SqlTransaction) As Long
+    Dim SQLstmt As String
+    Dim transaction As SqlTransaction
+    On Error GoTo DbPushFailException
+    If Utils.IsNothing(trans) Then
+        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
+    End If
+    ' build the sql query
+    Logger.Log "Updating " & key_id & " . . . "
+    SQLstmt = "UPDATE " & Table & " " & _
+              "SET " & column_name & " = '" & column_value & "' " & _
+              "WHERE " & key_name & " ='" & key_id & "'"
+    Debug.Print SQLstmt
+    trans.ExecuteSQL (SQLstmt)
+    UpdateValue = DB_PUSH_SUCCESS
+    Exit Function
+DbPushFailException:
+    Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
+    UpdateValue = DB_PUSH_FAILURE
+End Function

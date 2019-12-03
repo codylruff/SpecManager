@@ -34,6 +34,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Private WithEvents pLogger As SystemLogger
 Attribute pLogger.VB_VarHelpID = -1
 

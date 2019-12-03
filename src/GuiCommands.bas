@@ -48,7 +48,7 @@ End Sub
 
 Public Sub InitializeApplication()
     SpecManager.StartApp
-    ActionLog.LogUserAction "Logged In"
+    'ActionLog.LogUserAction "Logged In"
     shtDeveloper.Visible = xlSheetVeryHidden
     'formConsole.show vbModeless
     GoToMain

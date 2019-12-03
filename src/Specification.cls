@@ -43,7 +43,24 @@ Public Property Let MaterialId(value As String): MaterialId_ = UCase(value): End
 Public Property Get MaterialDescription() As String: MaterialDescription = MaterialDescription_: End Property
 Public Property Let MaterialDescription(val As String): MaterialDescription_ = val: End Property
 Public Property Let ProcessId(value As String): ProcessId_ = value: End Property
-Public Property Get ProcessId() As String: ProcessId = ProcessId_: End Property
+Public Property Get ProcessId() As String
+    If ProcessId_ = nullstr Then
+        Select Case Left(MaterialId, 1)
+            Case "N", "O"
+                ProcessId = "Warping"
+            Case "H", "G"
+                ProcessId = "Weaving"
+            Case "U", "T"
+                ProcessId = "Finishing"
+            Case "I", "J"
+                ProcessId = "Isotex/Monti"
+            Case Else
+                ProcessId = "default"
+        End Select
+    Else
+        ProcessId = ProcessId_
+    End If
+End Property
 
 ' METHODS---
 Public Function GetProperty(property As String) As Variant

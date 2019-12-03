@@ -52,11 +52,12 @@ Public Sub LoadNewRBA()
     App.Start
     file_path = SelectSpecifcationFile
     progress_bar = App.gDll.ShowProgressBar(4)
-    ' Task 1
+    ' Task 1 Extract material Id from file name.
     progress_bar = App.gDll.SetProgressBar(progress_bar, 1, "Task 1/4")
     path_no_ext = Replace(file_path, ".xlsx", vbNullString)
     path_len = Len(path_no_ext)
     char_count = path_len
+    ' Throw error for improper file name
     On Error GoTo FileNamingError
     Do Until char_buffer = "_"
         char_count = char_count - 1
@@ -64,11 +65,11 @@ Public Sub LoadNewRBA()
     Loop
     On Error GoTo 0
     material_number = Mid(path_no_ext, char_count + 1, path_len - char_count)
-    ' Task 2
+    ' Task 2 Parse the RBA Document for a json string
     progress_bar = App.gDll.SetProgressBar(progress_bar, 2, "Task 2/4")
     Set json_object = ParseRBA(file_path)
     json_string = JsonVBA.ConvertToJson(json_object)
-    ' Task 3
+    ' Task 3 Convert json string into specification object
     progress_bar = App.gDll.SetProgressBar(progress_bar, 3, "Task 3/4")
     Dim spec As Specification
     Dim ret_val As Long
@@ -78,10 +79,10 @@ Public Sub LoadNewRBA()
     spec.MaterialId = material_number
     spec.SpecType = "Weaving RBA"
     spec.Revision = "1.0"
-    ' Task 4
+    ' Task 4 Save specification object to the database
     progress_bar = App.gDll.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
     ret_val = SpecManager.SaveNewSpecification(spec)
-    Debug.Print spec.PropertiesJson
+    'Debug.Print spec.PropertiesJson
     If ret_val = DB_PUSH_SUCCESS Then
         PromptHandler.Success "New Specification Saved."
     ElseIf ret_val = SM_MATERIAL_EXISTS Then
@@ -127,7 +128,7 @@ Public Function ParseRBA(path As String) As Object
         rba_dict.Add arr(i, 0), arr(i, 1)
     Next i
     On Error GoTo 0
-    ret_val = JsonVBA.WriteJsonObject(path & ".json", rba_dict)
+    'ret_val = JsonVBA.WriteJsonObject(path & ".json", rba_dict)
     Set ParseRBA = rba_dict
     'Set rba_dict = Nothing
     wb.Close

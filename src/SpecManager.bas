@@ -278,10 +278,12 @@ Function GetMaterialDescription(material_id As String) As Variant
     GetMaterialDescription = DataAccess.GetColumn("Material_Id", material_id, "Description", "materials").Data
 End Function
 
-Function AddNewMaterialDescription(material_id As String, description As String) As Long
+Function AddNewMaterialDescription(material_id As String, description As String, process_id As String) As Long
 ' If a material description does not exist create it.
+    Dim ret_val As Long
     If GetMaterialDescription(material_id) = Empty Then
-        AddNewMaterialDescription = DataAccess.PushValue("Material_Id", material_id, "Description", description, "materials")
+        ret_val = DataAccess.PushValue("Material_Id", material_id, "Description", description, "materials")
+        AddNewMaterialDescription = DataAccess.UpdateValue("Material_Id", material_id, "Process_Id", process_id, "materials")
     Else
         AddNewMaterialDescription = SM_MATERIAL_EXISTS
     End If
@@ -294,7 +296,9 @@ Function SaveNewSpecification(spec As Specification) As Long
             ret_val = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
             ActionLog.CrudOnSpecification spec, "Created New Specification"
             If IsEmpty(GetMaterialDescription(spec.MaterialId)) Then
-                SaveNewSpecification = AddNewMaterialDescription(spec.MaterialId, CStr(PromptHandler.UserInput(SingleLineText, "Material Description: " & spec.MaterialId, "Enter Material Description :")))
+                SaveNewSpecification = AddNewMaterialDescription(spec.MaterialId, _
+                            CStr(PromptHandler.UserInput(SingleLineText, "Material Description: " & spec.MaterialId, _
+                                "Enter Material Description :")), spec.ProcessId)
                 Exit Function
             End If
             SaveNewSpecification = ret_val

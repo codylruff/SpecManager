@@ -49,6 +49,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Option Explicit
 
 Private Sub cmdConfig_Click()
@@ -86,7 +88,7 @@ Private Sub cmdDatabaseQuery_Click()
 End Sub
 
 Private Sub cmdExit_Click()
-    ActionLog.LogUserAction "Logged Out"
+    'ActionLog.LogUserAction "Logged Out"
     SpecManager.StopApp
     GuiCommands.UnloadAllForms
     'GuiCommands.ExitApp
