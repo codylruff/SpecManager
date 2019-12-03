@@ -397,6 +397,7 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     End If
     ' Insert values into worksheet
     Set spec = specs_dict("Weaving RBA")
+    Utils.Insert shtRBA.Range("article_code"), spec.MaterialId
     Utils.Insert shtRBA.Range("material_description"), spec.MaterialDescription
     Utils.Insert shtRBA.Range("revision"), spec.Revision
     Utils.Insert shtRBA.Range("qc_sample_size"), qc_sample
