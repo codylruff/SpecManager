@@ -15,8 +15,11 @@ Function CreateDictionary() As Object
     Set CreateDictionary = CreateObject("Scripting.Dictionary")
 End Function
 
-Public Function CreateTable() As Table
-    Set CreateTable = New Table
+Public Function CreateTable(ws As Worksheet, table_name As String) As Table
+    Dim tbl As Table
+    Set tbl = New Table
+    Set tbl.ListObject = ws.ListObjects(table_name)
+    Set CreateTable = tbl
 End Function
 
 Function CreateSpecification() As Specification

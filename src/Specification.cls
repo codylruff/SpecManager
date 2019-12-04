@@ -63,6 +63,11 @@ Public Property Get ProcessId() As String
 End Property
 
 ' METHODS---
+Public Function GetName() As String
+' Returns the material_id/spec_type as a string.
+    GetName = Me.MaterialId & "/" & Me.SpecType
+End Function
+
 Public Function GetProperty(property As String) As Variant
     If Me.Properties.Exists(property) Then
         GetProperty = Me.Properties(property)

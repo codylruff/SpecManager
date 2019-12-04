@@ -85,7 +85,7 @@ Function SearchForSpecifications(material_id As String) As Long
         SearchForSpecifications = SM_SEARCH_FAILURE
     Else
         Set App.specs = specs_dict
-        itms = App.specs.items
+        itms = App.specs.Items
         Set App.current_spec = itms(0)
         Set coll = New Collection
         For Each Key In App.specs
@@ -289,16 +289,21 @@ Function AddNewMaterialDescription(material_id As String, description As String,
     End If
 End Function
 
-Function SaveNewSpecification(spec As Specification) As Long
+Function SaveNewSpecification(spec As Specification, Optional material_description As String) As Long
     Dim ret_val As Long
     If ManagerOrAdmin Then
         If DataAccess.GetSpecification(spec.MaterialId, spec.SpecType).records.Count = 0 Then
             ret_val = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
             ActionLog.CrudOnSpecification spec, "Created New Specification"
             If IsEmpty(GetMaterialDescription(spec.MaterialId)) Then
-                SaveNewSpecification = AddNewMaterialDescription(spec.MaterialId, _
-                            CStr(PromptHandler.UserInput(SingleLineText, "Material Description: " & spec.MaterialId, _
-                                "Enter Material Description :")), spec.ProcessId)
+                ' Use material_description param or prompt the user to enter one.
+                If material_description = nullstr Then
+                    material_description = CStr(PromptHandler.UserInput(SingleLineText, "Material Description: " & spec.MaterialId, _
+                                "Enter Material Description :"))
+                End If
+                ' Add the new Material Description to the materials table.
+                SaveNewSpecification = AddNewMaterialDescription(spec.MaterialId, material_description, spec.ProcessId)
+                ActionLog.CrudOnSpecification spec, "Created New Material"
                 Exit Function
             End If
             SaveNewSpecification = ret_val
@@ -453,54 +458,69 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
 
 End Sub
 
-Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws As Worksheet, Optional start_row As Integer = 2, Optional start_col As Integer = 1)
+Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws As Worksheet, Optional start_row As Integer = 2, Optional start_col As Integer = 1, Optional print_json_column As Boolean = True, Optional write_to_live As Boolean = False)
 ' Create a column at the end of a table and fill it with a json string represent each row.
     Dim dict As Object
-    Dim i As Integer
-    Dim k As Integer
+    Dim i, k As Integer
     Dim json_string As String
     Dim new_spec As Specification
     Dim spec_dict As Object
     App.Start
     With ws
-        For i = start_row To num_rows
+        For i = start_row To num_rows - start_row + 1
             Set dict = Factory.CreateDictionary
             Set spec_dict = Factory.CreateDictionary
             For k = start_col To num_cols
                 dict.Add .Cells(1, k), .Cells(i, k)
             Next k
             json_string = JsonVBA.ConvertToJson(dict)
-            .Cells(i, num_cols + start_col).value = json_string
-            spec_dict.Add "Properties_Json", json_string
-            spec_dict.Add "Material_Id", .Cells(i, 1).value
-            spec_dict.Add "Spec_Type", .Cells(i, 2).value
-            spec_dict.Add "Revision", 1
-            Set new_spec = Factory.CreateSpecFromDict(spec_dict)
-            ret_val = SpecManager.SaveNewSpecification(new_spec)
-            If ret_val = DB_PUSH_SUCCESS Then
-                PromptHandler.Success "New Specification Saved."
-            ElseIf ret_val = SM_MATERIAL_EXISTS Then
-                PromptHandler.Error "Material Already Exists."
-            Else
-                PromptHandler.Error "Specification Not Saved."
+            ' If requested, print the json string in a new column.
+            If print_json_column Then
+                .Cells(i, num_cols + start_col).value = json_string
             End If
-            ' If DataAccess.PushIQueryable(new_spec, "standard_specifications") <> DB_PUSH_SUCCESS Then
-            '     Logger.Error "Error Writing : " & spec_dict.item("Material_Id")
-            '     Exit Sub
-            ' End If
-            ActionLog.CrudOnSpecification new_spec, "Created New Specification"
+            If write_to_live Then
+                spec_dict.Add "Properties_Json", json_string
+                spec_dict.Add "Material_Id", .Cells(i, 1).value
+                spec_dict.Add "Spec_Type", .Cells(i, 2).value
+                spec_dict.Add "Revision", 1
+                Set new_spec = Factory.CreateSpecFromDict(spec_dict)
+                ret_val = SpecManager.SaveNewSpecification(new_spec, .Cells(i, 3))
+                If ret_val = DB_PUSH_SUCCESS Then
+                    Logger.Log new_spec.GetName & " Created."
+                    ActionLog.CrudOnSpecification new_spec, "Created New Specification"
+                ElseIf ret_val = SM_MATERIAL_EXISTS Then
+                    Logger.Log new_spec.GetName & " Already Exists."
+                Else
+                    Logger.Log new_spec.GetName & " Was Not Saved."
+                End If
+            End If
         Next i
         
     End With
     App.Shutdown
 End Sub
 
-Public Sub EntireTableToJson()
+Public Sub ParseSpecsTable(ws_name As String, table_name As String, Optional print_json_column As Boolean = True, Optional write_to_live As Boolean = False)
 ' Converts each row in the table to json format, then loads it into the specs db
-    MassCreateSpecifications num_rows:=44, _
-                num_cols:=19, _
-                ws:=ActiveWorkbook.Sheets("testing"), _
-                start_col:=3
+    Dim tbl As Table
+
+    Set tbl = Factory.CreateTable(ActiveWorkbook.Sheets(ws_name), table_name)
+    ' Validate table column headers
+    If tbl.HeaderRowRange(1) <> "Material_Id" Then ' The first column must be the material_id
+        Logger.Log "The first column must be the 'Material_Id'"
+    ElseIf tbl.HeaderRowRange(2) <> "Spec_Type" Then ' The second column must be the spec_type
+        Logger.Log "The second column must be the 'Spec_Type'"
+    ElseIf tbl.HeaderRowRange(3) <> "Description" Then ' The third column must be the material_description
+        Logger.Log "The second column must be the 'Description'"
+    Else
+        MassCreateSpecifications num_rows:=tbl.Rows.Count, _
+                    num_cols:=CInt(tbl.Columns.Count), _
+                    ws:=tbl.Worksheet, _
+                    start_col:=4, _
+                    print_json_column:=print_json_column, _
+                    write_to_live:=write_to_live
+    End If
+
 End Sub
 
 Public Sub CopyPropertiesFromFile()
@@ -519,7 +539,8 @@ Public Sub CopyPropertiesFromFile()
     Next r
 End Sub
 
-Public Sub UpdateRBAFromSheet()
+Private Sub UpdateRBAFromSheet()
+' ****THIS IS BROKEN****
 ' This routine will update a specificaiton in the database
 ' with the parameters entered into the sheet.
     Dim material_id As String

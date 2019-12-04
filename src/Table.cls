@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-' Consider changing the name of this class to data frame (like pandas)
+
 Private list As ListObject
 Private CustomSorters As VBA.Collection
 
@@ -20,11 +20,11 @@ Property Get ListObject() As ListObject
 End Property
 
 Public Property Get Columns() As ListColumns
-    Set ListColumns = list.ListColumns
+    Set Columns = list.ListColumns
 End Property
 
 Property Get Rows() As ListRows
-    Set ListRows = list.ListRows
+    Set Rows = list.ListRows
 End Property
 
 Property Get Name() As String

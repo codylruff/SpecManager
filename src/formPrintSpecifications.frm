@@ -15,6 +15,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -110,6 +112,7 @@ Sub PrintSelectedPackage(selected_package As DocumentPackageVariant)
                         Array("Testing Requirements", "Ballistic Testing Requirements")), selected_package, txtProductionOrder
         Case Default
             Logger.Log "Printing All Available Specs"
+            Debug.Print IsEmpty(App.specs)
             App.printer.PrintPackage App.specs, selected_package, txtProductionOrder
     End Select
 

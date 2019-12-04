@@ -195,9 +195,8 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
 
     ' Toggle Performance Mode
     App.PerformanceMode True
-
     ' Print special requirements document if needed. Specials should print out on top!
-    If CheckForSpecialRequirements(spec.MaterialId) Then App.printer.PrintSheet SheetByName(spec.MaterialId)
+    If CheckForSpecialRequirements(App.current_spec.MaterialId) Then App.printer.PrintSheet SheetByName(App.current_spec.MaterialId)
     
     ' Print all the documents in the package
     For Each doc In doc_package
@@ -257,7 +256,7 @@ Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet, Op
 ' Loads a spec to a custom worksheet for printing.
     Dim nr As Variant
     Dim rng As Range
-    On Error Resume Next
+    'On Error Resume Next
     If IsNothing(names_map) Then
         For Each nr In spec.Properties
             Set rng = custom_sheet.Range(CStr(nr))
@@ -269,7 +268,7 @@ Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet, Op
             Utils.Insert rng, spec.GetProperty(CStr(nr))
         Next nr
     End If
-    On Error GoTo 0
+    'On Error GoTo 0
 End Sub
 
 Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = nullstr)
@@ -459,10 +458,8 @@ Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
     Set ws = Utils.SheetByName("Warping Requirements")
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
-    Set names_map = JsonVBA.ParseJson("{""Style"":""style"",""Customer"":""customer"",""Width (CM)"":""width"",""Supplier"":""yarn_supplier"",""Yarn Type"":""yarn_type"",""Dtex"":""dtex"",""Number of Ends"":""number_of_ends"",""Warping Tension (cN)"":""warping_tension"",""Spring Color"":""spring_color"",""S-Wrap"":""s_wrap"",""Warping Speed (m/min)"":""warping_speed"",""Beaming Tension (N)"":""beaming_tension"",""Beaming Speed (m/min)"":""beaming_speed"",""Cross Winding (mm)"":""cross_winding"",""Beam Width (CM)"":""beam_width"",""Dents/cm"":""dents_per_cm"",""Ends/dent"":""ends_per_dent"",""Notes"":""notes""}")
-    spec.ChangeProperty "k1", nullstr
-    spec.ChangeProperty "k2", nullstr
-    LoadCustomSheet spec, ws, names_map
+    Utils.Insert ws.Range("revision"), spec.Revision
+    LoadCustomSheet spec, ws
 
 End Sub
 

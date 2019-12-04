@@ -104,7 +104,7 @@ End Function
 Public Function ParseRBA(path As String) As Object
     Dim wb As Workbook
     Dim strFile As String
-    Dim rba_dict As Object
+    Dim doc_dict As Object
     Dim prop As Variant
     Dim nr As Name
     Dim rng As Object
@@ -117,7 +117,7 @@ Public Function ParseRBA(path As String) As Object
     Dim ret_val As Long
     Set wb = OpenWorkbook(path)
     'DeleteNames wb
-     Set rba_dict = CreateObject("Scripting.Dictionary")
+     Set doc_dict = CreateObject("Scripting.Dictionary")
     ' Clean data by removing units and filling in missing values
     Dim arr
     Dim rngs() As Variant
@@ -125,11 +125,11 @@ Public Function ParseRBA(path As String) As Object
     ReDim rngs(UBound(arr, 1), 1)
     On Error Resume Next
     For i = 0 To UBound(arr, 1) - 1
-        rba_dict.Add arr(i, 0), arr(i, 1)
+        doc_dict.Add arr(i, 0), arr(i, 1)
     Next i
     On Error GoTo 0
     'ret_val = JsonVBA.WriteJsonObject(path & ".json", rba_dict)
-    Set ParseRBA = rba_dict
+    Set ParseRBA = doc_dict
     'Set rba_dict = Nothing
     wb.Close
     ' Turn off Performance Mode

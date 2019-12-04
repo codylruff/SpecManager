@@ -544,7 +544,7 @@ If StartCells.Cells.Count = 1 Then
     ' the collection moving downwards.
     '''''''''''''''''''''''''''''''''''''
     Set DestRng = StartCells
-    For Each V In dict.items
+    For Each V In dict.Items
         If IsObject(V) = False Then
             DestRng.value = V
             If DestRng.row < DestRng.Parent.Rows.Count Then
@@ -571,7 +571,7 @@ If StartCells.Cells.Count = 2 Then
         ' across the row.
         '''''''''''''''''''''''''''''''''
         Set DestRng = StartCells.Cells(1, 1)
-        For Each V In dict.items
+        For Each V In dict.Items
             If IsObject(V) = False Then
                 DestRng.value = V
                 If DestRng.Column < StartCells.Parent.Columns.Count Then
@@ -590,7 +590,7 @@ If StartCells.Cells.Count = 2 Then
         ' down the column.
         '''''''''''''''''''''''''''''''''
         Set DestRng = StartCells.Cells(1, 1)
-        For Each V In dict.items
+        For Each V In dict.Items
             If IsObject(V) = False Then
                 DestRng.value = V
                 If DestRng.row < StartCells.Parent.Rows.Count Then
@@ -611,7 +611,7 @@ End If
 '''''''''''''''''''''''''''''''''''''
 For Ndx = 1 To StartCells.Cells.Count
     If Ndx <= dict.Count Then
-        V = dict.items(Ndx - 1)
+        V = dict.Items(Ndx - 1)
         If IsObject(V) = False Then
             StartCells.Cells(Ndx).value = V
         End If
@@ -684,10 +684,10 @@ For Ndx = 0 To dict.Count - 1
     ' Test to see if the item in the Dict is
     ' an object. If so, use Set.
     '''''''''''''''''''''''''''''''''''''''''
-    If IsObject(dict.items(Ndx)) = True Then
-        Set arr(Ndx, 1) = dict.items(Ndx)
+    If IsObject(dict.Items(Ndx)) = True Then
+        Set arr(Ndx, 1) = dict.Items(Ndx)
     Else
-        arr(Ndx, 1) = dict.items(Ndx)
+        arr(Ndx, 1) = dict.Items(Ndx)
     End If
 
 Next Ndx
@@ -745,10 +745,10 @@ End If
 '''''''''''''''''''''''''''''''''
 On Error Resume Next
 For Ndx = 0 To dict.Count - 1
-    If IsObject(dict.items(Ndx)) = True Then
-        Set ItemVar = dict.items(Ndx)
+    If IsObject(dict.Items(Ndx)) = True Then
+        Set ItemVar = dict.Items(Ndx)
     Else
-        ItemVar = dict.items(Ndx)
+        ItemVar = dict.Items(Ndx)
     End If
     KeyVal = dict.keys(Ndx)
     err.Clear
@@ -1293,9 +1293,9 @@ Else
     ReDim VTypes(0 To dict.Count - 1)
 
     For Ndx = 0 To dict.Count - 1
-        If (IsObject(dict.items(Ndx)) = True) Or _
-            (IsArray(dict.items(Ndx)) = True) Or _
-            VarType(dict.items(Ndx)) = vbUserDefinedType Then
+        If (IsObject(dict.Items(Ndx)) = True) Or _
+            (IsArray(dict.Items(Ndx)) = True) Or _
+            VarType(dict.Items(Ndx)) = vbUserDefinedType Then
             Debug.Print "***** ITEM IN DICTIONARY WAS OBJECT OR ARRAY OR UDT"
             Exit Sub
         End If
@@ -1307,8 +1307,8 @@ Else
         ' array. We'll use these values later to convert
         ' back to the proper data type for Item.
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            arr(Ndx) = dict.items(Ndx) & vbNullChar & dict.keys(Ndx)
-            VTypes(Ndx) = VarType(dict.items(Ndx))
+            arr(Ndx) = dict.Items(Ndx) & vbNullChar & dict.keys(Ndx)
+            VTypes(Ndx) = VarType(dict.Items(Ndx))
             
     Next Ndx
     ''''''''''''''''''''''''''''''''''
