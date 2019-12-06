@@ -74,6 +74,7 @@ Public Sub InitializeTestSuiteCredentials()
     current_user.ProductLine = "Admin"
     App.TestingMode = True
     ActionLog.Disable
+    Logger.EnableSaving
 End Sub
 
 Public Sub DeInitializeTestSuiteCredentials()
@@ -81,6 +82,7 @@ Public Sub DeInitializeTestSuiteCredentials()
     Me.RefreshObjects
     ActionLog.enable
     Set current_user = AccessControl.Account_Initialize
+    Logger.DisableSaving
 End Sub
 
 Public Sub Shutdown()

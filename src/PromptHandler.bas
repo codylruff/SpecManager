@@ -41,6 +41,8 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
         Else
             ProtectionPlanningSequence = WeavingStyleChange
         End If
+    ElseIf App.current_spec.ProcessId = "Isotex" Then
+        ProtectionPlanningSequence = Isotex
     Else
         ProtectionPlanningSequence = Default
     End If
@@ -90,4 +92,13 @@ Public Function ChangePassword() As String
     new_pass_1 = nullstr
     new_pass_2 = nullstr
     
+End Function
+
+Public Function EnterTemplateType() As String
+    EnterTemplateType = CStr(UserInput(SingleLineText, "Template Selection", "Enter A Template Type :"))
+End Function
+
+Public Function SelectSpecifcationFile() As String
+' Select an specification file from the file dialog.
+    SelectSpecifcationFile = App.gDll.OpenFile("Select Specification Document . . .")
 End Function

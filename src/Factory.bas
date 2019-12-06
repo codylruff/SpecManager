@@ -46,6 +46,23 @@ ErrorHandler:
     Exit Function
 End Function
 
+Function CreateTemplateFromJsonFile(path As String, Optional product_line As String = "Protection") As SpecificationTemplate
+' Generate a template object from a json file.
+    Dim Template As SpecificationTemplate
+    Dim FSO As Object
+    On Error GoTo ErrorHandler
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    Debug.Print FSO.GetBaseName(path)
+    Set Template = New SpecificationTemplate
+    Template.SpecType = FSO.GetBaseName(path)
+    Template.JsonToObject JsonVBA.ReadJsonFileToString(path), Template.SpecType, "1.0", product_line
+    Set CreateTemplateFromJsonFile = Template
+    Exit Function
+ErrorHandler:
+    Logger.Log "File could not be read.", ErrorLog
+    Exit Function
+End Function
+
 Function CopySpecification(spec As Specification) As Specification
     Dim spec_copy As Specification
     Set spec_copy = New Specification

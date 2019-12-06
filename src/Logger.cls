@@ -20,11 +20,21 @@ Private folder_path As String
 Private file_path As String
 Private log_enabled As Boolean
 Private pImmediateLog As LogType
+Private saving_enabled As Boolean
 
 Private Sub Class_Initialize()
 ' Constructor
     ImmediateLog = RuntimeLog
     log_level = LOG_LOW
+    saving_enabled = False
+End Sub
+
+Public Sub EnableSaving()
+    saving_enabled = True
+End Sub
+
+Public Sub DisableSaving()
+    saving_enabled = False
 End Sub
 
 Public Property Get ImmediateLog() As LogType
@@ -111,6 +121,7 @@ Public Sub SaveAllLogs()
 ' Saves all non-empty logs
     Dim log_files As Variant
     Dim log_file As Variant
+
     Select Case log_level
         Case LOG_LOW
             log_files = Array(RuntimeLog, UserLog, ErrorLog)
@@ -124,30 +135,37 @@ Public Sub SaveAllLogs()
             log_files = Array(RuntimeLog, UserLog, ErrorLog)
     End Select
 
-    For Each log_file In log_files
-        SaveLog (log_file)
-    Next
+    If saving_enabled Then
+        For Each log_file In log_files
+            SaveLog (log_file)
+        Next
+    Else
+        ClearBuffer RuntimeLog
+    End If
 End Sub
 
 Public Sub SaveLog(Optional log_type As LogType = 0)
     Dim line As Variant
     Dim i As Long
     Dim file_name As String
-    file_name = Logs(log_type).Id & "_" & TimeInS
-    If Logs(log_type).Buffer Is Nothing Then Exit Sub
-    folder_path = ThisWorkbook.path & "\logs"
-    file_path = folder_path & "\" & file_name & ".log"
-    Set FSO = CreateObject("Scripting.FileSystemObject")
-    If Not FSO.FolderExists(folder_path) Then FSO.CreateFolder folder_path
-    Me.Log "Saving : " & file_name & ".log", RuntimeLog
-    With Logs(log_type)
-        Set stream = FSO.CreateTextFile(file_path, True)
-        For i = 1 To .Buffer.Count
-            stream.WriteLine printf("{0} : {1}", CStr(.Buffer(i)(0)), CStr(.Buffer(i)(1)))
-        Next i
-        stream.Close
-    End With
-
+    If saving_enabled Then
+        file_name = Logs(log_type).Id & "_" & TimeInS
+        If Logs(log_type).Buffer Is Nothing Then Exit Sub
+        folder_path = ThisWorkbook.path & "\logs"
+        file_path = folder_path & "\" & file_name & ".log"
+        Set FSO = CreateObject("Scripting.FileSystemObject")
+        If Not FSO.FolderExists(folder_path) Then FSO.CreateFolder folder_path
+        Me.Log "Saving : " & file_name & ".log", RuntimeLog
+        With Logs(log_type)
+            Set stream = FSO.CreateTextFile(file_path, True)
+            For i = 1 To .Buffer.Count
+                stream.WriteLine printf("{0} : {1}", CStr(.Buffer(i)(0)), CStr(.Buffer(i)(1)))
+            Next i
+            stream.Close
+        End With
+    Else
+        ClearBuffer log_type
+    End If
 End Sub
 
 Private Sub ClearBuffer(log_id As LogType)

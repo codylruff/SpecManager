@@ -82,6 +82,8 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
             LoadTestingRequirementsToSheet spec, sht, prod_order, package_variant
         Case "Ballistic Testing Requirements"
             LoadBallisticTestingRequirementsToSheet spec, sht, prod_order
+        Case "TSPP"
+            LoadTsppToSheet spec, prod_order
         Case Else
             ' All specifications which do not have a custom worksheet template
             ' will be handled by this case.
@@ -202,17 +204,19 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     For Each doc In doc_package
         Set spec = doc_package(doc)
         ' Log User Action
-        ActionLog.DocumentPrinted spec, work_order
         With spec
             ' Weaving RBA gets special treament here to include the checklist.
             If .SpecType = "Weaving RBA" Then
                 App.printer.PrintSheet SheetByName("Weaving RBA"), FitToPage:=False
                 ActionLog.LogUserAction IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover") & " Checklist Printed"
                 App.printer.PrintSheet SheetByName(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
+            ElseIf IsInArray(.SpecType, Array("Warping Requirements", "TSPP")) Then
+                App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=False
             Else
-                App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True, work_order:=work_order
+                App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True
             End If
         End With
+        ActionLog.DocumentPrinted spec, work_order
     Next doc
     
     ' Turn off Performance Mode
@@ -221,7 +225,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
 
 End Sub
 
-Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False, Optional work_order As String)
+Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
 ' Prints the sheet of the given name in the spec manager workbook
     If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
         ws.Visible = xlSheetVisible
@@ -459,6 +463,21 @@ Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
     Utils.Insert ws.Range("revision"), spec.Revision
+    LoadCustomSheet spec, ws
+
+End Sub
+
+Private Sub LoadTsppToSheet(spec As Specification, prod_order As String)
+' Load Isotex Requirements (TSPP) to sheet
+    Dim nr As Variant
+    Dim rng As Range
+    Dim ws As Worksheet
+
+    Set ws = Utils.SheetByName("TSPP")
+    Utils.Insert ws.Range("work_order"), prod_order
+    Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
+    Utils.Insert ws.Range("revision"), spec.Revision
+    Utils.Insert ws.Range("description"), spec.MaterialDescription
     LoadCustomSheet spec, ws
 
 End Sub

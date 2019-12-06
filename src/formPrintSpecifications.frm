@@ -31,6 +31,7 @@ Private Sub cmdPrintSpecifications_Click()
          PromptHandler.Error "Please enter a production order."
          Exit Sub
     End If
+    ' Consider process exceptions based on input from planners.
     prompt_result = PromptHandler.ProtectionPlanningSequence
     If Not App.TestingMode Then
         App.printer.WriteAllDocuments Me.txtProductionOrder, prompt_result
@@ -110,6 +111,9 @@ Sub PrintSelectedPackage(selected_package As DocumentPackageVariant)
             Logger.Log "Printing Finishing without QC Package"
             App.printer.PrintPackage DropKeys(App.specs, _
                         Array("Testing Requirements", "Ballistic Testing Requirements")), selected_package, txtProductionOrder
+        Case Isotex
+            Logger.Log "Printing Isotex TSPP"
+            App.printer.PrintPackage App.specs, selected_package, txtProductionOrder
         Case Default
             Logger.Log "Printing All Available Specs"
             Debug.Print IsEmpty(App.specs)

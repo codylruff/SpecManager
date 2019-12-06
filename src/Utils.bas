@@ -21,6 +21,20 @@ Private Declare Function UpdateWindow Lib "user32" (ByVal Hwnd As Long) As Long
 Private Declare Function IsWindow Lib "user32" (ByVal Hwnd As Long) As Long
 #End If
 ' -------------------------------------------------
+Public Sub ColumnToRow(rng As Range)
+' Take a column range and convert it to a row range starting in the first cell.
+    Dim cell As Range
+
+    For Each cell In rng.Cells
+        Debug.Print cell.value
+        If Not cell.row = 1 Then
+            rng.Worksheet.Cells(1, cell.row).value = cell.value
+            cell.value = Null
+        End If
+    Next cell
+
+End Sub
+
 Function ArrayContains(arr As Variant, item As Variant) As Boolean
 ' Checks for an item within the given array and returns true or false.
     Dim i As Long

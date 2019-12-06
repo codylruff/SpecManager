@@ -37,6 +37,7 @@ Public Enum DocumentPackageVariant
     WeavingTieBack = 2
     FinishingWithQC = 3
     FinishingNoQC = 4
+    Isotex = 5
 End Enum
 
 Public Enum PixelDirection

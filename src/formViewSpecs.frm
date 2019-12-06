@@ -15,19 +15,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdPrint_Click()
@@ -114,14 +101,19 @@ End Sub
 Sub PrintConsole()
 ' This subroutine prints the contents of the console box using the default printer assign in user settings.
     'Check if there is actually text to print
-    Dim spec As Specification
-    Dim T As Variant
-    Dim new_sht As Worksheet
+    Dim ws As Worksheet
+
     If Me.txtConsole.text = nullstr Then
         PromptHandler.Error "There is nothing to print!"
     Else
         ' Print the specs one at a time to the default printer
-        App.gDll.ShowDialog "Function Disabled", vbOkOnly, "Under Development"
+        Set ws = Utils.CreateNewSheet(App.current_spec.SpecType)
+        App.printer.PrintObjectToSheet App.current_spec, ws
+        If IsInArray(App.current_spec.SpecType, Array("Warping Requirements", "Weaving RBA", "TSPP")) Then
+            App.printer.PrintSheet ws, FitToPage:=False
+        Else
+            App.printer.PrintSheet ws, FitToPage:=True
+        End If
     End If
 End Sub
 
