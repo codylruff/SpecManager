@@ -29,7 +29,7 @@ Public Event BeforeStart()
 Public Event AfterStart()
 Public Event BeforeShutdown()
 ' Fields
-Public gDll                 As New KrishDll
+Public kDll                 As New KrishDll
 Public gMsg                 As String
 Public gAppGuid             As String
 Public version              As String
@@ -42,6 +42,12 @@ Public current_template     As SpecificationTemplate
 Public TestingMode          As Boolean
 Private pPerformanceMode    As Boolean
 Private settings_           As Settings
+
+
+Public Property Get GUI() As KrishDll
+' Wrapper for gDll krishDll library handle
+    Set GUI = kDll
+End Property
 
 ' Methods
 Sub Start()

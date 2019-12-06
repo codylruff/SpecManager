@@ -111,7 +111,7 @@ End Sub
 
 Public Sub Hashing_Test()
     Dim input_text As String
-    input_text = App.gDll.CreateInputBox(Password, "Password Hash Test", "Password : ")
+    input_text = App.GUI.CreateInputBox(Password, "Password Hash Test", "Password : ")
     Debug.Print input_text & " : " & GetSHA1Hash(input_text)
 End Sub
 

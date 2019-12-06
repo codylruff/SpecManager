@@ -33,10 +33,10 @@ Public Sub LoadNewDocument()
     On Error GoTo 0
 
     ' Initialize the progress bar
-    progress_bar = App.gDll.ShowProgressBar(4)
+    progress_bar = App.GUI.ShowProgressBar(4)
 
     ' Task 1 Extract material Id from file name.
-    progress_bar = App.gDll.SetProgressBar(progress_bar, 1, "Task 1/4")
+    progress_bar = App.GUI.SetProgressBar(progress_bar, 1, "Task 1/4")
     path_no_ext = Replace(file_path, ".xlsx", vbNullString)
     path_len = Len(path_no_ext)
     char_count = path_len
@@ -50,12 +50,12 @@ Public Sub LoadNewDocument()
     On Error GoTo 0
     
     ' Task 2 Parse the Document for a json string
-    progress_bar = App.gDll.SetProgressBar(progress_bar, 2, "Task 2/4")
+    progress_bar = App.GUI.SetProgressBar(progress_bar, 2, "Task 2/4")
     material_number = Mid(path_no_ext, char_count + 1, path_len - char_count)
     json_string = JsonVBA.ConvertToJson(ParseDocument(file_path, template_type))
 
     ' Task 3 Convert json string into specification object
-    progress_bar = App.gDll.SetProgressBar(progress_bar, 3, "Task 3/4")
+    progress_bar = App.GUI.SetProgressBar(progress_bar, 3, "Task 3/4")
 
     ' Create specification from json string
     spec.JsonToObject json_string
@@ -64,7 +64,7 @@ Public Sub LoadNewDocument()
     spec.Revision = "1.0"
 
     ' Task 4 Save specification object to the database
-    progress_bar = App.gDll.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
+    progress_bar = App.GUI.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
 
     ' Save Specification to database
     ret_val = SpecManager.SaveNewSpecification(spec)

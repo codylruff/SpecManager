@@ -39,7 +39,7 @@ End Sub
 
 Private Sub cmdExportPdf_Click()
     ExportPdf
-    'App.gDll.ShowDialog "Function Disabled.", vbOkOnly, "Under Development"
+    'App.GUI.ShowDialog "Function Disabled.", vbOkOnly, "Under Development"
 End Sub
 
 Private Sub ClearThisForm()
