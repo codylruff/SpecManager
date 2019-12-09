@@ -710,69 +710,6 @@ EXIT_ROUTINE:
 End Function
 
 
-Public Function FTPUploadFile(Server As String, Port As Long, Username As String, Password As String, localFile As String, remoteLocation As String, Optional TLSHostFingerprint = "", Optional Protocol As ProtocolEnum = ProtocolEnum.ftp, Optional FtpSecure As FtpSecureEnum = FtpSecureEnum.Explicit, Optional giveUpSecurityAndAcceptAnyTlsHostCertificate As Boolean = False)
-'---------------------------------------------------------------------------------------
-' Procedure : FTPUploadFile
-' Author    : KRISH J
-' Date      : 04/09/2018
-' Purpose   : Uplods a file to remote server.
-' Returns   : True or false or server message.
-' Usage     : FTPUploadFile(ServerName, 21, UserName,Password,"C:\somefile.png", "/RemoteFoder/",SSHFingerprint, ProtocolType, FtpSecureType, yes/no whether to use sshfingerprint.
-' giveUpSecurityAndAcceptAnyTlsHostCertificate = yes means connection will accept any server sshfingerprint. use this for debug purpose only
-' Read more in https://winscp.net/forum/viewtopic.php?t=15428
-'---------------------------------------------------------------------------------------
-'
-    'USE giveUpSecurityAndAcceptAnyTlsHostCertificate only for debuggin purposes
-    
-    Dim result As String
-    result = DLL.ftp.FTPS_UPLOAD(Server, Port, Username, Password, localFile, remoteLocation, TLSHostFingerprint, Protocol, FtpSecure, giveUpSecurityAndAcceptAnyTlsHostCertificate)
-    
-    If result = "true" Then
-    
-        'File has been uploaded to the server.
-        'Construct your own method to convert the fileName to remote filename. i.e. http://yourdomain/yourfolder/filename.ext
-        result = System.FN_FILE_GET_NAME(localFile) ' Returning local file path
-        Me.Toast "File uploaded to the server"
-        
-    Else
-        Me.ShowDialog sFormat("Unable to upload the file: {0}", result), vbExclamation, "File upload error"
-        result = ""
-    End If
-    
-    FTPUploadFile = result
-    
-    
-End Function
-
-Public Function FTPDeleteFile(Server As String, Port As Long, Username As String, Password As String, RemoteFile As String, Optional TLSHostFingerprint = "", Optional Protocol As ProtocolEnum = ProtocolEnum.ftp, Optional FtpSecure As FtpSecureEnum = FtpSecureEnum.Explicit, Optional giveUpSecurityAndAcceptAnyTlsHostCertificate As Boolean = False) As String
-'---------------------------------------------------------------------------------------
-' Procedure : FTPDeleteFile
-' Author    : KRISH J
-' Date      : 31/07/2018
-' Purpose   : Deletes a file from remote server
-' Returns   : string, true or failed or error message
-'---------------------------------------------------------------------------------------
-'
-
-    If IsBlank(RemoteFile) Then Exit Function
-    
-    RemoteFile = VBA.Replace(RemoteFile, "", "", , , vbDatabaseCompare) ' Do some url manipulatios if you require. I.e remove the web hyperlink part
-    If TLSHostFingerprint = "" Then TLSHostFingerprint = "" ' place your sshfingerprint
-    
-    Dim result As String
-    result = DLL.ftp.FTPDeleteFile(Server, Port, Username, Password, RemoteFile, TLSHostFingerprint, Protocol, FtpSecure, giveUpSecurityAndAcceptAnyTlsHostCertificate)
-    If result = "true" Then
-        
-        Me.Toast "File removed from server"
-    Else
-        Me.ShowDialog sFormat("Unable to delete the file: {0}", result), vbExclamation, "File Delete", "OK", ""
-    End If
-    
-    FTPDeleteFile = result
-    
-End Function
-
-
 Public Function ImportJSON(JsonSource As String, TableName As String, ImportOptions As AcImportXMLOption, Optional Recreate As Boolean = False) As String
 '---------------------------------------------------------------------------------------
 ' Procedure : ImportJSON
@@ -802,8 +739,6 @@ Public Function ExportToJSON(TableOrQueryName As String, SaveAs As String, Optio
     
 End Function
 
-
-
 Public Function CreateBarcode(symbology As symbology, barcodeDataValue As String, multiplier As Double)
 '---------------------------------------------------------------------------------------
 ' Procedure : CreateBarcode
@@ -827,8 +762,7 @@ Public Function CreateBarcode(symbology As symbology, barcodeDataValue As String
     CreateBarcode = DLL.Barcode.CreateBarcode(symbology, barcodeDataValue, 300, 300, multiplier)
 End Function
 
-
-Public Function ShowDropDown(title As String, message As String, dataSource As String, boundColumn As Integer, ColumnWidths As Variant, Optional isRawSql As Boolean = False, Optional posX As Long = 0, Optional posY As Long = 0, Optional themeColour As String = "#00C851", Optional themeForeColour = "#FFFFFF", Optional doneButtonCaption As String = "Done") As String
+Public Function ShowDropDown(title As String, message As String, dbSource As String, SQLstmt As String, boundColumn As Integer, ColumnWidths As Variant, Optional isRawSql As Boolean = True, Optional posX As Long = 0, Optional posY As Long = 0, Optional themeColour As String = "#00C851", Optional themeForeColour = "#FFFFFF", Optional doneButtonCaption As String = "Done") As String
 '---------------------------------------------------------------------------------------
 ' Procedure : ShowDropDown
 ' Author    : KRISH J
@@ -855,9 +789,7 @@ Public Function ShowDropDown(title As String, message As String, dataSource As S
 '        /// <param name="doneButtonCaption">Button Text</param>
 '        /// <returns>String value</returns>
     
-    'ShowDropDown = DLL.ShowDropDownBox(title:=title, message:=message, dbSource:=activeworkbook.FullName, tableSource:=dataSource, boundColumn:=boundColumn, ColumnWidths:=ColumnWidths, isRawSql:=isRawSql, posX:=posX, posY:=posY, themeColour:=themeColour, themeForeColour:=themeForeColour)
-    
-    ShowDropDown = DLL.Dialog.ShowDropDownBox(title, message, ActiveWorkbook.FullName, dataSource, boundColumn, ColumnWidths, isRawSql, posX, posY, themeColour, themeForeColour, doneButtonCaption)
+    ShowDropDown = DLL.Dialog.ShowDropDownBox(title, message, dbSource, SQLstmt, boundColumn, ColumnWidths, isRawSql, posX, posY, themeColour, themeForeColour, doneButtonCaption)
     
 End Function
 

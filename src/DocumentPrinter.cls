@@ -84,6 +84,8 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
             LoadBallisticTestingRequirementsToSheet spec, sht, prod_order
         Case "TSPP"
             LoadTsppToSheet spec, prod_order
+        Case "TSSP"
+            LoadTsspToSheet spec, prod_order
         Case Else
             ' All specifications which do not have a custom worksheet template
             ' will be handled by this case.
@@ -210,7 +212,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
                 App.printer.PrintSheet SheetByName("Weaving RBA"), FitToPage:=False
                 ActionLog.LogUserAction IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover") & " Checklist Printed"
                 App.printer.PrintSheet SheetByName(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
-            ElseIf IsInArray(.SpecType, Array("Warping Requirements", "TSPP")) Then
+            ElseIf IsInArray(.SpecType, Array("Warping Requirements", "TSPP", "TSSP")) Then
                 App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=False
             Else
                 App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True
@@ -474,6 +476,21 @@ Private Sub LoadTsppToSheet(spec As Specification, prod_order As String)
     Dim ws As Worksheet
 
     Set ws = Utils.SheetByName("TSPP")
+    Utils.Insert ws.Range("work_order"), prod_order
+    Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
+    Utils.Insert ws.Range("revision"), spec.Revision
+    Utils.Insert ws.Range("description"), spec.MaterialDescription
+    LoadCustomSheet spec, ws
+
+End Sub
+
+Private Sub LoadTsspToSheet(spec As Specification, prod_order As String)
+' Load Scouring Requirements (TSSP) to sheet
+    Dim nr As Variant
+    Dim rng As Range
+    Dim ws As Worksheet
+
+    Set ws = Utils.SheetByName("TSSP")
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
     Utils.Insert ws.Range("revision"), spec.Revision

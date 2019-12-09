@@ -15,6 +15,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
 Option Explicit
 
 Private Sub cmdPrint_Click()
@@ -109,7 +111,7 @@ Sub PrintConsole()
         ' Print the specs one at a time to the default printer
         Set ws = Utils.CreateNewSheet(App.current_spec.SpecType)
         App.printer.PrintObjectToSheet App.current_spec, ws
-        If IsInArray(App.current_spec.SpecType, Array("Warping Requirements", "Weaving RBA", "TSPP")) Then
+        If IsInArray(App.current_spec.SpecType, Array("Warping Requirements", "Weaving RBA", "TSPP", "TSSP")) Then
             App.printer.PrintSheet ws, FitToPage:=False
         Else
             App.printer.PrintSheet ws, FitToPage:=True
