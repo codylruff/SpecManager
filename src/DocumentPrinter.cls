@@ -262,7 +262,7 @@ Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet, Op
 ' Loads a spec to a custom worksheet for printing.
     Dim nr As Variant
     Dim rng As Range
-    'On Error Resume Next
+    On Error Resume Next
     If IsNothing(names_map) Then
         For Each nr In spec.Properties
             Set rng = custom_sheet.Range(CStr(nr))
@@ -274,7 +274,7 @@ Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet, Op
             Utils.Insert rng, spec.GetProperty(CStr(nr))
         Next nr
     End If
-    'On Error GoTo 0
+    On Error GoTo 0
 End Sub
 
 Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = nullstr)
