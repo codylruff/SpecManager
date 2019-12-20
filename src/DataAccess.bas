@@ -57,7 +57,7 @@ Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal colum
     Set GetColumn = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
-Function GetSpecification(ByVal material_id As String, ByVal spec_type As String, Optional ByRef trans As SqlTransaction) As DataFrame
+Function GetSpecification(ByVal material_id As String, ByVal spec_type As String, machine_id As String, Optional ByRef trans As SqlTransaction) As DataFrame
 ' Gets a single specifcation from the database
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -68,7 +68,8 @@ Function GetSpecification(ByVal material_id As String, ByVal spec_type As String
     SQLstmt = "SELECT * FROM standard_specifications " & _
               "LEFT JOIN materials ON standard_specifications.Material_Id = materials.Material_Id " & _
               "WHERE standard_specifications.Material_Id ='" & material_id & _
-              "' AND " & "standard_specifications.Spec_Type ='" & spec_type & "'"
+              "' AND " & "standard_specifications.Spec_Type ='" & spec_type & "'" & _
+              " AND " & "standard_specifications.Machine_Id ='" & machine_id & "'"
 
     Set GetSpecification = trans.ExecuteSQLSelect(SQLstmt)
 End Function
@@ -202,7 +203,7 @@ DbDeleteFailException:
     DeleteTemplate = DB_DELETE_FAILURE
 End Function
 
-Function DeleteSpec(ByRef spec As Specification, Optional tbl As String = "standard_specifications", Optional ByRef trans As SqlTransaction) As Long
+Function DeleteSpec(ByRef spec As Specification, machine_id As String, Optional tbl As String = "standard_specifications", Optional ByRef trans As SqlTransaction) As Long
 ' Push a new records
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -213,7 +214,9 @@ Function DeleteSpec(ByRef spec As Specification, Optional tbl As String = "stand
     ' Create SQL statement from objects
     SQLstmt = "DELETE FROM " & tbl & " " & _
               "WHERE Material_Id ='" & spec.MaterialId & "' AND Revision ='" & spec.Revision & "'" & _
-              " AND Spec_Type ='" & spec.SpecType & "'"
+              " AND Spec_Type ='" & spec.SpecType & "'" & _
+              " AND " & "Machine_Id ='" & machine_id & "'"
+
     trans.ExecuteSQL (SQLstmt)
     DeleteSpec = DB_DELETE_SUCCESS
     Exit Function

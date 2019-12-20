@@ -36,9 +36,10 @@ Function CreateSpecificationFromJsonFile(path As String) As Specification
     Set spec = CreateSpecification
     spec.JsonToObject JsonVBA.ReadJsonFileToString(path)
     spec.MaterialId = FSO.GetBaseName(path)
-    spec.SpecType = "Weaving RBA"
+    spec.SpecType = CStr(PromptHandler.UserInput(SingleLineText, "Template Type Selection", "Assign a template for this specification:"))
     spec.Revision = "1.0"
-    spec.Template = App.templates("Weaving RBA")
+    spec.Template = App.templates(spec.SpecType)
+    spec.MachineId = PromptHandler.GetMachineId
     Set CreateSpecificationFromJsonFile = spec
     Exit Function
 ErrorHandler:
@@ -74,6 +75,7 @@ Function CopySpecification(spec As Specification) As Specification
         spec_copy.SpecType = .SpecType
         spec_copy.Revision = .Revision
         spec_copy.MaterialDescription = .MaterialDescription
+        spec_copy.MachineId = .MachineId
     End With
     Set CopySpecification = spec_copy
 End Function
@@ -108,6 +110,7 @@ Function CreateSpecificationFromRecord(df As DataFrame) As Specification
         spec_.Revision = CStr(.item("Revision"))
     Set spec_.Template = Factory.CopyTemplate(App.templates(spec_.SpecType))
         spec_.JsonToObject .item("Properties_Json")
+        spec_.MachineId = .item("Machine_Id")
     End With
     Set CreateSpecificationFromRecord = spec_
 End Function
@@ -134,6 +137,7 @@ Function CreateSpecFromDict(dict As Object) As Specification
         spec.Revision = CStr(.item("Revision"))
     Set spec.Template = Factory.CopyTemplate(App.templates(spec.SpecType))
         spec.JsonToObject .item("Properties_Json")
+        spec.MachineId = .item("Machine_Id")
     End With
     Set CreateSpecFromDict = spec
 End Function

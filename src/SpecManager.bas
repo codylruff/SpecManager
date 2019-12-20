@@ -292,7 +292,7 @@ End Function
 Function SaveNewSpecification(spec As Specification, Optional material_description As String) As Long
     Dim ret_val As Long
     If ManagerOrAdmin Then
-        If DataAccess.GetSpecification(spec.MaterialId, spec.SpecType).records.Count = 0 Then
+        If DataAccess.GetSpecification(spec.MaterialId, spec.SpecType, spec.MachineId).records.Count = 0 Then
             ret_val = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
             ActionLog.CrudOnSpecification spec, "Created New Specification"
             If IsEmpty(GetMaterialDescription(spec.MaterialId)) Then
@@ -388,9 +388,9 @@ End Function
 Function DeleteSpecification(spec As Specification, Optional tbl As String = "standard_specifications", Optional trans As SqlTransaction) As Long
     If App.current_user.PrivledgeLevel = USER_ADMIN Then
         If IsNothing(trans) Then
-            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, spec.MachineId, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
         Else
-            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, tbl, trans) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, spec.MachineId, tbl, trans) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
         End If
     Else
         DeleteSpecification = DB_DELETE_DENIED
@@ -539,35 +539,35 @@ Public Sub CopyPropertiesFromFile()
     Next r
 End Sub
 
-Private Sub UpdateRBAFromSheet()
-' ****THIS IS BROKEN****
-' This routine will update a specificaiton in the database
-' with the parameters entered into the sheet.
-    Dim material_id As String
-    Dim spec_type As String
-    Dim spec As Specification
-    Dim old_spec As Specification
-    Dim prop As Variant
-    Dim T As SpecificationTemplate
-    App.Start
-    ' Start up spec-manager
-    material_id = CStr(Range("article_code").value)
-    spec_type = "Weaving RBA"
-    Set spec = Factory.CreateSpecificationFromRecord(DataAccess.GetSpecification(material_id, spec_type))
-    Set props = CreateObject("Scripting.Dictionary")
-    ' Get spec by material_id and make a copy
-    Set old_spec = Factory.CopySpecification(spec)
-    ' Loop through named ranges and create a dictionary
-    spec.Revision = CStr(Range("revision").value + 1)
-    For Each prop In spec.Properties
-        spec.Properties(CStr(prop)) = Range(prop).value
-        Logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
-    Next prop
-    ' Update the specification
-    Logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec), DebugLog
-    App.Shutdown
-    AccessControl.ConfigControl
-End Sub
+'Private Sub UpdateRBAFromSheet()
+'' ****THIS IS BROKEN****
+'' This routine will update a specificaiton in the database
+'' with the parameters entered into the sheet.
+'    Dim material_id As String
+'    Dim spec_type As String
+'    Dim spec As Specification
+'    Dim old_spec As Specification
+'    Dim prop As Variant
+'    Dim T As SpecificationTemplate
+'    App.Start
+'    ' Start up spec-manager
+'    material_id = CStr(Range("article_code").value)
+'    spec_type = "Weaving RBA"
+'    Set spec = Factory.CreateSpecificationFromRecord(DataAccess.GetSpecification(material_id, spec_type))
+'    Set props = CreateObject("Scripting.Dictionary")
+'    ' Get spec by material_id and make a copy
+'    Set old_spec = Factory.CopySpecification(spec)
+'    ' Loop through named ranges and create a dictionary
+'    spec.Revision = CStr(Range("revision").value + 1)
+'    For Each prop In spec.Properties
+'        spec.Properties(CStr(prop)) = Range(prop).value
+'        Logger.Log "Set : " & CStr(prop) & " = " & spec.Properties(CStr(prop))
+'    Next prop
+'    ' Update the specification
+'    Logger.Log "Data Access Returned : " & SaveSpecification(spec, old_spec), DebugLog
+'    App.Shutdown
+'    AccessControl.ConfigControl
+'End Sub
 
 Public Function BuildBallisticTestSpec(material_id As String, package_length_inches As Double, fabric_width_inches As Double, conditioned_weight_gsm As Double, target_psf As Double) As BallisticPackage
     Dim spec As Specification

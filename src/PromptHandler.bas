@@ -75,6 +75,10 @@ Public Function GetPassword() As String
     GetPassword = CStr(UserInput(Password, "Access Control", "Enter Your Password :"))
 End Function
 
+Public Function GetMachineId() As String
+    GetMachineId = CStr(PromptHandler.UserInput(SingleLineText, "Machine Id Selection", "Enter a Machine Id for this specification:"))
+End Function
+
 Public Function ChangePassword() As String
     Dim new_pass_1 As String
     Dim new_pass_2 As String

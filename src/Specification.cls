@@ -26,6 +26,8 @@ Private IsLatest_   As Boolean
 Private Template_   As SpecificationTemplate
 Private MaterialDescription_ As String
 Private ProcessId_  As String
+Private MachineId_ As String
+
 ' Template
 Public Property Set Template(obj As SpecificationTemplate)
     Set Template_ = obj
@@ -34,6 +36,8 @@ Public Property Get Template() As SpecificationTemplate
     Set Template = Template_
 End Property
 
+Public Property Let MachineId(value As String): MachineId_ = value: End Property
+Public Property Get MachineId() As String: MachineId = MachineId_: End Property
 Public Property Let Revision(value As String): Revision_ = value: End Property
 Public Property Get Revision() As String: Revision = Revision_: End Property
 Public Property Let SpecType(value As String): SpecType_ = value: End Property
@@ -178,7 +182,7 @@ End Sub
 
 ' IQueryable Methods
 Function IQueryable_GetValueLabels() As String
-    IQueryable_GetValueLabels = "Material_Id, Time_Stamp, Properties_Json, Revision, Spec_Type"
+    IQueryable_GetValueLabels = "Material_Id, Time_Stamp, Properties_Json, Revision, Spec_Type, Machine_Id"
 End Function
 
 Function IQueryable_GetValues() As String
@@ -186,5 +190,6 @@ Function IQueryable_GetValues() As String
                            "'" & CStr(Now()) & "', " & _
                            "'" & Me.PropertiesJson & "', " & _
                            "'" & Me.Revision & "', " & _
-                           "'" & Me.SpecType & "'"
+                           "'" & Me.SpecType & "', " & _
+                           "'" & Me.MachineId & "'"
 End Function
