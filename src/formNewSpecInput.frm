@@ -14,43 +14,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -73,9 +36,11 @@ Private Sub PopulateCboSelectSpecType()
 End Sub
 
 Private Sub cmdContinue_Click()
-    Dim selection As String
+    Dim spec_type_selection As String
+    Dim machine_id_selection As String
     Dim material_id As String
-    selection = cboSelectSpecificationType.value
+    spec_type_selection = cboSelectSpecificationType.value
+    machine_id_selection = txtMachineId.Value
 '    If selection = "Weaving RBA" Then
 '        ' For the weaving rba a base file must be selected to load.
 '        Unload Me
@@ -84,17 +49,17 @@ Private Sub cmdContinue_Click()
 '        Exit Sub
 '    End If
     material_id = UCase(Utils.RemoveWhiteSpace(txtSpecName.value))
-    If SpecManager.NewSpecificationInput(selection, material_id) <> nullstr Then
+    If SpecManager.NewSpecificationInput(spec_type_selection, material_id, machine_id_selection) <> nullstr Then
         Unload Me
         formCreateSpec.show vbModeless
     Else
-        PromptHandler.Error "Please enter a template type and specification name !"
+        PromptHandler.Error "Please enter a template type, specification name, and machine Id !"
         Exit Sub
     End If
 End Sub
 
 Sub Continue()
-    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value))) <> nullstr Then
+    If SpecManager.NewSpecificationInput(cboSelectSpecificationType.value, UCase(Utils.RemoveWhiteSpace(txtSpecName.value)), txtMachineId.value) <> nullstr Then
         Logger.Log "Spec Input Pass"
     Else
         Logger.Log "Spec Input Fail"

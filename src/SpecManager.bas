@@ -30,7 +30,7 @@ Public Sub LoadExistingTemplate(template_type As String)
 
 End Sub
 
-Function NewSpecificationInput(template_type As String, spec_name As String) As String
+Function NewSpecificationInput(template_type As String, spec_name As String, machine_id As String) As String
     If template_type <> nullstr Then
         LoadExistingTemplate template_type
         With App
@@ -38,6 +38,7 @@ Function NewSpecificationInput(template_type As String, spec_name As String) As 
         .current_spec.SpecType = .current_template.SpecType
         .current_spec.Revision = "1.0"
         .current_spec.MaterialId = spec_name
+        .current_spec.MachineId = machine_id
         End With
         NewSpecificationInput = spec_name
     Else
