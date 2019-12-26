@@ -76,8 +76,6 @@ Function CreateTemplate_Test() As String
     ' 6. Click the Save Changes Button
     formCreateGeneric.SubmitTemplate
     ' 7. Report pass / fail
-    ' TODO: I am not sure how to report on this other than a crash.
-    ' 8. Go to main menu
     CreateTemplate_Test = Utils.FormatTestResult("Create Template Test", "PASS")
     pTestResults.Add True
     Exit Function
@@ -105,8 +103,6 @@ Function CreateSpecification_Test() As String
     ' 8. Click the save changes button
     formCreateSpec.SaveChanges
     ' 9. Report pass / fail
-    ' TODO: No idea how to do this yet
-    ' 10. Go to main menu
     CreateSpecification_Test = Utils.FormatTestResult("Create Specification Test", "PASS")
     pTestResults.Add True
     Exit Function
@@ -128,8 +124,6 @@ Function ViewSpecification_AfterCreate_Test() As String
     '    the process. (save as test_specification_rev1.pdf)
     'formViewSpecs.ExportPdf
     ' 5. Report pass / fail
-    ' TODO: No idea how to do this yet.
-    ' 6. Go to main menu
     ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "PASS")
     pTestResults.Add True
     Exit Function
@@ -161,8 +155,6 @@ Function EditTemplate_Test() As String
     ' 10. Save Changes
     formEditTemplate.SaveChanges
     ' 11. Report pass / fail
-    ' TODO:
-    ' 12. Go to main menu
     EditTemplate_Test = Utils.FormatTestResult("Edit Template Test", "PASS")
     pTestResults.Add True
     Exit Function
@@ -190,8 +182,6 @@ Function EditSpecification_Test() As String
     ' 8. Remove old specification from the archive
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.item("to_archive"), "archived_specifications"), SqlLog
     ' 9. Report pass / fail
-    ' TODO:
-    ' 10. Go to main menu
     EditSpecification_Test = Utils.FormatTestResult("Edit Specification Test", "PASS")
     pTestResults.Add True
     Exit Function
@@ -212,13 +202,11 @@ Function ViewSpecification_AfterEdit_Test() As String
     '    noted in the tests.log file. This pdf should not display but it must be check after the tests are complete as a final step to validate
     '    the process. (save as test_specification_rev1.pdf)
     'formViewSpecs.ExportPdf True
-    ' 5. Report pass / fail
-    ' TODO: No idea how to do this yet.
-    ' 6. Go to main menu
-    ' 7. Remove Spec Template
+    ' 5. Remove Spec Template
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_spec.Template), SqlLog
-    ' 8. Remove Spec
+    ' 6. Remove Spec
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), SqlLog
+    ' 7. Report pass / fail
     ViewSpecification_AfterEdit_Test = Utils.FormatTestResult("View Specification After Edit Test", "PASS")
     pTestResults.Add True
     Exit Function
