@@ -409,6 +409,7 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
     Utils.Insert shtRBA.Range("work_order"), prod_order
     Utils.Insert shtRBA.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
+    Utils.Insert shtRBA.Range("loom_number"), spec.MachineId
     
     LoadCustomSheet spec, shtRBA
         

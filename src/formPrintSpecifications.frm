@@ -55,6 +55,10 @@ Private Sub SelectLoomId(loom_id As String)
             End If
         End With
     Next spec_id
+    ' If this loom has no RBA print a blank one.
+    If Not App.specs.Exists("Weaving RBA_" & loom_id) Then
+        'TODO: Currently does nothing. May add logic later to print a blank or an existing RBA as a starting point.
+    End If
 End Sub
 
 Private Sub cmdSearch_Click()
