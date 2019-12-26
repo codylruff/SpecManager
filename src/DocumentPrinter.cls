@@ -210,8 +210,8 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
             ' Weaving RBA gets special treament here to include the checklist.
             If .SpecType = "Weaving RBA" Then
                 App.printer.PrintSheet SheetByName("Weaving RBA"), FitToPage:=False
-                ActionLog.LogUserAction IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover") & " Checklist Printed"
-                App.printer.PrintSheet SheetByName(IIf(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
+                ActionLog.LogUserAction iif(package_variant = WeavingTieBack, "Tie-In", "Changeover") & " Checklist Printed"
+                App.printer.PrintSheet SheetByName(iif(package_variant = WeavingTieBack, "Tie-In", "Changeover")), FitToPage:=False
             ElseIf IsInArray(.SpecType, Array("Warping Requirements", "TSPP", "TSSP")) Then
                 App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=False
             Else

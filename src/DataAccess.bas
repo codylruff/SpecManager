@@ -278,7 +278,7 @@ End Function
 Public Function BeginTransaction(Optional path As String) As SqlTransaction
 ' Begin a transaction in sqlite
     Dim trans As SqlTransaction
-    Set trans = Factory.CreateSqlTransaction(IIf(path = nullstr, DATABASE_PATH, path))
+    Set trans = Factory.CreateSqlTransaction(iif(path = nullstr, DATABASE_PATH, path))
     If trans.Begin <> DB_TRANSACTION_FAILURE Then
         Set BeginTransaction = trans
     Else

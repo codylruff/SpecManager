@@ -38,7 +38,7 @@ End Property
 
 Public Property Get UID() As String
     ' Unique Identifier for a having more than one machine (ex. Looms)
-    UID = Me.SpecType & iif(Me.MachineId <> nullstr, "_" & Me.MachineId, nullstr) 
+    UID = Me.SpecType & iif(Me.MachineId <> nullstr, "_" & Me.MachineId, nullstr)
 End Property
 
 Public Property Let MachineId(value As String): MachineId_ = value: End Property

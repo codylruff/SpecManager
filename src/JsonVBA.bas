@@ -714,7 +714,7 @@ Private Function json_ParseNumber(json_string As String, ByRef json_Index As Lon
             '
             ' Fix: Parse -> String, Convert -> String longer than 15/16 characters containing only numbers and decimal points -> Number
             ' (decimal doesn't factor into significant digit count, so if present check for 15 digits + decimal = 16)
-            json_IsLargeNumber = IIf(InStr(json_Value, "."), Len(json_Value) >= 17, Len(json_Value) >= 16)
+            json_IsLargeNumber = iif(InStr(json_Value, "."), Len(json_Value) >= 17, Len(json_Value) >= 16)
             If Not JsonOptions.UseDoubleForLargeNumbers And json_IsLargeNumber Then
                 json_ParseNumber = json_Value
             Else
@@ -933,7 +933,7 @@ Private Sub json_BufferAppend(ByRef json_Buffer As String, _
         ' Appending would overflow buffer, add chunk
         ' (double buffer length or append length, whichever is bigger)
         Dim json_AddedLength As Long
-        json_AddedLength = IIf(json_AppendLength > json_BufferLength, json_AppendLength, json_BufferLength)
+        json_AddedLength = iif(json_AppendLength > json_BufferLength, json_AppendLength, json_BufferLength)
 
         json_Buffer = json_Buffer & VBA.Space$(json_AddedLength)
         json_BufferLength = json_BufferLength + json_AddedLength

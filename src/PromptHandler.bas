@@ -50,7 +50,7 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
 End Function
 
 Private Function question(question_text As String) As Boolean
-    question = IIf(App.GUI.ShowDialog(question_text, vbYesNo, "Question", "Yes", "No") = vbYes, True, False)
+    question = iif(App.GUI.ShowDialog(question_text, vbYesNo, "Question", "Yes", "No") = vbYes, True, False)
 End Function
 
 Public Sub AccessDenied()

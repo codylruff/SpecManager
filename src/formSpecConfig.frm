@@ -13,52 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdCopySpec_Click()
@@ -95,7 +49,7 @@ Private Sub cmdBack_Click()
 End Sub
 
 Private Sub cmdSaveChanges_Click()
-' Calls method to save a new specification incremented the revision by +0.1
+' Calls method to save a new specification incrementing the revision by 1
     SaveChanges
 End Sub
 
@@ -116,16 +70,16 @@ Private Sub ClearThisForm()
 End Sub
 
 Private Sub PopulateCboSelectType()
-    Dim rev As Variant
+    Dim spec_id As Variant
     Dim i As Integer
     Do While cboSelectType.ListCount > 0
         cboSelectType.RemoveItem 0
     Loop
     With cboSelectType
-        For Each rev In App.specs
-            .AddItem rev
-            .value = rev
-        Next rev
+        For Each spec_id In App.specs
+            .AddItem spec_id
+            .value = spec_id
+        Next spec_id
     End With
 End Sub
 
@@ -167,7 +121,7 @@ Sub MaterialSearch()
     SpecManager.PrintSpecification Me
     PopulateCboSelectProperty
     PopulateCboSelectType
-    cboSelectType.value = App.current_spec.SpecType
+    cboSelectType.value = App.current_spec.UID
 End Sub
 
 Sub Back()
@@ -185,7 +139,7 @@ Sub SaveChanges()
     Dim old_spec As Specification
     Set old_spec = New Specification
     Set old_spec = Factory.CopySpecification(App.current_spec)
-    App.specs.Add "to_archive", old_spec
+    'App.specs.Add "to_archive", old_spec
     App.current_spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
     ret_val = SpecManager.SaveSpecification(App.current_spec, old_spec)
     If ret_val <> DB_PUSH_SUCCESS Then

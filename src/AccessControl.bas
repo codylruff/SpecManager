@@ -30,7 +30,7 @@ Function GetPrivledges(Name As String) As Account
         User.PrivledgeLevel = df.records(1).item("Privledge_Level")
         User.ProductLine = df.records(1).item("Product_Line")
         User.SecretSHA1 = df.records(1).item("Secret")
-        User.FlaggedForPasswordChange = IIf(df.records(1).item("New_Secret_Required") = 0, False, True)
+        User.FlaggedForPasswordChange = iif(df.records(1).item("New_Secret_Required") = 0, False, True)
         Set GetPrivledges = User
     End If
 End Function
@@ -85,7 +85,7 @@ End Function
 
 Private Function CheckSecret(User As Account) As Boolean
 ' Compares password hashes for match
-    CheckSecret = IIf(User.GetSecret = GetSHA1Hash(PromptHandler.GetPassword), True, False)
+    CheckSecret = iif(User.GetSecret = GetSHA1Hash(PromptHandler.GetPassword), True, False)
 End Function
 
 Public Sub CreateNewAdmin()

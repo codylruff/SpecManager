@@ -364,7 +364,7 @@ Public Function ApplyNames(arr As Variant, wb As Workbook, ws_name As String) As
         addr = Chr(34) & arr(i, 1) & Chr(34)
         Name = Chr(34) & arr(i, 0) & Chr(34)
         wb.Names.Add Name:=Name, RefersTo:=ws.Range(addr)
-        dict.Add Key:=Name, item:=IIf(Range(wb.Names(Name)).value = vbNullString, _
+        dict.Add Key:=Name, item:=iif(Range(wb.Names(Name)).value = vbNullString, _
                                       vbNullString, Range(wb.Names(Name)).value)
     Next i
     Set ApplyNames = dict

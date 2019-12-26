@@ -254,15 +254,15 @@ Public Sub ProtectionPlanningSequence_Tests()
         .SetImmediateLog TestLog
         .Log "Protection Planning Prompt Sequence", TestLog
         PromptHandler.Success "weaving style change"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = WeavingStyleChange, "PASS", "FAIL"), TestLog
+        .Log iif(PromptHandler.ProtectionPlanningSequence = WeavingStyleChange, "PASS", "FAIL"), TestLog
         PromptHandler.Success "weaving tie-back"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = WeavingTieBack, "PASS", "FAIL"), TestLog
+        .Log iif(PromptHandler.ProtectionPlanningSequence = WeavingTieBack, "PASS", "FAIL"), TestLog
         PromptHandler.Success "finishing first roll not isotex bound"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingWithQC, "PASS", "FAIL"), TestLog
+        .Log iif(PromptHandler.ProtectionPlanningSequence = FinishingWithQC, "PASS", "FAIL"), TestLog
         PromptHandler.Success "finishing second roll"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
+        .Log iif(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
         PromptHandler.Success "finishing first roll + isotex bound"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
+        .Log iif(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
         .SaveAllLogs
         .SetImmediateLog RuntimeLog
         .SetLogLevel LOG_LOW

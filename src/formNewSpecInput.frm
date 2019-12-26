@@ -14,6 +14,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
 Option Explicit
 
 Private Sub UserForm_Initialize()
@@ -40,7 +41,7 @@ Private Sub cmdContinue_Click()
     Dim machine_id_selection As String
     Dim material_id As String
     spec_type_selection = cboSelectSpecificationType.value
-    machine_id_selection = txtMachineId.Value
+    machine_id_selection = txtMachineId.value
 '    If selection = "Weaving RBA" Then
 '        ' For the weaving rba a base file must be selected to load.
 '        Unload Me
