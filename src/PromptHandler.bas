@@ -20,7 +20,6 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
     ' Prompt #1 : Is this a finishing order?
     If App.current_spec.ProcessId = "Finishing" Then
         ' Prompt #2 : Is this the first loom cut?
-        
         If question("Is this the first loom cut?") Then
             ' Prompt #3 : After finishing, will this roll be processed on the Isotex?
             If question("After finishing, will this roll be processed on the Isotex?") Then
@@ -75,8 +74,8 @@ Public Function GetPassword() As String
     GetPassword = CStr(UserInput(Password, "Access Control", "Enter Your Password :"))
 End Function
 
-Public Function GetMachineId() As String
-    GetMachineId = CStr(PromptHandler.UserInput(SingleLineText, "Machine Id Selection", "Enter a Machine Id for this specification:"))
+Public Function GetLoomNumber() As String
+    GetLoomNumber = CStr(PromptHandler.UserInput(SingleLineText, "Loom Number Selection", "Enter a Loom Number for this Work Order:"))
 End Function
 
 Public Function ChangePassword() As String

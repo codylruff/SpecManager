@@ -13,18 +13,11 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
     Dim prompt_result As DocumentPackageVariant
+    Dim machine_id As String
     If App.printer.FormId Is Nothing Then
          PromptHandler.Error "There is nothing to print!"
          Exit Sub
@@ -38,12 +31,30 @@ Private Sub cmdPrintSpecifications_Click()
     ' Consider process exceptions based on input from planners.
     prompt_result = PromptHandler.ProtectionPlanningSequence
     If Not App.TestingMode Then
+        ' Check for alternate machine ids (currently only for weaving)
+        If App.current_spec.ProcessId = "Weaving" Then
+            SelectLoomId PromptHandler.GetLoomNumber
+        End If
+        ' Write the documents to their repsective worksheets
         App.printer.WriteAllDocuments Me.txtProductionOrder, prompt_result
+        ' Print all of the documents based on the selected doc package and machine
         PrintSelectedPackage prompt_result
     Else
         Logger.Log CStr(prompt_result)
     End If
     
+End Sub
+
+Private Sub SelectLoomId(loom_id As String)
+' This routine removes all but the weaving rba for the loom number selected(by machine_id)
+    Dim spec_id As Variant
+    For Each spec_id In App.specs
+        With App.specs(spec_id)
+            If .SpecType = "Weaving RBA" And .MachineId <> loom_id Then
+                App.specs.Remove spec_id
+            End If
+        End With
+    Next spec_id
 End Sub
 
 Private Sub cmdSearch_Click()
