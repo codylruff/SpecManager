@@ -14,26 +14,22 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-
-
-
-
 Option Explicit
 
-Private Sub cmdPrint_Click()
-    PrintConsole
+Private Sub cmdMaterialSearch_Click()
+    MaterialSearch
 End Sub
 
 Private Sub cmdSelectType_Click()
     SelectType
 End Sub
 
-Private Sub UserForm_Initialize()
-    Logger.Log "--------- Start " & Me.Name & " ----------"
+Private Sub cmdPrint_Click()
+    PrintConsole
 End Sub
 
-Private Sub cmdMaterialSearch_Click()
-    MaterialSearch
+Private Sub UserForm_Initialize()
+    Logger.Log "--------- Start " & Me.Name & " ----------"
 End Sub
 
 Private Sub cmdBack_Click()
@@ -47,9 +43,11 @@ End Sub
 
 Private Sub ClearThisForm()
     Dim i As Integer
+    ' Clear the select type cbo
     Do While cboSelectType.ListCount > 0
         cboSelectType.RemoveItem 0
     Loop
+    ' Clear the rest of the form
     ClearForm Me
 End Sub
 
@@ -70,16 +68,16 @@ Private Sub UserForm_Terminate()
 End Sub
 
 Private Sub PopulateCboSelectType()
-    Dim rev As Variant
+    Dim spec_id As Variant
     Dim i As Integer
     Do While cboSelectType.ListCount > 0
         cboSelectType.RemoveItem 0
     Loop
     With cboSelectType
-        For Each rev In App.specs
-            .AddItem rev
-            .value = rev
-        Next rev
+        For Each spec_id In App.specs
+            .AddItem spec_id
+            .value = spec_id
+        Next spec_id
     End With
 End Sub
 
@@ -88,7 +86,7 @@ Sub MaterialSearch()
     SpecManager.MaterialInput UCase(txtMaterialId)
     SpecManager.PrintSpecification Me
     PopulateCboSelectType
-    cboSelectType.value = App.current_spec.SpecType
+    cboSelectType.value = App.current_spec.UID
 End Sub
 
 Sub Back()

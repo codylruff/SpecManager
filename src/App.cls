@@ -28,6 +28,7 @@ Public Event AfterRefresh()
 Public Event BeforeStart()
 Public Event AfterStart()
 Public Event BeforeShutdown()
+
 ' Fields
 Public kDll                 As New KrishDll
 Public gMsg                 As String

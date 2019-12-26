@@ -77,21 +77,16 @@ End Sub
 
 Function SearchForSpecifications(material_id As String) As Long
 ' Manages the search procedure
-    Dim coll As Collection
     Dim specs_dict As Object
     Dim itms
     Set specs_dict = SpecManager.GetSpecifications(material_id)
     If specs_dict Is Nothing Then
-        Logger.Log "Could not find a standard for : " & material_id
+        Logger.Log "Could not find a specifaction for : " & material_id
         SearchForSpecifications = SM_SEARCH_FAILURE
     Else
         Set App.specs = specs_dict
         itms = App.specs.Items
         Set App.current_spec = itms(0)
-        Set coll = New Collection
-        For Each Key In App.specs
-            coll.Add App.specs.item(Key)
-        Next Key
         Logger.Log "Succesfully retrieved specifications for : " & material_id
         ' If SpecManager.UpdateTemplateChanges Then
         '     Logger.Log "Specs updated"
@@ -194,7 +189,7 @@ Function GetSpecifications(material_id As String) As Object
     Else
         For Each json_dict In df.records
             Set spec = Factory.CreateSpecFromDict(json_dict)
-            specs_dict.Add json_dict.item("Spec_Type"), spec
+            specs_dict.Add spec.UID, spec
         Next json_dict
         Set GetSpecifications = specs_dict
     End If
