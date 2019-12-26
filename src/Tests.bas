@@ -122,7 +122,7 @@ Function ViewSpecification_AfterCreate_Test() As String
     ' 3. Click the search button
     formViewSpecs.MaterialSearch
     ' 4. Select a specification UID
-    formViewSpecs.cboSelectType = "test_template_test_machine"
+    formViewSpecs.cboSelectType = "test_template(test_machine)"
     ' 5. Report pass / fail
     ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "PASS")
     pTestResults.Add True
@@ -170,7 +170,7 @@ Function EditSpecification_Test() As String
     ' 3. Click the search button
     formSpecConfig.MaterialSearch
     ' 4. Select a Specification UID
-    formSpecConfig.cboSelectType = "test_template_test_machine"
+    formSpecConfig.cboSelectType = "test_template(test_machine)"
     ' 5. Select a property name in the combo box "new_test_property"
     formSpecConfig.cboSelectProperty = "new_test_property"
     ' 6. Enter a value in the property value box "Edit specification test"
@@ -198,10 +198,8 @@ Function ViewSpecification_AfterEdit_Test() As String
     formViewSpecs.txtMaterialId = "test_specification"
     ' 3. Click the search button
     formViewSpecs.MaterialSearch
-    ' 4. Click the save pdf button but make sure it does not display a file input box and the file is save in a predetermined place that subsequently
-    '    noted in the tests.log file. This pdf should not display but it must be check after the tests are complete as a final step to validate
-    '    the process. (save as test_specification_rev1.pdf)
-    'formViewSpecs.ExportPdf True
+    ' 4. Select a specification UID
+    formViewSpecs.cboSelectType = "test_template(test_machine)"
     ' 5. Remove Spec Template
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_spec.Template), SqlLog
     ' 6. Remove Spec

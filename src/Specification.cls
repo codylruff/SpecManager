@@ -38,7 +38,7 @@ End Property
 
 Public Property Get UID() As String
     ' Unique Identifier for a having more than one machine (ex. Looms)
-    UID = Me.SpecType & iif(Me.MachineId <> nullstr, "_" & Me.MachineId, nullstr)
+    UID = Me.SpecType & IIf(Me.MachineId <> nullstr, "(" & Me.MachineId & ")", nullstr)
 End Property
 
 Public Property Let MachineId(value As String): MachineId_ = value: End Property
@@ -74,7 +74,7 @@ End Property
 ' METHODS---
 Public Function GetName() As String
 ' Returns the material_id/spec_type as a string.
-    GetName = Me.MaterialId & "/" & Me.SpecType
+    GetName = Me.MaterialId & "/" & Me.UID
 End Function
 
 Public Function GetProperty(property As String) As Variant
