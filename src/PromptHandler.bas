@@ -78,6 +78,10 @@ Public Function GetLoomNumber() As String
     GetLoomNumber = CStr(PromptHandler.UserInput(SingleLineText, "Loom Number Selection", "Enter a Loom Number for this Work Order:"))
 End Function
 
+Public Function GetMachineId() As String
+    GetMachineId = CStr(PromptHandler.UserInput(SingleLineText, "Machine Id Selection", "Enter a Machine Id for this Specification:"))
+End Function
+
 Public Function ChangePassword() As String
     Dim new_pass_1 As String
     Dim new_pass_2 As String
