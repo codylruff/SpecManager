@@ -92,17 +92,19 @@ Function CreateSpecification_Test() As String
     formNewSpecInput.cboSelectSpecificationType = "test_template"
     ' 3. Enter a material ID "test_specification"
     formNewSpecInput.txtSpecName = "test_specification"
-    ' 4. Click the submit button
+    ' 4. Enter a machine id for this specification
+    formNewSpecInput.txtMachineId = "test_machine"
+    ' 5. Click the submit button
     formNewSpecInput.Continue
-    ' 5. Select the property "test_property" from the combo box
+    ' 6. Select the property "test_property" from the combo box
     formCreateSpec.cboSelectProperty = "test_property"
-    ' 6. Enter a value in the txtPropertyValue textbox "Create specification test"
+    ' 7. Enter a value in the txtPropertyValue textbox "Create specification test"
     formCreateSpec.txtPropertyValue = "Create specification test"
-    ' 7. Click the set property button
+    ' 8. Click the set property button
     formCreateSpec.SetProperty
-    ' 8. Click the save changes button
+    ' 9. Click the save changes button
     formCreateSpec.SaveChanges
-    ' 9. Report pass / fail
+    ' 10. Report pass / fail
     CreateSpecification_Test = Utils.FormatTestResult("Create Specification Test", "PASS")
     pTestResults.Add True
     Exit Function
@@ -119,10 +121,8 @@ Function ViewSpecification_AfterCreate_Test() As String
     formViewSpecs.txtMaterialId = "test_specification"
     ' 3. Click the search button
     formViewSpecs.MaterialSearch
-    ' 4. Click the save pdf button but make sure it does not display a file input box and the file is save in a predetermined place that subsequently
-    '    noted in the tests.log file. This pdf should not display but it must be check after the tests are complete as a final step to validate
-    '    the process. (save as test_specification_rev1.pdf)
-    'formViewSpecs.ExportPdf
+    ' 4. Select a specification UID
+    formViewSpecs.cboSelectType = "test_template_test_machine"
     ' 5. Report pass / fail
     ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "PASS")
     pTestResults.Add True
@@ -146,15 +146,13 @@ Function EditTemplate_Test() As String
     formEditTemplate.AddProperty
     ' 6. Save Changes
     formEditTemplate.SaveChanges
-    ' 7. Report pass / fail
-    ' TODO:
-    ' 8. Select a property in the property combo box "test_property"
+    ' 7. Select a property in the property combo box "test_property"
     formEditTemplate.cboSelectProperty = "test_property"
-    ' 9. Click the delete property button
+    ' 8. Click the delete property button
     formEditTemplate.RemoveProperty
-    ' 10. Save Changes
+    ' 9. Save Changes
     formEditTemplate.SaveChanges
-    ' 11. Report pass / fail
+    ' 10. Report pass / fail
     EditTemplate_Test = Utils.FormatTestResult("Edit Template Test", "PASS")
     pTestResults.Add True
     Exit Function
@@ -171,17 +169,19 @@ Function EditSpecification_Test() As String
     formSpecConfig.txtMaterialId = "test_specification"
     ' 3. Click the search button
     formSpecConfig.MaterialSearch
-    ' 4. Select a property name in the combo box "new_test_property"
+    ' 4. Select a Specification UID
+    formSpecConfig.cboSelectType = "test_template_test_machine"
+    ' 5. Select a property name in the combo box "new_test_property"
     formSpecConfig.cboSelectProperty = "new_test_property"
-    ' 5. Enter a value in the property value box "Edit specification test"
+    ' 6. Enter a value in the property value box "Edit specification test"
     formSpecConfig.txtPropertyValue = "Edit specification test"
-    ' 6. Click the set property button
+    ' 7. Click the set property button
     formSpecConfig.Submit
-    ' 7. Save changes
+    ' 8. Save changes
     formSpecConfig.SaveChanges
-    ' 8. Remove old specification from the archive
+    ' 9. Remove old specification from the archive
     Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.item("to_archive"), "archived_specifications"), SqlLog
-    ' 9. Report pass / fail
+    ' 10. Report pass / fail
     EditSpecification_Test = Utils.FormatTestResult("Edit Specification Test", "PASS")
     pTestResults.Add True
     Exit Function

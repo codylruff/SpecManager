@@ -139,7 +139,7 @@ Sub SaveChanges()
     Dim old_spec As Specification
     Set old_spec = New Specification
     Set old_spec = Factory.CopySpecification(App.current_spec)
-    'App.specs.Add "to_archive", old_spec
+    App.specs.Add "to_archive", old_spec
     App.current_spec.Revision = CStr(CDbl(old_spec.Revision) + 1)
     ret_val = SpecManager.SaveSpecification(App.current_spec, old_spec)
     If ret_val <> DB_PUSH_SUCCESS Then
