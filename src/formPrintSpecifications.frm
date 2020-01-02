@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -56,7 +57,7 @@ Private Sub SelectLoomId(loom_id As String)
         For Each spec_id In App.specs
             With App.specs(spec_id)
                 If .SpecType = "Weaving RBA" Then
-                    loom_id = spec_id.MachineId
+                    loom_id = .MachineId
                 End If
             End With
         Next spec_id
@@ -70,8 +71,8 @@ Private Sub SelectLoomId(loom_id As String)
         End With
     Next spec_id
     ' If this loom has no RBA print a blank one.
-    If Not App.specs.Exists("Weaving RBA_" & loom_id) Then 
-        SpecManager.LoadBlankWeavingRba(Utils.RemoveWhiteSpace(txtMaterialId), selected_loom_id)
+    If Not App.specs.Exists("Weaving RBA_" & loom_id) Then
+        SpecManager.LoadBlankWeavingRba Utils.RemoveWhiteSpace(txtMaterialId), selected_loom_id
     End If
 End Sub
 

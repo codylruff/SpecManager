@@ -142,7 +142,7 @@ End Function
 
 Public Function FileExists(file_path As String) As Boolean
 ' Tests whether a file exists
-    FileExists = iif(Dir(file_path) <> "", True, False)
+    FileExists = IIf(Dir(file_path) <> "", True, False)
 End Function
 
 Public Function CleanString(ByVal target As String, find_strings As Variant, Optional remove_whitespace As Boolean = False) As String
@@ -153,7 +153,7 @@ Public Function CleanString(ByVal target As String, find_strings As Variant, Opt
         clean_string = Replace(clean_string, find_strings(i), nullstr)
     Next i
     If clean_string <> target Then
-        CleanString = iif(remove_whitespace, Utils.RemoveWhiteSpace(clean_string), clean_string)
+        CleanString = IIf(remove_whitespace, Utils.RemoveWhiteSpace(clean_string), clean_string)
     Else
         CleanString = target
     End If
