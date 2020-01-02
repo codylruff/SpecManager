@@ -189,10 +189,10 @@ End Sub
 '         .Add Name:="cad_max", RefersTo:=ws.Range("F15") ' Conditioned Weight Max
 '         .Add Name:="cad_min", RefersTo:=ws.Range("D15") ' Conditioned Weight Minimum
 '         .Add Name:="cad_nom", RefersTo:=ws.Range("E15") ' Conditioned Weight Nominal
-'         .Add Name:="coated_ad_max", RefersTo:=ws.Range("F39") ' Coated Fabric Weight Max
-'         .Add Name:="coated_ad_min", RefersTo:=ws.Range("D39") ' Coated Fabric Weight Minimum
-'         .Add Name:="coated_ad_nom", RefersTo:=ws.Range("E39") ' Coated Fabric Weight Nominal
-'         .Add Name:="coating_description", RefersTo:=ws.Range("D38") ' Coating Description
+'         .Add Name:="coated_ad_max", RefersTo:=ws.Range("F41") ' Coated Fabric Weight Max
+'         .Add Name:="coated_ad_min", RefersTo:=ws.Range("D41") ' Coated Fabric Weight Minimum
+'         .Add Name:="coated_ad_nom", RefersTo:=ws.Range("E41") ' Coated Fabric Weight Nominal
+'         .Add Name:="coating_description", RefersTo:=ws.Range("D40") ' Coating Description
 '         .Add Name:="code", RefersTo:=ws.Range("B6") ' SAP Code
 '         .Add Name:="core_id", RefersTo:=ws.Range("D33") ' Core Inside Diameter
 '         .Add Name:="core_len", RefersTo:=ws.Range("D34") ' Core Length

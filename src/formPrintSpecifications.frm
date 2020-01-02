@@ -47,7 +47,21 @@ End Sub
 
 Private Sub SelectLoomId(loom_id As String)
 ' This routine removes all but the weaving rba for the loom number selected(by machine_id)
+' TODO: Validate input based on list of loom numbers
+    Dim selected_loom_id As String
     Dim spec_id As Variant
+    selected_loom_id = loom_id
+    If Not App.specs.Exists("Weaving RBA_" & loom_id) Then
+        ' Check for an RBA from a different loom to use as a baseline
+        For Each spec_id In App.specs
+            With App.specs(spec_id)
+                If .SpecType = "Weaving RBA" Then
+                    loom_id = spec_id.MachineId
+                End If
+            End With
+        Next spec_id
+    End If
+    ' Remove all but selected loom
     For Each spec_id In App.specs
         With App.specs(spec_id)
             If .SpecType = "Weaving RBA" And .MachineId <> loom_id Then
@@ -56,8 +70,8 @@ Private Sub SelectLoomId(loom_id As String)
         End With
     Next spec_id
     ' If this loom has no RBA print a blank one.
-    If Not App.specs.Exists("Weaving RBA_" & loom_id) Then
-        'TODO: Currently does nothing. May add logic later to print a blank or an existing RBA as a starting point.
+    If Not App.specs.Exists("Weaving RBA_" & loom_id) Then 
+        SpecManager.LoadBlankWeavingRba(Utils.RemoveWhiteSpace(txtMaterialId), selected_loom_id)
     End If
 End Sub
 

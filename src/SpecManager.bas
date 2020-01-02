@@ -579,3 +579,15 @@ Public Function BuildBallisticTestSpec(material_id As String, package_length_inc
     'SaveNewSpecification spec
     Set BuildBallisticTestSpec = package
 End Function
+
+Public Function LoadBlankWeavingRba(material_id As String, loom_number As String)
+' Selects the BlankRBA spec from the database.
+    Dim blank_rba As Specification
+    ' Retrieve the blank rba spec
+    Set blank_rba = GetSpecifications("BLANKRBA").Items(0)
+    ' Add material/loom ids to the blank rba
+    blank_rba.MaterialId = material_id
+    blank_rba.MachineId = loom_number
+    ' Load the blank rba into App.specs
+    App.specs.Add blank_rba.UID, blank_rba 
+End Function
