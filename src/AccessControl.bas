@@ -56,7 +56,7 @@ Public Sub ConfigControl()
     
     If Open_Config(App.current_user) Then
         ' Turn on Performance Mode
-        App.PerformanceMode True
+        If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
         If Windows.Count <> 1 Then
             For Each w In Windows
                 If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
@@ -68,7 +68,7 @@ Public Sub ConfigControl()
         GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
         ThisWorkbook.Sheets("Administrator").Activate
         ' Turn off Performance Mode
-        App.PerformanceMode False
+        If App.PerformanceModeEnabled Then App.PerformanceMode (False)
     End If
 End Sub
 

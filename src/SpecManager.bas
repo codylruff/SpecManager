@@ -189,7 +189,7 @@ Function GetSpecifications(material_id As String) As Object
     Else
         For Each json_dict In df.records
             Set spec = Factory.CreateSpecFromDict(json_dict)
-            specs_dict.Add spec.UID, spec
+            specs_dict.Add spec.SpecType, spec
         Next json_dict
         Set GetSpecifications = specs_dict
     End If
@@ -204,7 +204,7 @@ Sub ListSpecifications(frm As MSForms.UserForm)
     Logger.Log "Listing Specifications . . . "
     Set App.printer = Factory.CreateDocumentPrinter(frm)
     If Not App.specs Is Nothing Then
-        App.printer.ListObjects App.specs
+        App.printer.ListObjects App.DocumentsByUID
     Else
         App.printer.WriteLine "No specifications are available for this code."
     End If
@@ -434,7 +434,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     'RestartApp
     
     ' Turn on Performance Mode
-    App.PerformanceMode True
+    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
 
     Set dict = CreateObject("Scripting.Dictionary")
     Set ws = Utils.CreateNewSheet(spec_type & " Dump " & Format(CStr(Now()), "dd-mm-yy"), True)
@@ -450,7 +450,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Columns.AutoFit
     
     ' Turn off Performance Mode
-    App.PerformanceMode False
+    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
 
 End Sub
 
@@ -583,11 +583,46 @@ End Function
 Public Function LoadBlankWeavingRba(material_id As String, loom_number As String)
 ' Selects the BlankRBA spec from the database.
     Dim blank_rba As Specification
+    Dim dict As Scripting.Dictionary
     ' Retrieve the blank rba spec
-    Set blank_rba = GetSpecifications("BLANKRBA").Items(0)
+    Set dict = GetSpecifications("BLANKRBA")
+    Set blank_rba = dict.Items(0)
     ' Add material/loom ids to the blank rba
     blank_rba.MaterialId = material_id
     blank_rba.MachineId = loom_number
     ' Load the blank rba into App.specs
-    App.specs.Add blank_rba.UID, blank_rba
+    App.specs.Add "Weaving RBA", blank_rba
 End Function
+
+Public Sub FilterByMachineId(selected_machine_id As String)
+' This routine removes all but the specifications associated with the machine_id selected. (From App.specs)
+' TODO: Validate input based on list of loom numbers
+    Dim machine_id As String
+    Dim spec_id As Variant
+    
+    machine_id = selected_machine_id
+    ' If Not App.specs.Exists("Weaving RBA_" & machine_id) Then
+    '     ' Check for an RBA from a different loom to use as a baseline
+    '     For Each spec_id In App.specs
+    '         With App.specs(spec_id)
+    '             If .SpecType = "Weaving RBA" Then
+    '                 machine_id = .MachineId
+    '             End If
+    '         End With
+    '     Next machine_id
+    ' End If
+    ' Remove all but selected loom
+    For Each spec_id In App.specs
+        With App.specs(spec_id)
+            If .SpecType = "Weaving RBA" Then
+                If .MachineId <> machine_id Then
+                    App.specs.Remove spec_id
+                End If
+            End If
+        End With
+    Next spec_id
+    ' If this loom has no RBA print a blank one. In the future this may be a baseline RBA created from the PDR.
+    If Not App.specs.Exists("Weaving RBA_" & machine_id) Then
+        LoadBlankWeavingRba Utils.RemoveWhiteSpace(App.current_spec.MaterialId), selected_machine_id
+    End If
+End Sub

@@ -14,6 +14,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
+
+
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
@@ -34,7 +37,7 @@ Private Sub cmdPrintSpecifications_Click()
     If Not App.TestingMode Then
         ' Check for alternate machine ids (currently only for weaving)
         If App.current_spec.ProcessId = "Weaving" Then
-            SelectLoomId PromptHandler.GetLoomNumber
+            SpecManager.FilterByMachineId PromptHandler.GetLoomNumber
         End If
         ' Write the documents to their repsective worksheets
         App.printer.WriteAllDocuments Me.txtProductionOrder, prompt_result
@@ -44,36 +47,6 @@ Private Sub cmdPrintSpecifications_Click()
         Logger.Log CStr(prompt_result)
     End If
     
-End Sub
-
-Private Sub SelectLoomId(loom_id As String)
-' This routine removes all but the weaving rba for the loom number selected(by machine_id)
-' TODO: Validate input based on list of loom numbers
-    Dim selected_loom_id As String
-    Dim spec_id As Variant
-    selected_loom_id = loom_id
-    If Not App.specs.Exists("Weaving RBA_" & loom_id) Then
-        ' Check for an RBA from a different loom to use as a baseline
-        For Each spec_id In App.specs
-            With App.specs(spec_id)
-                If .SpecType = "Weaving RBA" Then
-                    loom_id = .MachineId
-                End If
-            End With
-        Next spec_id
-    End If
-    ' Remove all but selected loom
-    For Each spec_id In App.specs
-        With App.specs(spec_id)
-            If .SpecType = "Weaving RBA" And .MachineId <> loom_id Then
-                App.specs.Remove spec_id
-            End If
-        End With
-    Next spec_id
-    ' If this loom has no RBA print a blank one.
-    If Not App.specs.Exists("Weaving RBA_" & loom_id) Then
-        SpecManager.LoadBlankWeavingRba Utils.RemoveWhiteSpace(txtMaterialId), selected_loom_id
-    End If
 End Sub
 
 Private Sub cmdSearch_Click()

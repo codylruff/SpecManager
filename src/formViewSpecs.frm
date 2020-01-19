@@ -14,6 +14,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
+
+
 Option Explicit
 
 Private Sub cmdMaterialSearch_Click()
@@ -74,7 +77,7 @@ Private Sub PopulateCboSelectType()
         cboSelectType.RemoveItem 0
     Loop
     With cboSelectType
-        For Each spec_id In App.specs
+        For Each spec_id In App.DocumentsByUID
             .AddItem spec_id
             .value = spec_id
         Next spec_id
@@ -95,7 +98,7 @@ Sub Back()
 End Sub
 
 Sub SelectType()
-    Set App.current_spec = App.specs.item(cboSelectType.value)
+    Set App.current_spec = App.DocumentsByUID.item(cboSelectType.value)
     SpecManager.PrintSpecification Me
 End Sub
 

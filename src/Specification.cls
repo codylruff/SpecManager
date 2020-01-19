@@ -27,6 +27,11 @@ Private Template_   As SpecificationTemplate
 Private MaterialDescription_ As String
 Private ProcessId_  As String
 Private MachineId_ As String
+Private DocumentId_ As Long
+
+
+Public Property Let DocumentId(value As Long): DocumentId_ = value: End Property
+Public Property Get DocumentId() As Long: DocumentId = DocumentId_: End Property
 
 ' Template
 Public Property Set Template(obj As SpecificationTemplate)

@@ -30,20 +30,28 @@ Public Event AfterStart()
 Public Event BeforeShutdown()
 
 ' Fields
-Public kDll                 As New KrishDll
-Public gMsg                 As String
-Public gAppGuid             As String
-Public version              As String
-Public current_user         As Account
-Public current_spec         As Specification
-Public templates            As VBA.Collection
-Public specs                As Object
-Public printer              As DocumentPrinter
-Public current_template     As SpecificationTemplate
-Public TestingMode          As Boolean
-Private pPerformanceMode    As Boolean
-Private settings_           As Settings
+Public kDll                      As New KrishDll
+Public gMsg                      As String
+Public gAppGuid                  As String
+Public version                   As String
+Public current_user              As Account
+Public current_spec              As Specification
+Public templates                 As VBA.Collection
+Public specs                     As Object
+Public printer                   As DocumentPrinter
+Public current_template          As SpecificationTemplate
+Public current_machine_id        As String
+Public TestingMode               As Boolean
+Public PerformanceModeEnabled    As Boolean
+Private settings_                As Settings
+Private DocumentsByUID_          As Object
 
+Public Property Get DocumentsByUID() As Object
+    
+    Set DocumentsByUID_ = SortDocumentsByUID
+    Set DocumentsByUID = DocumentsByUID_
+
+End Property
 
 Public Property Get GUI() As KrishDll
 ' Wrapper for gDll krishDll library handle
@@ -51,6 +59,22 @@ Public Property Get GUI() As KrishDll
 End Property
 
 ' Methods
+
+Private Function SortDocumentsByUID() As Object
+' Sort specs by UID and return it as a new dictionary
+    Dim docs_by_uid As Object
+    Dim doc As Variant
+
+    Set docs_by_uid = Factory.CreateDictionary
+
+    ' Create a dictionary based on UID
+    For Each doc In specs
+        docs_by_uid.Add Key:=specs(doc).UID, item:=specs(doc)
+    Next doc
+    
+    Set SortDocumentsByUID = docs_by_uid
+End Function
+
 Sub Start()
     ' Log in with environ(username)
     Set current_user = AccessControl.Account_Initialize
@@ -61,15 +85,17 @@ Sub Start()
     Set current_spec = New Specification
     Set templates = SpecManager.GetAllTemplates
     Set specs = CreateObject("Scripting.Dictionary")
+    Set DocumentsByUID_ = CreateObject("Scripting.Dictionary")
     Set printer = New DocumentPrinter
     Set current_template = New SpecificationTemplate
     TestingMode = False
-    pPerformanceMode = False
+    PerformanceModeEnabled = False
 End Sub
 
 Public Sub RefreshObjects()
     Set current_spec = New Specification
     Set specs = CreateObject("Scripting.Dictionary")
+    Set DocumentsByUID_ = CreateObject("Scripting.Dictionary")
     Set printer = New DocumentPrinter
     Set current_template = New SpecificationTemplate
 End Sub
@@ -99,6 +125,7 @@ Public Sub Shutdown()
     Set current_user = Nothing
     Set current_spec = Nothing
     Set specs = Nothing
+    Set DocumentsByUID_ = Nothing
     Set printer = Nothing
     Set current_template = Nothing
     Logger.SaveAllLogs
@@ -120,8 +147,9 @@ End Sub
 
 Public Sub PerformanceMode(enable As Boolean, Optional DisableEvents As Boolean = False)
 ' This Sub turns off un-necessary gui functions to increase performance
-    If enable And Not pPerformanceMode Then
-        pPerformanceMode = True
+    PerformanceModeEnabled = enable
+
+    If enable Then
         Logger.Log "Performance Mode : ON", RuntimeLog
         ' Save current excel-gui settings
         SaveSettings
@@ -134,16 +162,13 @@ Public Sub PerformanceMode(enable As Boolean, Optional DisableEvents As Boolean 
             If .Calculation = xlCalculationAutomatic Then .Calculation = xlCalculationManual
         End With
     Else
-        If pPerformanceMode Then
-            pPerformanceMode = False
-            Logger.Log "Performance Mode : OFF", RuntimeLog
-            With Application
-                .ScreenUpdating = settings_.ScreenUpdating
-                .DisplayAlerts = settings_.DisplayAlerts
-                .DisplayStatusBar = settings_.DisplayStatusBar
-                .Calculation = settings_.Calculation
-            End With
-        End If
+        Logger.Log "Performance Mode : OFF", RuntimeLog
+        With Application
+            .ScreenUpdating = settings_.ScreenUpdating
+            .DisplayAlerts = settings_.DisplayAlerts
+            .DisplayStatusBar = settings_.DisplayStatusBar
+            .Calculation = settings_.Calculation
+        End With
     End If
 
     

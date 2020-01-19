@@ -71,7 +71,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
            Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
 ' Print object to specified worksheet starting in cell "A1"
     ' Disable updates to the gui during processing
-    App.PerformanceMode True
+    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
     ' This tree selects any specs which have an associated custom worksheet template
     Select Case spec.SpecType
         Case "Warping Requirements"
@@ -94,7 +94,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     End Select
     
     ' Enable updates to the gui after processing
-    App.PerformanceMode False
+    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
     
 End Sub
 
@@ -176,18 +176,18 @@ Public Sub WriteAllDocuments(Optional order_number As String = nullstr, Optional
     Dim T As Variant
 
     ' Toggle Performance Mode
-    App.PerformanceMode True
+    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
 
     For Each T In App.specs
         Set spec = App.specs.item(T)
             App.printer.PrintObjectToSheet spec, _
-                        Utils.CreateNewSheet(spec.SpecType), _
+                        ThisWorkbook.Sheets(spec.SpecType), _
                         order_number, _
                         package_variant
     Next T
 
     ' Turn off Performance Mode
-    App.PerformanceMode False
+    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
 
 End Sub
 
@@ -198,7 +198,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     Dim doc As Variant
 
     ' Toggle Performance Mode
-    App.PerformanceMode True
+    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
     ' Print special requirements document if needed. Specials should print out on top!
     If CheckForSpecialRequirements(App.current_spec.MaterialId) Then App.printer.PrintSheet SheetByName(App.current_spec.MaterialId)
     
@@ -223,7 +223,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     
     ' Turn off Performance Mode
     GuiCommands.ResetExcelGUI
-    App.PerformanceMode False
+    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
 
 End Sub
 
@@ -401,7 +401,12 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
         ballistic_sample = "NONE"
     End If
     ' Insert values into worksheet
-    Set spec = specs_dict("Weaving RBA")
+    Dim item As Variant
+    For Each item In App.DocumentsByUID
+        If item = "Weaving RBA_" & App.current_machine_id Then Set spec = App.DocumentsByUID(item)
+    Next item
+    
+    If Utils.IsNothing(spec) Then Exit Sub
     Utils.Insert shtRBA.Range("article_code"), spec.MaterialId
     Utils.Insert shtRBA.Range("material_description"), spec.MaterialDescription
     Utils.Insert shtRBA.Range("revision"), spec.Revision
@@ -409,7 +414,7 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
     Utils.Insert shtRBA.Range("work_order"), prod_order
     Utils.Insert shtRBA.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
-    Utils.Insert shtRBA.Range("loom_number"), spec.MachineId
+    Utils.Insert shtRBA.Range("loom_number"), App.current_machine_id
     
     LoadCustomSheet spec, shtRBA
         
