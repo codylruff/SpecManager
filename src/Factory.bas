@@ -80,11 +80,11 @@ Function CopySpecification(spec As Specification) As Specification
     Set CopySpecification = spec_copy
 End Function
 
-Function CopyTemplate(temp As SpecificationTemplate) As SpecificationTemplate
+Function CopyTemplate(Temp As SpecificationTemplate) As SpecificationTemplate
     Dim temp_copy As SpecificationTemplate
     Set temp_copy = New SpecificationTemplate
     On Error Resume Next
-    With temp
+    With Temp
         temp_copy.JsonToObject .PropertiesJson, .SpecType, .Revision, .ProductLine
     End With
     Set CopyTemplate = temp_copy
@@ -143,12 +143,12 @@ Function CreateSpecFromDict(dict As Object) As Specification
 End Function
 
 Function CreateTemplateFromDict(dict As Object) As SpecificationTemplate
-    Dim temp As SpecificationTemplate
-    Set temp = New SpecificationTemplate
+    Dim Temp As SpecificationTemplate
+    Set Temp = New SpecificationTemplate
     With dict
-        temp.JsonToObject .item("Properties_Json"), .item("Spec_Type"), .item("Revision"), .item("Product_Line")
+        Temp.JsonToObject .item("Properties_Json"), .item("Spec_Type"), .item("Revision"), .item("Product_Line")
     End With
-    Set CreateTemplateFromDict = temp
+    Set CreateTemplateFromDict = Temp
 End Function
 
 Function CreateDocumentPrinter(frm As UserForm) As DocumentPrinter

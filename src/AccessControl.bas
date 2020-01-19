@@ -120,12 +120,12 @@ End Sub
 
 Public Function GetSHA1Hash(str)
   Dim i As Integer
-  Dim arr() As Byte
-  ReDim arr(0 To Len(str) - 1) As Byte
+  Dim Arr() As Byte
+  ReDim Arr(0 To Len(str) - 1) As Byte
   For i = 0 To Len(str) - 1
-   arr(i) = Asc(Mid(str, i + 1, 1))
+   Arr(i) = Asc(Mid(str, i + 1, 1))
   Next i
-  GetSHA1Hash = Replace(LCase(HexDefaultSHA1(arr)), " ", "")
+  GetSHA1Hash = Replace(LCase(HexDefaultSHA1(Arr)), " ", "")
 End Function
 
 Function HexDefaultSHA1(message() As Byte) As String

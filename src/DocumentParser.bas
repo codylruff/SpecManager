@@ -93,7 +93,7 @@ Public Function ParseDocument(path As String, template_type As String) As Object
     Dim wb As Workbook
     Dim doc_dict As Object
     Dim i As Long
-    Dim arr
+    Dim Arr
     
     ' Turn on Performance Mode
     Application.ScreenUpdating = False
@@ -105,11 +105,11 @@ Public Function ParseDocument(path As String, template_type As String) As Object
 
     ' Retrieve names from the document
     ' The sheet must be named after the Spec_Type to work.
-    arr = Utils.GetNames(wb, template_type)
+    Arr = Utils.GetNames(wb, template_type)
 
     On Error GoTo ParsingError
-    For i = 0 To UBound(arr, 1) - 1
-        doc_dict.Add arr(i, 0), arr(i, 1)
+    For i = 0 To UBound(Arr, 1) - 1
+        doc_dict.Add Arr(i, 0), Arr(i, 1)
     Next i
     On Error GoTo 0
     
@@ -122,7 +122,7 @@ Public Function ParseDocument(path As String, template_type As String) As Object
     Exit Function
 
 ParsingError:
-    PromptHandler.Error "Parsing Error @" & CStr(arr(i, 0))
+    PromptHandler.Error "Parsing Error @" & CStr(Arr(i, 0))
 End Function
 
 Public Sub CreateTemplateFromFile()
@@ -352,7 +352,7 @@ Public Sub RenameRBAs()
     Next r
 End Sub
 
-Public Function ApplyNames(arr As Variant, wb As Workbook, ws_name As String) As Object
+Public Function ApplyNames(Arr As Variant, wb As Workbook, ws_name As String) As Object
     Dim i As Long
     Dim ws As Worksheet
     Dim Name As String
@@ -360,9 +360,9 @@ Public Function ApplyNames(arr As Variant, wb As Workbook, ws_name As String) As
     Dim dict As Object
     Set ws = wb.Sheets(ws_name)
     Set dict = CreateObject("Scripting.Dictionary")
-    For i = LBound(arr) To UBound(arr)
-        addr = Chr(34) & arr(i, 1) & Chr(34)
-        Name = Chr(34) & arr(i, 0) & Chr(34)
+    For i = LBound(Arr) To UBound(Arr)
+        addr = Chr(34) & Arr(i, 1) & Chr(34)
+        Name = Chr(34) & Arr(i, 0) & Chr(34)
         wb.Names.Add Name:=Name, RefersTo:=ws.Range(addr)
         dict.Add Key:=Name, item:=IIf(Range(wb.Names(Name)).value = vbNullString, _
                                       vbNullString, Range(wb.Names(Name)).value)

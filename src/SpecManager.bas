@@ -36,7 +36,7 @@ Function NewSpecificationInput(template_type As String, spec_name As String, mac
         With App
         Set .current_spec = New Specification
         .current_spec.SpecType = .current_template.SpecType
-        .current_spec.Revision = "1.0"
+        .current_spec.Revision = "1"
         .current_spec.MaterialId = spec_name
         .current_spec.MachineId = machine_id
         End With
@@ -421,7 +421,7 @@ Function InitializeNewSpecification()
     With App
         Set App.current_spec = New Specification
         .current_spec.SpecType = .current_template.SpecType
-        .current_spec.Revision = "1.0"
+        .current_spec.Revision = "1"
         Set .current_spec.Properties = .current_template.Properties
     End With
 End Function
@@ -432,7 +432,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Dim dict As Object
     Dim props As Variant
     'RestartApp
-    
+    App.Start
     ' Turn on Performance Mode
     If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
 
@@ -451,7 +451,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     
     ' Turn off Performance Mode
     If App.PerformanceModeEnabled Then App.PerformanceMode (False)
-
+    App.Shutdown
 End Sub
 
 Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws As Worksheet, Optional start_row As Integer = 2, Optional start_col As Integer = 1, Optional print_json_column As Boolean = True, Optional write_to_live As Boolean = False)
@@ -479,6 +479,7 @@ Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws
                 spec_dict.Add "Material_Id", .Cells(i, 1).value
                 spec_dict.Add "Spec_Type", .Cells(i, 2).value
                 spec_dict.Add "Revision", 1
+                spec_dict.Add "Machine_Id", "BASE"
                 Set new_spec = Factory.CreateSpecFromDict(spec_dict)
                 ret_val = SpecManager.SaveNewSpecification(new_spec, .Cells(i, 3))
                 If ret_val = DB_PUSH_SUCCESS Then
@@ -494,6 +495,10 @@ Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws
         
     End With
     App.Shutdown
+End Sub
+
+Public Sub UpdateRbas()
+    ParseSpecsTable "Weaving RBA Dump 19-01-20", "WeavingRbaDump", False, True
 End Sub
 
 Public Sub ParseSpecsTable(ws_name As String, table_name As String, Optional print_json_column As Boolean = True, Optional write_to_live As Boolean = False)
@@ -583,15 +588,26 @@ End Function
 Public Function LoadBlankWeavingRba(material_id As String, loom_number As String)
 ' Selects the BlankRBA spec from the database.
     Dim blank_rba As Specification
-    Dim dict As Scripting.Dictionary
     ' Retrieve the blank rba spec
-    Set dict = GetSpecifications("BLANKRBA")
-    Set blank_rba = dict.Items(0)
+
+    Set blank_rba = Factory.CreateSpecificationFromRecord(DataAccess.GetSpecification("BLANKRBA", "Weaving RBA", "NONE"))
     ' Add material/loom ids to the blank rba
     blank_rba.MaterialId = material_id
     blank_rba.MachineId = loom_number
     ' Load the blank rba into App.specs
     App.specs.Add "Weaving RBA", blank_rba
+End Function
+
+Public Function LoadBaseWeavingRba(material_id As String, loom_number As String)
+' Selects the BlankRBA spec from the database.
+    Dim base_rba As Specification
+    ' Retrieve the base rba spec
+    Set base_rba = Factory.CreateSpecificationFromRecord(DataAccess.GetSpecification(material_id, "Weaving RBA", "BASE"))
+    ' Add material/loom ids to the blank rba
+    base_rba.MaterialId = material_id
+    base_rba.MachineId = loom_number
+    ' Load the base rba into App.specs
+    App.specs.Add "Weaving RBA", base_rba
 End Function
 
 Public Sub FilterByMachineId(selected_machine_id As String)

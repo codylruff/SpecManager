@@ -93,6 +93,7 @@ End Function
 Public Sub AddProperty(property As String)
 ' Adds a property to the list of properties
     Me.Properties.Add property, nullstr
+    SortPropertiesByName
 End Sub
 
 Public Sub ChangeProperty(property As Variant, new_val As Variant)
@@ -101,6 +102,7 @@ Public Sub ChangeProperty(property As Variant, new_val As Variant)
     old_val = Me.Properties(property)
     Me.Properties(property) = new_val
     'RaiseEvent PropertyChanged(property, old_val, new_val)
+    SortPropertiesByName
 End Sub
 
 Public Sub JsonToObject(properties_json As String)
@@ -110,15 +112,22 @@ Public Sub JsonToObject(properties_json As String)
     Set props_temp = JsonVBA.ParseJson(properties_json)
     If Not IsNothing(Me.Template) Then
         Set Me.Properties = Template.Properties
-        On Error Resume Next
-        For Each prop In Me.Properties
-            Me.Properties(prop) = props_temp(prop)
+        For Each prop In Me.Template.Properties
+            If props_temp.Exists(prop) Then
+                Me.Properties(prop) = props_temp(prop)
+            Else
+                Me.Properties(prop) = nullstr
+            End If
         Next prop
-        On Error GoTo 0
     Else
         Set Me.Properties = props_temp
     End If
+    SortPropertiesByName
+End Sub
 
+Private Sub SortPropertiesByName()
+' Sort the properties dictionary alpha numerically by key
+    Utils.SortDictionary Me.Properties, True, True, vbBinaryCompare
 End Sub
 
 Public Sub CreateFromTestingPlan(testing_plan As ITestingPlan)
@@ -129,41 +138,44 @@ End Sub
 
 Public Function PropertiesJson() As String
 ' Store spec Properties dictionary as json
+    SortPropertiesByName
     PropertiesJson = JsonVBA.ConvertToJson(Me.Properties)
 End Function
 
 Public Function header() As Variant
-    Dim arr() As String
+    Dim Arr() As String
     Dim i As Long
     Dim prop As Variant
     Dim number_of_props As Long
     number_of_props = Me.Properties.Count + 2
-    ReDim arr(number_of_props)
-    arr(0) = "Material Id"
-    arr(2) = "Revision"
+    ReDim Arr(number_of_props)
+    Arr(0) = "Material Id"
+    Arr(2) = "Revision"
     i = 2
-    For Each prop In Me.Properties
-        arr(i) = CStr(prop)
+    SortPropertiesByName
+    For Each prop In Me.Template.Properties
+        Arr(i) = CStr(prop)
         i = i + 1
     Next prop
-    header = arr
+    header = Arr
 End Function
 
 Public Function ToArray() As Variant
-    Dim arr() As String
+    Dim Arr() As String
     Dim i As Long
     Dim prop As Variant
     Dim number_of_props As Long
     number_of_props = Me.Properties.Count + 2
-    ReDim arr(number_of_props)
-    arr(0) = Me.MaterialId
-    arr(2) = Me.Revision
+    ReDim Arr(number_of_props)
+    Arr(0) = Me.MaterialId
+    Arr(2) = Me.Revision
     i = 2
-    For Each prop In Me.Properties
-        arr(i) = Properties.item(prop)
+    SortPropertiesByName
+    For Each prop In Me.Template.Properties
+        Arr(i) = Me.Properties.item(prop)
         i = i + 1
     Next prop
-    ToArray = arr
+    ToArray = Arr
 End Function
 
 Public Function ToString() As String
