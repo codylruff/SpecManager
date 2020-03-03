@@ -18,16 +18,16 @@ Public Event PropertyChanged(property As Variant, old_val As Variant, new_val As
 ' Properties dictionary
 Public Properties   As Object
 ' FIELDS and PROPERTIES---
-Private SpecType_   As String
-Private Revision_   As String
-Private MaterialId_ As String
-Private IsStandard_ As Boolean
-Private IsLatest_   As Boolean
-Private Template_   As SpecificationTemplate
-Private MaterialDescription_ As String
-Private ProcessId_  As String
-Private MachineId_ As String
-Private DocumentId_ As Long
+Private SpecType_               As String
+Private Revision_               As String
+Private MaterialId_             As String
+Private IsStandard_             As Boolean
+Private IsLatest_               As Boolean
+Private Template_               As SpecificationTemplate
+Private MaterialDescription_    As String
+Private ProcessId_              As String
+Private MachineId_              As String
+Private DocumentId_             As Long
 
 
 Public Property Let DocumentId(value As Long): DocumentId_ = value: End Property

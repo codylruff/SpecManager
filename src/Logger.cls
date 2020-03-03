@@ -12,15 +12,15 @@ Option Explicit
 Public Event LogChanged(log_text As String)
 
 '@exclude.json
-Private FSO As Object ' Declare a FileSystemObject.
-Private stream As Object ' Declare a TextStream.
-Private Logs(8) As Log
-Private log_level As LogLevel
-Private folder_path As String
-Private file_path As String
-Private log_enabled As Boolean
-Private pImmediateLog As LogType
-Private saving_enabled As Boolean
+Private FSO             As Object ' Declare a FileSystemObject.
+Private stream          As Object ' Declare a TextStream.
+Private Logs(8)         As Log
+Private log_level       As LogLevel
+Private folder_path     As String
+Private file_path       As String
+Private log_enabled     As Boolean
+Private pImmediateLog   As LogType
+Private saving_enabled  As Boolean
 
 Private Sub Class_Initialize()
 ' Constructor
@@ -92,7 +92,7 @@ Public Sub Log(text As String, Optional log_type As LogType = 0)
 End Sub
 
 Public Sub Error(function_name As String)
-    Me.Log ("Error Returned From --> " & function_name), ErrorLog
+    Me.Log ("Error Returned From --> " & function_name)
 End Sub
 
 Public Sub Trace(text As String)
@@ -188,6 +188,3 @@ Private Function printf(mask As String, ParamArray tokens()) As String
     Next
     printf = mask
 End Function
-
-
-
