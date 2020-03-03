@@ -22,7 +22,7 @@ Public Sub LoadNewDocument()
 
     ' Initialize document parameters
     material_id = shtDeveloper.Range("material_id").value ' this is the material id (SAP Code)
-    description = shtDeveloper.Range("description").value ' This is the material description from SAP
+    description = shtDeveloper.Range("description").text ' This is the material description from SAP
     file_dir = shtDeveloper.Range("file_dir").value       ' This is not the file path it is the file directory
     machine_id = shtDeveloper.Range("machine_id").value   ' This is the machine id (ie. loom number, warper, etc...)
     template_id = shtDeveloper.Range("template_id").value ' This is the template the document is based on
@@ -64,17 +64,17 @@ Public Sub LoadNewDocument()
     
     ' Task 2 Parse the Document for a json string
     progress_bar = App.GUI.SetProgressBar(progress_bar, 2, "Task 2/4")
-    material_number = Mid(path_no_ext, char_count + 1, path_len - char_count)
-    json_string = JsonVBA.ConvertToJson(ParseDocument(file_path, template_type))
+    'material_number = Mid(path_no_ext, char_count + 1, path_len - char_count)
+    json_string = JsonVBA.ConvertToJson(ParseDocument(file_path, template_id))
 
     ' Task 3 Convert json string into specification object
     progress_bar = App.GUI.SetProgressBar(progress_bar, 3, "Task 3/4")
 
     ' Create specification from json string
     spec.JsonToObject json_string
-    spec.MaterialId = material_number
+    spec.MaterialId = material_id
     spec.SpecType = template_id
-    If machine_id = nullstr Then 
+    If machine_id = nullstr Then
         spec.Revision = "0"
         spec.MachineId = "BASE"
     Else
@@ -85,7 +85,7 @@ Public Sub LoadNewDocument()
     progress_bar = App.GUI.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
 
     ' Save Specification to database
-    ret_val = SpecManager.SaveNewSpecification(spec, description)
+    ret_val = SpecManager.SaveNewSpecification(spec, CStr(description))
 
     ' Parse return value.
     If ret_val = DB_PUSH_SUCCESS Then
@@ -104,7 +104,7 @@ FileNamingError:
     PromptHandler.Error "File named improperly."
     Exit Sub
 InvalidTemplateType:
-    PromptHandler.Error template_type & " Does Not Exist!"
+    PromptHandler.Error template_id & " Does Not Exist!"
 End Sub
 
 Public Function ParseDocument(path As String, template_type As String) As Object
