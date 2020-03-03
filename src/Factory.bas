@@ -151,10 +151,14 @@ Function CreateTemplateFromDict(dict As Object) As SpecificationTemplate
     Set CreateTemplateFromDict = Temp
 End Function
 
-Function CreateDocumentPrinter(frm As UserForm) As DocumentPrinter
+Function CreateDocumentPrinter(Optional frm As UserForm) As DocumentPrinter
     Dim obj As DocumentPrinter
     Set obj = New DocumentPrinter
-    Set obj.FormId = frm
+    If Not Utils.IsNothing(frm) Then
+        Set obj.FormId = frm
+    Else
+        Set obj.FormId = Nothing
+    End If
     Set CreateDocumentPrinter = obj
 End Function
 

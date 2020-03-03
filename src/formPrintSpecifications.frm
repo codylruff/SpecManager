@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formPrintSpecifications 
    Caption         =   "Spec-Manager "
-   ClientHeight    =   6615
+   ClientHeight    =   6612
    ClientLeft      =   120
    ClientTop       =   468
    ClientWidth     =   6696
@@ -13,9 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
 
 
 

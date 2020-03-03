@@ -64,7 +64,11 @@ Public Sub WriteLine(ParamArray var() As Variant)
              s = s & Left$(var(i) & ":" & Space(Padding), Padding)
          End If
     Next
-    Me.FormId.txtConsole.text = FormId.txtConsole.text & s & vbNewLine
+    If Me.FormId Is Nothing Then
+        shtDeveloper1.Range("console") = shtDeveloper1.Range("console") & s & vbNewLine
+    Else
+        Me.FormId.txtConsole.text = FormId.txtConsole.text & s & vbNewLine
+    End If
 End Sub
 
 Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = nullstr, _
@@ -133,8 +137,13 @@ End Function
 Public Sub ListObjects(dict As Object)
 ' Given a dictionary of documents, list the docs by type in the console
     Dim T As Variant
+    shtDeveloper1.Range("console") = nullstr
     For Each T In dict
-        Me.FormId.txtConsole.text = FormId.txtConsole.text & CStr(T) & vbNewLine
+        If Me.FormId Is Nothing Then
+            shtDeveloper1.Range("console") = shtDeveloper1.Range("console") & CStr(T) & vbNewLine
+        Else
+            Me.FormId.txtConsole.text = FormId.txtConsole.text & CStr(T) & vbNewLine
+        End If
     Next T
 End Sub
 

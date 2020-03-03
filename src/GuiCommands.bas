@@ -18,6 +18,8 @@ Private Sub HideAllSheets(wb As Workbook)
     For Each ws In wb.Worksheets
         If ws Is shtStart Then
             'Pass
+        ElseIf ws Is shtDeveloper1 Then
+            'Pass
         ElseIf ws.Visible = xlSheetVisible Then
             ws.Visible = xlSheetHidden
             Logger.Log ws.Name & " was hidden."
