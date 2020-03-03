@@ -15,21 +15,34 @@ Public Sub LoadNewDocument()
     Dim progress_bar As Long
     Dim spec As Specification
     Dim ret_val As Long
-    Dim template_type As String
+    Dim material_id, description, file_dir, machine_id, template_id As String
 
     ' Start the application
     App.Start
 
-    ' Prompt user to select file path
-    file_path = PromptHandler.SelectSpecifcationFile
+    ' Initialize document parameters
+    material_id = shtDeveloper.Range("material_id").value ' this is the material id (SAP Code)
+    description = shtDeveloper.Range("description").value ' This is the material description from SAP
+    file_dir = shtDeveloper.Range("file_dir").value       ' This is not the file path it is the file directory
+    machine_id = shtDeveloper.Range("machine_id").value   ' This is the machine id (ie. loom number, warper, etc...)
+    template_id = shtDeveloper.Range("template_id").value ' This is the template the document is based on
+    
+    ' Select file path
+    If file_dir = "" Then
+        file_path = PromptHandler.SelectSpecifcationFile
+    Else
+        file_path = file_dir & "\" & material_id & ".xlsx"
+    End If
     
     ' Initialize an empty specification
     Set spec = CreateSpecification
     
     ' Prompt the user for a template name. Then Validate the template exists
-    template_type = PromptHandler.EnterTemplateType
     On Error GoTo InvalidTemplateType
-    Set spec.Template = App.templates(template_type)
+    If template_id = nullstr Then
+        template_id = PromptHandler.EnterTemplateType
+    End If
+    Set spec.Template = App.templates(template_id)
     On Error GoTo 0
 
     ' Initialize the progress bar
@@ -43,10 +56,10 @@ Public Sub LoadNewDocument()
 
     ' Throw error for improper file name
     On Error GoTo FileNamingError
-    Do Until char_buffer = "_"
-        char_count = char_count - 1
-        char_buffer = Mid(path_no_ext, char_count, 1)
-    Loop
+'    Do Until char_buffer = "_"
+'        char_count = char_count - 1
+'        char_buffer = Mid(path_no_ext, char_count, 1)
+'    Loop
     On Error GoTo 0
     
     ' Task 2 Parse the Document for a json string
@@ -60,14 +73,19 @@ Public Sub LoadNewDocument()
     ' Create specification from json string
     spec.JsonToObject json_string
     spec.MaterialId = material_number
-    spec.SpecType = template_type
-    spec.Revision = "1.0"
+    spec.SpecType = template_id
+    If machine_id = nullstr Then 
+        spec.Revision = "0"
+        spec.MachineId = "BASE"
+    Else
+        spec.MachineId = machine_id
+    End If
 
     ' Task 4 Save specification object to the database
     progress_bar = App.GUI.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
 
     ' Save Specification to database
-    ret_val = SpecManager.SaveNewSpecification(spec)
+    ret_val = SpecManager.SaveNewSpecification(spec, description)
 
     ' Parse return value.
     If ret_val = DB_PUSH_SUCCESS Then
