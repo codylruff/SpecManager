@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formNewSpecInput
    Caption         =   "Create New Specification"
    ClientHeight    =   4560
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   4470
+   ClientTop       =   468
+   ClientWidth     =   4476
    OleObjectBlob   =   "formNewSpecInput.frx":0000
    StartUpPosition =   1  'CenterOwner
 End

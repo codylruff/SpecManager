@@ -390,20 +390,20 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     Dim qc_sample As String
     Dim ballistic_sample As String
     ' Check for sample sizes if required
-    If specs_dict.Exists("Testing Requirements") Then
-        qc_sample = specs_dict("Testing Requirements").GetProperty("QC Sample Length")
+    If specs_dict.Exists("Testing Requirements(Lab)") Then
+        qc_sample = specs_dict("Testing Requirements(Lab)").GetProperty("QC Sample Length")
     Else
         qc_sample = DEFAULT_QC_SAMPLE
     End If
-    If specs_dict.Exists("Ballistic Testing Requirements") Then
-        ballistic_sample = specs_dict("Ballistic Testing Requirements").GetProperty("Ballistic Sample Length")
+    If specs_dict.Exists("Ballistic Testing Requirements(Lab)") Then
+        ballistic_sample = specs_dict("Ballistic Testing Requirements(Lab)").GetProperty("Ballistic Sample Length")
     Else
         ballistic_sample = "NONE"
     End If
     ' Insert values into worksheet
     Dim item As Variant
     For Each item In App.DocumentsByUID
-        If item = "Weaving RBA_" & App.current_machine_id Then Set spec = App.DocumentsByUID(item)
+        If Left(item, 12) = "Weaving RBA(" Then Set spec = App.DocumentsByUID(item)
     Next item
     
     If Utils.IsNothing(spec) Then Exit Sub

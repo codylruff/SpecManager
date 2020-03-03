@@ -70,7 +70,7 @@ Function ExecuteSQLSelect(SQLstmt As String) As DataFrame
     Set df = New DataFrame
     On Error GoTo NullRecordException
     Logger.Log "-----------------------------------", SqlLog
-    Logger.Log SQLstmt, SqlLog
+    Logger.Log SQLstmt
     With Me.DbConnection
         .selectQry SQLstmt
         df.Data = .Data

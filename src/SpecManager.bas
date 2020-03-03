@@ -189,13 +189,13 @@ Function GetSpecifications(material_id As String) As Object
     Else
         For Each json_dict In df.records
             Set spec = Factory.CreateSpecFromDict(json_dict)
-            specs_dict.Add spec.SpecType, spec
+            specs_dict.Add spec.UID, spec
         Next json_dict
         Set GetSpecifications = specs_dict
     End If
     Exit Function
 NullSpecException:
-    Logger.Error "SpecManager.GetSpecifications()"
+    Logger.Log "SpecManager.GetSpecifications()"
     Set GetSpecifications = Nothing
 End Function
 
@@ -638,7 +638,7 @@ Public Sub FilterByMachineId(selected_machine_id As String)
         End With
     Next spec_id
     ' If this loom has no RBA print a blank one. In the future this may be a baseline RBA created from the PDR.
-    If Not App.specs.Exists("Weaving RBA_" & machine_id) Then
+    If Not App.specs.Exists("Weaving RBA(" & machine_id & ")") Then
         LoadBlankWeavingRba Utils.RemoveWhiteSpace(App.current_spec.MaterialId), selected_machine_id
     End If
 End Sub

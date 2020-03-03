@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formEditTemplate
    Caption         =   "Specification Control"
    ClientHeight    =   11865
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   9810
+   ClientTop       =   468
+   ClientWidth     =   9816
    OleObjectBlob   =   "formEditTemplate.frx":0000
    StartUpPosition =   1  'CenterOwner
 End

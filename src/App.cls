@@ -48,9 +48,9 @@ Private DocumentsByUID_          As Object
 
 Public Property Get DocumentsByUID() As Object
     
-    Set DocumentsByUID_ = SortDocumentsByUID
-    Set DocumentsByUID = DocumentsByUID_
-
+    'Set DocumentsByUID_ = SortDocumentsByUID
+    'Set DocumentsByUID = DocumentsByUID_
+    Set DocumentsByUID = specs
 End Property
 
 Public Property Get GUI() As KrishDll

@@ -128,7 +128,7 @@ End Function
 Function CreateSpecFromDict(dict As Object) As Specification
     Dim spec As Specification
     Set spec = New Specification
-    On Error Resume Next
+    'On Error Resume Next
     With dict
         spec.MaterialId = .item("Material_Id")
         spec.MaterialDescription = .item("Description")

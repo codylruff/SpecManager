@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formPrintSpecifications
    Caption         =   "Spec-Manager "
    ClientHeight    =   6615
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   6690
+   ClientTop       =   468
+   ClientWidth     =   6696
    OleObjectBlob   =   "formPrintSpecifications.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -17,15 +17,10 @@ Attribute VB_Exposed = False
 
 
 
-
-
-
-
 Option Explicit
 
 Private Sub cmdPrintSpecifications_Click()
     Dim prompt_result As DocumentPackageVariant
-    Dim machine_id As String
     If App.printer.FormId Is Nothing Then
          PromptHandler.Error "There is nothing to print!"
          Exit Sub
