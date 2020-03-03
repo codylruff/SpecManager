@@ -617,16 +617,16 @@ Public Sub FilterByMachineId(selected_machine_id As String)
     Dim spec_id As Variant
     
     machine_id = selected_machine_id
-    ' If Not App.specs.Exists("Weaving RBA_" & machine_id) Then
-    '     ' Check for an RBA from a different loom to use as a baseline
-    '     For Each spec_id In App.specs
-    '         With App.specs(spec_id)
-    '             If .SpecType = "Weaving RBA" Then
-    '                 machine_id = .MachineId
-    '             End If
-    '         End With
-    '     Next machine_id
-    ' End If
+    If Not App.specs.Exists("Weaving RBA(" & machine_id & ")") Then
+        If Not App.specs.Exists("Weaving RBA(BASE)") Then
+            ' If this loom has no RBA print a blank one.
+            LoadBlankWeavingRba Utils.RemoveWhiteSpace(App.current_spec.MaterialId), selected_machine_id
+        Else
+            With App.specs("Weaving RBA(BASE)")
+                .MachineId = machine_id
+            End With
+        End If
+    End If
     ' Remove all but selected loom
     For Each spec_id In App.specs
         With App.specs(spec_id)
@@ -637,8 +637,4 @@ Public Sub FilterByMachineId(selected_machine_id As String)
             End If
         End With
     Next spec_id
-    ' If this loom has no RBA print a blank one. In the future this may be a baseline RBA created from the PDR.
-    If Not App.specs.Exists("Weaving RBA(" & machine_id & ")") Then
-        LoadBlankWeavingRba Utils.RemoveWhiteSpace(App.current_spec.MaterialId), selected_machine_id
-    End If
 End Sub
