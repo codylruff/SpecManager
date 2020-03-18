@@ -1,0 +1,60 @@
+'============================================================================
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'NOTES:
+' This file will not be imported and is for reference only. Any changes to 
+' ThisWorkbook must be made in the VBIDE 
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'=============================================================================
+Private retry As Long
+Public Sub RemoveAll()
+    On Error Resume Next
+    Dim element As Object
+    For Each element In ActiveWorkbook.VBProject.VBComponents
+        ActiveWorkbook.VBProject.VBComponents.Remove element
+        Debug.Print element.Name
+    Next
+End Sub
+
+Sub VSImport()
+    
+    Dim path As String
+    Dim VerNum As String
+    Dim strFile As String
+    Dim wb As Workbook
+    
+    Set wb = ActiveWorkbook
+    
+    On Error GoTo ImportFail
+    
+    path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
+    strFile = Dir(path & "*.bas*")
+    
+    Do While Len(strFile) > 0
+        Debug.Print strFile
+        wb.VBProject.VBComponents.Import path & strFile
+        strFile = Dir
+    Loop
+    
+    path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
+    strFile = Dir(path & "*.frm*")
+    
+    Do While Len(strFile) > 0
+        Debug.Print strFile
+        wb.VBProject.VBComponents.Import path & strFile
+        strFile = Dir
+    Loop
+    
+    path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
+    strFile = Dir(path & "*.cls*")
+    
+    Do While Len(strFile) > 0
+        Debug.Print strFile
+        wb.VBProject.VBComponents.Import path & strFile
+        strFile = Dir
+    Loop
+    Debug.Print "Import Successful!"
+    Exit Sub
+
+ImportFail:
+    Debug.Print "Import Failed"
+End Sub

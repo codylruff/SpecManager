@@ -570,9 +570,11 @@ End Sub
 '    AccessControl.ConfigControl
 'End Sub
 
-Public Function BuildBallisticTestSpec(material_id As String, package_length_inches As Double, fabric_width_inches As Double, conditioned_weight_gsm As Double, target_psf As Double) As BallisticPackage
+Public Function BuildBallisticTestSpec(material_id As String, package_length_inches As Double, fabric_width_inches As Double, conditioned_weight_gsm As Double, target_psf As Double, machine_id As String, Optional is_test As Boolean = True) As Long
     Dim spec As Specification
     Dim package As BallisticPackage
+    Dim ret_val As Long
+
     Set package = Factory.CreateBallisticPackage(package_length_inches, fabric_width_inches, conditioned_weight_gsm, target_psf)
     Set spec = Factory.CreateSpecification
     With spec
@@ -580,9 +582,15 @@ Public Function BuildBallisticTestSpec(material_id As String, package_length_inc
         .SpecType = "Ballistic Testing Requirements"
         .Revision = 1
         .CreateFromTestingPlan package
+        .MachineId = machine_id
     End With
-    'SaveNewSpecification spec
-    Set BuildBallisticTestSpec = package
+    If is_test Then
+        ret_val = 0
+    Else
+        ret_val = SaveNewSpecification(spec)
+    End If
+
+    BuildBallisticTestSpec = ret_val
 End Function
 
 Public Function LoadBlankWeavingRba(material_id As String, loom_number As String)

@@ -11,7 +11,7 @@ End Type
 Public Type Log
     Buffer As VBA.Collection
     log_type As LogType
-    Id As String
+    ID As String
 End Type
 
 Public Type Rect

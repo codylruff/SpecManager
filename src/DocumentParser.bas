@@ -4,35 +4,27 @@ Option Explicit
 ' DOCUMENT PARSER
 ' ==============================================
 
-Public Sub LoadNewDocument()
-    Dim file_path As String
-    Dim path_no_ext As String
-    Dim path_len As Integer
-    Dim char_count As Integer
-    Dim char_buffer As String
-    Dim material_number As String
-    Dim json_string As String
-    Dim progress_bar As Long
+Public Sub LoadNewDocument(file_type As String)
+    
     Dim spec As Specification
     Dim ret_val As Long
-    Dim material_id, description, file_dir, machine_id, template_id As String
+    Dim material_id As String
+    Dim description As String
+    Dim file_dir As String
+    Dim machine_id As String
+    Dim Revision As String
+    Dim template_id As String
 
     ' Start the application
     App.Start
 
     ' Initialize document parameters
-    material_id = shtDeveloper.Range("material_id").value ' this is the material id (SAP Code)
-    description = shtDeveloper.Range("description").text ' This is the material description from SAP
-    file_dir = shtDeveloper.Range("file_dir").value       ' This is not the file path it is the file directory
-    machine_id = shtDeveloper.Range("machine_id").value   ' This is the machine id (ie. loom number, warper, etc...)
-    template_id = shtDeveloper.Range("template_id").value ' This is the template the document is based on
-    
-    ' Select file path
-    If file_dir = "" Then
-        file_path = PromptHandler.SelectSpecifcationFile
-    Else
-        file_path = file_dir & "\" & material_id & ".xlsx"
-    End If
+    material_id = CStr(shtDeveloper.Range("material_id").value) ' this is the material id (SAP Code)
+    description = shtDeveloper.Range("description").text        ' This is the material description from SAP
+    file_dir = CStr(shtDeveloper.Range("file_dir").value)       ' This is not the file path it is the file directory
+    machine_id = CStr(shtDeveloper.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
+    Revision = CStr(shtDeveloper.Range("revision").value)       ' This is the document revision number
+    template_id = CStr(shtDeveloper.Range("template_id").value) ' This is the template the document is based on
     
     ' Initialize an empty specification
     Set spec = CreateSpecification
@@ -45,47 +37,19 @@ Public Sub LoadNewDocument()
     Set spec.Template = App.templates(template_id)
     On Error GoTo 0
 
-    ' Initialize the progress bar
-    progress_bar = App.GUI.ShowProgressBar(4)
-
-    ' Task 1 Extract material Id from file name.
-    progress_bar = App.GUI.SetProgressBar(progress_bar, 1, "Task 1/4")
-    path_no_ext = Replace(file_path, ".xlsx", vbNullString)
-    path_len = Len(path_no_ext)
-    char_count = path_len
-
-    ' Throw error for improper file name
-    On Error GoTo FileNamingError
-'    Do Until char_buffer = "_"
-'        char_count = char_count - 1
-'        char_buffer = Mid(path_no_ext, char_count, 1)
-'    Loop
-    On Error GoTo 0
-    
-    ' Task 2 Parse the Document for a json string
-    progress_bar = App.GUI.SetProgressBar(progress_bar, 2, "Task 2/4")
-    'material_number = Mid(path_no_ext, char_count + 1, path_len - char_count)
-    json_string = JsonVBA.ConvertToJson(ParseDocument(file_path, template_id))
-
-    ' Task 3 Convert json string into specification object
-    progress_bar = App.GUI.SetProgressBar(progress_bar, 3, "Task 3/4")
-
-    ' Create specification from json string
-    spec.JsonToObject json_string
-    spec.MaterialId = material_id
-    spec.SpecType = template_id
-    If machine_id = nullstr Then
-        spec.Revision = "0"
-        spec.MachineId = "BASE"
+    If file_type = "json" Then
+    ' The procedure below creates a spec from a json file and a template
+    '---------------------------------------------------------------------------------------------
+        ret_val = ParseJsonDocument(spec, material_id, description, file_dir, machine_id, Revision, template_id)
+    '---------------------------------------------------------------------------------------------
+    ElseIf file_type = "excel" Then
+    ' The procedure below creates a spec from an excel workbook and a template
+    '---------------------------------------------------------------------------------------------
+        ret_val = ParseExcelDocument(spec, material_id, description, file_dir, machine_id, Revision, template_id)
+    '---------------------------------------------------------------------------------------------
     Else
-        spec.MachineId = machine_id
+        ret_val = SM_INTERNAL_ERROR
     End If
-
-    ' Task 4 Save specification object to the database
-    progress_bar = App.GUI.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
-
-    ' Save Specification to database
-    ret_val = SpecManager.SaveNewSpecification(spec, CStr(description))
 
     ' Parse return value.
     If ret_val = DB_PUSH_SUCCESS Then
@@ -100,11 +64,108 @@ Public Sub LoadNewDocument()
     App.Shutdown
     Exit Sub
     
-FileNamingError:
-    PromptHandler.Error "File named improperly."
-    Exit Sub
 InvalidTemplateType:
     PromptHandler.Error template_id & " Does Not Exist!"
+End Sub
+
+Public Function ParseExcelDocument(spec As Specification, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
+    
+    Dim file_path As String
+    Dim json_string As String
+    Dim path_no_ext As String
+    Dim path_len As Integer
+    Dim progress_bar As Long
+
+    ' Select file path
+    If file_dir = "" Then
+        file_path = PromptHandler.SelectSpecifcationFile
+    Else
+        file_path = file_dir & "\" & material_id & ".xlsx"
+    End If
+    
+    ' Initialize the progress bar
+    progress_bar = App.GUI.ShowProgressBar(4)
+
+    ' Task 1 Extract material Id from file name.
+    progress_bar = App.GUI.SetProgressBar(progress_bar, 1, "Task 1/4")
+    
+    ' Task 2 Parse the Document for a json string
+    progress_bar = App.GUI.SetProgressBar(progress_bar, 2, "Task 2/4")
+
+    json_string = JsonVBA.ConvertToJson(ParseDocument(file_path, template_id))
+
+    ' Task 3 Convert json string into specification object
+    progress_bar = App.GUI.SetProgressBar(progress_bar, 3, "Task 3/4")
+
+    ' Create specification from json string
+    spec.JsonToObject json_string
+    spec.MaterialId = material_id
+    spec.SpecType = template_id
+    spec.Revision = Revision
+    If machine_id = nullstr Then
+        spec.Revision = "0"
+        spec.MachineId = "BASE"
+    Else
+        spec.MachineId = machine_id
+    End If
+
+    ' Task 4 Save specification object to the database
+    progress_bar = App.GUI.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
+
+    ' Save Specification to database
+    ParseExcelDocument = SpecManager.SaveNewSpecification(spec, CStr(description))
+End Function
+
+Public Function ParseJsonDocument(spec As Specification, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
+    
+    Dim json_string As String
+    Dim file_path As String
+
+    ' Select file path
+    If file_dir = "" Then
+        PromptHandler.Error "Must enter a file directory"
+    Else
+        file_path = PromptHandler.SelectSpecifcationFile
+    End If
+
+    ' Read json from file
+    json_string = JsonVBA.ReadJsonFileToString(file_path)
+
+    ' Create specification from json string
+    spec.JsonToObject json_string
+    spec.MaterialId = material_id
+    spec.SpecType = template_id
+    spec.Revision = Revision
+    If machine_id = nullstr Then
+        PromptHandler.Error "Must enter machine_id when loading from json."
+    Else
+        spec.MachineId = machine_id
+    End If
+
+    ' Save Specification to database
+    ParseJsonDocument = SpecManager.SaveNewSpecification(spec, CStr(description))
+
+End Function
+
+Public Sub CreateTemplateFromFile()
+    Dim file_path As String
+    Dim Template As SpecificationTemplate
+
+    ' Start the application
+    App.Start
+
+    ' Prompt user to select file path
+    file_path = PromptHandler.SelectSpecifcationFile
+
+    ' Spec_Type will be name of file selected
+    Set Template = Factory.CreateTemplateFromJsonFile(file_path)
+
+    ' Parse database return value.
+    If SpecManager.SaveSpecificationTemplate(Template) <> DB_PUSH_SUCCESS Then
+        PromptHandler.Error "Failed to create " & Template.SpecType
+        Exit Sub
+    End If
+    PromptHandler.Success Template.SpecType & " Created Successfully!"
 End Sub
 
 Public Function ParseDocument(path As String, template_type As String) As Object
@@ -143,27 +204,7 @@ ParsingError:
     PromptHandler.Error "Parsing Error @" & CStr(Arr(i, 0))
 End Function
 
-Public Sub CreateTemplateFromFile()
-    Dim file_path As String
-    Dim Template As SpecificationTemplate
-
-    ' Start the application
-    App.Start
-
-    ' Prompt user to select file path
-    file_path = PromptHandler.SelectSpecifcationFile
-
-    ' Spec_Type will be name of file selected
-    Set Template = Factory.CreateTemplateFromJsonFile(file_path)
-
-    ' Parse database return value.
-    If SpecManager.SaveSpecificationTemplate(Template) <> DB_PUSH_SUCCESS Then
-        PromptHandler.Error "Failed to create " & Template.SpecType
-        Exit Sub
-    End If
-    PromptHandler.Success Template.SpecType & " Created Successfully!"
-End Sub
-
+' ARCHIVED -------------------------------------------------------------------------
 'Public Function ParsePsf(path As String) As Object
 '    Dim wb As Workbook
 '    Dim strFile As String

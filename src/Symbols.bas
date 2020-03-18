@@ -3,27 +3,30 @@ Option Explicit
 ' String Constants
 Public Const PUBLIC_DIR               As String = "S:\Data Manager"
 Public Const SM_PATH                  As String = "C:\Users\"
-Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+Public Const DATABASE_PATH            As String = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\Database\SAATI_Spec_Manager.db3"
+'Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+Public Const TEST_DATABASE_PATH       As String = ""
 Public Const nullstr                  As String = vbNullString
 
 ' SPEC MANAGER ERROR DESCRIPTIONS:
-Public Const SM_SEARCH_SUCCESS     As Long = 0
-Public Const SM_SEARCH_FAILURE     As Long = 1
-Public Const SM_SEARCH_AGAIN       As Long = 3
-Public Const SM_REGEX_ERROR        As Long = 4
-Public Const SM_MATERIAL_EXISTS    As Long = 5
+Public Const SM_SEARCH_SUCCESS     As Long = 440
+Public Const SM_SEARCH_FAILURE     As Long = 441
+Public Const SM_SEARCH_AGAIN       As Long = 443
+Public Const SM_REGEX_ERROR        As Long = 444
+Public Const SM_MATERIAL_EXISTS    As Long = 445
+Public Const SM_INTERNAL_ERROR     As Long = 446
 
 ' DATABASE ERROR DESCRIPTIONS:
-Public Const DB_PUSH_SUCCESS            As Long = 0
-Public Const DB_PUSH_FAILURE            As Long = 1
-Public Const DB_DELETE_SUCCESS          As Long = 2
-Public Const DB_DELETE_FAILURE          As Long = 3
-Public Const DB_SELECT_SUCCESS          As Long = 4
-Public Const DB_SELECT_FAILURE          As Long = 5
-Public Const DB_PUSH_DENIED             As Long = 6
-Public Const DB_DELETE_DENIED           As Long = 7
-Public Const DB_TRANSACTION_FAILURE     As Long = 8
-Public Const DB_TRANSACTION_SUCCESS     As Long = 9
+Public Const DB_PUSH_SUCCESS            As Long = 900
+Public Const DB_PUSH_FAILURE            As Long = 901
+Public Const DB_DELETE_SUCCESS          As Long = 902
+Public Const DB_DELETE_FAILURE          As Long = 903
+Public Const DB_SELECT_SUCCESS          As Long = 904
+Public Const DB_SELECT_FAILURE          As Long = 905
+Public Const DB_PUSH_DENIED             As Long = 906
+Public Const DB_DELETE_DENIED           As Long = 907
+Public Const DB_TRANSACTION_FAILURE     As Long = 908
+Public Const DB_TRANSACTION_SUCCESS     As Long = 909
 
 ' ACCOUNT PRIVLEDGE LEVELS
 Public Const USER_MANAGER          As Long = 21

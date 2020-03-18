@@ -2,8 +2,8 @@ VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} formMainMenu 
    Caption         =   "SAATI Spec-Manager"
    ClientHeight    =   4650
-   ClientLeft      =   48
-   ClientTop       =   408
+   ClientLeft      =   45
+   ClientTop       =   405
    ClientWidth     =   5520
    OleObjectBlob   =   "formMainMenu.frx":0000
    StartUpPosition =   1  'CenterOwner
@@ -13,62 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

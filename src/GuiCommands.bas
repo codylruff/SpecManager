@@ -20,6 +20,8 @@ Private Sub HideAllSheets(wb As Workbook)
             'Pass
         ElseIf ws Is shtDeveloper1 Then
             'Pass
+        ElseIf ws Is shtLog Then
+            'Pass
         ElseIf ws.Visible = xlSheetVisible Then
             ws.Visible = xlSheetHidden
             Logger.Log ws.Name & " was hidden."
@@ -225,4 +227,67 @@ Public Sub DocumentPrinterToPdf_Test()
     
 SaveFileError:
     Logger.Log "Failed to save file PDF Fail", TestLog
+End Sub
+
+Public Sub OpenConfiguration()
+' Opens the configuration panel
+    App.Start
+    AccessControl.ConfigControl
+End Sub
+
+Public Sub GoToPlanning()
+' Opens planning worksheet
+    shtDeveloper1.Activate
+End Sub
+
+' Makes a copy of the current spec, with a new material id
+Public Sub CopyCurrentSpecification()
+    Dim new_material_id As String
+    Dim ret_val As Long
+    new_material_id = PromptHandler.UserInput(SingleLineText, "Material Id", "Enter a material id for copy?")
+    ret_val = SpecManager.CreateSpecificationFromCopy(App.current_spec, new_material_id)
+    If ret_val = DB_PUSH_SUCCESS Then
+        PromptHandler.Success "Copied Successfully"
+    Else
+        PromptHandler.Error "Copy Failed"
+    End If
+End Sub
+
+Public Sub LoadExcelDocument()
+    DocumentParser.LoadNewDocument "excel"
+End Sub
+
+Public Sub LoadJsonDocument()
+    DocumentParser.LoadNewDocument "json"
+End Sub
+
+Public Sub CreateBallisticsDocument()
+    Dim material_id As String
+    Dim package_length_inches As Double
+    Dim fabric_width_inches As Double
+    Dim conditioned_weight_gsm As Double
+    Dim target_psf As Double
+    Dim ret_val As Long
+    Dim machine_id As String
+
+    App.Start
+    material_id = shtDeveloper.Range("material_id").value ' this is the material id (SAP Code)
+    package_length_inches = shtDeveloper.Range("package_length_inches")
+    fabric_width_inches = shtDeveloper.Range("fabric_width_inches")
+    conditioned_weight_gsm = shtDeveloper.Range("conditioned_weight_gsm")
+    target_psf = shtDeveloper.Range("target_psf")
+    machine_id = CStr(shtDeveloper.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
+
+    ret_val = SpecManager.BuildBallisticTestSpec(material_id, package_length_inches, fabric_width_inches, conditioned_weight_gsm, target_psf, machine_id, False)
+    
+    ' Parse return value.
+    If ret_val = DB_PUSH_SUCCESS Then
+        PromptHandler.Success "New Specification Saved."
+    ElseIf ret_val = SM_MATERIAL_EXISTS Then
+        PromptHandler.Error "Material Already Exists."
+    Else
+        PromptHandler.Error "Error Saving Specification."
+    End If
+    
+    App.Shutdown
 End Sub

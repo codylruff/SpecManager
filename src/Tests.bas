@@ -36,7 +36,7 @@ Sub AllTests()
         .Log EditSpecification_Test, TestLog
         .Log ViewSpecification_AfterEdit_Test, TestLog
         ' Delete test template
-        .Log "Delete Test Template Returned : " & Tests.DeleteTestTemplate, TestLog
+        .Log Utils.FormatTestResult("Delete Template Test", IIf(Tests.DeleteTestTemplate = DB_DELETE_SUCCESS, "PASS", "FAIL")), TestLog
         ' Account Control
         ' TODO: This feature has not been implemented yet.
         App.DeInitializeTestSuiteCredentials
@@ -334,3 +334,5 @@ Public Sub BuildBallisticPackage_Test()
         Debug.Print "Package Mass [lbm] : " & .PackageMass
     End With
 End Sub
+
+    

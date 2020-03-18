@@ -142,6 +142,11 @@ Public Function PropertiesJson() As String
     PropertiesJson = JsonVBA.ConvertToJson(Me.Properties)
 End Function
 
+Public Function GetPropertyList() As Variant
+' Return an array of property names
+    GetPropertyList = Me.Properties.keys()
+End Function
+
 Public Function header() As Variant
     Dim Arr() As String
     Dim i As Long
