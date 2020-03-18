@@ -320,19 +320,4 @@ Public Sub SelectAllWhere_Test()
     Debug.Print df.ToString
 End Sub
 
-Public Sub BuildBallisticPackage_Test()
-    Dim package As BallisticPackage
-    App.Start
-    Set package = SpecManager.BuildBallisticTestSpec("test", 15, 63, 173, 0.75)
-    App.Shutdown
-    With package
-        Debug.Print "Target Weight [psf]: " & .TargetPsf
-        Debug.Print "Conditioned Weight [gsm] : " & .ConditionedWeight
-        Debug.Print "Package Length [in] : " & .PackageLengthInches
-        Debug.Print "Actual Weight [psf] : " & .ActualPsf
-        Debug.Print "Minimum Sample Length [LY] : " & .MinRequiredSampleLength
-        Debug.Print "Package Mass [lbm] : " & .PackageMass
-    End With
-End Sub
-
     

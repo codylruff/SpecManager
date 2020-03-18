@@ -26,9 +26,9 @@ Private saving_enabled  As Boolean
 Private Sub Class_Initialize()
 ' Constructor
     ImmediateLog = RuntimeLog
-    log_level = LOG_ALL
+    log_level = LOG_LOW
     saving_enabled = False
-    ws_log_enabled = True
+    ws_log_enabled = False
 End Sub
 
 Public Sub EnableWsLogging()
