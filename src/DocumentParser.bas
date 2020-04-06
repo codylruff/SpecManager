@@ -19,12 +19,12 @@ Public Sub LoadNewDocument(file_type As String)
     App.Start
 
     ' Initialize document parameters
-    material_id = CStr(shtDeveloper.Range("material_id").value) ' this is the material id (SAP Code)
-    description = shtDeveloper.Range("description").text        ' This is the material description from SAP
-    file_dir = CStr(shtDeveloper.Range("file_dir").value)       ' This is not the file path it is the file directory
-    machine_id = CStr(shtDeveloper.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
-    Revision = CStr(shtDeveloper.Range("revision").value)       ' This is the document revision number
-    template_id = CStr(shtDeveloper.Range("template_id").value) ' This is the template the document is based on
+    material_id = CStr(shtAdmin.Range("material_id").value) ' this is the material id (SAP Code)
+    description = shtAdmin.Range("description").text        ' This is the material description from SAP
+    file_dir = CStr(shtAdmin.Range("file_dir").value)       ' This is not the file path it is the file directory
+    machine_id = CStr(shtAdmin.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
+    Revision = CStr(shtAdmin.Range("revision").value)       ' This is the document revision number
+    template_id = CStr(shtAdmin.Range("template_id").value) ' This is the template the document is based on
     
     ' Initialize an empty specification
     Set spec = CreateSpecification
