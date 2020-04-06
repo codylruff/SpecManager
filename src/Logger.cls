@@ -19,7 +19,6 @@ Private log_level       As LogLevel
 Private folder_path     As String
 Private file_path       As String
 Private log_enabled     As Boolean
-Private ws_log_enabled  As Boolean
 Private pImmediateLog   As LogType
 Private saving_enabled  As Boolean
 
@@ -28,11 +27,6 @@ Private Sub Class_Initialize()
     ImmediateLog = RuntimeLog
     log_level = LOG_LOW
     saving_enabled = False
-    ws_log_enabled = False
-End Sub
-
-Public Sub EnableWsLogging()
-    ws_log_enabled = True
 End Sub
 
 Public Sub EnableSaving()
@@ -121,7 +115,6 @@ End Sub
 Private Function AddLine(text As String) As Variant
     Dim line As Variant
 
-    If ws_log_enabled Then WsLog (text)
     line = Array(TimeInMS, text)
     AddLine = line
     

@@ -1,10 +1,10 @@
-Attribute VB_Name = "Symbols"
+Attribute VB_Name = "Globals"
 Option Explicit
 ' String Constants
 Public Const PUBLIC_DIR               As String = "S:\Data Manager"
 Public Const SM_PATH                  As String = "C:\Users\"
-Public Const DATABASE_PATH            As String = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\Database\SAATI_Spec_Manager.db3"
-'Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+'Public Const DATABASE_PATH            As String = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\Database\SAATI_Spec_Manager.db3"
+Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
 Public Const TEST_DATABASE_PATH       As String = ""
 Public Const nullstr                  As String = vbNullString
 

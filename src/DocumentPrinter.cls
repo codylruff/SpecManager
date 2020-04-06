@@ -65,7 +65,7 @@ Public Sub WriteLine(ParamArray var() As Variant)
          End If
     Next
     If Me.FormId Is Nothing Then
-        shtDeveloper1.Range("console") = shtDeveloper1.Range("console") & s & vbNewLine
+        shtPlanning.Range("console") = shtPlanning.Range("console") & s & vbNewLine
     Else
         Me.FormId.txtConsole.text = FormId.txtConsole.text & s & vbNewLine
     End If
@@ -81,6 +81,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
         Case "Warping Requirements"
             LoadWarpingRequirements spec, prod_order
         Case "Weaving RBA"
+            
             LoadRbaToSheet App.specs, prod_order
         Case "Testing Requirements"
             LoadTestingRequirementsToSheet spec, sht, prod_order, package_variant
@@ -137,10 +138,10 @@ End Function
 Public Sub ListObjects(dict As Object)
 ' Given a dictionary of documents, list the docs by type in the console
     Dim T As Variant
-    shtDeveloper1.Range("console") = nullstr
+    shtPlanning.Range("console") = nullstr
     For Each T In dict
         If Me.FormId Is Nothing Then
-            shtDeveloper1.Range("console") = shtDeveloper1.Range("console") & CStr(T) & vbNewLine
+            shtPlanning.Range("console") = shtPlanning.Range("console") & CStr(T) & vbNewLine
         Else
             Me.FormId.txtConsole.text = FormId.txtConsole.text & CStr(T) & vbNewLine
         End If
@@ -414,15 +415,21 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     For Each item In App.DocumentsByUID
         If Left(item, 12) = "Weaving RBA(" Then Set spec = App.DocumentsByUID(item)
     Next item
-    
-    If Utils.IsNothing(spec) Then Exit Sub
-    Utils.Insert shtRBA.Range("article_code"), spec.MaterialId
-    Utils.Insert shtRBA.Range("material_description"), spec.MaterialDescription
-    Utils.Insert shtRBA.Range("revision"), spec.Revision
+    ' Reset the sheet values
+    ResetSheetValues App.templates("Weaving RBA"), shtRBA
+    Utils.Insert shtRBA.Range("article_code"), App.current_spec.MaterialId
+    Utils.Insert shtRBA.Range("material_description"), App.current_spec.MaterialDescription
+    Utils.Insert shtRBA.Range("revision"), nullstr
     Utils.Insert shtRBA.Range("qc_sample_size"), qc_sample
     Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
     Utils.Insert shtRBA.Range("work_order"), prod_order
     Utils.Insert shtRBA.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
+    Utils.Insert shtRBA.Range("loom_id"), nullstr
+
+    If Utils.IsNothing(spec) Then Exit Sub
+    
+    ' Load the spec
+    Utils.Insert shtRBA.Range("revision"), spec.Revision
     Utils.Insert shtRBA.Range("loom_id"), spec.MachineId
     
     LoadCustomSheet spec, shtRBA
@@ -594,4 +601,15 @@ Private Sub LoadGenericSpecificationDocument(spec As Specification, sht As Works
 
 End Sub
 
+Public Sub ResetSheetValues(spec As SpecificationTemplate, ws As Worksheet)
+' Resets spec values in a sheet to nullstr
+    Dim k As Variant
+    With spec
+        On Error Resume Next
+        For Each k In .Properties
+            ws.Range(k).value = nullstr
+        Next k
+        On Error GoTo 0
+    End With
+End Sub
 

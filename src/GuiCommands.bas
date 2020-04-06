@@ -18,9 +18,7 @@ Private Sub HideAllSheets(wb As Workbook)
     For Each ws In wb.Worksheets
         If ws Is shtStart Then
             'Pass
-        ElseIf ws Is shtDeveloper1 Then
-            'Pass
-        ElseIf ws Is shtLog Then
+        ElseIf ws Is shtPlanning Then
             'Pass
         ElseIf ws.Visible = xlSheetVisible Then
             ws.Visible = xlSheetHidden
@@ -52,9 +50,7 @@ End Sub
 
 Public Sub InitializeApplication()
     SpecManager.StartApp
-    'ActionLog.LogUserAction "Logged In"
-    shtDeveloper.Visible = xlSheetVeryHidden
-    'formConsole.show vbModeless
+    shtAdmin.Visible = xlSheetVeryHidden
     GoToMain
 End Sub
 
@@ -146,7 +142,7 @@ End Sub
 Public Sub CloseConfig()
 'Performs actions needed to close config.
     ThisWorkbook.Save
-    shtDeveloper.Visible = xlSheetVeryHidden
+    shtAdmin.Visible = xlSheetVeryHidden
     Application.VBE.MainWindow.Visible = False
     Application.DisplayAlerts = False
     GuiCommands.GoToMain
@@ -237,7 +233,7 @@ End Sub
 
 Public Sub GoToPlanning()
 ' Opens planning worksheet
-    shtDeveloper1.Activate
+    shtPlanning.Activate
 End Sub
 
 ' Makes a copy of the current spec, with a new material id
@@ -271,12 +267,12 @@ Public Sub CreateBallisticsDocument()
     Dim machine_id As String
 
     App.Start
-    material_id = shtDeveloper.Range("material_id").value ' this is the material id (SAP Code)
-    package_length_inches = shtDeveloper.Range("package_length_inches")
-    fabric_width_inches = shtDeveloper.Range("fabric_width_inches")
-    conditioned_weight_gsm = shtDeveloper.Range("conditioned_weight_gsm")
-    target_psf = shtDeveloper.Range("target_psf")
-    machine_id = CStr(shtDeveloper.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
+    material_id = shtAdmin.Range("material_id").value ' this is the material id (SAP Code)
+    package_length_inches = shtAdmin.Range("package_length_inches")
+    fabric_width_inches = shtAdmin.Range("fabric_width_inches")
+    conditioned_weight_gsm = shtAdmin.Range("conditioned_weight_gsm")
+    target_psf = shtAdmin.Range("target_psf")
+    machine_id = CStr(shtAdmin.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
 
     ret_val = SpecManager.BuildBallisticTestSpec(material_id, package_length_inches, fabric_width_inches, conditioned_weight_gsm, target_psf, machine_id, False)
     
