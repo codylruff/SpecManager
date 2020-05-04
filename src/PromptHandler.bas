@@ -62,6 +62,10 @@ Public Sub Error(message_text As String)
     If Not App.TestingMode Then App.GUI.ShowDialog message_text, vbCritical, "Error Message", ThemeBg:="#f44336"
 End Sub
 
+Public Sub FNI()
+    Error("This function has not been implemented yet.")
+End Sub
+
 Public Sub Success(message_text As String)
     If Not App.TestingMode Then App.GUI.ShowDialog message_text, vbOkOnly, "Success!"
 End Sub
