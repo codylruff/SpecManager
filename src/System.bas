@@ -157,7 +157,7 @@ Public Function FN_GET_UUID() As String
 
 FN_GET_UUID_Error:
     App.gMsg = err.description & ": in procedure FN_GET_UUID of Module mod_system_"
-    App.GUI.ShowDialogRich "Error " & err.Number & " (" & App.gMsg & ")", vbExclamation
+    GUI.Krish.ShowDialogRich "Error " & err.Number & " (" & App.gMsg & ")", vbExclamation
 End Function
 
 Public Function VSImport() As String

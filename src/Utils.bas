@@ -307,7 +307,7 @@ Function CreateNewSheet(shtName As String, Optional DeleteOldSheet As Boolean = 
 'test
 ' Creates a new worksheet with the given name
     ' Turn on Performance Mode
-    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
 
     Dim Exists As Boolean, i As Integer
     With ThisWorkbook
@@ -328,17 +328,17 @@ Function CreateNewSheet(shtName As String, Optional DeleteOldSheet As Boolean = 
     End With
     Set CreateNewSheet = ThisWorkbook.Sheets(shtName)
     ' Turn off Performance Mode
-    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
 End Function
 
 Function RemoveSheet(ws As Worksheet) As Boolean
 
     On Error GoTo ErrorHandler
     ' Turn on Performance Mode
-    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
     ws.Delete
     ' Turn off Performance Mode
-    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
     RemoveSheet = True
     Exit Function
 ErrorHandler:
@@ -441,7 +441,7 @@ Sub SaveAll()
     Dim xWb As Workbook
 
     ' Turn on Performance Mode
-    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
 
     For Each xWb In Application.Workbooks
         If Not xWb.ReadOnly And Windows(xWb.Name).Visible Then
@@ -449,7 +449,7 @@ Sub SaveAll()
         End If
     Next
     ' Turn off Performance Mode
-    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
 End Sub
 
 Function TestForUnsavedChanges() As Boolean

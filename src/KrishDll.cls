@@ -423,7 +423,7 @@ Public Function OpenFileInlineFilterArray(title As String, Optional Filters As V
 ' Author    : KRISH
 ' Purpose   : File open dialog with inline array filter.
 ' Returns   : String array
-' Usage     : App.GUI.OpenFileInlineFilterArray("Open Png files",Array("Png Pictures only |*.png"), false)
+' Usage     : GUI.Krish.OpenFileInlineFilterArray("Open Png files",Array("Png Pictures only |*.png"), false)
 '---------------------------------------------------------------------------------------
 '
     On Error Resume Next
@@ -453,7 +453,7 @@ Public Function OpenFile(title As String, Optional FilterUsesInlineArray As Obje
 ' Date      : 05/02/2019
 ' Purpose   : allows to open for specific files. Uses inline Array() for filter
 ' Returns   : FilePath of the selected file, or jsonArray if multiFiles are requested
-' Usage     : App.GUI.OpenFile("Open Png files",Array("Png Pictures only |*.png"), false)
+' Usage     : GUI.Krish.OpenFile("Open Png files",Array("Png Pictures only |*.png"), false)
 '---------------------------------------------------------------------------------------
 '
 
@@ -473,7 +473,7 @@ Public Function OpenFileA(title As String, FilterUsesStringArray() As String, Op
 ' Date      : 05/02/2019
 ' Purpose   : allows to open for specific files. Uses a string array for filters
 ' Returns   : FilePath of the selected file, or jsonArray if multiFiles are requested
-' Usage     : App.GUI.OpenFile("Open Png files",Array("Png Pictures only |*.png"), false)
+' Usage     : GUI.Krish.OpenFile("Open Png files",Array("Png Pictures only |*.png"), false)
 '---------------------------------------------------------------------------------------
 '
 
@@ -980,7 +980,7 @@ End Function
 
 Public Function CreateInputBox(input_type As InputBoxType, title_text As String, message_text As String) As Variant
     
-    CreateInputBox = App.GUI.DLL.Dialog.showinputbox(Type:=input_type, _
+    CreateInputBox = GUI.Krish.DLL.Dialog.showinputbox(Type:=input_type, _
                         title:=title_text, message:=message_text, ThemeBg:="", themeForeColour:="")
 End Function
 

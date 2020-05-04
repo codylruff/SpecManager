@@ -434,7 +434,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     'RestartApp
     App.Start
     ' Turn on Performance Mode
-    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
 
     Set dict = CreateObject("Scripting.Dictionary")
     Set ws = Utils.CreateNewSheet(spec_type & " Dump " & Format(CStr(Now()), "dd-mm-yy"), True)
@@ -450,7 +450,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     ws.Range(Cells(1, 1), Cells(1, ArrayLength(props))).Columns.AutoFit
     
     ' Turn off Performance Mode
-    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
     App.Shutdown
 End Sub
 

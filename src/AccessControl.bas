@@ -56,7 +56,7 @@ Public Sub ConfigControl()
     
     If Open_Config(App.current_user) Then
         ' Turn on Performance Mode
-        If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
+        If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
         If Windows.Count <> 1 Then
             For Each w In Windows
                 If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
@@ -68,7 +68,7 @@ Public Sub ConfigControl()
         GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
         ThisWorkbook.Sheets("Administrator").Activate
         ' Turn off Performance Mode
-        If App.PerformanceModeEnabled Then App.PerformanceMode (False)
+        If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
     End If
 End Sub
 
@@ -111,7 +111,7 @@ End Sub
 
 Public Sub Hashing_Test()
     Dim input_text As String
-    input_text = App.GUI.CreateInputBox(Password, "Password Hash Test", "Password : ")
+    input_text = GUI.Krish.CreateInputBox(Password, "Password Hash Test", "Password : ")
     Debug.Print input_text & " : " & GetSHA1Hash(input_text)
 End Sub
 

@@ -49,17 +49,17 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
 End Function
 
 Private Function question(question_text As String) As Boolean
-    question = IIf(App.GUI.ShowDialog(question_text, vbYesNo, "Question", "Yes", "No") = vbYes, True, False)
+    question = IIf(GUI.Krish.ShowDialog(question_text, vbYesNo, "Question", "Yes", "No") = vbYes, True, False)
 End Function
 
 Public Sub AccessDenied()
 ' Shows an access denied prompt
-    If Not App.TestingMode Then App.GUI.ShowDialog "Access Denied", vbCritical, "Access Control", ThemeBg:="#f44336"
+    If Not App.TestingMode Then GUI.Krish.ShowDialog "Access Denied", vbCritical, "Access Control", ThemeBg:="#f44336"
 End Sub
 
 Public Sub Error(message_text As String)
 ' Shows a handled error message
-    If Not App.TestingMode Then App.GUI.ShowDialog message_text, vbCritical, "Error Message", ThemeBg:="#f44336"
+    If Not App.TestingMode Then GUI.Krish.ShowDialog message_text, vbCritical, "Error Message", ThemeBg:="#f44336"
 End Sub
 
 Public Sub FNI()
@@ -67,11 +67,11 @@ Public Sub FNI()
 End Sub
 
 Public Sub Success(message_text As String)
-    If Not App.TestingMode Then App.GUI.ShowDialog message_text, vbOkOnly, "Success!"
+    If Not App.TestingMode Then GUI.Krish.ShowDialog message_text, vbOkOnly, "Success!"
 End Sub
 
 Public Function UserInput(input_type As InputBoxType, title_text As String, message_text As String) As Variant
-    UserInput = App.GUI.CreateInputBox(input_type, title_text, message_text)
+    UserInput = GUI.Krish.CreateInputBox(input_type, title_text, message_text)
 End Function
 
 Public Function GetPassword() As String
@@ -111,5 +111,5 @@ End Function
 
 Public Function SelectSpecifcationFile() As String
 ' Select an specification file from the file dialog.
-    SelectSpecifcationFile = App.GUI.OpenFile("Select Specification Document . . .")
+    SelectSpecifcationFile = GUI.Krish.OpenFile("Select Specification Document . . .")
 End Function

@@ -84,18 +84,18 @@ Public Function ParseExcelDocument(spec As Specification, material_id As String,
     End If
     
     ' Initialize the progress bar
-    progress_bar = App.GUI.ShowProgressBar(4)
+    progress_bar = GUI.Krish.ShowProgressBar(4)
 
     ' Task 1 Extract material Id from file name.
-    progress_bar = App.GUI.SetProgressBar(progress_bar, 1, "Task 1/4")
+    progress_bar = GUI.Krish.SetProgressBar(progress_bar, 1, "Task 1/4")
     
     ' Task 2 Parse the Document for a json string
-    progress_bar = App.GUI.SetProgressBar(progress_bar, 2, "Task 2/4")
+    progress_bar = GUI.Krish.SetProgressBar(progress_bar, 2, "Task 2/4")
 
     json_string = JsonVBA.ConvertToJson(ParseDocument(file_path, template_id))
 
     ' Task 3 Convert json string into specification object
-    progress_bar = App.GUI.SetProgressBar(progress_bar, 3, "Task 3/4")
+    progress_bar = GUI.Krish.SetProgressBar(progress_bar, 3, "Task 3/4")
 
     ' Create specification from json string
     spec.JsonToObject json_string
@@ -110,7 +110,7 @@ Public Function ParseExcelDocument(spec As Specification, material_id As String,
     End If
 
     ' Task 4 Save specification object to the database
-    progress_bar = App.GUI.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
+    progress_bar = GUI.Krish.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
 
     ' Save Specification to database
     ParseExcelDocument = SpecManager.SaveNewSpecification(spec, CStr(description))

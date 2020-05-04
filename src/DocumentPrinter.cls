@@ -75,7 +75,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
            Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
 ' Print object to specified worksheet starting in cell "A1"
     ' Disable updates to the gui during processing
-    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
     ' This tree selects any specs which have an associated custom worksheet template
     Select Case spec.SpecType
         Case "Warping Requirements"
@@ -99,7 +99,7 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
     End Select
     
     ' Enable updates to the gui after processing
-    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
     
 End Sub
 
@@ -186,7 +186,7 @@ Public Sub WriteAllDocuments(Optional order_number As String = nullstr, Optional
     Dim T As Variant
 
     ' Toggle Performance Mode
-    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
 
     For Each T In App.specs
         Set spec = App.specs.item(T)
@@ -197,7 +197,7 @@ Public Sub WriteAllDocuments(Optional order_number As String = nullstr, Optional
     Next T
 
     ' Turn off Performance Mode
-    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
 
 End Sub
 
@@ -208,7 +208,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     Dim doc As Variant
 
     ' Toggle Performance Mode
-    If Not App.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
     ' Print special requirements document if needed. Specials should print out on top!
     If CheckForSpecialRequirements(App.current_spec.MaterialId) Then App.printer.PrintSheet SheetByName(App.current_spec.MaterialId)
     
@@ -233,7 +233,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     
     ' Turn off Performance Mode
     GuiCommands.ResetExcelGUI
-    If App.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
 
 End Sub
 

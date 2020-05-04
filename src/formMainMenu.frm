@@ -56,7 +56,7 @@ Private Sub cmdCreateTemplate_Click()
 End Sub
 
 Private Sub cmdDatabaseQuery_Click()
-    App.GUI.ShowDialog "Feature Under Development.", vbOkOnly, "Under Development"
+    GUI.Krish.ShowDialog "Feature Under Development.", vbOkOnly, "Under Development"
 End Sub
 
 Private Sub cmdExit_Click()
