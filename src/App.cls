@@ -36,6 +36,7 @@ Public gAppGuid                  As String
 Public version                   As String
 Public current_user              As Account
 Public current_spec              As Specification
+Public forms                     As VBA.Collection
 Public templates                 As VBA.Collection
 Public specs                     As Object
 Public printer                   As DocumentPrinter
@@ -86,11 +87,25 @@ Sub Start()
     Set templates = SpecManager.GetAllTemplates
     Set specs = CreateObject("Scripting.Dictionary")
     Set DocumentsByUID_ = CreateObject("Scripting.Dictionary")
+    Set forms = SetUpForms()
     Set printer = New DocumentPrinter
     Set current_template = New SpecificationTemplate
     TestingMode = False
     PerformanceModeEnabled = False
 End Sub
+
+Private Function SetUpForms() As VBA.Collection
+' Prepare forms for use
+    Dim coll As VBA.Collection
+    Set coll = New VBA.Collection
+    With coll
+        .Add Factory.CreateProtectionPlanningForm, "Protection Planning"
+        .Add Factory.CreateFiltrationPlanningForm, "Filtration Planning"
+        .Add Factory.CreateAdminForm, "Admin Control Panel"
+        .Add Factory.SpecificationConfigForm, "Specification Config"
+    End With
+    Set SetUpForms = coll
+End Function
 
 Public Sub RefreshObjects()
     Set current_spec = New Specification
@@ -128,6 +143,7 @@ Public Sub Shutdown()
     Set DocumentsByUID_ = Nothing
     Set printer = Nothing
     Set current_template = Nothing
+    Set forms = Nothing
     Logger.SaveAllLogs
 End Sub
 
