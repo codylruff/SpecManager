@@ -276,7 +276,7 @@ Function DeleteTestTemplate() As Long
     Exit Function
 DbDeleteFailException:
     Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
-    DeleteTestTemplate = DB_DELETE_FAILURE
+    DeleteTestTemplate = DB_DELETE_ERR
 End Function
 
 Public Sub GetFiles_Test()

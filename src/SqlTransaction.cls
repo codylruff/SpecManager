@@ -39,7 +39,7 @@ Public Function Begin() As Long
     Begin = DB_TRANSACTION_SUCCESS
 DbTransactionFailException:
     Logger.Log "SQL BEGIN Error : DbTransactionFailException", SqlLog
-    Begin = DB_TRANSACTION_FAILURE
+    Begin = DB_TRANSACTION_ERR
 End Function
 
 Public Function Rollback() As Long
@@ -50,7 +50,7 @@ Public Function Rollback() As Long
     Rollback = DB_TRANSACTION_SUCCESS
 DbTransactionFailException:
     Logger.Log "SQL ROLLBACK Error : DbTransactionFailException", SqlLog
-    Rollback = DB_TRANSACTION_FAILURE
+    Rollback = DB_TRANSACTION_ERR
 End Function
 
 Public Function Commit() As Long
@@ -61,7 +61,7 @@ Public Function Commit() As Long
     Commit = DB_TRANSACTION_SUCCESS
 DbTransactionFailException:
     Logger.Log "SQL COMMIT Error : DbTransactionFailException", SqlLog
-    Commit = DB_TRANSACTION_FAILURE
+    Commit = DB_TRANSACTION_ERR
 End Function
 
 Function ExecuteSQLSelect(SQLstmt As String) As DataFrame

@@ -3,30 +3,28 @@ Option Explicit
 ' String Constants
 Public Const PUBLIC_DIR               As String = "S:\Data Manager"
 Public Const SM_PATH                  As String = "C:\Users\"
-'Public Const DATABASE_PATH            As String = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\Database\SAATI_Spec_Manager.db3"
-Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+Public Const DATABASE_PATH            As String = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\Database\SAATI_Spec_Manager.db3"
+'Public Const DATABASE_PATH            As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
 Public Const TEST_DATABASE_PATH       As String = ""
 Public Const nullstr                  As String = vbNullString
 
 ' SPEC MANAGER ERROR DESCRIPTIONS:
-Public Const SM_SEARCH_SUCCESS     As Long = 440
-Public Const SM_SEARCH_FAILURE     As Long = 441
-Public Const SM_SEARCH_AGAIN       As Long = 443
-Public Const SM_REGEX_ERROR        As Long = 444
-Public Const SM_MATERIAL_EXISTS    As Long = 445
-Public Const SM_INTERNAL_ERROR     As Long = 446
-
-' DATABASE ERROR DESCRIPTIONS:
-Public Const DB_PUSH_SUCCESS            As Long = 900
-Public Const DB_PUSH_FAILURE            As Long = 901
-Public Const DB_DELETE_SUCCESS          As Long = 902
-Public Const DB_DELETE_FAILURE          As Long = 903
-Public Const DB_SELECT_SUCCESS          As Long = 904
-Public Const DB_SELECT_FAILURE          As Long = 905
-Public Const DB_PUSH_DENIED             As Long = 906
-Public Const DB_DELETE_DENIED           As Long = 907
-Public Const DB_TRANSACTION_FAILURE     As Long = 908
-Public Const DB_TRANSACTION_SUCCESS     As Long = 909
+' Error Id + vbObjectError (ie. -2147221504)
+Public Const SM_SEARCH_SUCCESS          As Long = -2147221064
+Public Const SEARCH_ERR                 As Long = -2147221063
+Public Const REGEX_ERR                  As Long = -2147221062
+Public Const MATERIAL_EXISTS_ERR        As Long = -2147221061
+Public Const INTERNAL_ERR               As Long = -2147221060
+Public Const DB_PUSH_SUCCESS            As Long = -2147220604
+Public Const DB_PUSH_ERR                As Long = -2147220603
+Public Const DB_DELETE_SUCCESS          As Long = -2147220602
+Public Const DB_DELETE_ERR              As Long = -2147220601
+Public Const DB_SELECT_SUCCESS          As Long = -2147220600
+Public Const DB_SELECT_ERR              As Long = -2147220599
+Public Const DB_PUSH_DENIED_ERR_ERR     As Long = -2147220598
+Public Const DB_DELETE_DENIED_ERR_ERR   As Long = -2147220597
+Public Const DB_TRANSACTION_ERR         As Long = -2147220596
+Public Const DB_TRANSACTION_SUCCESS     As Long = -2147220595
 
 ' ACCOUNT PRIVLEDGE LEVELS
 Public Const USER_MANAGER          As Long = 21

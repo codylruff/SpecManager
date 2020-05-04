@@ -102,7 +102,7 @@ End Sub
 
 Public Sub ChangeSecret(User As Account)
 ' Changes a password in the db (SHA1 hash)
-    If DataAccess.ChangeUserSecret(User.Name, GetSHA1Hash(PromptHandler.ChangePassword)) = DB_PUSH_FAILURE Then
+    If DataAccess.ChangeUserSecret(User.Name, GetSHA1Hash(PromptHandler.ChangePassword)) = DB_PUSH_ERR Then
         PromptHandler.Error "Password was not changed! Contact Admin"
     Else
         PromptHandler.Success "Password was changed succesfully!"

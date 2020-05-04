@@ -60,13 +60,13 @@ Sub MaterialInput(material_id As String)
         Exit Sub
     End If
     ret_val = SpecManager.SearchForSpecifications(material_id)
-    If ret_val = SM_SEARCH_FAILURE Then
+    If ret_val = SEARCH_ERR Then
         ' Let the user know that the specifcation could not be found.
         PromptHandler.Error "Specification not found!"
         Exit Sub
     ElseIf ret_val = SM_SEARCH_AGAIN Then
         ret_val = SpecManager.SearchForSpecifications(material_id)
-        If ret_val = SM_SEARCH_FAILURE Then
+        If ret_val = SEARCH_ERR Then
             ' Let the user know that the specifcation could not be found.
             PromptHandler.Error "Specification not found!"
             Exit Sub
@@ -82,7 +82,7 @@ Function SearchForSpecifications(material_id As String) As Long
     Set specs_dict = SpecManager.GetSpecifications(material_id)
     If specs_dict Is Nothing Then
         Logger.Log "Could not find a specifaction for : " & material_id
-        SearchForSpecifications = SM_SEARCH_FAILURE
+        SearchForSpecifications = SEARCH_ERR
     Else
         Set App.specs = specs_dict
         itms = App.specs.Items
@@ -281,7 +281,7 @@ Function AddNewMaterialDescription(material_id As String, description As String,
         ret_val = DataAccess.PushValue("Material_Id", material_id, "Description", description, "materials")
         AddNewMaterialDescription = DataAccess.UpdateValue("Material_Id", material_id, "Process_Id", process_id, "materials")
     Else
-        AddNewMaterialDescription = SM_MATERIAL_EXISTS
+        AddNewMaterialDescription = MATERIAL_EXISTS_ERR
     End If
 End Function
 
@@ -289,7 +289,7 @@ Function SaveNewSpecification(spec As Specification, Optional material_descripti
     Dim ret_val As Long
     If ManagerOrAdmin Then
         If DataAccess.GetSpecification(spec.MaterialId, spec.SpecType, spec.MachineId).records.Count = 0 Then
-            ret_val = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+            ret_val = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
             ActionLog.CrudOnSpecification spec, "Created New Specification"
             If IsEmpty(GetMaterialDescription(spec.MaterialId)) Then
                 ' Use material_description param or prompt the user to enter one.
@@ -304,10 +304,10 @@ Function SaveNewSpecification(spec As Specification, Optional material_descripti
             End If
             SaveNewSpecification = ret_val
         Else
-            SaveNewSpecification = SM_MATERIAL_EXISTS
+            SaveNewSpecification = MATERIAL_EXISTS_ERR
         End If
     Else
-        SaveNewSpecification = DB_PUSH_DENIED
+        SaveNewSpecification = DB_PUSH_DENIED_ERR
     End If
 
 End Function
@@ -316,19 +316,19 @@ Function SaveSpecification(spec As Specification, old_spec As Specification, Opt
     If ManagerOrAdmin Then
         If Utils.IsNothing(transaction) Then
             If ArchiveSpecification(old_spec) = DB_DELETE_SUCCESS Then
-                SaveSpecification = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+                SaveSpecification = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
             Else
-                SaveSpecification = DB_PUSH_DENIED
+                SaveSpecification = DB_PUSH_DENIED_ERR
             End If
         Else
             If ArchiveSpecification(old_spec, transaction) = DB_DELETE_SUCCESS Then
-                SaveSpecification = IIf(DataAccess.PushIQueryable(spec, "standard_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+                SaveSpecification = IIf(DataAccess.PushIQueryable(spec, "standard_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
             Else
-                SaveSpecification = DB_PUSH_DENIED
+                SaveSpecification = DB_PUSH_DENIED_ERR
             End If
         End If
     Else
-        SaveSpecification = DB_PUSH_DENIED
+        SaveSpecification = DB_PUSH_DENIED_ERR
     End If
     ActionLog.CrudOnSpecification spec, "Revised Specification"
 End Function
@@ -338,14 +338,14 @@ Function ArchiveSpecification(old_spec As Specification, Optional transaction As
     Dim ret_val As Long
     If Utils.IsNothing(transaction) Then
         ' 1. Insert old version into archived_specifications
-        ret_val = IIf(DataAccess.PushIQueryable(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        ret_val = IIf(DataAccess.PushIQueryable(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
         ' 2. Delete old version from standard_specifications
         If ret_val = DB_PUSH_SUCCESS Then
-            ArchiveSpecification = IIf(DeleteSpecification(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+            ArchiveSpecification = IIf(DeleteSpecification(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
         End If
     Else
         ' 1. Insert old version into archived_specifications
-        ret_val = IIf(DataAccess.PushIQueryable(old_spec, "archived_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        ret_val = IIf(DataAccess.PushIQueryable(old_spec, "archived_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
         ' 2. Delete old version from standard_specifications
         If ret_val = DB_PUSH_SUCCESS Then
             ArchiveSpecification = IIf(DeleteSpecification(old_spec, "standard_specifications", transaction) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
@@ -356,27 +356,27 @@ End Function
 
 Function SaveSpecificationTemplate(Template As SpecificationTemplate) As Long
     If ManagerOrAdmin Then
-        SaveSpecificationTemplate = IIf(DataAccess.PushIQueryable(Template, "template_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        SaveSpecificationTemplate = IIf(DataAccess.PushIQueryable(Template, "template_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
     Else
-        SaveSpecificationTemplate = DB_PUSH_DENIED
+        SaveSpecificationTemplate = DB_PUSH_DENIED_ERR
     End If
     ActionLog.CrudOnTemplate Template, "Created New Template"
 End Function
 
 Function UpdateSpecificationTemplate(Template As SpecificationTemplate) As Long
     If ManagerOrAdmin Then
-        UpdateSpecificationTemplate = IIf(DataAccess.UpdateTemplate(Template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_FAILURE)
+        UpdateSpecificationTemplate = IIf(DataAccess.UpdateTemplate(Template) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
     Else
-        UpdateSpecificationTemplate = DB_PUSH_DENIED
+        UpdateSpecificationTemplate = DB_PUSH_DENIED_ERR
     End If
     ActionLog.CrudOnTemplate Template, "Revised Template"
 End Function
 
 Function DeleteSpecificationTemplate(Template As SpecificationTemplate) As Long
     If App.current_user.PrivledgeLevel = USER_ADMIN Then
-        DeleteSpecificationTemplate = IIf(DataAccess.DeleteTemplate(Template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+        DeleteSpecificationTemplate = IIf(DataAccess.DeleteTemplate(Template) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
     Else
-        DeleteSpecificationTemplate = DB_DELETE_DENIED
+        DeleteSpecificationTemplate = DB_DELETE_DENIED_ERR
     End If
     ActionLog.CrudOnTemplate Template, "Deleted Template"
 End Function
@@ -384,12 +384,12 @@ End Function
 Function DeleteSpecification(spec As Specification, Optional tbl As String = "standard_specifications", Optional trans As SqlTransaction) As Long
     If App.current_user.PrivledgeLevel = USER_ADMIN Then
         If IsNothing(trans) Then
-            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, spec.MachineId, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, spec.MachineId, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
         Else
-            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, spec.MachineId, tbl, trans) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+            DeleteSpecification = IIf(DataAccess.DeleteSpec(spec, spec.MachineId, tbl, trans) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
         End If
     Else
-        DeleteSpecification = DB_DELETE_DENIED
+        DeleteSpecification = DB_DELETE_DENIED_ERR
     End If
     ActionLog.CrudOnSpecification spec, "Deleted Specification"
 End Function
@@ -485,7 +485,7 @@ Public Sub MassCreateSpecifications(num_rows As Integer, num_cols As Integer, ws
                 If ret_val = DB_PUSH_SUCCESS Then
                     Logger.Log new_spec.GetName & " Created."
                     ActionLog.CrudOnSpecification new_spec, "Created New Specification"
-                ElseIf ret_val = SM_MATERIAL_EXISTS Then
+                ElseIf ret_val = MATERIAL_EXISTS_ERR Then
                     Logger.Log new_spec.GetName & " Already Exists."
                 Else
                     Logger.Log new_spec.GetName & " Was Not Saved."

@@ -244,7 +244,7 @@ Function ConvertToCamelCase(s As String) As String
     End With
     Exit Function
 RegExError:
-    err.Raise SM_REGEX_ERROR
+    err.Raise REGEX_ERR
     Logger.Log "RegEx Error: ConvertToCamelCase", DebugLog
 End Function
 

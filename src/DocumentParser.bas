@@ -48,13 +48,13 @@ Public Sub LoadNewDocument(file_type As String)
         ret_val = ParseExcelDocument(spec, material_id, description, file_dir, machine_id, Revision, template_id)
     '---------------------------------------------------------------------------------------------
     Else
-        ret_val = SM_INTERNAL_ERROR
+        ret_val = INTERNAL_ERR
     End If
 
     ' Parse return value.
     If ret_val = DB_PUSH_SUCCESS Then
         PromptHandler.Success "New Specification Saved."
-    ElseIf ret_val = SM_MATERIAL_EXISTS Then
+    ElseIf ret_val = MATERIAL_EXISTS_ERR Then
         PromptHandler.Error "Material Already Exists."
     Else
         PromptHandler.Error "Error Saving Specification."

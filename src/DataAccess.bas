@@ -21,7 +21,7 @@ Function PushIQueryable(ByRef obj As IQueryable, Table As String, Optional ByRef
 DbPushFailException:
     Logger.Log "SQL INSERT Error : DbPushFailException", RuntimeLog
     Logger.Log SQLstmt, RuntimeLog
-    PushIQueryable = DB_PUSH_FAILURE
+    PushIQueryable = DB_PUSH_ERR
 End Function
 
 Function PushValue(ByVal key_name As String, ByVal key_id As Variant, ByVal column_name As String, ByVal column_value As Variant, Table As String, Optional ByRef trans As SqlTransaction) As Long
@@ -40,7 +40,7 @@ Function PushValue(ByVal key_name As String, ByVal key_id As Variant, ByVal colu
     Exit Function
 DbPushFailException:
     Logger.Log "SQL INSERT Error : DbPushFailException", SqlLog
-    PushValue = DB_PUSH_FAILURE
+    PushValue = DB_PUSH_ERR
 End Function
 
 Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal column_name As String, ByVal tbl As String, Optional ByRef trans As SqlTransaction) As DataFrame
@@ -106,7 +106,7 @@ Function FlagUserForSecretChange(Name As String, Optional ByRef trans As SqlTran
     Exit Function
 DbPushFailException:
     Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
-    FlagUserForSecretChange = DB_PUSH_FAILURE
+    FlagUserForSecretChange = DB_PUSH_ERR
 End Function
 
 Function ChangeUserSecret(Name As String, new_secret As String, Optional ByRef trans As SqlTransaction) As Long
@@ -128,7 +128,7 @@ Function ChangeUserSecret(Name As String, new_secret As String, Optional ByRef t
     Exit Function
 DbPushFailException:
     Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
-    ChangeUserSecret = DB_PUSH_FAILURE
+    ChangeUserSecret = DB_PUSH_ERR
 End Function
 
 Function GetTemplateRecord(ByRef spec_type As String, Optional ByRef trans As SqlTransaction) As DataFrame
@@ -181,7 +181,7 @@ Function UpdateTemplate(ByRef Template As SpecificationTemplate, Optional ByRef 
     Exit Function
 DbPushFailException:
     Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
-    UpdateTemplate = DB_PUSH_FAILURE
+    UpdateTemplate = DB_PUSH_ERR
 End Function
 
 Function DeleteTemplate(ByRef Template As SpecificationTemplate, Optional ByRef trans As SqlTransaction) As Long
@@ -200,7 +200,7 @@ Function DeleteTemplate(ByRef Template As SpecificationTemplate, Optional ByRef 
     Exit Function
 DbDeleteFailException:
     Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
-    DeleteTemplate = DB_DELETE_FAILURE
+    DeleteTemplate = DB_DELETE_ERR
 End Function
 
 Function DeleteSpec(ByRef spec As Specification, machine_id As String, Optional tbl As String = "standard_specifications", Optional ByRef trans As SqlTransaction) As Long
@@ -222,7 +222,7 @@ Function DeleteSpec(ByRef spec As Specification, machine_id As String, Optional 
     Exit Function
 DbDeleteFailException:
     Logger.Log "SQL DELETE Error : DbDeleteFailException", SqlLog
-    DeleteSpec = DB_DELETE_FAILURE
+    DeleteSpec = DB_DELETE_ERR
 End Function
 
 Function GetTemplateTypes(Optional ByRef trans As SqlTransaction) As DataFrame
@@ -279,7 +279,7 @@ Public Function BeginTransaction(Optional path As String) As SqlTransaction
 ' Begin a transaction in sqlite
     Dim trans As SqlTransaction
     Set trans = Factory.CreateSqlTransaction(IIf(path = nullstr, DATABASE_PATH, path))
-    If trans.Begin <> DB_TRANSACTION_FAILURE Then
+    If trans.Begin <> DB_TRANSACTION_ERR Then
         Set BeginTransaction = trans
     Else
         Set BeginTransaction = Nothing
@@ -304,5 +304,5 @@ Function UpdateValue(ByVal key_name As String, ByVal key_id As Variant, ByVal co
     Exit Function
 DbPushFailException:
     Logger.Log "SQL UPDATE Error : DbPushFailException", SqlLog
-    UpdateValue = DB_PUSH_FAILURE
+    UpdateValue = DB_PUSH_ERR
 End Function

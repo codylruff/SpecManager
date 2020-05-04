@@ -236,11 +236,14 @@ Public Sub GoToPlanning()
     shtPlanning.Activate
 End Sub
 
-' Makes a copy of the current spec, with a new material id
 Public Sub CopyCurrentSpecification()
+' Makes a copy of the current spec, with a new material id
     Dim new_material_id As String
     Dim ret_val As Long
     new_material_id = PromptHandler.UserInput(SingleLineText, "Material Id", "Enter a material id for copy?")
+    if new_material_id = nullstr Then
+        PromptHandler.Error "You must enter a material id."
+        Err.Raise 
     ret_val = SpecManager.CreateSpecificationFromCopy(App.current_spec, new_material_id)
     If ret_val = DB_PUSH_SUCCESS Then
         PromptHandler.Success "Copied Successfully"
@@ -279,7 +282,7 @@ Public Sub CreateBallisticsDocument()
     ' Parse return value.
     If ret_val = DB_PUSH_SUCCESS Then
         PromptHandler.Success "New Specification Saved."
-    ElseIf ret_val = SM_MATERIAL_EXISTS Then
+    ElseIf ret_val = MATERIAL_EXISTS_ERR Then
         PromptHandler.Error "Material Already Exists."
     Else
         PromptHandler.Error "Error Saving Specification."
