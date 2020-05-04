@@ -180,3 +180,43 @@ Function CreateSqlTransaction(path As String) As SqlTransaction
     sql_trans.Connect path
     Set CreateSqlTransaction = sql_trans
 End Function
+
+Function CreateProtectionPlanningForm As ProtectionPlanningForm
+
+    Dim frm As ProtectionPlanningForm
+    Set frm = New ProtectionPlanningForm
+    With frm
+        Set .Sheet = shtPlanning
+    End With
+    Set CreateProtectionPlanningForm = frm
+End Function
+
+Function CreateFiltrationPlanningForm As FiltrationPlanningForm
+
+    Dim frm As FiltrationPlanningForm
+    Set frm = New FiltrationPlanningForm
+    With frm
+        Set .Sheet = Nothing
+    End With
+    Set CreateFiltrationPlanningForm = frm
+End Function
+
+Function CreateAdminForm As AdminForm
+
+    Dim frm As AdminForm
+    Set frm = New AdminForm
+    With frm
+        Set .Sheet = shtAdmin
+    End With
+    Set CreateAdminForm = frm
+End Function
+
+Function SpecificationConfigForm As SpecificationConfigForm
+
+    Dim frm As SpecificationConfigForm
+    Set frm = New SpecificationConfigForm
+    With frm
+        Set .Sheet = shtSpecConfig
+    End With
+    Set SpecificationConfigForm = frm
+End Function
