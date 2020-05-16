@@ -22,39 +22,39 @@ Public Function CreateTable(ws As Worksheet, table_name As String) As Table
     Set CreateTable = tbl
 End Function
 
-Function CreateSpecification() As Specification
-    Set CreateSpecification = New Specification
+Function CreateDocument() As Document
+    Set CreateDocument = New Document
 End Function
 
-Function CreateSpecificationFromJsonFile(path As String) As Specification
+Function CreateDocumentFromJsonFile(path As String) As Document
 ' Generate a specification object from a json file.
-    Dim spec As Specification
+    Dim doc As Document
     Dim FSO As Object
     On Error GoTo ErrorHandler
     Set FSO = CreateObject("Scripting.FileSystemObject")
     Debug.Print FSO.GetBaseName(path)
-    Set spec = CreateSpecification
-    spec.JsonToObject JsonVBA.ReadJsonFileToString(path)
-    spec.MaterialId = FSO.GetBaseName(path)
-    spec.SpecType = CStr(PromptHandler.UserInput(SingleLineText, "Template Type Selection", "Assign a template for this specification:"))
-    spec.Revision = "1.0"
-    spec.Template = App.templates(spec.SpecType)
-    spec.MachineId = PromptHandler.GetMachineId
-    Set CreateSpecificationFromJsonFile = spec
+    Set spec = CreateDocument
+    doc.JsonToObject JsonVBA.ReadJsonFileToString(path)
+    doc.MaterialId = FSO.GetBaseName(path)
+    doc.SpecType = CStr(Prompt.UserInput(SingleLineText, "Template Type Selection", "Assign a template for this specification:"))
+    doc.Revision = "1.0"
+    doc.Template = App.templates(doc.SpecType)
+    doc.MachineId = Prompt.GetMachineId
+    Set CreateDocumentFromJsonFile = spec
     Exit Function
 ErrorHandler:
     Logger.Log "File could not be read.", ErrorLog
     Exit Function
 End Function
 
-Function CreateTemplateFromJsonFile(path As String, Optional product_line As String = "Protection") As SpecificationTemplate
+Function CreateTemplateFromJsonFile(path As String, Optional product_line As String = "Protection") As Template
 ' Generate a template object from a json file.
-    Dim Template As SpecificationTemplate
+    Dim Template As Template
     Dim FSO As Object
     On Error GoTo ErrorHandler
     Set FSO = CreateObject("Scripting.FileSystemObject")
     Debug.Print FSO.GetBaseName(path)
-    Set Template = New SpecificationTemplate
+    Set Template = New Template
     Template.SpecType = FSO.GetBaseName(path)
     Template.JsonToObject JsonVBA.ReadJsonFileToString(path), Template.SpecType, "1.0", product_line
     Set CreateTemplateFromJsonFile = Template
@@ -64,9 +64,9 @@ ErrorHandler:
     Exit Function
 End Function
 
-Function CopySpecification(spec As Specification) As Specification
-    Dim spec_copy As Specification
-    Set spec_copy = New Specification
+Function CopyDocument(doc As Document) As Document
+    Dim spec_copy As Document
+    Set spec_copy = New Document
     On Error Resume Next
     With spec
         Set spec_copy.Template = .Template
@@ -77,12 +77,12 @@ Function CopySpecification(spec As Specification) As Specification
         spec_copy.MaterialDescription = .MaterialDescription
         spec_copy.MachineId = .MachineId
     End With
-    Set CopySpecification = spec_copy
+    Set CopyDocument = spec_copy
 End Function
 
-Function CopyTemplate(Temp As SpecificationTemplate) As SpecificationTemplate
-    Dim temp_copy As SpecificationTemplate
-    Set temp_copy = New SpecificationTemplate
+Function CopyTemplate(Temp As Template) As Template
+    Dim temp_copy As Template
+    Set temp_copy = New Template
     On Error Resume Next
     With Temp
         temp_copy.JsonToObject .PropertiesJson, .SpecType, .Revision, .ProductLine
@@ -90,34 +90,34 @@ Function CopyTemplate(Temp As SpecificationTemplate) As SpecificationTemplate
     Set CopyTemplate = temp_copy
 End Function
 
-Function CreateNewTemplate(Optional template_name As String = nullstr) As SpecificationTemplate
-    Dim Template As SpecificationTemplate
-    Set Template = New SpecificationTemplate
+Function CreateNewTemplate(Optional template_name As String = nullstr) As Template
+    Dim Template As Template
+    Set Template = New Template
     Template.SpecType = template_name
     Template.Revision = 1
     Set CreateNewTemplate = Template
 End Function
 
-Function CreateSpecificationFromRecord(df As DataFrame) As Specification
-    Dim spec_ As Specification
-    Set spec_ = New Specification
+Function CreateDocumentFromRecord(df As DataFrame) As Document
+    Dim doc As Document
+    Set doc = New Document
     On Error Resume Next
     With df.records(1)
-        spec_.MaterialId = .item("Material_Id")
-        spec_.MaterialDescription = .item("Description")
-        spec_.ProcessId = .item("Process_Id")
-        spec_.SpecType = .item("Spec_Type")
-        spec_.Revision = CStr(.item("Revision"))
-    Set spec_.Template = Factory.CopyTemplate(App.templates(spec_.SpecType))
-        spec_.JsonToObject .item("Properties_Json")
-        spec_.MachineId = .item("Machine_Id")
+        doc.MaterialId = .item("Material_Id")
+        doc.MaterialDescription = .item("Description")
+        doc.ProcessId = .item("Process_Id")
+        doc.SpecType = .item("Spec_Type")
+        doc.Revision = CStr(.item("Revision"))
+    Set doc.Template = Factory.CopyTemplate(App.templates(doc.SpecType))
+        doc.JsonToObject .item("Properties_Json")
+        doc.MachineId = .item("Machine_Id")
     End With
-    Set CreateSpecificationFromRecord = spec_
+    Set CreateDocumentFromRecord = doc
 End Function
 
-Function CreateTemplateFromRecord(df As DataFrame) As SpecificationTemplate
-    Dim Template As SpecificationTemplate
-    Set Template = New SpecificationTemplate
+Function CreateTemplateFromRecord(df As DataFrame) As Template
+    Dim Template As Template
+    Set Template = New Template
     ' obsoleted
     With df.records(1)
         Template.JsonToObject .item("Properties_Json"), .item("Spec_Type"), .item("Revision"), .item("Product_Line")
@@ -125,26 +125,26 @@ Function CreateTemplateFromRecord(df As DataFrame) As SpecificationTemplate
     Set CreateTemplateFromRecord = Template
 End Function
 
-Function CreateSpecFromDict(dict As Object) As Specification
-    Dim spec As Specification
-    Set spec = New Specification
+Function CreateSpecFromDict(dict As Object) As Document
+    Dim doc As Document
+    Set spec = New Document
     'On Error Resume Next
     With dict
-        spec.MaterialId = .item("Material_Id")
-        spec.MaterialDescription = .item("Description")
-        spec.ProcessId = .item("Process_Id")
-        spec.SpecType = .item("Spec_Type")
-        spec.Revision = CStr(.item("Revision"))
-    Set spec.Template = Factory.CopyTemplate(App.templates(spec.SpecType))
-        spec.JsonToObject .item("Properties_Json")
-        spec.MachineId = .item("Machine_Id")
+        doc.MaterialId = .item("Material_Id")
+        doc.MaterialDescription = .item("Description")
+        doc.ProcessId = .item("Process_Id")
+        doc.SpecType = .item("Spec_Type")
+        doc.Revision = CStr(.item("Revision"))
+    Set doc.Template = Factory.CopyTemplate(App.templates(doc.SpecType))
+        doc.JsonToObject .item("Properties_Json")
+        doc.MachineId = .item("Machine_Id")
     End With
     Set CreateSpecFromDict = spec
 End Function
 
-Function CreateTemplateFromDict(dict As Object) As SpecificationTemplate
-    Dim Temp As SpecificationTemplate
-    Set Temp = New SpecificationTemplate
+Function CreateTemplateFromDict(dict As Object) As Template
+    Dim Temp As Template
+    Set Temp = New Template
     With dict
         Temp.JsonToObject .item("Properties_Json"), .item("Spec_Type"), .item("Revision"), .item("Product_Line")
     End With
@@ -181,42 +181,42 @@ Function CreateSqlTransaction(path As String) As SqlTransaction
     Set CreateSqlTransaction = sql_trans
 End Function
 
-Function CreateProtectionPlanningForm As ProtectionPlanningForm
+Function CreateWorkOrderAccess() As WorkOrderAccess
 
-    Dim frm As ProtectionPlanningForm
-    Set frm = New ProtectionPlanningForm
+    Dim frm As WorkOrderAccess
+    Set frm = New WorkOrderAccess
     With frm
         Set .Sheet = shtPlanning
     End With
-    Set CreateProtectionPlanningForm = frm
+    Set CreateWorkOrderAccess = frm
 End Function
 
-Function CreateFiltrationPlanningForm As FiltrationPlanningForm
-
-    Dim frm As FiltrationPlanningForm
-    Set frm = New FiltrationPlanningForm
-    With frm
-        Set .Sheet = Nothing
-    End With
-    Set CreateFiltrationPlanningForm = frm
-End Function
-
-Function CreateAdminForm As AdminForm
-
-    Dim frm As AdminForm
-    Set frm = New AdminForm
-    With frm
-        Set .Sheet = shtAdmin
-    End With
-    Set CreateAdminForm = frm
-End Function
-
-Function SpecificationConfigForm As SpecificationConfigForm
-
-    Dim frm As SpecificationConfigForm
-    Set frm = New SpecificationConfigForm
-    With frm
-        Set .Sheet = shtSpecConfig
-    End With
-    Set SpecificationConfigForm = frm
-End Function
+'Function CreateFiltrationPlanningForm() As FiltrationPlanningForm
+'
+'    Dim frm As FiltrationPlanningForm
+'    Set frm = New FiltrationPlanningForm
+'    With frm
+'        Set .Sheet = Nothing
+'    End With
+'    Set CreateFiltrationPlanningForm = frm
+'End Function
+'
+'Function CreateAdminForm() As AdminForm
+'
+'    Dim frm As AdminForm
+'    Set frm = New AdminForm
+'    With frm
+'        Set .Sheet = shtAdmin
+'    End With
+'    Set CreateAdminForm = frm
+'End Function
+'
+'Function DocumentConfigForm() As DocumentConfigForm
+'
+'    Dim frm As DocumentConfigForm
+'    Set frm = New DocumentConfigForm
+'    With frm
+'        Set .Sheet = shtSpecConfig
+'    End With
+'    Set DocumentConfigForm = frm
+'End Function

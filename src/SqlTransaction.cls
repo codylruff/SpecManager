@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public DbConnection As SQLiteDatabase
+Public DbConnection As SQLiteDatabase 'IDatabase
 Private ConnectionString_ As String
 ' ConnectionString
 Private Property Let ConnectionString(value As String)
@@ -22,7 +22,7 @@ End Property
 Public Sub Connect(path As String)
 ' Connect to sqlite database
     If ConnectionString_ = nullstr Then
-        DbConnection.openDb path
+        DbConnection.openDb path ' IDatabase.openDb
         Logger.Log "Connection established.", SqlLog
         ConnectionString = path
     Else
@@ -72,11 +72,11 @@ Function ExecuteSQLSelect(SQLstmt As String) As DataFrame
     Logger.Log "-----------------------------------", SqlLog
     Logger.Log SQLstmt
     With Me.DbConnection
-        .selectQry SQLstmt
-        df.Data = .Data
-        df.header = .header
-        df.Rows = .NumRows
-        df.Columns = .NumColumns
+        .selectQry SQLstmt ' IDatabase.selectQry -> Null or Boolean
+        df.Data = .Data ' IDatabase.Data -> Variant
+        df.header = .header ' IDatabase.header -> Variant
+        df.Rows = .NumRows ' Idatabase.NumRows -> Long
+        df.Columns = .NumColumns ' IDatabase.NumColumns -> Long
     End With
     Set ExecuteSQLSelect = df
     Exit Function
@@ -94,7 +94,7 @@ Sub ExecuteSQL(SQLstmt As String)
         Exit Sub
     Else
         'db.openDb (path)
-        Me.DbConnection.execute SQLstmt
+        Me.DbConnection.execute SQLstmt ' IDatabase.execute
     End If
 End Sub
 

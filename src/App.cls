@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-OPtion Explicit
+Option Explicit
 
 ' Events
 Public Event BeforeRefresh()
@@ -19,11 +19,11 @@ Public Event BeforeShutdown()
 ' Fields
 Public version                   As String
 Public current_user              As Account
-Public current_spec              As Specification
+Public current_doc              As Document
 Public templates                 As VBA.Collection
 Public specs                     As Object
 Public printer                   As DocumentPrinter
-Public current_template          As SpecificationTemplate
+Public current_template          As Template
 Public current_machine_id        As String
 Public TestingMode               As Boolean
 Private DocumentsByUID_          As Object
@@ -59,21 +59,21 @@ Sub Start()
     ' Load user settings
     current_user.LoadUserJson
     ' Create global object instances for specs and templates
-    Set current_spec = New Specification
+    Set current_doc = New Document
     Set templates = SpecManager.GetAllTemplates
     Set specs = CreateObject("Scripting.Dictionary")
     Set DocumentsByUID_ = CreateObject("Scripting.Dictionary")
     Set printer = New DocumentPrinter
-    Set current_template = New SpecificationTemplate
+    Set current_template = New Template
     TestingMode = False
 End Sub
 
 Public Sub RefreshObjects()
-    Set current_spec = New Specification
+    Set current_doc = New Document
     Set specs = CreateObject("Scripting.Dictionary")
     Set DocumentsByUID_ = CreateObject("Scripting.Dictionary")
     Set printer = New DocumentPrinter
-    Set current_template = New SpecificationTemplate
+    Set current_template = New Template
 End Sub
 
 Public Sub InitializeTestSuiteCredentials()
@@ -99,7 +99,7 @@ Public Sub Shutdown()
         current_user.SaveUserJson
     End If
     Set current_user = Nothing
-    Set current_spec = Nothing
+    Set current_doc = Nothing
     Set specs = Nothing
     Set DocumentsByUID_ = Nothing
     Set printer = Nothing

@@ -6,7 +6,7 @@ Option Explicit
 
 Public Sub LoadNewDocument(file_type As String)
     
-    Dim spec As Specification
+    Dim doc As Document
     Dim ret_val As Long
     Dim material_id As String
     Dim description As String
@@ -27,14 +27,14 @@ Public Sub LoadNewDocument(file_type As String)
     template_id = CStr(shtAdmin.Range("template_id").value) ' This is the template the document is based on
     
     ' Initialize an empty specification
-    Set spec = CreateSpecification
+    Set spec = CreateDocument
     
     ' Prompt the user for a template name. Then Validate the template exists
     On Error GoTo InvalidTemplateType
     If template_id = nullstr Then
-        template_id = PromptHandler.EnterTemplateType
+        template_id = Prompt.EnterTemplateType
     End If
-    Set spec.Template = App.templates(template_id)
+    Set doc.Template = App.templates(template_id)
     On Error GoTo 0
 
     If file_type = "json" Then
@@ -53,11 +53,11 @@ Public Sub LoadNewDocument(file_type As String)
 
     ' Parse return value.
     If ret_val = DB_PUSH_SUCCESS Then
-        PromptHandler.Success "New Specification Saved."
+        Prompt.Success "New Document Saved."
     ElseIf ret_val = MATERIAL_EXISTS_ERR Then
-        PromptHandler.Error "Material Already Exists."
+        Prompt.Error "Material Already Exists."
     Else
-        PromptHandler.Error "Error Saving Specification."
+        Prompt.Error "Error Saving Document."
     End If
 
     ' Stop the app
@@ -65,10 +65,10 @@ Public Sub LoadNewDocument(file_type As String)
     Exit Sub
     
 InvalidTemplateType:
-    PromptHandler.Error template_id & " Does Not Exist!"
+    Prompt.Error template_id & " Does Not Exist!"
 End Sub
 
-Public Function ParseExcelDocument(spec As Specification, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
+Public Function ParseExcelDocument(doc As Document, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
     
     Dim file_path As String
     Dim json_string As String
@@ -78,7 +78,7 @@ Public Function ParseExcelDocument(spec As Specification, material_id As String,
 
     ' Select file path
     If file_dir = "" Then
-        file_path = PromptHandler.SelectSpecifcationFile
+        file_path = Prompt.SelectSpecifcationFile
     Else
         file_path = file_dir & "\" & material_id & ".xlsx"
     End If
@@ -98,74 +98,74 @@ Public Function ParseExcelDocument(spec As Specification, material_id As String,
     progress_bar = GUI.Krish.SetProgressBar(progress_bar, 3, "Task 3/4")
 
     ' Create specification from json string
-    spec.JsonToObject json_string
-    spec.MaterialId = material_id
-    spec.SpecType = template_id
-    spec.Revision = Revision
+    doc.JsonToObject json_string
+    doc.MaterialId = material_id
+    doc.SpecType = template_id
+    doc.Revision = Revision
     If machine_id = nullstr Then
-        spec.Revision = "0"
-        spec.MachineId = "BASE"
+        doc.Revision = "0"
+        doc.MachineId = "BASE"
     Else
-        spec.MachineId = machine_id
+        doc.MachineId = machine_id
     End If
 
     ' Task 4 Save specification object to the database
     progress_bar = GUI.Krish.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
 
-    ' Save Specification to database
-    ParseExcelDocument = SpecManager.SaveNewSpecification(spec, CStr(description))
+    ' Save Document to database
+    ParseExcelDocument = SpecManager.SaveNewDocument(spec, CStr(description))
 End Function
 
-Public Function ParseJsonDocument(spec As Specification, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
+Public Function ParseJsonDocument(doc As Document, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
     
     Dim json_string As String
     Dim file_path As String
 
     ' Select file path
     If file_dir = "" Then
-        PromptHandler.Error "Must enter a file directory"
+        Prompt.Error "Must enter a file directory"
     Else
-        file_path = PromptHandler.SelectSpecifcationFile
+        file_path = Prompt.SelectSpecifcationFile
     End If
 
     ' Read json from file
     json_string = JsonVBA.ReadJsonFileToString(file_path)
 
     ' Create specification from json string
-    spec.JsonToObject json_string
-    spec.MaterialId = material_id
-    spec.SpecType = template_id
-    spec.Revision = Revision
+    doc.JsonToObject json_string
+    doc.MaterialId = material_id
+    doc.SpecType = template_id
+    doc.Revision = Revision
     If machine_id = nullstr Then
-        PromptHandler.Error "Must enter machine_id when loading from json."
+        Prompt.Error "Must enter machine_id when loading from json."
     Else
-        spec.MachineId = machine_id
+        doc.MachineId = machine_id
     End If
 
-    ' Save Specification to database
-    ParseJsonDocument = SpecManager.SaveNewSpecification(spec, CStr(description))
+    ' Save Document to database
+    ParseJsonDocument = SpecManager.SaveNewDocument(spec, CStr(description))
 
 End Function
 
 Public Sub CreateTemplateFromFile()
     Dim file_path As String
-    Dim Template As SpecificationTemplate
+    Dim Template As Template
 
     ' Start the application
     App.Start
 
     ' Prompt user to select file path
-    file_path = PromptHandler.SelectSpecifcationFile
+    file_path = Prompt.SelectSpecifcationFile
 
     ' Spec_Type will be name of file selected
     Set Template = Factory.CreateTemplateFromJsonFile(file_path)
 
     ' Parse database return value.
-    If SpecManager.SaveSpecificationTemplate(Template) <> DB_PUSH_SUCCESS Then
-        PromptHandler.Error "Failed to create " & Template.SpecType
+    If SpecManager.SaveTemplate(Template) <> DB_PUSH_SUCCESS Then
+        Prompt.Error "Failed to create " & Template.SpecType
         Exit Sub
     End If
-    PromptHandler.Success Template.SpecType & " Created Successfully!"
+    Prompt.Success Template.SpecType & " Created Successfully!"
 End Sub
 
 Public Function ParseDocument(path As String, template_type As String) As Object
@@ -201,7 +201,7 @@ Public Function ParseDocument(path As String, template_type As String) As Object
     Exit Function
 
 ParsingError:
-    PromptHandler.Error "Parsing Error @" & CStr(Arr(i, 0))
+    Prompt.Error "Parsing Error @" & CStr(Arr(i, 0))
 End Function
 
 ' ARCHIVED -------------------------------------------------------------------------

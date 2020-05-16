@@ -14,7 +14,7 @@ Option Explicit
 ' Represents a specific warp order.
 '====================================
 'Factory Module Constructor function:
-'Function CreateWarp(Specification As WarpingSpecification, NumberOfBobbins As Integer, _
+'Function CreateWarp(Document As WarpingDocument, NumberOfBobbins As Integer, _
 '                     PackageWeightlbs As Double, WarpLengthYds As Double) As Warp
 '----------------
 ' CONSTANTS
@@ -23,7 +23,7 @@ Const MinimumPackageLengthyds = 10936
 '----------------
 'CLASS VARIABLES
 '----------------
-Private Specification_          As Specification
+Private Document_          As Document
 Private NumberOfBobbins_        As Double
 Private PackageWeightlbs_       As Double
 Private WarpLengthYds_          As Double
@@ -39,9 +39,9 @@ Public Property Get PackageWeightlbs() As Double: PackageWeightlbs = PackageWeig
 ' NumberOfBobbins
 Public Property Let NumberOfBobbins(value As Double): NumberOfBobbins_ = value: End Property
 Public Property Get NumberOfBobbins() As Double: NumberOfBobbins = NumberOfBobbins_: End Property
-' Specification
-Public Property Set Specification(value As Specification): Set Specification_ = value: End Property
-Public Property Get Specification() As Specification: Set Specification = Specification_: End Property
+' Document
+Public Property Set Document(value As Document): Set Document_ = value: End Property
+Public Property Get Document() As Document: Set Document = Document_: End Property
 '----------------
 ' PROPERTIES
 '----------------
@@ -56,14 +56,14 @@ Public Property Get ResidualLengthYds() As Double
 End Property
 ' PackageLengthYds
 Public Property Get PackageLengthYds() As Double
-    With Me.Specification.Properties
+    With Me.Document.Properties
         ' 454 g / lb and 0.9144 m / yd
         PackageLengthYds = PackageWeightlbs / (.item("Dtex") / 10000 / 454 * 0.9144)
     End With
 End Property
 ' NumberOfSections
 Public Property Get NumberOfSections() As Double
-    With Me.Specification.Properties
+    With Me.Document.Properties
         NumberOfSections = .item("EndsPerInch") * .item("FinalWidthCm") / 2.54 / NumberOfBobbins
     End With
 End Property

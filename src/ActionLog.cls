@@ -23,7 +23,7 @@ Private Property Get Username() As String
     Username = UCase(VBA.Environ("Username"))
 End Property
 
-Public Sub DocumentPrinted(spec As Specification, work_order As String)
+Public Sub DocumentPrinted(doc As Document, work_order As String)
     Dim ret_val As Long
     If Not log_enabled Then Exit Sub
     With spec
@@ -39,7 +39,7 @@ Public Sub LogUserAction(Optional description As String)
 End Sub
 
 
-Public Sub CrudOnSpecification(spec As Specification, message As String)
+Public Sub CrudOn(doc As Document, message As String)
 ' Log any crud operation on a specification
     If Not log_enabled Then Exit Sub
     With spec
@@ -47,7 +47,7 @@ Public Sub CrudOnSpecification(spec As Specification, message As String)
     End With
 End Sub
 
-Public Sub CrudOnTemplate(Template As SpecificationTemplate, message As String)
+Public Sub CrudOnTemplate(Template As Template, message As String)
 ' Log any crud operation on a template
     If Not log_enabled Then Exit Sub
     With Template

@@ -70,10 +70,10 @@ End Sub
 
 Public Sub ExportAll()
 ' Exports the codebase to a project folder as text files
-    Const Module = 1
-    Const ClassModule = 2
-    Const Form = 3
-    Const Document = 100
+    Const vbaModule = 1
+    Const vbaClassModule = 2
+    Const vbaForm = 3
+    Const vbaDocument = 100
     Const Padding = 24
 
     Dim VBComponent As Object
@@ -97,16 +97,16 @@ Public Sub ExportAll()
     Logger.Log "Exporting Files . . . ", RuntimeLog
     For Each VBComponent In ActiveWorkbook.VBProject.VBComponents
         
-        If VBComponent.Type <> Document Then
+        If VBComponent.Type <> vbaDocument Then
             Select Case VBComponent.Type
-                Case ClassModule
+                Case vbaClassModule
                     extension = ".cls"
                     path = directory & VBComponent.Name & extension
-                Case Form
+                Case vbaForm
                     extension = ".frm"
                     path = directory & VBComponent.Name & extension
                     
-                Case Module
+                Case vbaModule
                     extension = ".bas"
                     path = directory & VBComponent.Name & extension
                     
@@ -189,7 +189,7 @@ Public Sub DocumentPrinterToPdf()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError
-    fileName = PUBLIC_DIR & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
+    fileName = PUBLIC_DIR & "\Specifications\" & App.current_doc.MaterialId & "_" & App.current_doc.Revision
     Set ws = Sheets("pdf")
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
@@ -209,8 +209,8 @@ Public Sub DocumentPrinterToPdf_Test()
     Dim ws As Worksheet
     Dim fileName As String
     On Error GoTo SaveFileError
-    fileName = PUBLIC_DIR & "\Specifications\" & App.current_spec.MaterialId & "_" & App.current_spec.Revision
-    Set ws = Sheets("SpecificationForm")
+    fileName = PUBLIC_DIR & "\Specifications\" & App.current_doc.MaterialId & "_" & App.current_doc.Revision
+    Set ws = Sheets("DocumentForm")
     ws.ExportAsFixedFormat _
         Type:=xlTypePDF, _
         fileName:=fileName, _
@@ -236,19 +236,20 @@ Public Sub GoToPlanning()
     shtPlanning.Activate
 End Sub
 
-Public Sub CopyCurrentSpecification()
+Public Sub CopyCurrentDocument()
 ' Makes a copy of the current spec, with a new material id
     Dim new_material_id As String
     Dim ret_val As Long
-    new_material_id = PromptHandler.UserInput(SingleLineText, "Material Id", "Enter a material id for copy?")
-    if new_material_id = nullstr Then
-        PromptHandler.Error "You must enter a material id."
-        Err.Raise 
-    ret_val = SpecManager.CreateSpecificationFromCopy(App.current_spec, new_material_id)
+    new_material_id = Prompt.UserInput(SingleLineText, "Material Id", "Enter a material id for copy?")
+    If new_material_id = nullstr Then
+        Prompt.Error "You must enter a material id."
+        Exit Sub
+    End If
+    ret_val = SpecManager.CreateDocumentFromCopy(App.current_doc, new_material_id)
     If ret_val = DB_PUSH_SUCCESS Then
-        PromptHandler.Success "Copied Successfully"
+        Prompt.Success "Copied Successfully"
     Else
-        PromptHandler.Error "Copy Failed"
+        Prompt.Error "Copy Failed"
     End If
 End Sub
 
@@ -281,11 +282,11 @@ Public Sub CreateBallisticsDocument()
     
     ' Parse return value.
     If ret_val = DB_PUSH_SUCCESS Then
-        PromptHandler.Success "New Specification Saved."
+        Prompt.Success "New Document Saved."
     ElseIf ret_val = MATERIAL_EXISTS_ERR Then
-        PromptHandler.Error "Material Already Exists."
+        Prompt.Error "Material Already Exists."
     Else
-        PromptHandler.Error "Error Saving Specification."
+        Prompt.Error "Error Saving Document."
     End If
     
     App.Shutdown

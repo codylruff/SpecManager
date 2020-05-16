@@ -307,7 +307,7 @@ Function CreateNewSheet(shtName As String, Optional DeleteOldSheet As Boolean = 
 'test
 ' Creates a new worksheet with the given name
     ' Turn on Performance Mode
-    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
 
     Dim Exists As Boolean, i As Integer
     With ThisWorkbook
@@ -328,17 +328,17 @@ Function CreateNewSheet(shtName As String, Optional DeleteOldSheet As Boolean = 
     End With
     Set CreateNewSheet = ThisWorkbook.Sheets(shtName)
     ' Turn off Performance Mode
-    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
 End Function
 
 Function RemoveSheet(ws As Worksheet) As Boolean
 
     On Error GoTo ErrorHandler
     ' Turn on Performance Mode
-    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
     ws.Delete
     ' Turn off Performance Mode
-    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
     RemoveSheet = True
     Exit Function
 ErrorHandler:
@@ -441,7 +441,7 @@ Sub SaveAll()
     Dim xWb As Workbook
 
     ' Turn on Performance Mode
-    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
 
     For Each xWb In Application.Workbooks
         If Not xWb.ReadOnly And Windows(xWb.Name).Visible Then
@@ -449,7 +449,7 @@ Sub SaveAll()
         End If
     Next
     ' Turn off Performance Mode
-    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
 End Sub
 
 Function TestForUnsavedChanges() As Boolean
@@ -2835,3 +2835,34 @@ Public Function ConvertCmToTwips(ValueInCm As Double) As Double
 
     ConvertCmToTwips = 567 * ValueInCm
 End Function
+
+' Sub AddNewRow()
+'     Dim pswStr As String
+'     Dim ws As Worksheet
+'     Set ws = shtDataEntry
+'     pswStr = "123"
+'     On Error Resume Next
+'     Application.ScreenUpdating = False
+'     With ws
+'         .Unprotect Password:=pswStr
+'        .Range("A1").Select
+'         Range("Table1[[#Headers],[Material Id]:[Exclude]]").Select
+'         Selection.End(xlDown).Select
+'         Selection.Offset(0, 2).Select
+'         Dim id As Long
+'         id = Selection.Value + 1
+'         Selection.Offset(1, 0).Select
+'         Selection.Value = id
+'         ActiveSheet.Protect Password:=pswStr, DrawingObjects:=False, _
+'                         Contents:=True, Scenarios:=False, _
+'                         AllowFormattingCells:=True, AllowFormattingColumns:=True, _
+'                         AllowFormattingRows:=True, AllowInsertingColumns:=True, _
+'                         AllowInsertingRows:=True, AllowInsertingHyperlinks:=True, _
+'                         AllowDeletingColumns:=True, AllowDeletingRows:=True, _
+'                         AllowSorting:=True, AllowFiltering:=True, _
+'                         AllowUsingPivotTables:=True
+'         Selection.ClearContents
+'     End With
+'     Application.ScreenUpdating = True
+
+' End Sub

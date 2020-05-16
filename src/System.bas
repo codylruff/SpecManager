@@ -156,40 +156,28 @@ Public Function FN_GET_UUID() As String
    Exit Function
 
 FN_GET_UUID_Error:
-    App.gMsg = err.description & ": in procedure FN_GET_UUID of Module mod_system_"
-    GUI.Krish.ShowDialogRich "Error " & err.Number & " (" & App.gMsg & ")", vbExclamation
-End Function
-
-Public Function VSImport() As String
-    
-    Dim path As String
-    Dim VerNum As String
-    Dim strFile As String
-    Dim wb As Workbook
-    
-    Set wb = ThisWorkbook
-    
-    DoEvents
-    
-    On Error GoTo ImportFail
-    
-    path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
-    strFile = Dir(path & "*.frm*")
-    
-    Do While Len(strFile) > 0
-        Debug.Print strFile
-        wb.VBProject.VBComponents.Import path & strFile
-        strFile = Dir
-    Loop
-    
-    VSImport = "Import Successful!"
-    Exit Function
-
-ImportFail:
-    VSImport = "Import Failed"
+    GUI.gMsg = err.description & ": in procedure FN_GET_UUID of Module mod_system_"
+    GUI.Krish.ShowDialogRich "Error " & err.Number & " (" & GUI.gMsg & ")", vbExclamation
 End Function
 
 ' (Module: Messages.bas)
 Public Function SayHi(Name As Variant) As String
   SayHi = "Howdy " & Name & "!"
+End Function
+
+' MySQL API
+Public Function ExecuteScalar(dbType As DatabaseType, conn As String, sql As String)  As Object
+' Executes and SQL and returns first row first column of the result set or an empty string
+End Function
+
+Public Function ExecuteNonQuery(dbType As DatabaseType, conn As String, sql As String) As Boolean
+' Returns true or false if the nonQuery sql command was success
+End Function
+
+Public Function MySqlGetAvailableServerFromList(conn As String) As String
+' Takes array of connetionstrings and returns first reachable connectionstring. or ""
+End Function
+
+Public Function MySqlServerIsReachable(conn As String) As Boolean
+' Connects to a MySql server using the connectionstring and returns true or false
 End Function

@@ -1,0 +1,529 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Administrator</Author>
+  <LastAuthor>Administrator</LastAuthor>
+  <Created>2020-05-11T09:02:12Z</Created>
+  <Version>16.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <SupBook>
+   <Path>\Users\cruff\Documents\Projects\source\Spec-Manager\Spec Manager v2.0.1b.xlsm</Path>
+   <SheetName>Start</SheetName>
+   <SheetName>Planning</SheetName>
+   <SheetName>Administrator</SheetName>
+   <SheetName>Spec-Config</SheetName>
+   <SheetName>Warping Requirements</SheetName>
+   <SheetName>Warping Requirements Change Log</SheetName>
+   <SheetName>Weaving RBA</SheetName>
+   <SheetName>RBA Template Change Log</SheetName>
+   <SheetName>Testing Requirements</SheetName>
+   <SheetName>Ballistic Testing Requirements</SheetName>
+   <SheetName>TSSP</SheetName>
+   <SheetName>Error Codes</SheetName>
+   <SheetName>TSPP</SheetName>
+   <SheetName>Changeover</SheetName>
+   <SheetName>Tie-in</SheetName>
+   <SheetName>GTW006901000T0DC</SheetName>
+   <SheetName>pdf</SheetName>
+   <SheetName>FormParser</SheetName>
+   <SheetName>MassSpecCreation</SheetName>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>0</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>1</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>2</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>3</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>4</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>5</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>6</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>7</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>8</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>9</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>10</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>11</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>12</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>13</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>14</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>15</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>16</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>17</SheetIndex>
+   </Xct>
+   <Xct>
+    <Count>0</Count>
+    <SheetIndex>18</SheetIndex>
+   </Xct>
+  </SupBook>
+  <WindowHeight>9024</WindowHeight>
+  <WindowWidth>23040</WindowWidth>
+  <WindowTopX>32767</WindowTopX>
+  <WindowTopY>32767</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="m543657872">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Top"/>
+   <Borders>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="12" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="m543657892">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Top"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="12" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s62">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="16" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s63">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="12" ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="s64">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="12" ss:Color="#000000"/>
+   <NumberFormat ss:Format="Short Date"/>
+  </Style>
+  <Style ss:ID="s65">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="14" ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="s66">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s67">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="14" ss:Color="#000000"/>
+   <NumberFormat ss:Format="Short Date"/>
+  </Style>
+  <Style ss:ID="s68">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s69">
+   <Alignment ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="20" ss:Color="#000000"
+    ss:Bold="1"/>
+   <Interior ss:Color="#FFFFFF" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s70">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="20" ss:Color="#000000"
+    ss:Bold="1"/>
+   <Interior ss:Color="#FFFFFF" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s71">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="14" ss:Color="#000000"/>
+   <Interior ss:Color="#FFFFFF" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Names>
+  <NamedRange ss:Name="bsf_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="bsf_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="bsf_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="bsw_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="bsw_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="bsw_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="cad_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="cad_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="cad_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="coated_ad_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="coated_ad_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="coated_ad_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="coating_description" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="code" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="core_id" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="core_len" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="core_material" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="customer_approval" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="da_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="da_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="da_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="dad_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="dad_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="dad_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="description" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="fiber" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="fil_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="fill_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="fill_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="finish" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="flag_defects" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="fringe_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="fringe_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="fringe_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="insp_docs" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="lam_or_coat" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="len_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="len_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="len_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="min_acceptable_len" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="packaging_reqs" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="pallet_size" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="product" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="psf_no" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="rc_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="rc_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="rc_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="rev_date" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="rev_no" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="shrink" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="sox_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="sox_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="sox_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="storage_conditions" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="storage_reqs" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="tape_selvage" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="tg_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="tg_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="tg_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="thick_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="thick_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="thick_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="v50_layers" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="v50_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="v50_test_reqs" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="vc_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="vc_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="vc_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="warp_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="warp_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="warp_nom" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="warp_yarn" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="weave" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="weft_yarn" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="wid_max" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="wid_min" ss:RefersTo="=#REF!"/>
+  <NamedRange ss:Name="wid_nom" ss:RefersTo="=#REF!"/>
+ </Names>
+ <Worksheet ss:Name="Warping Requirements">
+  <Names>
+   <NamedRange ss:Name="beam_width" ss:RefersTo="='Warping Requirements'!R22C2"/>
+   <NamedRange ss:Name="beaming_speed" ss:RefersTo="='Warping Requirements'!R20C2"/>
+   <NamedRange ss:Name="beaming_tension"
+    ss:RefersTo="='Warping Requirements'!R19C2"/>
+   <NamedRange ss:Name="cross_winding" ss:RefersTo="='Warping Requirements'!R21C2"/>
+   <NamedRange ss:Name="customer" ss:RefersTo="='Warping Requirements'!R8C2"/>
+   <NamedRange ss:Name="date_printed" ss:RefersTo="='Warping Requirements'!R5C2"/>
+   <NamedRange ss:Name="density" ss:RefersTo="='Warping Requirements'!R25C2"/>
+   <NamedRange ss:Name="dents_per_cm" ss:RefersTo="='Warping Requirements'!R23C2"/>
+   <NamedRange ss:Name="dtex" ss:RefersTo="='Warping Requirements'!R13C2"/>
+   <NamedRange ss:Name="ends_per_dent" ss:RefersTo="='Warping Requirements'!R24C2"/>
+   <NamedRange ss:Name="material" ss:RefersTo="='Warping Requirements'!R10C2"/>
+   <NamedRange ss:Name="notes" ss:RefersTo="='Warping Requirements'!R28C1"/>
+   <NamedRange ss:Name="number_of_ends" ss:RefersTo="='Warping Requirements'!R14C2"/>
+   <NamedRange ss:Name="revision" ss:RefersTo="='Warping Requirements'!R7C2"/>
+   <NamedRange ss:Name="s_wrap" ss:RefersTo="='Warping Requirements'!R17C2"/>
+   <NamedRange ss:Name="spring_color" ss:RefersTo="='Warping Requirements'!R16C2"/>
+   <NamedRange ss:Name="style" ss:RefersTo="='Warping Requirements'!R6C2"/>
+   <NamedRange ss:Name="warping_speed" ss:RefersTo="='Warping Requirements'!R18C2"/>
+   <NamedRange ss:Name="warping_tension"
+    ss:RefersTo="='Warping Requirements'!R15C2"/>
+   <NamedRange ss:Name="width" ss:RefersTo="='Warping Requirements'!R9C2"/>
+   <NamedRange ss:Name="work_order" ss:RefersTo="='Warping Requirements'!R4C2"/>
+   <NamedRange ss:Name="yarn_supplier" ss:RefersTo="='Warping Requirements'!R11C2"/>
+   <NamedRange ss:Name="yarn_type" ss:RefersTo="='Warping Requirements'!R12C2"/>
+  </Names>
+  <Table ss:ExpandedColumnCount="3" ss:ExpandedRowCount="34" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultRowHeight="14.4">
+   <Column ss:AutoFitWidth="0" ss:Width="156"/>
+   <Column ss:AutoFitWidth="0" ss:Width="200.39999999999998"/>
+   <Column ss:AutoFitWidth="0" ss:Width="91.199999999999989"/>
+   <Row ss:Height="21">
+    <Cell ss:Index="2" ss:StyleID="s62"><Data ss:Type="String">WARPING</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String">Rev. 3</Data></Cell>
+   </Row>
+   <Row ss:Height="21">
+    <Cell ss:Index="2" ss:StyleID="s62"><Data ss:Type="String">PARAMETERS</Data></Cell>
+    <Cell ss:StyleID="s64"><Data ss:Type="DateTime">2020-03-09T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:Index="4" ss:AutoFitHeight="0" ss:Height="39">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Production Order</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="Number">101204670</Data><NamedCell
+      ss:Name="work_order"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="39">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Date Printed</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="DateTime">2020-04-01T00:00:00.000</Data><NamedCell
+      ss:Name="date_printed"/></Cell>
+    <Cell ss:StyleID="s68"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="39.900000000000006">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Style</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="Number">522</Data><NamedCell
+      ss:Name="style"/></Cell>
+    <Cell ss:StyleID="s69"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="39.900000000000006">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Revision</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="Number">1</Data><NamedCell
+      ss:Name="revision"/></Cell>
+    <Cell ss:StyleID="s70"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Customer</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">Tex Tech</Data><NamedCell
+      ss:Name="customer"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Width&#10;(CM)</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">168.2</Data><NamedCell
+      ss:Name="width"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Material Code</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">OKE005229DP00DF</Data><NamedCell
+      ss:Name="material"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Supplier</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">Dupont</Data><NamedCell
+      ss:Name="yarn_supplier"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Yarn Type</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">KM2+ 1W040</Data><NamedCell
+      ss:Name="yarn_type"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Dtex</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">944</Data><NamedCell
+      ss:Name="dtex"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Number &#10;of ends</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">1438</Data><NamedCell
+      ss:Name="number_of_ends"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Warping &#10;Tension (cN)</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">236</Data><NamedCell
+      ss:Name="warping_tension"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Spring &#10;Color</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">Black</Data><NamedCell
+      ss:Name="spring_color"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">S-Wrap</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">OFF</Data><NamedCell
+      ss:Name="s_wrap"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Warping Speed&#10;(m/min)</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">300</Data><NamedCell
+      ss:Name="warping_speed"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Beaming &#10;Tension (N)</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">4242</Data><NamedCell
+      ss:Name="beaming_tension"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Beaming &#10;Speed (m/min)</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">80</Data><NamedCell
+      ss:Name="beaming_speed"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Cross &#10;Winding (mm)</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">5</Data><NamedCell
+      ss:Name="cross_winding"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Beam Width&#10;(CM)</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">167.9</Data><NamedCell
+      ss:Name="beam_width"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Dents/cm</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">4.3</Data><NamedCell
+      ss:Name="dents_per_cm"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><Data ss:Type="String">Ends/dent</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="Number">2</Data><NamedCell
+      ss:Name="ends_per_dent"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.949999999999996">
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><Font html:Color="#000000">Density (g/dm</Font><Sup><Font
+        html:Color="#000000">3</Font></Sup><Font html:Color="#000000">)</Font></ss:Data></Cell>
+    <Cell ss:StyleID="s71"><NamedCell ss:Name="density"/></Cell>
+    <Cell ss:StyleID="s66"/>
+   </Row>
+   <Row ss:Index="27" ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:MergeAcross="2" ss:StyleID="m543657872"><Data ss:Type="String">NOTES :</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:MergeAcross="2" ss:MergeDown="6" ss:StyleID="m543657892"><Data
+      ss:Type="String">Density 880</Data><NamedCell ss:Name="notes"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15" ss:Span="5"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Layout x:CenterHorizontal="1"/>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <FitToPage/>
+   <Print>
+    <ValidPrinterInfo/>
+    <Scale>62</Scale>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Zoom>130</Zoom>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>4</ActiveRow>
+     <ActiveCol>4</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

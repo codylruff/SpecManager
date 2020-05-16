@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "ProtectionPlanningForm"
+Attribute VB_Name = "WorkOrderAccess"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -12,58 +12,61 @@ Attribute VB_Exposed = False
 ' This forms is used to print spec docs for protection
 '====================================
 'Factory Module Constructor function:
-'Function CreateProtectionPlanningForm() As ProtectionPlanningForm
-Implements IForm, ISearchForm
+'Function CreateWorkOrderAccess() As WorkOrderAccess
+Implements IForm
+Implements ISearchForm
 '----------------
 'CLASS VARIABLES
 '----------------
 Private m_Name As String
+Private m_Sheet As Worksheet
 '------------
 ' COLLECTIONS
 '------------
 '------------
 ' PROPERTIES
 '------------
+Public Property Get Sheet() As Worksheet: Set Sheet = m_Sheet: End Property
 Public Property Get IForm_Name() As String: Name = m_Name: End Property
 '----------
 ' METHODS
 '----------
-Public Sub cmdPrintSpecifications()
+Public Sub cmdPrintDocuments()
     ISearchForm_DisplayResults
 End Sub
 
 Public Sub cmdSearch()
     ' Check for any white space and remove it
-    FormatSearchInput
     ' Run search routine
-    ISearchForm_Search
+    ISearchForm_Search (FormatSearchInput)
 End Sub
 
 Public Sub cmdClear()
     IForm_Clear
 End Sub
 
-Private Sub FormatSearchInput()
+Private Function FormatSearchInput() As String
     If Utils.RemoveWhiteSpace(shtPlanning.Range("material_id")) = nullstr Then
-       PromptHandler.Error "Please enter a material id."
-       Exit Sub
+       Prompt.Error "Please enter a material id."
+       Exit Function
     ElseIf Utils.RemoveWhiteSpace(shtPlanning.Range("work_order")) = nullstr Then
-        PromptHandler.Error "Please enter a work order number."
-       Exit Sub
+        Prompt.Error "Please enter a work order number."
+       Exit Function
     ElseIf Utils.RemoveWhiteSpace(shtPlanning.Range("machine_id")) = nullstr Then
-        PromptHandler.Error "Please enter a machine id."
-       Exit Sub
+        Prompt.Error "Please enter a machine id."
+       Exit Function
     End If
-End Sub
+    FormatSearchInput = Me.Sheet.Range("material_id").value
+End Function
 
 Public Function IForm_Clear()
     Logger.NotImplementedException
-    PromptHandler.FNI
+    Prompt.FNI
 End Function
 
-Public Function ISearchForm_Search()
+Public Function ISearchForm_Search(id_value As String)
     SpecManager.MaterialInput UCase(shtPlanning.Range("material_id"))
-    Logger.Log "Listing Specifications . . . "
+    Logger.Log "Listing Documents . . . "
     Set App.printer = Factory.CreateDocumentPrinter
     If Not App.specs Is Nothing Then
         App.printer.ListObjects App.specs
@@ -78,20 +81,21 @@ End Function
 Public Function ISearchForm_DisplayResults()
     Dim prompt_result As DocumentPackageVariant
     If shtPlanning.Range("console") = nullstr Then
-         PromptHandler.Error "There is nothing to print!"
-         Exit Sub
+         Prompt.Error "There is nothing to print!"
+         Exit Function
     ElseIf shtPlanning.Range("console") = "No specifications are available for this code." Then
-         PromptHandler.Error "There is nothing to print!"
-         Exit Sub
+         Prompt.Error "There is nothing to print!"
+         Exit Function
     ElseIf Not IsNumeric(shtPlanning.Range("work_order")) Then
-         PromptHandler.Error "Please enter a production order."
-         Exit Sub
+         Prompt.Error "Please enter a production order."
+         Exit Function
     End If
     ' Consider process exceptions based on input from planners.
-    prompt_result = PromptHandler.ProtectionPlanningSequence
+    ' Eventually this will be obsolete
+    prompt_result = Prompt.ProtectionPlanningSequence
     If Not App.TestingMode Then
         ' Check for alternate machine ids (currently only for weaving)
-        If App.current_spec.ProcessId = "Weaving" Then
+        If App.current_doc.ProcessId = "Weaving" Then
                 SpecManager.FilterByMachineId shtPlanning.Range("machine_id")
         End If
         ' Write the documents to their repsective worksheets
@@ -102,7 +106,7 @@ Public Function ISearchForm_DisplayResults()
         Logger.Log CStr(prompt_result)
     End If
     App.Shutdown
-End Sub
+End Function
 
 Sub PrintSelectedPackage(selected_package As DocumentPackageVariant)
 ' Prints the select document package for protection
@@ -139,6 +143,7 @@ End Sub
 ' Constructor
 Private Sub Class_Initialize()
     m_Name = "Protection Planning"
+    Set m_Sheet = shtPlanning
 End Sub
 ' Deconstructor
 Private Sub Class_Terminate()

@@ -56,7 +56,7 @@ Public Sub ConfigControl()
     
     If Open_Config(App.current_user) Then
         ' Turn on Performance Mode
-        If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
+        If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
         If Windows.Count <> 1 Then
             For Each w In Windows
                 If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
@@ -68,7 +68,7 @@ Public Sub ConfigControl()
         GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
         ThisWorkbook.Sheets("Administrator").Activate
         ' Turn off Performance Mode
-        If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
+        If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
     End If
 End Sub
 
@@ -78,14 +78,14 @@ Private Function Open_Config(User As Account) As Boolean
     If CheckSecret(User) Then
         Open_Config = True
     Else
-        PromptHandler.AccessDenied
+        Prompt.AccessDenied
         Open_Config = False
     End If
 End Function
 
 Private Function CheckSecret(User As Account) As Boolean
 ' Compares password hashes for match
-    CheckSecret = IIf(User.GetSecret = GetSHA1Hash(PromptHandler.GetPassword), True, False)
+    CheckSecret = IIf(User.GetSecret = GetSHA1Hash(Prompt.GetPassword), True, False)
 End Function
 
 Public Sub CreateNewAdmin()
@@ -93,7 +93,7 @@ Public Sub CreateNewAdmin()
     Dim new_admin As String
     SpecManager.StartApp
     If CheckSecret(App.current_user) Then
-        new_admin = PromptHandler.UserInput( _
+        new_admin = Prompt.UserInput( _
             SingleLineText, "Access Control", "Enter user-name for new admin account :")
     End If
     DataAccess.FlagUserForSecretChange new_admin
@@ -102,10 +102,10 @@ End Sub
 
 Public Sub ChangeSecret(User As Account)
 ' Changes a password in the db (SHA1 hash)
-    If DataAccess.ChangeUserSecret(User.Name, GetSHA1Hash(PromptHandler.ChangePassword)) = DB_PUSH_ERR Then
-        PromptHandler.Error "Password was not changed! Contact Admin"
+    If DataAccess.ChangeUserSecret(User.Name, GetSHA1Hash(Prompt.ChangePassword)) = DB_PUSH_ERR Then
+        Prompt.Error "Password was not changed! Contact Admin"
     Else
-        PromptHandler.Success "Password was changed succesfully!"
+        Prompt.Success "Password was changed succesfully!"
     End If
 End Sub
 

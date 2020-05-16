@@ -44,7 +44,7 @@ End Property
 
 Sub Start()
     ' Set up forms for application
-    Set forms = SetUpForms()
+    Set forms = SetUpForms
     PerformanceModeEnabled = False
 End Sub
 
@@ -62,10 +62,10 @@ Private Function SetUpForms() As VBA.Collection
     Dim coll As VBA.Collection
     Set coll = New VBA.Collection
     With coll
-        .Add Factory.CreateProtectionPlanningForm, "Protection Planning"
-        .Add Factory.CreateFiltrationPlanningForm, "Filtration Planning"
-        .Add Factory.CreateAdminForm, "Admin Control Panel"
-        .Add Factory.SpecificationConfigForm, "Specification Config"
+        .Add Factory.CreateWorkOrderAccess, "Protection Planning"
+        '.Add Factory.CreateFiltrationPlanningForm, "Filtration Planning"
+        '.Add Factory.CreateAdminForm, "Admin Control Panel"
+        '.Add Factory.DocumentConfigForm, "Document Config"
     End With
     Set SetUpForms = coll
 End Function
@@ -109,9 +109,9 @@ Public Sub PerformanceMode(enable As Boolean, Optional DisableEvents As Boolean 
 End Sub
 
 ' Forms Interface Methods
-Function ClearForm(name As String) As Boolean
+Function ClearForm(Name As String) As Boolean
     On Error GoTo catchError
-    Set current_form = GUI.forms.Item(name)
+    Set current_form = GUI.forms.item(Name)
     current_form.Clear
 exitFunction:
     Set current_form = Nothing

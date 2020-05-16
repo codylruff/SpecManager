@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Specification"
+Attribute VB_Name = "Document"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -23,7 +23,7 @@ Private Revision_               As String
 Private MaterialId_             As String
 Private IsStandard_             As Boolean
 Private IsLatest_               As Boolean
-Private Template_               As SpecificationTemplate
+Private Template_               As Template
 Private MaterialDescription_    As String
 Private ProcessId_              As String
 Private MachineId_              As String
@@ -34,10 +34,10 @@ Public Property Let DocumentId(value As Long): DocumentId_ = value: End Property
 Public Property Get DocumentId() As Long: DocumentId = DocumentId_: End Property
 
 ' Template
-Public Property Set Template(obj As SpecificationTemplate)
+Public Property Set Template(obj As Template)
     Set Template_ = obj
 End Property
-Public Property Get Template() As SpecificationTemplate
+Public Property Get Template() As Template
     Set Template = Template_
 End Property
 

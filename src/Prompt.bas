@@ -1,4 +1,4 @@
-Attribute VB_Name = "PromptHandler"
+Attribute VB_Name = "Prompt"
 Option Explicit
 
 ' Prompt Sequences
@@ -18,7 +18,7 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
 ' Roll is first cut so if no then print all specifications
 '------------------------------------------------------------------------
     ' Prompt #1 : Is this a finishing order?
-    If App.current_spec.ProcessId = "Finishing" Then
+    If App.current_doc.ProcessId = "Finishing" Then
         ' Prompt #2 : Is this the first loom cut?
         If question("Is this the first loom cut?") Then
             ' Prompt #3 : After finishing, will this roll be processed on the Isotex?
@@ -33,14 +33,14 @@ Function ProtectionPlanningSequence() As DocumentPackageVariant
             ProtectionPlanningSequence = FinishingNoQC
             Exit Function
         End If
-    ElseIf App.current_spec.ProcessId = "Weaving" Then
+    ElseIf App.current_doc.ProcessId = "Weaving" Then
         ' Prompt #4 : Is this a straight tie-back?
         If question("Is this a straight tie-back?") Then
             ProtectionPlanningSequence = WeavingTieBack
         Else
             ProtectionPlanningSequence = WeavingStyleChange
         End If
-    ElseIf App.current_spec.ProcessId = "Isotex" Then
+    ElseIf App.current_doc.ProcessId = "Isotex" Then
         ProtectionPlanningSequence = Isotex
     Else
         ProtectionPlanningSequence = Default
@@ -63,7 +63,7 @@ Public Sub Error(message_text As String)
 End Sub
 
 Public Sub FNI()
-    Error("This function has not been implemented yet.")
+    Error ("This function has not been implemented yet.")
 End Sub
 
 Public Sub Success(message_text As String)
@@ -75,15 +75,15 @@ Public Function UserInput(input_type As InputBoxType, title_text As String, mess
 End Function
 
 Public Function GetPassword() As String
-    GetPassword = CStr(UserInput(Password, "Access Control", "Enter Your Password :"))
+    GetPassword = CStr(Prompt.UserInput(Password, "Access Control", "Enter Your Password :"))
 End Function
 
 Public Function GetLoomNumber() As String
-    GetLoomNumber = CStr(PromptHandler.UserInput(SingleLineText, "Loom Number Selection", "Enter a Loom Number for this Work Order:"))
+    GetLoomNumber = CStr(Prompt.UserInput(SingleLineText, "Loom Number Selection", "Enter a Loom Number for this Work Order:"))
 End Function
 
 Public Function GetMachineId() As String
-    GetMachineId = CStr(PromptHandler.UserInput(SingleLineText, "Machine Id Selection", "Enter a Machine Id for this Specification:"))
+    GetMachineId = CStr(Prompt.UserInput(SingleLineText, "Machine Id Selection", "Enter a Machine Id for this Document:"))
 End Function
 
 Public Function ChangePassword() As String
@@ -95,7 +95,7 @@ Public Function ChangePassword() As String
         new_pass_1 = UserInput(Password, "Access Control", "Enter Your New Password :")
         new_pass_2 = UserInput(Password, "Access Control", "Confirm Your New Password :")
         If new_pass_1 <> new_pass_2 Then
-            PromptHandler.Error "Passwords don't match!"
+            Prompt.Error "Passwords don't match!"
         End If
     Wend
     ' Return new password
@@ -111,5 +111,5 @@ End Function
 
 Public Function SelectSpecifcationFile() As String
 ' Select an specification file from the file dialog.
-    SelectSpecifcationFile = GUI.Krish.OpenFile("Select Specification Document . . .")
+    SelectSpecifcationFile = GUI.Krish.OpenFile("Select Document . . .")
 End Function

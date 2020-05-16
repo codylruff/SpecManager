@@ -34,7 +34,7 @@ Private Const DEFAULT_QC_SAMPLE      As String = "1.5"          ' Minimum protec
 'CLASS VARIABLES
 '----------------
 Private FormId_  As MSForms.UserForm
-'Public Event DocumentPrinted(spec As Specification, work_order As String)
+'Public Event DocumentPrinted(doc As Document, work_order As String)
 '-----------------
 ' AUTO-PROPERTIES
 '-----------------
@@ -71,13 +71,13 @@ Public Sub WriteLine(ParamArray var() As Variant)
     End If
 End Sub
 
-Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional prod_order As String = nullstr, _
+Public Sub PrintObjectToSheet(doc As Document, sht As Worksheet, Optional prod_order As String = nullstr, _
            Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
 ' Print object to specified worksheet starting in cell "A1"
     ' Disable updates to the gui during processing
-    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
     ' This tree selects any specs which have an associated custom worksheet template
-    Select Case spec.SpecType
+    Select Case doc.SpecType
         Case "Warping Requirements"
             LoadWarpingRequirements spec, prod_order
         Case "Weaving RBA"
@@ -95,11 +95,11 @@ Public Sub PrintObjectToSheet(spec As Specification, sht As Worksheet, Optional 
             ' All specifications which do not have a custom worksheet template
             ' will be handled by this case.
             ' Insert/Format body of the specification
-            LoadGenericSpecificationDocument spec, sht, prod_order
+            LoadGenericDocument spec, sht, prod_order
     End Select
     
     ' Enable updates to the gui after processing
-    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
     
 End Sub
 
@@ -149,12 +149,12 @@ Public Sub ListObjects(dict As Object)
 End Sub
 
 Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = nullstr)
-' Exports the given ws as a PDF and saves it to S:\Data Manager\Specifications
+' Exports the given ws as a PDF and saves it to S:\Data Manager\Documents
 
     On Error GoTo SaveFileError
     ' Parse args
     If destination_path = nullstr Then
-        With App.current_spec
+        With App.current_doc
             destination_path = PUBLIC_DIR & "\Specifications\" & .MaterialId & "_" & .SpecType & "_rev" & .Revision
         End With
     End If
@@ -182,35 +182,35 @@ End Sub
 
 Public Sub WriteAllDocuments(Optional order_number As String = nullstr, Optional package_variant As DocumentPackageVariant = Default)
 ' Write all specification docs to the correct worksheets / create worksheet if missing
-    Dim spec As Specification
+    Dim doc As Document
     Dim T As Variant
 
     ' Toggle Performance Mode
-    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
 
     For Each T In App.specs
         Set spec = App.specs.item(T)
             App.printer.PrintObjectToSheet spec, _
-                        ThisWorkbook.Sheets(spec.SpecType), _
+                        ThisWorkbook.Sheets(doc.SpecType), _
                         order_number, _
                         package_variant
     Next T
 
     ' Turn off Performance Mode
-    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
 
 End Sub
 
 Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackageVariant, Optional work_order As String)
 ' Print specs from the given doc_package (dictionary)
     'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
-    Dim spec As Specification
+    Dim doc As Document
     Dim doc As Variant
 
     ' Toggle Performance Mode
-    If Not GUI.PerformanceModeEnabled Then App.PerformanceMode (True)
+    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
     ' Print special requirements document if needed. Specials should print out on top!
-    If CheckForSpecialRequirements(App.current_spec.MaterialId) Then App.printer.PrintSheet SheetByName(App.current_spec.MaterialId)
+    If CheckForSpecialRequirements(App.current_doc.MaterialId) Then App.printer.PrintSheet SheetByName(App.current_doc.MaterialId)
     
     ' Print all the documents in the package
     For Each doc In doc_package
@@ -233,11 +233,11 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     
     ' Turn off Performance Mode
     GuiCommands.ResetExcelGUI
-    If GUI.PerformanceModeEnabled Then App.PerformanceMode (False)
+    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
 
 End Sub
 
-Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
+Public Sub PrintSheets(ws As Worksheet, Optional FitToPage As Boolean = False)
 ' Prints the sheet of the given name in the spec manager workbook
     If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
         ws.Visible = xlSheetVisible
@@ -256,6 +256,10 @@ Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
     ws.PrintOut ActivePrinter:=App.current_user.Settings.item("default_printer")
 End Sub
 
+Public Sub PrintSheets(ws_array As Variant)
+    Sheets.(ws_array()).PrintOut
+End Sub
+
 '-----------------
 ' PRIVATE METHODS
 '-----------------
@@ -268,37 +272,37 @@ Private Function CheckForSpecialRequirements(material_id As String) As Boolean
     CheckForSpecialRequirements = Utils.ArrayContains(specials, material_id)
 End Function
 
-Private Sub LoadCustomSheet(spec As Specification, custom_sheet As Worksheet, Optional names_map As Object)
+Private Sub LoadCustomSheet(doc As Document, custom_sheet As Worksheet, Optional names_map As Object)
 ' Loads a spec to a custom worksheet for printing.
     Dim nr As Variant
     Dim rng As Range
     On Error Resume Next
     If IsNothing(names_map) Then
-        For Each nr In spec.Properties
+        For Each nr In doc.Properties
             Set rng = custom_sheet.Range(CStr(nr))
-            Utils.Insert rng, spec.GetProperty(CStr(nr))
+            Utils.Insert rng, doc.GetProperty(CStr(nr))
         Next nr
     Else
-        For Each nr In spec.Properties
+        For Each nr In doc.Properties
             Set rng = custom_sheet.Range(CStr(names_map(nr)))
-            Utils.Insert rng, spec.GetProperty(CStr(nr))
+            Utils.Insert rng, doc.GetProperty(CStr(nr))
         Next nr
     End If
     On Error GoTo 0
 End Sub
 
-Private Sub InsertHeader(ws As Worksheet, spec As Specification, Optional production_order As String = nullstr)
+Private Sub InsertHeader(ws As Worksheet, doc As Document, Optional production_order As String = nullstr)
 ' Header Content and formatting for Spec Docs
     ' Clear Header
     Utils.ClearHeaderFooter ws, header:=True, footer:=False
     ' Insert Header
     With ws.PageSetup
         If .ScaleWithDocHeaderFooter = True Then .ScaleWithDocHeaderFooter = False
-        .LeftHeader = "&09" & spec.SpecType & " (v" & spec.Template.Revision & ")" & Chr(10) & _
+        .LeftHeader = "&09" & doc.SpecType & " (v" & doc.Template.Revision & ")" & Chr(10) & _
                       "Order No. : " & production_order
-        .CenterHeader = "&09Material : " & spec.MaterialId & Chr(10) & _
-                        spec.MaterialDescription
-        .RightHeader = "&09Revision : " & spec.Revision & Chr(10) & _
+        .CenterHeader = "&09Material : " & doc.MaterialId & Chr(10) & _
+                        doc.MaterialDescription
+        .RightHeader = "&09Revision : " & doc.Revision & Chr(10) & _
                        "Printed : " & CStr(Now())
     End With
 End Sub
@@ -396,7 +400,7 @@ End Sub
 
 Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
 ' Load values from rba properties into cooresponding named range
-    Dim spec As Specification
+    Dim doc As Document
     Dim qc_sample As String
     Dim ballistic_sample As String
     ' Check for sample sizes if required
@@ -417,8 +421,8 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     Next item
     ' Reset the sheet values
     ResetSheetValues App.templates("Weaving RBA"), shtRBA
-    Utils.Insert shtRBA.Range("article_code"), App.current_spec.MaterialId
-    Utils.Insert shtRBA.Range("material_description"), App.current_spec.MaterialDescription
+    Utils.Insert shtRBA.Range("article_code"), App.current_doc.MaterialId
+    Utils.Insert shtRBA.Range("material_description"), App.current_doc.MaterialDescription
     Utils.Insert shtRBA.Range("revision"), nullstr
     Utils.Insert shtRBA.Range("qc_sample_size"), qc_sample
     Utils.Insert shtRBA.Range("ballistic_sample_size"), ballistic_sample
@@ -429,22 +433,22 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     If Utils.IsNothing(spec) Then Exit Sub
     
     ' Load the spec
-    Utils.Insert shtRBA.Range("revision"), spec.Revision
-    Utils.Insert shtRBA.Range("loom_id"), spec.MachineId
+    Utils.Insert shtRBA.Range("revision"), doc.Revision
+    Utils.Insert shtRBA.Range("loom_id"), doc.MachineId
     
     LoadCustomSheet spec, shtRBA
         
 
 End Sub
 
-Private Sub LoadTestingRequirementsToSheet(spec As Specification, sht As Worksheet, prod_order As String, _
+Private Sub LoadTestingRequirementsToSheet(doc As Document, sht As Worksheet, prod_order As String, _
             package_variant As DocumentPackageVariant)
 ' Load QC Testing document per  given variant
     Dim i As Integer
-    LoadGenericSpecificationDocument spec, sht, prod_order
+    LoadGenericDocumentDocument spec, sht, prod_order
     ' Change Critical tests to Required tests for Tie-Backs
     If package_variant = WeavingTieBack Then
-        For i = 2 To spec.Properties.Count
+        For i = 2 To doc.Properties.Count
             With sht.Range("B" & i)
                 If .value = Chr(CHAR_CRITICAL) Then
                     .value = Chr(CHAR_REQUIRED)
@@ -466,17 +470,17 @@ Private Sub LoadTestingRequirementsToSheet(spec As Specification, sht As Workshe
     sht.Range("F5").Font.Name = FONT_NOT_REQUIRED
     sht.Columns("A:G").AutoFit
     ' Insert fabric construction image
-    InsertImage sht, GetWeavePatternImagePath(spec.MaterialId), spec.Properties.Count + 4
+    InsertImage sht, GetWeavePatternImagePath(doc.MaterialId), doc.Properties.Count + 4
 End Sub
 
-Private Sub LoadBallisticTestingRequirementsToSheet(spec As Specification, sht As Worksheet, prod_order As String)
+Private Sub LoadBallisticTestingRequirementsToSheet(doc As Document, sht As Worksheet, prod_order As String)
 ' Load Ballistic Testing Requirements to Sheet
-    LoadGenericSpecificationDocument spec, sht, prod_order
+    LoadGenericDocumentDocument spec, sht, prod_order
     ' Insert package build image
-    InsertImage sht, GetBallisticPackageImagePath, spec.Properties.Count + 4
+    InsertImage sht, GetBallisticPackageImagePath, doc.Properties.Count + 4
 End Sub
 
-Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
+Private Sub LoadWarpingRequirements(doc As Document, prod_order As String)
 ' Load Warping Requirements to sheet
     Dim nr As Variant
     Dim rng As Range
@@ -486,12 +490,12 @@ Private Sub LoadWarpingRequirements(spec As Specification, prod_order As String)
     Set ws = Utils.SheetByName("Warping Requirements")
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
-    Utils.Insert ws.Range("revision"), spec.Revision
+    Utils.Insert ws.Range("revision"), doc.Revision
     LoadCustomSheet spec, ws
 
 End Sub
 
-Private Sub LoadTsppToSheet(spec As Specification, prod_order As String)
+Private Sub LoadTsppToSheet(doc As Document, prod_order As String)
 ' Load Isotex Requirements (TSPP) to sheet
     Dim nr As Variant
     Dim rng As Range
@@ -500,13 +504,13 @@ Private Sub LoadTsppToSheet(spec As Specification, prod_order As String)
     Set ws = Utils.SheetByName("TSPP")
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
-    Utils.Insert ws.Range("revision"), spec.Revision
-    Utils.Insert ws.Range("description"), spec.MaterialDescription
+    Utils.Insert ws.Range("revision"), doc.Revision
+    Utils.Insert ws.Range("description"), doc.MaterialDescription
     LoadCustomSheet spec, ws
 
 End Sub
 
-Private Sub LoadTsspToSheet(spec As Specification, prod_order As String)
+Private Sub LoadTsspToSheet(doc As Document, prod_order As String)
 ' Load Scouring Requirements (TSSP) to sheet
     Dim nr As Variant
     Dim rng As Range
@@ -515,8 +519,8 @@ Private Sub LoadTsspToSheet(spec As Specification, prod_order As String)
     Set ws = Utils.SheetByName("TSSP")
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
-    Utils.Insert ws.Range("revision"), spec.Revision
-    Utils.Insert ws.Range("description"), spec.MaterialDescription
+    Utils.Insert ws.Range("revision"), doc.Revision
+    Utils.Insert ws.Range("description"), doc.MaterialDescription
     LoadCustomSheet spec, ws
 
 End Sub
@@ -583,7 +587,7 @@ Private Sub PrintPropertyToSheet(ws As Worksheet, prop_name As Variant, prop_val
     End With
 End Sub
 
-Private Sub LoadGenericSpecificationDocument(spec As Specification, sht As Worksheet, _
+Private Sub LoadGenericDocumentDocument(doc As Document, sht As Worksheet, _
             prod_order As String, Optional i As Integer = 2)
 ' Handles all non-custom generic spec-docs
     Dim Key As Variant
@@ -593,15 +597,15 @@ Private Sub LoadGenericSpecificationDocument(spec As Specification, sht As Works
         InsertHeader sht, spec, prod_order
         InsertFooter sht
         ' Spec Properties
-        For Each Key In spec.Properties
-            PrintPropertyToSheet sht, Key, spec.GetProperty(CStr(Key)), i
+        For Each Key In doc.Properties
+            PrintPropertyToSheet sht, Key, doc.GetProperty(CStr(Key)), i
             i = i + 1
         Next Key
         sht.Columns("A:G").AutoFit
 
 End Sub
 
-Public Sub ResetSheetValues(spec As SpecificationTemplate, ws As Worksheet)
+Public Sub ResetSheetValues(spec As Template, ws As Worksheet)
 ' Resets spec values in a sheet to nullstr
     Dim k As Variant
     With spec

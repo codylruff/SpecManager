@@ -4,13 +4,14 @@ Option Explicit
 '===================================
 'DESCRIPTION: Data Access Module
 '===================================
-Function PushIQueryable(ByRef obj As IQueryable, Table As String, Optional ByRef trans As SqlTransaction) As Long
+Function PushIQueryable(ByRef obj As IQueryable, Table As String, Optional ByRef trans As SqlTransaction, _
+                        Optional db_path As String=DATABASE_PATH) As Long
 ' Push an object, that implements the IQueryable interface, to the database
     Dim transaction As SqlTransaction
     Dim SQLstmt As String
     On Error GoTo DbPushFailException
     If Utils.IsNothing(trans) Then
-        Set trans = Factory.CreateSqlTransaction(DATABASE_PATH)
+        Set trans = Factory.CreateSqlTransaction(db_path)
     End If
     SQLstmt = "INSERT INTO " & Table & _
             "(" & obj.GetValueLabels & ") " & _
@@ -24,7 +25,8 @@ DbPushFailException:
     PushIQueryable = DB_PUSH_ERR
 End Function
 
-Function PushValue(ByVal key_name As String, ByVal key_id As Variant, ByVal column_name As String, ByVal column_value As Variant, Table As String, Optional ByRef trans As SqlTransaction) As Long
+Function PushValue(ByVal key_name As String, ByVal key_id As Variant, ByVal column_name As String, _
+                    ByVal column_value As Variant, Table As String, Optional ByRef trans As SqlTransaction) As Long
 ' Push a value to the database
     Dim transaction As SqlTransaction
     Dim SQLstmt As String
@@ -43,7 +45,8 @@ DbPushFailException:
     PushValue = DB_PUSH_ERR
 End Function
 
-Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal column_name As String, ByVal tbl As String, Optional ByRef trans As SqlTransaction) As DataFrame
+Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal column_name As String, _
+                    ByVal tbl As String, Optional ByRef trans As SqlTransaction) As DataFrame
 ' Gets a single specifcation from the database
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -57,7 +60,8 @@ Function GetColumn(ByVal key_name As String, ByVal key_id As String, ByVal colum
     Set GetColumn = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
-Function GetSpecification(ByVal material_id As String, ByVal spec_type As String, machine_id As String, Optional ByRef trans As SqlTransaction) As DataFrame
+Function GetDocument(ByVal material_id As String, ByVal spec_type As String, machine_id As String, _
+                            Optional ByRef trans As SqlTransaction) As DataFrame
 ' Gets a single specifcation from the database
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -71,7 +75,7 @@ Function GetSpecification(ByVal material_id As String, ByVal spec_type As String
               "' AND " & "standard_specifications.Spec_Type ='" & spec_type & "'" & _
               " AND " & "standard_specifications.Machine_Id ='" & machine_id & "'"
 
-    Set GetSpecification = trans.ExecuteSQLSelect(SQLstmt)
+    Set GetDocument = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
 Function GetUser(ByVal Name As String, Optional ByRef trans As SqlTransaction) As DataFrame
@@ -145,7 +149,7 @@ Function GetTemplateRecord(ByRef spec_type As String, Optional ByRef trans As Sq
     Set GetTemplateRecord = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
-Function GetSpecificationRecords(ByRef MaterialId As String, Optional ByRef trans As SqlTransaction) As DataFrame
+Function GetDocumentRecords(ByRef MaterialId As String, Optional ByRef trans As SqlTransaction) As DataFrame
 ' Get a record(s) from the database
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -158,10 +162,10 @@ Function GetSpecificationRecords(ByRef MaterialId As String, Optional ByRef tran
               "LEFT JOIN materials ON standard_specifications.Material_Id = materials.Material_Id " & _
               "WHERE standard_specifications.Material_Id= '" & MaterialId & "'"
               
-    Set GetSpecificationRecords = trans.ExecuteSQLSelect(SQLstmt)
+    Set GetDocumentRecords = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
-Function UpdateTemplate(ByRef Template As SpecificationTemplate, Optional ByRef trans As SqlTransaction)
+Function UpdateTemplate(ByRef Template As Template, Optional ByRef trans As SqlTransaction)
 ' Push new template record
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -184,7 +188,7 @@ DbPushFailException:
     UpdateTemplate = DB_PUSH_ERR
 End Function
 
-Function DeleteTemplate(ByRef Template As SpecificationTemplate, Optional ByRef trans As SqlTransaction) As Long
+Function DeleteTemplate(ByRef Template As Template, Optional ByRef trans As SqlTransaction) As Long
 ' Deletes a record
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -203,7 +207,7 @@ DbDeleteFailException:
     DeleteTemplate = DB_DELETE_ERR
 End Function
 
-Function DeleteSpec(ByRef spec As Specification, machine_id As String, Optional tbl As String = "standard_specifications", Optional ByRef trans As SqlTransaction) As Long
+Function DeleteSpec(ByRef doc As Document, machine_id As String, Optional tbl As String = "standard_specifications", Optional ByRef trans As SqlTransaction) As Long
 ' Push a new records
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
@@ -213,8 +217,8 @@ Function DeleteSpec(ByRef spec As Specification, machine_id As String, Optional 
     End If
     ' Create SQL statement from objects
     SQLstmt = "DELETE FROM " & tbl & " " & _
-              "WHERE Material_Id ='" & spec.MaterialId & "' AND Revision ='" & spec.Revision & "'" & _
-              " AND Spec_Type ='" & spec.SpecType & "'" & _
+              "WHERE Material_Id ='" & doc.MaterialId & "' AND Revision ='" & doc.Revision & "'" & _
+              " AND Spec_Type ='" & doc.SpecType & "'" & _
               " AND " & "Machine_Id ='" & machine_id & "'"
 
     trans.ExecuteSQL (SQLstmt)
@@ -237,7 +241,7 @@ Function GetTemplateTypes(Optional ByRef trans As SqlTransaction) As DataFrame
     Set GetTemplateTypes = trans.ExecuteSQLSelect(SQLstmt)
 End Function
 
-Function SelectAllSpecifications(spec_type As String, Optional ByRef trans As SqlTransaction) As VBA.Collection
+Function SelectAllDocuments(spec_type As String, Optional ByRef trans As SqlTransaction) As VBA.Collection
     Dim SQLstmt As String
     Dim transaction As SqlTransaction
     Dim df As DataFrame
@@ -248,7 +252,7 @@ Function SelectAllSpecifications(spec_type As String, Optional ByRef trans As Sq
     'Logger.Log "Selecting all specifications . . . "
     SQLstmt = "SELECT * FROM standard_specifications WHERE Spec_Type ='" & spec_type & "'"
     Set df = trans.ExecuteSQLSelect(SQLstmt)
-    Set SelectAllSpecifications = df.records
+    Set SelectAllDocuments = df.records
 End Function
 
 Function SelectAllWhere(wheres As Variant, vals As Variant, Table As String, Optional fields As String = "*", Optional ByRef trans As SqlTransaction) As DataFrame

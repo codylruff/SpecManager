@@ -13,7 +13,7 @@ Attribute VB_Exposed = False
 '====================================
 'Factory Module Constructor function:
 'Function CreateIForm() As IForm
-Public Function GetName() As String
-End Function
+Public Property Get Name() As String
+End Property
 Public Function Clear()
 End Function

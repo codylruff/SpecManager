@@ -30,11 +30,11 @@ Sub AllTests()
         Utils.UnloadAllForms
         App.InitializeTestSuiteCredentials
         .Log CreateTemplate_Test, TestLog
-        .Log CreateSpecification_Test, TestLog
-        .Log ViewSpecification_AfterCreate_Test, TestLog
+        .Log CreateDocument_Test, TestLog
+        .Log ViewDocument_AfterCreate_Test, TestLog
         .Log EditTemplate_Test, TestLog
-        .Log EditSpecification_Test, TestLog
-        .Log ViewSpecification_AfterEdit_Test, TestLog
+        .Log EditDocument_Test, TestLog
+        .Log ViewDocument_AfterEdit_Test, TestLog
         ' Delete test template
         .Log Utils.FormatTestResult("Delete Template Test", IIf(Tests.DeleteTestTemplate = DB_DELETE_SUCCESS, "PASS", "FAIL")), TestLog
         ' Account Control
@@ -57,7 +57,7 @@ TestSuiteFailed:
         .SetImmediateLog RuntimeLog
         .SetLogLevel LOG_LOW
     End With
-    'PromptHandler.Error "Somethings wrong, please contact the administrator."
+    'Prompt.Error "Somethings wrong, please contact the administrator."
 End Sub
 
 Function CreateTemplate_Test() As String
@@ -78,18 +78,20 @@ Function CreateTemplate_Test() As String
     ' 7. Report pass / fail
     CreateTemplate_Test = Utils.FormatTestResult("Create Template Test", "PASS")
     pTestResults.Add True
+    Finally:
     Exit Function
 TestFailed:
     pTestResults.Add False
     CreateTemplate_Test = Utils.FormatTestResult("Create Template Test", "FAIL")
+    Goto Finally
 End Function
 
-Function CreateSpecification_Test() As String
+Function CreateDocument_Test() As String
     On Error GoTo TestFailed
     ' 1. Main menu button to  create specification
     App.RefreshObjects
     ' 2. Select a template type from the combo box "test_template"
-    formNewSpecInput.cboSelectSpecificationType = "test_template"
+    formNewSpecInput.cboSelectDocumentType = "test_template"
     ' 3. Enter a material ID "test_specification"
     formNewSpecInput.txtSpecName = "test_specification"
     ' 4. Enter a machine id for this specification
@@ -105,15 +107,17 @@ Function CreateSpecification_Test() As String
     ' 9. Click the save changes button
     formCreateSpec.SaveChanges
     ' 10. Report pass / fail
-    CreateSpecification_Test = Utils.FormatTestResult("Create Specification Test", "PASS")
+    CreateDocument_Test = Utils.FormatTestResult("Create Document Test", "PASS")
     pTestResults.Add True
+    Finally:
     Exit Function
 TestFailed:
     pTestResults.Add False
-    CreateSpecification_Test = Utils.FormatTestResult("Create Specification Test", "FAIL")
+    CreateDocument_Test = Utils.FormatTestResult("Create Document Test", "FAIL")
+    Goto Finally
 End Function
 
-Function ViewSpecification_AfterCreate_Test() As String
+Function ViewDocument_AfterCreate_Test() As String
     On Error GoTo TestFailed
     ' 1. Main menu button to view specifications
     App.RefreshObjects
@@ -124,12 +128,14 @@ Function ViewSpecification_AfterCreate_Test() As String
     ' 4. Select a specification UID
     formViewSpecs.cboSelectType = "test_template(test_machine)"
     ' 5. Report pass / fail
-    ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "PASS")
+    ViewDocument_AfterCreate_Test = Utils.FormatTestResult("View Document Test", "PASS")
     pTestResults.Add True
+    Finally:
     Exit Function
 TestFailed:
     pTestResults.Add False
-    ViewSpecification_AfterCreate_Test = Utils.FormatTestResult("View Specification Test", "FAIL")
+    ViewDocument_AfterCreate_Test = Utils.FormatTestResult("View Document Test", "FAIL")
+    Goto Finally
 End Function
 
 Function EditTemplate_Test() As String
@@ -155,13 +161,15 @@ Function EditTemplate_Test() As String
     ' 10. Report pass / fail
     EditTemplate_Test = Utils.FormatTestResult("Edit Template Test", "PASS")
     pTestResults.Add True
+    Finally:
     Exit Function
 TestFailed:
     pTestResults.Add False
     EditTemplate_Test = Utils.FormatTestResult("Edit Template Test", "FAIL")
+    Goto Finally
 End Function
 
-Function EditSpecification_Test() As String
+Function EditDocument_Test() As String
     On Error GoTo TestFailed
     ' 1. Main menu button to edit specification
     App.RefreshObjects
@@ -169,7 +177,7 @@ Function EditSpecification_Test() As String
     formSpecConfig.txtMaterialId = "test_specification"
     ' 3. Click the search button
     formSpecConfig.MaterialSearch
-    ' 4. Select a Specification UID
+    ' 4. Select a Document UID
     formSpecConfig.cboSelectType = "test_template(test_machine)"
     ' 5. Select a property name in the combo box "new_test_property"
     formSpecConfig.cboSelectProperty = "new_test_property"
@@ -180,17 +188,19 @@ Function EditSpecification_Test() As String
     ' 8. Save changes
     formSpecConfig.SaveChanges
     ' 9. Remove old specification from the archive
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.specs.item("to_archive"), "archived_specifications"), SqlLog
+    Logger.Log "SQLite returned : " & SpecManager.DeleteDocument(App.specs.item("to_archive"), "archived_specifications"), SqlLog
     ' 10. Report pass / fail
-    EditSpecification_Test = Utils.FormatTestResult("Edit Specification Test", "PASS")
+    EditDocument_Test = Utils.FormatTestResult("Edit Document Test", "PASS")
     pTestResults.Add True
+    Finally:
     Exit Function
 TestFailed:
     pTestResults.Add False
-    EditSpecification_Test = Utils.FormatTestResult("Edit Specification Test", "FAIL")
+    EditDocument_Test = Utils.FormatTestResult("Edit Document Test", "FAIL")
+    GoTo Finally
 End Function
 
-Function ViewSpecification_AfterEdit_Test() As String
+Function ViewDocument_AfterEdit_Test() As String
     On Error GoTo TestFailed
     ' 1. Main menu button to view specifications
     App.RefreshObjects
@@ -201,16 +211,18 @@ Function ViewSpecification_AfterEdit_Test() As String
     ' 4. Select a specification UID
     formViewSpecs.cboSelectType = "test_template(test_machine)"
     ' 5. Remove Spec Template
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecificationTemplate(App.current_spec.Template), SqlLog
+    Logger.Log "SQLite returned : " & SpecManager.DeleteTemplate(App.current_doc.Template), SqlLog
     ' 6. Remove Spec
-    Logger.Log "SQLite returned : " & SpecManager.DeleteSpecification(App.current_spec), SqlLog
+    Logger.Log "SQLite returned : " & SpecManager.DeleteDocument(App.current_doc), SqlLog
     ' 7. Report pass / fail
-    ViewSpecification_AfterEdit_Test = Utils.FormatTestResult("View Specification After Edit Test", "PASS")
+    ViewDocument_AfterEdit_Test = Utils.FormatTestResult("View Document After Edit Test", "PASS")
     pTestResults.Add True
+    Finally:
     Exit Function
 TestFailed:
     pTestResults.Add False
-    ViewSpecification_AfterEdit_Test = Utils.FormatTestResult("Create Specification After Edit Test", "FAIL")
+    ViewDocument_AfterEdit_Test = Utils.FormatTestResult("View Document After Edit Test", "FAIL")
+    Goto Finally
 End Function
 
 Sub AccessControl_Test()
@@ -239,16 +251,16 @@ Public Sub ProtectionPlanningSequence_Tests()
         .SetLogLevel LOG_TEST
         .SetImmediateLog TestLog
         .Log "Protection Planning Prompt Sequence", TestLog
-        PromptHandler.Success "weaving style change"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = WeavingStyleChange, "PASS", "FAIL"), TestLog
-        PromptHandler.Success "weaving tie-back"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = WeavingTieBack, "PASS", "FAIL"), TestLog
-        PromptHandler.Success "finishing first roll not isotex bound"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingWithQC, "PASS", "FAIL"), TestLog
-        PromptHandler.Success "finishing second roll"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
-        PromptHandler.Success "finishing first roll + isotex bound"
-        .Log IIf(PromptHandler.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
+        Prompt.Success "weaving style change"
+        .Log IIf(Prompt.ProtectionPlanningSequence = WeavingStyleChange, "PASS", "FAIL"), TestLog
+        Prompt.Success "weaving tie-back"
+        .Log IIf(Prompt.ProtectionPlanningSequence = WeavingTieBack, "PASS", "FAIL"), TestLog
+        Prompt.Success "finishing first roll not isotex bound"
+        .Log IIf(Prompt.ProtectionPlanningSequence = FinishingWithQC, "PASS", "FAIL"), TestLog
+        Prompt.Success "finishing second roll"
+        .Log IIf(Prompt.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
+        Prompt.Success "finishing first roll + isotex bound"
+        .Log IIf(Prompt.ProtectionPlanningSequence = FinishingNoQC, "PASS", "FAIL"), TestLog
         .SaveAllLogs
         .SetImmediateLog RuntimeLog
         .SetLogLevel LOG_LOW
@@ -257,7 +269,7 @@ End Sub
 
 Public Sub SqlTransaction_Tests()
     App.Start
-    SpecManager.ApplyTemplateChangesToSpecifications "Transaction Test", Array("Change 1", "Change 2")
+    SpecManager.ApplyTemplateChangesToDocuments "Transaction Test", Array("Change 1", "Change 2")
     Logger.SaveAllLogs
     App.Shutdown
 End Sub
@@ -286,10 +298,10 @@ Public Sub GetFiles_Test()
     Next file
 End Sub
 
-Function CreateTestSpec() As Specification
-    Dim test_spec As Specification
+Function CreateTestSpec() As Document
+    Dim test_spec As Document
     
-    Set test_spec = Factory.CreateSpecification
+    Set test_spec = Factory.CreateDocument
     With test_spec
         .MaterialId = "TEST_SPECIFICATION"
         .AddProperty "Test Property"
@@ -300,12 +312,12 @@ Function CreateTestSpec() As Specification
 End Function
 
 Public Sub AddNewMaterialDescription_Test()
-    Dim test_spec As Specification
+    Dim test_spec As Document
     App.Start
     App.InitializeTestSuiteCredentials
     Set test_spec = CreateTestSpec
-    Logger.Log SpecManager.SaveNewSpecification(test_spec)
-    SpecManager.DeleteSpecification test_spec
+    Logger.Log SpecManager.SaveNewDocument(test_spec)
+    SpecManager.DeleteDocument test_spec
     App.DeInitializeTestSuiteCredentials
     App.Shutdown
 End Sub
@@ -313,7 +325,7 @@ End Sub
 Public Sub SelectAllWhere_Test()
     Dim df As DataFrame
     Dim coll As VBA.Collection
-    Dim spec As Specification
+    Dim doc As Document
     Dim dict As Object
     Set dict = Factory.CreateDictionary
     Set df = DataAccess.SelectAllWhere(Array("Spec_Type"), Array("Testing Requirements"), "standard_specifications")

@@ -26,14 +26,14 @@ Private m_ConditionedWeight As Double
 Private m_FabricWidthInches As Double
 Private m_PackageLengthInches As Double
 Private m_NumberOfLayers As Integer
-Private m_Template As SpecificationTemplate
+Private m_Template As Template
 ' Properties dictionary
 Public Properties   As Object
 '------------
 ' PROPERTIES
 '------------
-Public Property Set Template(obj As SpecificationTemplate): Set m_Template = obj: End Property
-Public Property Get Template() As SpecificationTemplate: Set Template = m_Template: End Property
+Public Property Set Template(obj As Template): Set m_Template = obj: End Property
+Public Property Get Template() As Template: Set Template = m_Template: End Property
 Public Property Let PackageLengthInches(value As Double): m_PackageLengthInches = value: End Property
 Public Property Get PackageLengthInches() As Double: PackageLengthInches = m_PackageLengthInches: End Property
 Public Property Let FabricWidthInches(value As Double): m_FabricWidthInches = value: End Property
@@ -83,7 +83,7 @@ Function PackageMass() As Double
 End Function
 
 ' ITestingPlan Methods
-Function ITestingPlan_GetTemplate() As SpecificationTemplate
+Function ITestingPlan_GetTemplate() As Template
     Set Template = App.templates("Ballistic Testing Requirements")
     Set ITestingPlan_GetTemplate = Template
 End Function

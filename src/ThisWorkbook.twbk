@@ -15,6 +15,12 @@ Public Sub RemoveAll()
     Next
 End Sub
 
+Sub ImportAll()
+    If Not IsEditorInSync Then SyncVBAEditor
+    RemoveAll
+    Application.OnTime Now(), "VSImport"
+End Sub
+
 Sub VSImport()
     
     Dim path As String
@@ -24,6 +30,7 @@ Sub VSImport()
     
     Set wb = ActiveWorkbook
     
+
     On Error GoTo ImportFail
     
     path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
@@ -57,4 +64,34 @@ Sub VSImport()
 
 ImportFail:
     Debug.Print "Import Failed"
+    
+End Sub
+
+Function IsEditorInSync() As Boolean
+'=======================================================================
+' IsEditorInSync
+' This tests if the VBProject selected in the Project window, and
+' therefore the ActiveVBProject is the same as the VBProject associated
+' with the ActiveCodePane. If these two VBProjects are the same,
+' the editor is in sync and the result is True. If these are not the
+' same project, the editor is out of sync and the result is True.
+'=======================================================================
+    With Application.VBE
+    IsEditorInSync = .ActiveVBProject Is _
+        .ActiveCodePane.CodeModule.Parent.Collection.Parent
+    End With
+End Function
+
+Sub SyncVBAEditor()
+'=======================================================================
+' SyncVBAEditor
+' This syncs the editor with respect to the ActiveVBProject and the
+' VBProject containing the ActiveCodePane. This makes the project
+' that conrains the ActiveCodePane the ActiveVBProject.
+'=======================================================================
+    With Application.VBE
+    If Not .ActiveCodePane Is Nothing Then
+        Set .ActiveVBProject = .ActiveCodePane.CodeModule.Parent.Collection.Parent
+    End If
+    End With
 End Sub

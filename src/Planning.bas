@@ -1,22 +1,22 @@
 Attribute VB_Name = "Planning"
 
-Public Sub cmdPrintSpecifications()
+Public Sub cmdPrintDocuments()
     Dim prompt_result As DocumentPackageVariant
     If shtPlanning.Range("console") = nullstr Then
-         PromptHandler.Error "There is nothing to print!"
+         Prompt.Error "There is nothing to print!"
          Exit Sub
     ElseIf shtPlanning.Range("console") = "No specifications are available for this code." Then
-         PromptHandler.Error "There is nothing to print!"
+         Prompt.Error "There is nothing to print!"
          Exit Sub
     ElseIf Not IsNumeric(shtPlanning.Range("work_order")) Then
-         PromptHandler.Error "Please enter a production order."
+         Prompt.Error "Please enter a production order."
          Exit Sub
     End If
     ' Consider process exceptions based on input from planners.
-    prompt_result = PromptHandler.ProtectionPlanningSequence
+    prompt_result = Prompt.ProtectionPlanningSequence
     If Not App.TestingMode Then
         ' Check for alternate machine ids (currently only for weaving)
-        If App.current_spec.ProcessId = "Weaving" Then
+        If App.current_doc.ProcessId = "Weaving" Then
                 SpecManager.FilterByMachineId shtPlanning.Range("machine_id")
         End If
         ' Write the documents to their repsective worksheets
@@ -33,13 +33,13 @@ Public Sub cmdSearch()
     ' Check for any white space and remove it
     App.Start
     If Utils.RemoveWhiteSpace(shtPlanning.Range("material_id")) = nullstr Then
-       PromptHandler.Error "Please enter a material id."
+       Prompt.Error "Please enter a material id."
        Exit Sub
     ElseIf Utils.RemoveWhiteSpace(shtPlanning.Range("work_order")) = nullstr Then
-        PromptHandler.Error "Please enter a work order number."
+        Prompt.Error "Please enter a work order number."
        Exit Sub
     ElseIf Utils.RemoveWhiteSpace(shtPlanning.Range("machine_id")) = nullstr Then
-        PromptHandler.Error "Please enter a machine id."
+        Prompt.Error "Please enter a machine id."
        Exit Sub
     End If
     ' Run search routine
@@ -49,7 +49,7 @@ End Sub
 
 Sub MaterialSearch()
     SpecManager.MaterialInput UCase(shtPlanning.Range("material_id"))
-    Logger.Log "Listing Specifications . . . "
+    Logger.Log "Listing Documents . . . "
     Set App.printer = Factory.CreateDocumentPrinter
     If Not App.specs Is Nothing Then
         App.printer.ListObjects App.specs
