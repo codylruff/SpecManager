@@ -13,8 +13,8 @@ Attribute VB_Exposed = False
 '====================================
 'Factory Module Constructor function:
 'Function CreateWorkOrderAccess() As WorkOrderAccess
-Implements IForm
-Implements ISearchForm
+'Implements IForm
+'Implements ISearchForm
 '----------------
 'CLASS VARIABLES
 '----------------

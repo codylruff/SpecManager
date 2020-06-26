@@ -18,6 +18,7 @@ Option Explicit
 '----------------
 'CONSTANTS
 '----------------
+' These settings should not be changed unless you know what your doing.
 Private Const CHAR_REQUIRED          As Long = 252              ' Unicode character used to denote a required test
 Private Const CHAR_CRITICAL          As Long = 171              ' Unicode character used to denote a critical test
 Private Const CHAR_NOT_REQUIRED      As Long = 210              ' Unicode character used to denote that a test is not-required
@@ -33,21 +34,19 @@ Private Const DEFAULT_QC_SAMPLE      As String = "1.5"          ' Minimum protec
 '----------------
 'CLASS VARIABLES
 '----------------
-Private FormId_  As MSForms.UserForm
+Private CurrentForm_  As IForm
 'Public Event DocumentPrinted(doc As Document, work_order As String)
 '-----------------
 ' AUTO-PROPERTIES
 '-----------------
-Public Property Set FormId(value As MSForms.UserForm): Set FormId_ = value: End Property
-Public Property Get FormId() As MSForms.UserForm: Set FormId = FormId_: End Property
-Public Property Get CurrentText() As String: CurrentText = Me.FormId.txtConsole.text: End Property
-Public Property Let CurrentText(value As String): CurrentText = value: End Property
+Public Property Set CurrentForm(value As MSForms.UserForm): Set CurrentForm_ = value: End Property
+Public Property Get CurrentForm() As MSForms.UserForm: Set CurrentForm = GUI.current_form: End Property
 '----------------
 ' PUBLIC METHODS
 '----------------
 Public Sub ClearConsole()
 ' Clears the console of any text
-    Me.CurrentText = nullstr
+    CurrentForm.Clear
     Logger.Log "Console Cleared"
 End Sub
 
@@ -64,10 +63,10 @@ Public Sub WriteLine(ParamArray var() As Variant)
              s = s & Left$(var(i) & ":" & Space(Padding), Padding)
          End If
     Next
-    If Me.FormId Is Nothing Then
+    If Me.CurrentForm Is Nothing Then
         shtPlanning.Range("console") = shtPlanning.Range("console") & s & vbNewLine
     Else
-        Me.FormId.txtConsole.text = FormId.txtConsole.text & s & vbNewLine
+        Me.CurrentForm.Console.text = CurrentForm.Console.text & s & vbNewLine
     End If
 End Sub
 
@@ -79,23 +78,22 @@ Public Sub PrintObjectToSheet(doc As Document, sht As Worksheet, Optional prod_o
     ' This tree selects any specs which have an associated custom worksheet template
     Select Case doc.SpecType
         Case "Warping Requirements"
-            LoadWarpingRequirements spec, prod_order
+            LoadWarpingRequirements doc, prod_order
         Case "Weaving RBA"
-            
             LoadRbaToSheet App.specs, prod_order
         Case "Testing Requirements"
-            LoadTestingRequirementsToSheet spec, sht, prod_order, package_variant
+            LoadTestingRequirementsToSheet doc, sht, prod_order, package_variant
         Case "Ballistic Testing Requirements"
-            LoadBallisticTestingRequirementsToSheet spec, sht, prod_order
+            LoadBallisticTestingRequirementsToSheet doc, sht, prod_order
         Case "TSPP"
-            LoadTsppToSheet spec, prod_order
+            LoadTsppToSheet doc, prod_order
         Case "TSSP"
-            LoadTsspToSheet spec, prod_order
+            LoadTsspToSheet doc, prod_order
         Case Else
             ' All specifications which do not have a custom worksheet template
             ' will be handled by this case.
             ' Insert/Format body of the specification
-            LoadGenericDocument spec, sht, prod_order
+            LoadGenericDocument doc, sht, prod_order
     End Select
     
     ' Enable updates to the gui after processing
@@ -107,7 +105,7 @@ Public Sub PrintObjectToConsole(obj As Object)
 ' Print object to console
     Dim Key As Variant
     ' Clear the console
-    FormId.txtConsole.text = nullstr
+    CurrentForm.Console.text = nullstr
     'WriteLine obj.SpecType, obj.MaterialId
     'WriteLine "Revision", obj.Revision
     
@@ -140,10 +138,10 @@ Public Sub ListObjects(dict As Object)
     Dim T As Variant
     shtPlanning.Range("console") = nullstr
     For Each T In dict
-        If Me.FormId Is Nothing Then
+        If Me.CurrentForm Is Nothing Then
             shtPlanning.Range("console") = shtPlanning.Range("console") & CStr(T) & vbNewLine
         Else
-            Me.FormId.txtConsole.text = FormId.txtConsole.text & CStr(T) & vbNewLine
+            Me.CurrentForm.Console.text = CurrentForm.Console.text & CStr(T) & vbNewLine
         End If
     Next T
 End Sub
@@ -189,8 +187,8 @@ Public Sub WriteAllDocuments(Optional order_number As String = nullstr, Optional
     If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
 
     For Each T In App.specs
-        Set spec = App.specs.item(T)
-            App.printer.PrintObjectToSheet spec, _
+        Set doc = App.specs.item(T)
+            App.printer.PrintObjectToSheet doc, _
                         ThisWorkbook.Sheets(doc.SpecType), _
                         order_number, _
                         package_variant
@@ -205,7 +203,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
 ' Print specs from the given doc_package (dictionary)
     'Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
     Dim doc As Document
-    Dim doc As Variant
+    Dim item As Variant
 
     ' Toggle Performance Mode
     If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
@@ -213,10 +211,10 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     If CheckForSpecialRequirements(App.current_doc.MaterialId) Then App.printer.PrintSheet SheetByName(App.current_doc.MaterialId)
     
     ' Print all the documents in the package
-    For Each doc In doc_package
-        Set spec = doc_package(doc)
+    For Each item In doc_package
+        Set doc = doc_package(item)
         ' Log User Action
-        With spec
+        With doc
             ' Weaving RBA gets special treament here to include the checklist.
             If .SpecType = "Weaving RBA" Then
                 App.printer.PrintSheet SheetByName("Weaving RBA"), FitToPage:=False
@@ -228,8 +226,8 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
                 App.printer.PrintSheet SheetByName(.SpecType), FitToPage:=True
             End If
         End With
-        ActionLog.DocumentPrinted spec, work_order
-    Next doc
+        ActionLog.DocumentPrinted doc, work_order
+    Next item
     
     ' Turn off Performance Mode
     GuiCommands.ResetExcelGUI
@@ -237,7 +235,7 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
 
 End Sub
 
-Public Sub PrintSheets(ws As Worksheet, Optional FitToPage As Boolean = False)
+Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
 ' Prints the sheet of the given name in the spec manager workbook
     If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
         ws.Visible = xlSheetVisible
@@ -256,9 +254,9 @@ Public Sub PrintSheets(ws As Worksheet, Optional FitToPage As Boolean = False)
     ws.PrintOut ActivePrinter:=App.current_user.Settings.item("default_printer")
 End Sub
 
-Public Sub PrintSheets(ws_array As Variant)
-    Sheets.(ws_array()).PrintOut
-End Sub
+' Public Sub PrintSheets(ws_array As Variant)
+'     Sheets.(ws_array()).PrintOut
+' End Sub
 
 '-----------------
 ' PRIVATE METHODS
@@ -417,7 +415,7 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     ' Insert values into worksheet
     Dim item As Variant
     For Each item In App.DocumentsByUID
-        If Left(item, 12) = "Weaving RBA(" Then Set spec = App.DocumentsByUID(item)
+        If Left(item, 12) = "Weaving RBA(" Then Set doc = App.DocumentsByUID(item)
     Next item
     ' Reset the sheet values
     ResetSheetValues App.templates("Weaving RBA"), shtRBA
@@ -430,13 +428,13 @@ Private Sub LoadRbaToSheet(specs_dict As Object, prod_order As String)
     Utils.Insert shtRBA.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
     Utils.Insert shtRBA.Range("loom_id"), nullstr
 
-    If Utils.IsNothing(spec) Then Exit Sub
+    If Utils.IsNothing(doc) Then Exit Sub
     
     ' Load the spec
     Utils.Insert shtRBA.Range("revision"), doc.Revision
     Utils.Insert shtRBA.Range("loom_id"), doc.MachineId
     
-    LoadCustomSheet spec, shtRBA
+    LoadCustomSheet doc, shtRBA
         
 
 End Sub
@@ -445,7 +443,7 @@ Private Sub LoadTestingRequirementsToSheet(doc As Document, sht As Worksheet, pr
             package_variant As DocumentPackageVariant)
 ' Load QC Testing document per  given variant
     Dim i As Integer
-    LoadGenericDocumentDocument spec, sht, prod_order
+    LoadGenericDocument doc, sht, prod_order
     ' Change Critical tests to Required tests for Tie-Backs
     If package_variant = WeavingTieBack Then
         For i = 2 To doc.Properties.Count
@@ -475,7 +473,7 @@ End Sub
 
 Private Sub LoadBallisticTestingRequirementsToSheet(doc As Document, sht As Worksheet, prod_order As String)
 ' Load Ballistic Testing Requirements to Sheet
-    LoadGenericDocumentDocument spec, sht, prod_order
+    LoadGenericDocument doc, sht, prod_order
     ' Insert package build image
     InsertImage sht, GetBallisticPackageImagePath, doc.Properties.Count + 4
 End Sub
@@ -491,7 +489,7 @@ Private Sub LoadWarpingRequirements(doc As Document, prod_order As String)
     Utils.Insert ws.Range("work_order"), prod_order
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
     Utils.Insert ws.Range("revision"), doc.Revision
-    LoadCustomSheet spec, ws
+    LoadCustomSheet doc, ws
 
 End Sub
 
@@ -506,7 +504,7 @@ Private Sub LoadTsppToSheet(doc As Document, prod_order As String)
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
     Utils.Insert ws.Range("revision"), doc.Revision
     Utils.Insert ws.Range("description"), doc.MaterialDescription
-    LoadCustomSheet spec, ws
+    LoadCustomSheet doc, ws
 
 End Sub
 
@@ -521,7 +519,7 @@ Private Sub LoadTsspToSheet(doc As Document, prod_order As String)
     Utils.Insert ws.Range("date_printed"), Format(CStr(Now()), "mm/dd/yyyy")
     Utils.Insert ws.Range("revision"), doc.Revision
     Utils.Insert ws.Range("description"), doc.MaterialDescription
-    LoadCustomSheet spec, ws
+    LoadCustomSheet doc, ws
 
 End Sub
 
@@ -587,14 +585,14 @@ Private Sub PrintPropertyToSheet(ws As Worksheet, prop_name As Variant, prop_val
     End With
 End Sub
 
-Private Sub LoadGenericDocumentDocument(doc As Document, sht As Worksheet, _
+Private Sub LoadGenericDocument(doc As Document, sht As Worksheet, _
             prod_order As String, Optional i As Integer = 2)
 ' Handles all non-custom generic spec-docs
     Dim Key As Variant
         ' Clear any existing information from the sheet
         sht.Cells.ClearContents
         ' Spec Header
-        InsertHeader sht, spec, prod_order
+        InsertHeader sht, doc, prod_order
         InsertFooter sht
         ' Spec Properties
         For Each Key In doc.Properties

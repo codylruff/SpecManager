@@ -11,6 +11,7 @@ Attribute VB_Exposed = False
 'CLASS DESCRIPTION:
 ' Interface for a testing plan object
 '====================================
+'namespace=src/Interfaces
 Function GetTemplate() As Template
 End Function
 Function GetPropertiesJson() As String

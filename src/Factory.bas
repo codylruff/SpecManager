@@ -155,9 +155,9 @@ Function CreateDocumentPrinter(Optional frm As UserForm) As DocumentPrinter
     Dim obj As DocumentPrinter
     Set obj = New DocumentPrinter
     If Not Utils.IsNothing(frm) Then
-        Set obj.FormId = frm
+        Set obj.CurrentForm = frm
     Else
-        Set obj.FormId = Nothing
+        Set obj.CurrentForm = Nothing
     End If
     Set CreateDocumentPrinter = obj
 End Function
@@ -181,6 +181,14 @@ Function CreateSqlTransaction(path As String) As SqlTransaction
     Set CreateSqlTransaction = sql_trans
 End Function
 
+Function CreateConsole(ws As Worksheet) As Console
+' Creates a Console object to handle a IForm_Console output.
+    Dim obj As Console
+    Set obj = New Console
+    obj.Sheet = ws
+    Set CreateConsole = obj
+End Function
+
 Function CreateWorkOrderAccess() As WorkOrderAccess
 
     Dim frm As WorkOrderAccess
@@ -189,6 +197,27 @@ Function CreateWorkOrderAccess() As WorkOrderAccess
         Set .Sheet = shtPlanning
     End With
     Set CreateWorkOrderAccess = frm
+End Function
+
+Function CreateFormCreate() As FormCreate
+' Creates a FormCreate Object for the GUI to handle.
+    Dim frm As FormCreate
+    Set frm = New FormCreate
+    Set CreateFormCreate = frm
+End Function
+
+Function CreateFormEdit() As FormEdit
+' Creates a FormEdit Object for the GUI to handle.
+    Dim frm As FormEdit
+    Set frm = New FormEdit
+    Set CreateFormEdit = frm
+End Function
+
+Function CreateFormView() As FormView
+' Creates a FormView Object for the GUI to handle.
+    Dim frm As FormView
+    Set frm = New FormView
+    Set CreateFormView = frm
 End Function
 
 'Function CreateFiltrationPlanningForm() As FiltrationPlanningForm

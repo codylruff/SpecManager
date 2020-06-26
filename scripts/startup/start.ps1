@@ -105,11 +105,12 @@ $Status.Text = "Launching Spec-Manager . . ."
 $Status.Refresh()
 Start-Sleep -Seconds 1
 $Excel = New-Object -comobject Excel.Application
+$App = $Excel.Application
 $FilePath = "$SpecManagerDir\Spec Manager $tag.xlsm"
 #$Excel.WindowState = -4140
 $Excel.visible = $true
 $Excel.Workbooks.Open($FilePath)
+$App.Run("GuiCommands.HideExcelItems")
 # Close the form
 $Launcher.Hide
-
 

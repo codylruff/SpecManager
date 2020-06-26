@@ -5,6 +5,7 @@ Option Compare Text
 ' DESCRIPTION: Util Module holds
 ' miscellenous helper functions.
 '=================================
+'namespace=src/util
 ' ------------------------------------------------
 ' WINDOWS API FUNCTIONS DO NOT CHANGE
 ' ------------------------------------------------

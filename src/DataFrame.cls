@@ -16,15 +16,15 @@ Private columns_    As Long
 Public m_fields     As Object
 Private m_records   As VBA.Collection
 
-Private Property Set fields(ByRef obj As Object)
+Private Property Set Fields(ByRef obj As Object)
     Set m_fields = obj
 End Property
-Public Property Get fields() As Object
+Public Property Get Fields() As Object
     On Error Resume Next
     If m_fields Is Nothing Then
        InitializeRecords
     End If
-    Set fields = m_fields
+    Set Fields = m_fields
 End Property
 
 Private Property Set records(ByRef obj As VBA.Collection)

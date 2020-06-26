@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-
+'NOTE This is where the GUI should be handled.
 #If VBA7 Then
     Private Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 #Else
@@ -23,6 +23,7 @@ Private Type Settings
 End Type
 
 ' Events
+'REVIEW These events are not used at all. Why are they here?
 Public Event BeforeRefresh()
 Public Event AfterRefresh()
 Public Event BeforeStart()
@@ -61,8 +62,12 @@ Private Function SetUpForms() As VBA.Collection
 ' Prepare forms for use
     Dim coll As VBA.Collection
     Set coll = New VBA.Collection
+    ' REVIEW Is this the right way to load the forms?
     With coll
-        .Add Factory.CreateWorkOrderAccess, "Protection Planning"
+        .Add Factory.CreateFormCreate
+        .Add Factory.CreateFormEdit
+        .Add Factory.CreateFormView
+        '.Add Factory.CreateWorkOrderAccess, "Protection Planning"
         '.Add Factory.CreateFiltrationPlanningForm, "Filtration Planning"
         '.Add Factory.CreateAdminForm, "Admin Control Panel"
         '.Add Factory.DocumentConfigForm, "Document Config"
@@ -106,6 +111,36 @@ Public Sub PerformanceMode(enable As Boolean, Optional DisableEvents As Boolean 
     End If
 
     
+End Sub
+
+Sub HideExcelItems()
+
+    Application.DisplayFullScreen = True
+    Application.DisplayFormulaBar = False
+    ActiveWindow.DisplayWorkbookTabs = False
+    ActiveWindow.DisplayHeadings = False
+    ActiveSheet.DisplayPageBreaks = False
+    With ActiveWindow
+        .DisplayHorizontalScrollBar = False
+        .DisplayVerticalScrollBar = False
+    End With
+
+    'ThisWorkbook.Protect ""
+End Sub
+
+Sub UnHideExcelItems()
+
+    'ThisWorkbook.Unprotect ""
+
+    Application.DisplayFullScreen = False
+    Application.DisplayFormulaBar = True
+    ActiveWindow.DisplayWorkbookTabs = True
+    ActiveWindow.DisplayHeadings = True
+
+    With ActiveWindow
+        .DisplayHorizontalScrollBar = True
+        .DisplayVerticalScrollBar = True
+    End With
 End Sub
 
 ' Forms Interface Methods

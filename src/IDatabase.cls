@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-'@Folder("Interfaces")
+'namespace=src/Interfaces
 '====================================
 'CLASS DESCRIPTION:
 ' Interface for databases

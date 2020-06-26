@@ -56,7 +56,7 @@ End Sub
 
 Public Sub GoToMain()
 'Opens the main menu form.
-    formMainMenu.show vbModeless
+
 End Sub
 
 Sub UnloadAllForms()
@@ -237,7 +237,7 @@ Public Sub GoToPlanning()
 End Sub
 
 Public Sub CopyCurrentDocument()
-' Makes a copy of the current spec, with a new material id
+' Makes a copy of the current doc, with a new material id
     Dim new_material_id As String
     Dim ret_val As Long
     new_material_id = Prompt.UserInput(SingleLineText, "Material Id", "Enter a material id for copy?")

@@ -164,20 +164,3 @@ End Function
 Public Function SayHi(Name As Variant) As String
   SayHi = "Howdy " & Name & "!"
 End Function
-
-' MySQL API
-Public Function ExecuteScalar(dbType As DatabaseType, conn As String, sql As String)  As Object
-' Executes and SQL and returns first row first column of the result set or an empty string
-End Function
-
-Public Function ExecuteNonQuery(dbType As DatabaseType, conn As String, sql As String) As Boolean
-' Returns true or false if the nonQuery sql command was success
-End Function
-
-Public Function MySqlGetAvailableServerFromList(conn As String) As String
-' Takes array of connetionstrings and returns first reachable connectionstring. or ""
-End Function
-
-Public Function MySqlServerIsReachable(conn As String) As Boolean
-' Connects to a MySql server using the connectionstring and returns true or false
-End Function

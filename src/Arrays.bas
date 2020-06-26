@@ -1,6 +1,7 @@
 Attribute VB_Name = "Arrays"
 Option Explicit
 Option Compare Text
+'namespace=src/lib
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' modArraySupport --> Renamed to Arrays.bas for this applciation (cruff)
 ' By Chip Pearson, chip@cpearson.com, www.cpearson.com

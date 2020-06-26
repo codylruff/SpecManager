@@ -26,7 +26,7 @@ End Property
 Public Sub DocumentPrinted(doc As Document, work_order As String)
     Dim ret_val As Long
     If Not log_enabled Then Exit Sub
-    With spec
+    With doc
         VerifyActionLogged DataAccess.PushIQueryable(CreateUserAction(Username, "Document Printed", _
                                                     .MaterialId, .SpecType, .Revision, work_order), "user_actions")
     End With
@@ -39,10 +39,10 @@ Public Sub LogUserAction(Optional description As String)
 End Sub
 
 
-Public Sub CrudOn(doc As Document, message As String)
+Public Sub CrudOnDocument(doc As Document, message As String)
 ' Log any crud operation on a specification
     If Not log_enabled Then Exit Sub
-    With spec
+    With doc
         VerifyActionLogged DataAccess.PushIQueryable(CreateUserAction(Username, message, .MaterialId, .SpecType, .Revision), "user_actions")
     End With
 End Sub

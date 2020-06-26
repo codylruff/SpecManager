@@ -1,5 +1,5 @@
 Attribute VB_Name = "JsonVBA"
-'@exclude.json
+'namespace=src/lib
 ''
 ' VBA-JSON v2.3.0
 ' (c) Tim Hall - https://github.com/VBA-tools/VBA-JSON
@@ -171,7 +171,7 @@ Public JsonOptions As json_Options
 ' @param {String} file_path
 ' @param {String} key (points to a particular property in a JSON array)
 ' @return {Variant} String or Number
-' @throws TODO: Add Error Description/Constant
+' @throws TODO Add Error Description/Constant
 ''
 Function GetJsonValue(ByVal file_path As String, ByVal Key As String) As Variant
     ' Extract the json object represented by the file and select a single value
@@ -187,7 +187,7 @@ End Function
 ' @method GetJsonObject
 ' @param  {String} file_path
 ' @return {JsonObject} (Dictionary or Collection)
-' @throws TODO: Add Error Description/Constant
+' @throws TODO Add Error Description/Constant
 ''
 Function GetJsonObject(ByVal file_path As String) As Object
     Dim FSO As Object
@@ -231,7 +231,7 @@ End Function
 ' @method WriteJsonObject
 ' @param  {String} file_path
 ' @param {JsonObject} (Dictionary or Collection)
-' @throws TODO: Add Error Description/Constant
+' @throws TODO Add Error Description/Constant
 ''
 Function WriteJsonObject(ByVal file_path As String, ByRef json_object As Object, Optional white_space As Variant) As Long
     Dim FSO As Object

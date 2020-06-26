@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-
+'namespace=src/Interfaces
 ' Interface to extract sql information
 ' Public Property Let SubIdentifiers(value As Variant)
 ' End Property

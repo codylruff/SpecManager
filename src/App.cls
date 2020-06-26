@@ -8,7 +8,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-
+'TODO Change App.specs to docs or documents
+'REVIEW Make sure that none of the "documents" in the class
+' are conflicting with the change to specification -> document
 ' Events
 Public Event BeforeRefresh()
 Public Event AfterRefresh()

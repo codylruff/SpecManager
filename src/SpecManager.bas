@@ -20,10 +20,11 @@ Public Const DB_DELETE_SUCCESS          As Long = -2147220602
 Public Const DB_DELETE_ERR              As Long = -2147220601
 Public Const DB_SELECT_SUCCESS          As Long = -2147220600
 Public Const DB_SELECT_ERR              As Long = -2147220599
-Public Const DB_PUSH_DENIED_ERR_ERR     As Long = -2147220598
-Public Const DB_DELETE_DENIED_ERR_ERR   As Long = -2147220597
+Public Const DB_PUSH_DENIED_ERR     As Long = -2147220598
+Public Const DB_DELETE_DENIED_ERR   As Long = -2147220597
 Public Const DB_TRANSACTION_ERR         As Long = -2147220596
 Public Const DB_TRANSACTION_SUCCESS     As Long = -2147220595
+Public Const E_NOTIMPL                  As Long = -2147220594
 
 ' ACCOUNT PRIVLEDGE LEVELS
 Public Const USER_MANAGER          As Long = 21
@@ -773,6 +774,45 @@ Public Enum AcImportXMLOption
     acAppendData = 2      'Imports the data into an existing table.
 End Enum
 
+Public Type DataTable
+    FirstColumn As String
+    LastColumn As String
+    FirstRow As Long
+    LastRow As Long
+End Type
+
+Public Type Log
+    Buffer As VBA.Collection
+    log_type As LogType
+    ID As String
+End Type
+
+Public Type Rect
+    Left        As Long  ' x1
+    Top         As Long  ' y1
+    Right       As Long  ' x2
+    Bottom      As Long  ' y2
+End Type
+
+Public Type GUID
+    Data1 As Long
+    Data2 As Integer
+    Data3 As Integer
+    Data4(7) As Byte
+End Type
+
+Public Type FourBytes
+    A As Byte
+    B As Byte
+    C As Byte
+    D As Byte
+End Type
+
+Public Type OneLong
+    L As Long
+End Type
+
+
 Public Sub StartApp()
     App.Start
     GUI.Start
@@ -839,7 +879,7 @@ Sub MaterialInput(material_id As String)
         ' Let the user know that the specifcation could not be found.
         Prompt.Error "Document not found!"
         Exit Sub
-    ElseIf ret_val = SM_SEARCH_AGAIN Then
+    ElseIf ret_val = 156468465 Then
         ret_val = SpecManager.SearchForDocuments(material_id)
         If ret_val = SEARCH_ERR Then
             ' Let the user know that the specifcation could not be found.
@@ -897,54 +937,6 @@ Function GetAllTemplates() As VBA.Collection
     Set GetAllTemplates = coll
 End Function
 
-Private Function UpdateTemplateChanges() As Boolean
-    ' Apply any changes to material specs that happened since the previous template was revised.
-    Dim Key, T As Variant
-    Dim ret_val As Long
-    Dim Updated As Boolean
-    Dim doc As Document
-    Dim Template As Template
-    Dim old_spec As Document
-    Logger.Log "Checking specifications for any template updates . . ."
-    For Each T In App.specs
-    Updated = False
-        Set spec = App.specs.item(T)
-        Set old_spec = Factory.CopyDocument(spec)
-        Set App.current_template = GetTemplate(doc.SpecType)
-        For Each Key In App.current_template.Properties
-            ' Checks for existence current template properites in previous spec
-            If Not doc.Properties.Exists(Key) Then
-                ' Missing properties are added.
-                Logger.Log "Adding : " & Key & " to " & doc.MaterialId & " properties list."
-                doc.Properties.Add Key:=Key, item:=nullstr
-                Updated = True
-            End If
-        Next Key
-        For Each Key In doc.Properties
-            ' Checks for existance of current_doc Properties in current_template.
-            If Not App.current_template.Properties.Exists(Key) Then
-                ' Old properties are removed
-                Logger.Log "Removing : " & Key & " from " & doc.MaterialId & " properties list."
-                doc.Properties.Remove Key
-                Updated = True
-            End If
-        Next Key
-        If Updated = True Then
-            doc.Revision = CStr(CDbl(doc.Revision) + 1#)
-            ret_val = SpecManager.SaveDocument(spec, old_spec)
-            If ret_val <> DB_PUSH_SUCCESS Then
-                Logger.Log "Data Access returned: " & ret_val, DebugLog
-                Logger.Log "New Document Was Not Saved. Contact Admin."
-            Else
-                Logger.Log "Data Access returned: " & ret_val, DebugLog
-                Logger.Log "New Document Succesfully Saved."
-            End If
-        End If
-    Next T
-
-    UpdateTemplateChanges = Updated
-End Function
-
 Function GetDocuments(material_id As String) As Object
     Dim json_dict As Object
     Dim specs_dict As Object
@@ -963,8 +955,8 @@ Function GetDocuments(material_id As String) As Object
         Exit Function
     Else
         For Each json_dict In df.records
-            Set spec = Factory.CreateSpecFromDict(json_dict)
-            specs_dict.Add doc.UID, spec
+            Set doc = Factory.CreateSpecFromDict(json_dict)
+            specs_dict.Add doc.UID, doc
         Next json_dict
         Set GetDocuments = specs_dict
     End If
@@ -987,7 +979,7 @@ End Sub
 
 Sub PrintDocument(frm As MSForms.UserForm)
     Logger.Log "Writing Document to Console. . . "
-    Set App.printer.FormId = frm
+    Set App.printer.CurrentForm = frm
     If Not App.current_doc Is Nothing Then
         App.printer.PrintObjectToConsole App.current_doc
     End If
@@ -995,7 +987,7 @@ End Sub
 
 Sub PrintTemplate(frm As MSForms.UserForm)
     Logger.Log "Writing Template to Console . . . "
-    Set App.printer.FormId = frm
+    Set App.printer.CurrentForm = frm
     App.printer.PrintObjectToConsole App.current_template
 End Sub
 
@@ -1007,19 +999,19 @@ Public Sub ApplyTemplateChangesToDocuments(spec_type As String, changes As Varia
 ' Apply template changes to all existing specs of that type
     Dim specifications As VBA.Collection
     Dim doc As Document
-    Dim old_spec As Document
+    Dim old_doc As Document
     Dim i As Long
     Dim transaction As SqlTransaction
     Set specifications = SelectAllDocumentsByType(spec_type)
     Set transaction = DataAccess.BeginTransaction
-    For Each spec In specifications
-        Set old_spec = Factory.CopyDocument(spec)
+    For Each doc In specifications
+        Set old_doc = Factory.CopyDocument(doc)
         For i = LBound(changes) To UBound(changes)
             doc.AddProperty CStr(changes(i))
         Next i
         doc.Revision = CStr(CDbl(old_doc.Revision) + 1)
-        Logger.Log SpecManager.SaveDocument(spec, old_spec, transaction), DebugLog
-    Next spec
+        Logger.Log SpecManager.SaveDocument(doc, old_doc, transaction), DebugLog
+    Next doc
     'Logger.Log transaction.Commit, DebugLog
 End Sub
 
@@ -1038,7 +1030,7 @@ End Function
 Function CreateDocumentFromCopy(doc As Document, material_id As String) As Long
 ' Takes a material and makes a copy of it under a new material id
     Dim spec_copy As Document
-    Set spec_copy = Factory.CopyDocument(spec)
+    Set spec_copy = Factory.CopyDocument(doc)
     spec_copy.MaterialId = material_id
     spec_copy.Revision = 1
     CreateDocumentFromCopy = SaveNewDocument(spec_copy)
@@ -1064,8 +1056,8 @@ Function SaveNewDocument(doc As Document, Optional material_description As Strin
     Dim ret_val As Long
     If ManagerOrAdmin Then
         If DataAccess.GetDocument(doc.MaterialId, doc.SpecType, doc.MachineId).records.Count = 0 Then
-            ret_val = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
-            ActionLog.CrudOnDocument spec, "Created New Document"
+            ret_val = IIf(DataAccess.PushIQueryable(doc, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
+            ActionLog.CrudOnDocument doc, "Created New Document"
             If IsEmpty(GetMaterialDescription(doc.MaterialId)) Then
                 ' Use material_description param or prompt the user to enter one.
                 If material_description = nullstr Then
@@ -1074,7 +1066,7 @@ Function SaveNewDocument(doc As Document, Optional material_description As Strin
                 End If
                 ' Add the new Material Description to the materials table.
                 SaveNewDocument = AddNewMaterialDescription(doc.MaterialId, material_description, doc.ProcessId)
-                ActionLog.CrudOnDocument spec, "Created New Material"
+                ActionLog.CrudOnDocument doc, "Created New Material"
                 Exit Function
             End If
             SaveNewDocument = ret_val
@@ -1087,17 +1079,17 @@ Function SaveNewDocument(doc As Document, Optional material_description As Strin
 
 End Function
 
-Function SaveDocument(doc As Document, old_spec As Document, Optional transaction As SqlTransaction) As Long
+Function SaveDocument(doc As Document, old_doc As Document, Optional transaction As SqlTransaction) As Long
     If ManagerOrAdmin Then
         If Utils.IsNothing(transaction) Then
-            If ArchiveDocument(old_spec) = DB_DELETE_SUCCESS Then
-                SaveDocument = IIf(DataAccess.PushIQueryable(spec, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
+            If ArchiveDocument(old_doc) = DB_DELETE_SUCCESS Then
+                SaveDocument = IIf(DataAccess.PushIQueryable(doc, "standard_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
             Else
                 SaveDocument = DB_PUSH_DENIED_ERR
             End If
         Else
-            If ArchiveDocument(old_spec, transaction) = DB_DELETE_SUCCESS Then
-                SaveDocument = IIf(DataAccess.PushIQueryable(spec, "standard_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
+            If ArchiveDocument(old_doc, transaction) = DB_DELETE_SUCCESS Then
+                SaveDocument = IIf(DataAccess.PushIQueryable(doc, "standard_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
             Else
                 SaveDocument = DB_PUSH_DENIED_ERR
             End If
@@ -1105,28 +1097,28 @@ Function SaveDocument(doc As Document, old_spec As Document, Optional transactio
     Else
         SaveDocument = DB_PUSH_DENIED_ERR
     End If
-    ActionLog.CrudOnDocument spec, "Revised Document"
+    ActionLog.CrudOnDocument doc, "Revised Document"
 End Function
 
-Function ArchiveDocument(old_spec As Document, Optional transaction As SqlTransaction) As Long
+Function ArchiveDocument(old_doc As Document, Optional transaction As SqlTransaction) As Long
 ' Archives the last spec in order to make room for the new one.
     Dim ret_val As Long
     If Utils.IsNothing(transaction) Then
         ' 1. Insert old version into archived_specifications
-        ret_val = IIf(DataAccess.PushIQueryable(old_spec, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
+        ret_val = IIf(DataAccess.PushIQueryable(old_doc, "archived_specifications") = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
         ' 2. Delete old version from standard_specifications
         If ret_val = DB_PUSH_SUCCESS Then
-            ArchiveDocument = IIf(DeleteDocument(old_spec) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
+            ArchiveDocument = IIf(DeleteDocument(old_doc) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
         End If
     Else
         ' 1. Insert old version into archived_specifications
-        ret_val = IIf(DataAccess.PushIQueryable(old_spec, "archived_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
+        ret_val = IIf(DataAccess.PushIQueryable(old_doc, "archived_specifications", transaction) = DB_PUSH_SUCCESS, DB_PUSH_SUCCESS, DB_PUSH_ERR)
         ' 2. Delete old version from standard_specifications
         If ret_val = DB_PUSH_SUCCESS Then
-            ArchiveDocument = IIf(DeleteDocument(old_spec, "standard_specifications", transaction) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_FAILURE)
+            ArchiveDocument = IIf(DeleteDocument(old_doc, "standard_specifications", transaction) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_DENIED_ERR)
         End If
     End If
-    'ActionLog.CrudOnDocument old_spec, "Archived Document"
+    'ActionLog.CrudOnDocument old_doc, "Archived Document"
 End Function
 
 Function SaveTemplate(Template As Template) As Long
@@ -1159,14 +1151,14 @@ End Function
 Function DeleteDocument(doc As Document, Optional tbl As String = "standard_specifications", Optional trans As SqlTransaction) As Long
     If App.current_user.PrivledgeLevel = USER_ADMIN Then
         If IsNothing(trans) Then
-            DeleteDocument = IIf(DataAccess.DeleteSpec(spec, doc.MachineId, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
+            DeleteDocument = IIf(DataAccess.DeleteSpec(doc, doc.MachineId, tbl) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
         Else
-            DeleteDocument = IIf(DataAccess.DeleteSpec(spec, doc.MachineId, tbl, trans) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
+            DeleteDocument = IIf(DataAccess.DeleteSpec(doc, doc.MachineId, tbl, trans) = DB_DELETE_SUCCESS, DB_DELETE_SUCCESS, DB_DELETE_ERR)
         End If
     Else
         DeleteDocument = DB_DELETE_DENIED_ERR
     End If
-    ActionLog.CrudOnDocument spec, "Deleted Document"
+    ActionLog.CrudOnDocument doc, "Deleted Document"
 End Function
 
 Private Function ManagerOrAdmin() As Boolean
@@ -1206,6 +1198,7 @@ Public Sub DumpAllSpecsToWorksheet(spec_type As String)
     Dim dicts As Collection
     Dim dict As Object
     Dim props As Variant
+    Dim i As Long
     'RestartApp
     App.Start
     ' Turn on Performance Mode
@@ -1234,8 +1227,9 @@ Public Sub MassCreateDocuments(num_rows As Integer, num_cols As Integer, ws As W
     Dim dict As Object
     Dim i, k As Integer
     Dim json_string As String
-    Dim new_spec As Document
+    Dim new_doc As Document
     Dim spec_dict As Object
+    Dim ret_val As Long
     App.Start
     With ws
         For i = start_row To num_rows - start_row + 1
@@ -1255,11 +1249,11 @@ Public Sub MassCreateDocuments(num_rows As Integer, num_cols As Integer, ws As W
                 spec_dict.Add "Spec_Type", .Cells(i, 2).value
                 spec_dict.Add "Revision", 1
                 spec_dict.Add "Machine_Id", "BASE"
-                Set new_spec = Factory.CreateSpecFromDict(spec_dict)
-                ret_val = SpecManager.SaveNewDocument(new_spec, .Cells(i, 3))
+                Set new_doc = Factory.CreateSpecFromDict(spec_dict)
+                ret_val = SpecManager.SaveNewDocument(new_doc, .Cells(i, 3))
                 If ret_val = DB_PUSH_SUCCESS Then
                     Logger.Log new_doc.GetName & " Created."
-                    ActionLog.CrudOnDocument new_spec, "Created New Document"
+                    ActionLog.CrudOnDocument new_doc, "Created New Document"
                 ElseIf ret_val = MATERIAL_EXISTS_ERR Then
                     Logger.Log new_doc.GetName & " Already Exists."
                 Else
@@ -1321,8 +1315,8 @@ Public Function BuildBallisticTestSpec(material_id As String, package_length_inc
     Dim ret_val As Long
 
     Set package = Factory.CreateBallisticPackage(package_length_inches, fabric_width_inches, conditioned_weight_gsm, target_psf)
-    Set spec = Factory.CreateDocument
-    With spec
+    Set doc = Factory.CreateDocument
+    With doc
         .MaterialId = material_id
         .SpecType = "Ballistic Testing Requirements"
         .Revision = 1
@@ -1332,7 +1326,7 @@ Public Function BuildBallisticTestSpec(material_id As String, package_length_inc
     If is_test Then
         ret_val = 0
     Else
-        ret_val = SaveNewDocument(spec)
+        ret_val = SaveNewDocument(doc)
     End If
 
     BuildBallisticTestSpec = ret_val
@@ -1365,7 +1359,7 @@ End Function
 
 Public Sub FilterByMachineId(selected_machine_id As String)
 ' This routine removes all but the specifications associated with the machine_id selected. (From App.specs)
-' TODO: Validate input based on list of loom numbers
+' TODO Validate input based on list of loom numbers
     Dim machine_id As String
     Dim spec_id As Variant
     

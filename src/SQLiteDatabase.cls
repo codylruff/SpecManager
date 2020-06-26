@@ -7,7 +7,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'namespace=src/lib
 Option Explicit
+
 ' Microsoft uses UTF-16, little endian byte order.
 Private Const JULIANDAY_OFFSET As Double = 2415018.5
 ' Options for Text and Blob binding

@@ -27,7 +27,7 @@ Public Sub LoadNewDocument(file_type As String)
     template_id = CStr(shtAdmin.Range("template_id").value) ' This is the template the document is based on
     
     ' Initialize an empty specification
-    Set spec = CreateDocument
+    Set doc = CreateDocument
     
     ' Prompt the user for a template name. Then Validate the template exists
     On Error GoTo InvalidTemplateType
@@ -40,12 +40,12 @@ Public Sub LoadNewDocument(file_type As String)
     If file_type = "json" Then
     ' The procedure below creates a spec from a json file and a template
     '---------------------------------------------------------------------------------------------
-        ret_val = ParseJsonDocument(spec, material_id, description, file_dir, machine_id, Revision, template_id)
+        ret_val = ParseJsonDocument(doc, material_id, description, file_dir, machine_id, Revision, template_id)
     '---------------------------------------------------------------------------------------------
     ElseIf file_type = "excel" Then
     ' The procedure below creates a spec from an excel workbook and a template
     '---------------------------------------------------------------------------------------------
-        ret_val = ParseExcelDocument(spec, material_id, description, file_dir, machine_id, Revision, template_id)
+        ret_val = ParseExcelDocument(doc, material_id, description, file_dir, machine_id, Revision, template_id)
     '---------------------------------------------------------------------------------------------
     Else
         ret_val = INTERNAL_ERR
@@ -59,13 +59,14 @@ Public Sub LoadNewDocument(file_type As String)
     Else
         Prompt.Error "Error Saving Document."
     End If
-
+Finally:
     ' Stop the app
     App.Shutdown
     Exit Sub
     
 InvalidTemplateType:
     Prompt.Error template_id & " Does Not Exist!"
+    GoTo Finally
 End Sub
 
 Public Function ParseExcelDocument(doc As Document, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
@@ -113,7 +114,7 @@ Public Function ParseExcelDocument(doc As Document, material_id As String, descr
     progress_bar = GUI.Krish.SetProgressBar(progress_bar, 4, "Task 4/4", AutoClose:=True)
 
     ' Save Document to database
-    ParseExcelDocument = SpecManager.SaveNewDocument(spec, CStr(description))
+    ParseExcelDocument = SpecManager.SaveNewDocument(doc, CStr(description))
 End Function
 
 Public Function ParseJsonDocument(doc As Document, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
@@ -143,7 +144,7 @@ Public Function ParseJsonDocument(doc As Document, material_id As String, descri
     End If
 
     ' Save Document to database
-    ParseJsonDocument = SpecManager.SaveNewDocument(spec, CStr(description))
+    ParseJsonDocument = SpecManager.SaveNewDocument(doc, CStr(description))
 
 End Function
 
