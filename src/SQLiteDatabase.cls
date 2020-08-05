@@ -209,7 +209,7 @@ Public Property Get NumColumns() As Long: NumColumns = m_qtyColumns: End Propert
 '================================================================
 ' opens a database x64
 Public Sub openDb(sqliPath As String)
-  If sqliPath = nullstr Or Len(Dir(sqliPath)) = 0 Then
+  If sqliPath = nullstr Or Len(dir(sqliPath)) = 0 Then
     err.Raise 1, "Database not found", "Please select a valid file address"
     Exit Sub
   End If

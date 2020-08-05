@@ -8,6 +8,7 @@ libs/
 logs/
 config/
 live/
+data/
 templates/
 Database/
 bin/

@@ -46,6 +46,11 @@ Public Property Get UID() As String
     UID = Me.SpecType & IIf(Me.MachineId <> nullstr, "(" & Me.MachineId & ")", nullstr)
 End Property
 
+Public Property Get fileName() As String
+' Used as the handle for any document files (.pdf or .xlsx)
+    fileName = Me.MaterialId & "_" & Me.UID & "_v" & Me.Revision
+End Property
+
 Public Property Let MachineId(value As String): MachineId_ = value: End Property
 Public Property Get MachineId() As String: MachineId = MachineId_: End Property
 Public Property Let Revision(value As String): Revision_ = value: End Property
@@ -148,39 +153,39 @@ Public Function GetPropertyList() As Variant
 End Function
 
 Public Function header() As Variant
-    Dim Arr() As String
+    Dim arr() As String
     Dim i As Long
     Dim prop As Variant
     Dim number_of_props As Long
     number_of_props = Me.Properties.Count + 2
-    ReDim Arr(number_of_props)
-    Arr(0) = "Material Id"
-    Arr(2) = "Revision"
+    ReDim arr(number_of_props)
+    arr(0) = "Material Id"
+    arr(2) = "Revision"
     i = 2
     SortPropertiesByName
     For Each prop In Me.Template.Properties
-        Arr(i) = CStr(prop)
+        arr(i) = CStr(prop)
         i = i + 1
     Next prop
-    header = Arr
+    header = arr
 End Function
 
 Public Function ToArray() As Variant
-    Dim Arr() As String
+    Dim arr() As String
     Dim i As Long
     Dim prop As Variant
     Dim number_of_props As Long
     number_of_props = Me.Properties.Count + 2
-    ReDim Arr(number_of_props)
-    Arr(0) = Me.MaterialId
-    Arr(2) = Me.Revision
+    ReDim arr(number_of_props)
+    arr(0) = Me.MaterialId
+    arr(2) = Me.Revision
     i = 2
     SortPropertiesByName
     For Each prop In Me.Template.Properties
-        Arr(i) = Me.Properties.item(prop)
+        arr(i) = Me.Properties.item(prop)
         i = i + 1
     Next prop
-    ToArray = Arr
+    ToArray = arr
 End Function
 
 Public Function ToString() As String

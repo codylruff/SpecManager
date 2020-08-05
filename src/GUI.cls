@@ -20,6 +20,7 @@ Private Type Settings
     DisplayAlerts As Boolean
     DisplayStatusBar As Boolean
     Calculation As Long
+    LastSheetUsed As String
 End Type
 
 ' Events
@@ -34,9 +35,9 @@ Public kDll                      As New KrishDll
 Public gMsg                      As String
 Public gAppGuid                  As String
 Public forms                     As VBA.Collection
-Public current_form              As IForm
 Public PerformanceModeEnabled    As Boolean
 Private settings_                As Settings
+Public IsRunning                As Boolean
 
 Public Property Get Krish() As KrishDll
 ' Wrapper for gDll krishDll library handle
@@ -46,11 +47,12 @@ End Property
 Sub Start()
     ' Set up forms for application
     Set forms = SetUpForms
-    PerformanceModeEnabled = False
+    GUI.IsRunning = True
 End Sub
 
 Sub Shutdown()
     Set forms = Nothing
+    GUI.IsRunning = False
 End Sub
 
 Public Sub Restart()
@@ -58,16 +60,61 @@ Public Sub Restart()
     Start
 End Sub
 
+Public Sub ActivateForm(frm_name As String)
+' Activates the specified form for navigation
+    On Error GoTo Catch
+    If Not GUI.IsRunning Then
+        Start
+    End If
+    On Error GoTo 0
+    GoTo Finally
+Catch:
+    Start
+Finally:
+    GUI.GetForm(frm_name).Sheet.Activate
+End Sub
+
+Public Sub ResetExcelGUI()
+' Sets visible sheets in the excel gui to only start
+    HideAllSheets SAATI_Data_Manager.ThisWorkbook
+    ThisWorkbook.Sheets(settings_.LastSheetUsed).Visible = xlSheetVisible
+    ThisWorkbook.Sheets(settings_.LastSheetUsed).Activate
+End Sub
+
+Private Sub HideAllSheets(wb As Workbook)
+' Hides all visible sheets in the given workbook.
+    Dim ws As Worksheet
+    For Each ws In wb.Worksheets
+        If ws Is shtNavigation Then
+            'Pass
+        ElseIf ws Is shtPlanning Then
+            'Pass
+        ElseIf ws Is shtPortal Then
+            'Pass
+        ElseIf ws.Visible = xlSheetVisible Then
+            ws.Visible = xlSheetHidden
+            Logger.Log ws.Name & " was hidden."
+        End If
+    Next ws
+End Sub
+
+Public Function GetForm(frm_name As String) As IForm
+' Returns the form object requested
+    Set GetForm = Me.forms.item(frm_name)
+End Function
+
 Private Function SetUpForms() As VBA.Collection
 ' Prepare forms for use
     Dim coll As VBA.Collection
     Set coll = New VBA.Collection
     ' REVIEW Is this the right way to load the forms?
     With coll
-        .Add Factory.CreateFormCreate
-        .Add Factory.CreateFormEdit
-        .Add Factory.CreateFormView
-        '.Add Factory.CreateWorkOrderAccess, "Protection Planning"
+        .Add Factory.CreateFormCreate, "FormCreate"
+        .Add Factory.CreateFormPortal, "FormPortal"
+        .Add Factory.CreateFormNavigation, "FormNavigation"
+        '.Add Factory.CreateFormEdit, "FormEdit"
+        '.Add Factory.CreateFormView, "FormView"
+        .Add Factory.CreateFormPlanning, "FormPlanning"
         '.Add Factory.CreateFiltrationPlanningForm, "Filtration Planning"
         '.Add Factory.CreateAdminForm, "Admin Control Panel"
         '.Add Factory.DocumentConfigForm, "Document Config"
@@ -76,6 +123,7 @@ Private Function SetUpForms() As VBA.Collection
 End Function
 
 Public Sub SaveSettings()
+    settings_.LastSheetUsed = ActiveSheet.Name
     With Application
         settings_.ScreenUpdating = .ScreenUpdating
         settings_.DisplayAlerts = .DisplayAlerts
@@ -110,7 +158,7 @@ Public Sub PerformanceMode(enable As Boolean, Optional DisableEvents As Boolean 
         End With
     End If
 
-    
+
 End Sub
 
 Sub HideExcelItems()
@@ -144,12 +192,34 @@ Sub UnHideExcelItems()
 End Sub
 
 ' Forms Interface Methods
+Public Property Get CurrentForm() As IForm
+        Set CurrentForm = GUI.GetForm("Form" & Right(ActiveSheet.CodeName, Len(ActiveSheet.CodeName) - 3))
+End Property
+
+Public Sub PassFormCommand(cmd As String)
+' Using the active sheet as the "form"
+    ' Toggle Performance Mode
+    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
+    On Error GoTo Catch
+    If Not GUI.IsRunning Then
+        Start
+    End If
+    On Error GoTo 0
+    GoTo Finally
+Catch:
+    Start
+Finally:
+    Dim frm As IForm
+    Set frm = GUI.CurrentForm
+    frm.CmdByName cmd
+    ' Turn off Performance Mode
+    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
+End Sub
+
 Function ClearForm(Name As String) As Boolean
     On Error GoTo catchError
-    Set current_form = GUI.forms.item(Name)
-    current_form.Clear
+    GUI.CurrentForm.Clear
 exitFunction:
-    Set current_form = Nothing
     Exit Function
 catchError:
     Logger.Log "Form not found."

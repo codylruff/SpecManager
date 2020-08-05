@@ -168,6 +168,9 @@ def main():
         print('Creating Github release . . . ')
         create_release(repo_dir, ver, secret, user_name)
 
+        # Remind user to change compilation constant Developer = 0
+        print('Be sure to set compilation constant Developer = 0')
+
     elif installer:
 
         print('Updating the installer on the network drive . . . ')

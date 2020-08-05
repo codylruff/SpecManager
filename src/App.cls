@@ -27,8 +27,11 @@ Public specs                     As Object
 Public printer                   As DocumentPrinter
 Public current_template          As Template
 Public current_machine_id        As String
+Public IsRunning                 As Boolean
 Public TestingMode               As Boolean
+Private m_DATABASE_PATH             As String
 Private DocumentsByUID_          As Object
+
 
 Public Property Get DocumentsByUID() As Object
     
@@ -37,8 +40,25 @@ Public Property Get DocumentsByUID() As Object
     Set DocumentsByUID = specs
 End Property
 
-' Methods
+Public Property Get DocumentsByMachineID() As Object
+' Returns a dictionary the key and item represent machine_id and spec_type respectively
+    Dim dict As Object
+    Dim UID As Variant
+    Set dict = Factory.CreateDictionary
+    With dict
+        On Error Resume Next
+        For Each UID In DocumentsByUID
+            .Add DocumentsByUID(UID).MachineId, DocumentsByUID(UID).SpecType
+        Next UID
+        On Error GoTo 0
+    End With
+    Set DocumentsByMachineID = dict
+End Sub
 
+Public Function ListMachineIDs() As String
+' Lists all of the machine ids represented
+End Function
+' Methods
 Private Function SortDocumentsByUID() As Object
 ' Sort specs by UID and return it as a new dictionary
     Dim docs_by_uid As Object
@@ -56,6 +76,7 @@ End Function
 
 Sub Start()
     ' Log in with environ(username)
+    App.IsRunning = True
     Set current_user = AccessControl.Account_Initialize
     If current_user.FlaggedForPasswordChange Then AccessControl.ChangeSecret current_user
     ' Load user settings
@@ -71,6 +92,7 @@ Sub Start()
 End Sub
 
 Public Sub RefreshObjects()
+    App.IsRunning = True
     Set current_doc = New Document
     Set specs = CreateObject("Scripting.Dictionary")
     Set DocumentsByUID_ = CreateObject("Scripting.Dictionary")
@@ -97,6 +119,7 @@ Public Sub DeInitializeTestSuiteCredentials()
 End Sub
 
 Public Sub Shutdown()
+    App.IsRunning = False
     If Not current_user Is Nothing Then
         current_user.SaveUserJson
     End If

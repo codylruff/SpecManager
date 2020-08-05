@@ -55,11 +55,11 @@ Public Sub ColumnToRow(rng As Range)
 
 End Sub
 
-Function ArrayContains(Arr As Variant, item As Variant) As Boolean
+Function ArrayContains(arr As Variant, item As Variant) As Boolean
 ' Checks for an item within the given array and returns true or false.
     Dim i As Long
-    For i = 0 To UBound(Arr)
-        If Arr(i) = item Then
+    For i = 0 To UBound(arr)
+        If arr(i) = item Then
             ArrayContains = True
             Exit Function
         End If
@@ -68,7 +68,7 @@ End Function
 
 Public Function GetFiles(Optional dir_path As String, Optional pfilters As Variant) As Variant
 ' Given a dir return an array of file names
-    Dim Arr() As String
+    Dim arr() As String
     Dim file As Variant
     Dim i As Long
     Dim result As Integer
@@ -100,13 +100,13 @@ Public Function GetFiles(Optional dir_path As String, Optional pfilters As Varia
     'Show the dialog. -1 means success!
     If fDialog.show = -1 Then
         i = 0
-        ReDim Arr(CLng(fDialog.SelectedItems.Count))
+        ReDim arr(CLng(fDialog.SelectedItems.Count))
         For Each file In fDialog.SelectedItems
-            Arr(i) = CStr(file)
+            arr(i) = CStr(file)
             i = i + 1
         Next file
     End If
-    GetFiles = Arr
+    GetFiles = arr
 
 End Function
 
@@ -162,7 +162,7 @@ End Function
 
 Public Function FileExists(file_path As String) As Boolean
 ' Tests whether a file exists
-    FileExists = IIf(Dir(file_path) <> "", True, False)
+    FileExists = IIf(dir(file_path) <> "", True, False)
 End Function
 
 Public Function CleanString(ByVal target As String, find_strings As Variant, Optional remove_whitespace As Boolean = False) As String
@@ -407,9 +407,9 @@ Public Function printf(mask As String, ParamArray tokens()) As String
     printf = mask
 End Function
 
-Public Function ArrayLength(Arr As Variant) As Long
+Public Function ArrayLength(arr As Variant) As Long
 'test
-    ArrayLength = UBound(Arr) - LBound(Arr) + 1
+    ArrayLength = UBound(arr) - LBound(arr) + 1
 End Function
 
 Sub ChangeActivePrinter()
@@ -493,7 +493,7 @@ End Sub
 
 Public Function GetNames(wb As Workbook, Optional ws As String) As Variant
 ' Returns an array of names for the given workbook/worksheet
-    Dim Arr() As String
+    Dim arr() As String
     Dim arr_len As Long
     Dim nm As Variant
     Dim i As Long
@@ -501,23 +501,23 @@ Public Function GetNames(wb As Workbook, Optional ws As String) As Variant
     On Error Resume Next
     If ws = nullstr Then
         arr_len = wb.Names.Count
-        ReDim Arr(arr_len, 1)
+        ReDim arr(arr_len, 1)
         For Each nm In wb.Names
-            Arr(i, 0) = Split(nm.Name, "!")(1)
-            Arr(i, 1) = wb.Range(nm.Name).value
+            arr(i, 0) = Split(nm.Name, "!")(1)
+            arr(i, 1) = wb.Range(nm.Name).value
             i = i + 1
         Next nm
     Else
         arr_len = wb.Sheets(ws).Names.Count
-        ReDim Arr(arr_len, 1)
+        ReDim arr(arr_len, 1)
         For Each nm In wb.Sheets(ws).Names
-            Arr(i, 0) = Split(nm.Name, "!")(1)
-            Arr(i, 1) = CStr(wb.Sheets(ws).Range(nm.Name).value)
+            arr(i, 0) = Split(nm.Name, "!")(1)
+            arr(i, 1) = CStr(wb.Sheets(ws).Range(nm.Name).value)
             i = i + 1
         Next nm
     End If
     On Error GoTo 0
-    GetNames = Arr
+    GetNames = arr
 
 End Function
 
@@ -587,7 +587,7 @@ End Sub
 
 
 
-Public Function ArrayToCollection(Arr As Variant, ByRef coll As VBA.Collection) As Object
+Public Function ArrayToCollection(arr As Variant, ByRef coll As VBA.Collection) As Object
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Set ArrayToCollection
 ' This function converts an array to a Collection. Arr may be either a 1-dimensional
@@ -605,7 +605,7 @@ Dim KeyVal As String
 ''''''''''''''''''''''''''
 ' Ensure Arr is an array.
 '''''''''''''''''''''''''
-If IsArray(Arr) = False Then
+If IsArray(arr) = False Then
     Set ArrayToCollection = Nothing
     Exit Function
 End If
@@ -619,7 +619,7 @@ End If
 ' duplicate key error).
 '''''''''''''''''''''''''''''''''''
 On Error GoTo ErrH:
-Select Case NumberOfArrayDimensions(Arr:=Arr)
+Select Case NumberOfArrayDimensions(arr:=arr)
     Case 0
         '''''''''''''''''''''''''''''''
         ' Unallocated array. Exit with
@@ -634,8 +634,8 @@ Select Case NumberOfArrayDimensions(Arr:=Arr)
         ' array. Load the elements of
         ' the array without keys.
         ''''''''''''''''''''''''''''''
-        For Ndx = LBound(Arr) To UBound(Arr)
-            coll.Add item:=Arr(Ndx)
+        For Ndx = LBound(arr) To UBound(arr)
+            coll.Add item:=arr(Ndx)
         Next Ndx
     
     Case 2
@@ -645,19 +645,19 @@ Select Case NumberOfArrayDimensions(Arr:=Arr)
         ' is the Item and the second
         ' column is the Key.
         '''''''''''''''''''''''''''''
-        For Ndx = LBound(Arr, 1) To UBound(Arr, 1)
-            KeyVal = Arr(Ndx, 1)
+        For Ndx = LBound(arr, 1) To UBound(arr, 1)
+            KeyVal = arr(Ndx, 1)
             If Trim(KeyVal) = nullstr Then
                 '''''''''''''''''''''''''''''''''
                 ' Key is empty. Add to collection
                 ' without a key.
                 '''''''''''''''''''''''''''''''''
-                coll.Add item:=Arr(Ndx, 1)
+                coll.Add item:=arr(Ndx, 1)
             Else
                 '''''''''''''''''''''''''''''''''
                 ' Key is not empty. Add with key.
                 '''''''''''''''''''''''''''''''''
-                coll.Add item:=Arr(Ndx, 0), Key:=KeyVal
+                coll.Add item:=arr(Ndx, 0), Key:=KeyVal
             End If
         Next Ndx
     
@@ -686,7 +686,7 @@ ErrH:
 
 End Function
 
-Public Function ArrayToDictionary(Arr As Variant, dict As Object) As Object
+Public Function ArrayToDictionary(arr As Variant, dict As Object) As Object
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' ArrayToDictionary
 ' This function loads the contents of a two dimensional array into the Dict dictionary
@@ -703,7 +703,7 @@ Dim KeyVal As String
 '''''''''''''''''''''''''
 ' Ensure Arr is an array.
 '''''''''''''''''''''''''
-If IsArray(Arr) = False Then
+If IsArray(arr) = False Then
     Set ArrayToDictionary = Nothing
     Exit Function
 End If
@@ -711,7 +711,7 @@ End If
 '''''''''''''''''''''''''''''''
 ' Ensure Arr is two dimensional
 '''''''''''''''''''''''''''''''
-If NumberOfArrayDimensions(Arr:=Arr) <> 2 Then
+If NumberOfArrayDimensions(arr:=arr) <> 2 Then
     Set ArrayToDictionary = Nothing
     Exit Function
 End If
@@ -721,8 +721,8 @@ End If
 ' add the items to the Dictionary.
 '''''''''''''''''''''''''''''''''''
 On Error GoTo ErrH:
-For Ndx = LBound(Arr, 1) To UBound(Arr, 1)
-    dict.Add Key:=Arr(Ndx, LBound(Arr, 2) + 1), item:=Arr(Ndx, LBound(Arr, 2))
+For Ndx = LBound(arr, 1) To UBound(arr, 1)
+    dict.Add Key:=arr(Ndx, LBound(arr, 2) + 1), item:=arr(Ndx, LBound(arr, 2))
 Next Ndx
     
 '''''''''''''''''
@@ -736,7 +736,7 @@ Set ArrayToDictionary = Nothing
 
 End Function
 
-Public Function CollectionToArray(coll As VBA.Collection, Arr As Variant) As Variant
+Public Function CollectionToArray(coll As VBA.Collection, arr As Variant) As Variant
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' CollectionToArray
 ' This function converts a collection object to a single dimensional array.
@@ -762,11 +762,11 @@ End If
 ' Ensure Arr is an array and
 ' is dynamic.
 ''''''''''''''''''''''''''''''
-If IsArray(Arr) = False Then
+If IsArray(arr) = False Then
     CollectionToArray = Null
     Exit Function
 End If
-If IsArrayDynamic(Arr:=Arr) = False Then
+If IsArrayDynamic(arr:=arr) = False Then
     CollectionToArray = Null
     Exit Function
 End If
@@ -784,7 +784,7 @@ End If
 ' Redim Arr to the number of
 ' elements in the collection.
 '''''''''''''''''''''''''''''
-ReDim Arr(1 To coll.Count)
+ReDim arr(1 To coll.Count)
 '''''''''''''''''''''''''''''
 ' Loop through the colletcion
 ' and add the elements of
@@ -792,13 +792,13 @@ ReDim Arr(1 To coll.Count)
 '''''''''''''''''''''''''''''
 For Ndx = 1 To coll.Count
     If IsObject(coll(Ndx)) = True Then
-        Set Arr(Ndx) = coll(Ndx)
+        Set arr(Ndx) = coll(Ndx)
     Else
-        Arr(Ndx) = coll(Ndx)
+        arr(Ndx) = coll(Ndx)
     End If
 Next Ndx
 
-CollectionToArray = Arr
+CollectionToArray = arr
 
 End Function
 
@@ -1176,7 +1176,7 @@ DictionaryToRange = True
 
 End Function
 
-Public Function DictionaryToArray(dict As Object, Arr As Variant) As Boolean
+Public Function DictionaryToArray(dict As Object, arr As Variant) As Boolean
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' DictionaryToArray
 ' This creates a 0-based, 2-dimensional array Arr from a Dictionary object.  Each
@@ -1196,7 +1196,7 @@ Dim Ndx As Long
 ' Ensure that Arr is an array
 ' of Variants.
 '''''''''''''''''''''''''''''
-If VarType(Arr) <> (vbArray + vbVariant) Then
+If VarType(arr) <> (vbArray + vbVariant) Then
     DictionaryToArray = False
     Exit Function
 End If
@@ -1204,7 +1204,7 @@ End If
 ''''''''''''''''''''''''''''''''
 ' Ensure Arr is a dynamic array.
 ''''''''''''''''''''''''''''''''
-If IsArrayDynamic(Arr:=Arr) = False Then
+If IsArrayDynamic(arr:=arr) = False Then
     DictionaryToArray = False
     Exit Function
 End If
@@ -1229,18 +1229,18 @@ End If
 '''''''''''''''''''''''''''''
 ' Redim the Arr variable.
 '''''''''''''''''''''''''''''
-ReDim Arr(0 To dict.Count - 1, 0 To 1)
+ReDim arr(0 To dict.Count - 1, 0 To 1)
 
 For Ndx = 0 To dict.Count - 1
-    Arr(Ndx, 0) = dict.keys(Ndx)
+    arr(Ndx, 0) = dict.keys(Ndx)
     '''''''''''''''''''''''''''''''''''''''''
     ' Test to see if the item in the Dict is
     ' an object. If so, use Set.
     '''''''''''''''''''''''''''''''''''''''''
     If IsObject(dict.Items(Ndx)) = True Then
-        Set Arr(Ndx, 1) = dict.Items(Ndx)
+        Set arr(Ndx, 1) = dict.Items(Ndx)
     Else
-        Arr(Ndx, 1) = dict.Items(Ndx)
+        arr(Ndx, 1) = dict.Items(Ndx)
     End If
 
 Next Ndx
@@ -1393,7 +1393,7 @@ Public Sub SortCollection(ByRef coll As VBA.Collection, _
 ' download at www.cpearson.com/excel/qsort.htm .
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Dim Arr() As Variant
+Dim arr() As Variant
 Dim Ndx As Long
 
 '''''''''''''''''''''''''''''''''''''
@@ -1421,13 +1421,13 @@ End Select
 If coll.Count <= 1 Then
     Exit Sub
 End If
-ReDim Arr(1 To coll.Count)
+ReDim arr(1 To coll.Count)
 For Ndx = 1 To coll.Count
-    If IsObject(Arr(Ndx)) = True Or IsArray(Arr(Ndx)) = True Then
+    If IsObject(arr(Ndx)) = True Or IsArray(arr(Ndx)) = True Then
         Debug.Print "The items of the Collection cannot be arrays or objects."
         Exit Sub
     End If
-    Arr(Ndx) = coll(Ndx)
+    arr(Ndx) = coll(Ndx)
 Next Ndx
 ''''''''''''''''''''''''''''''''''''''''''
 ' Sort the elements in the array. The
@@ -1435,7 +1435,7 @@ Next Ndx
 ' and downloadable from:
 ' http://www.cpearson.com/excel/qsort.htm
 ''''''''''''''''''''''''''''''''''''''''''
-QSortInPlace InputArray:=Arr, LB:=-1, UB:=-1, _
+QSortInPlace InputArray:=arr, LB:=-1, UB:=-1, _
     Descending:=Descending, CompareMode:=vbTextCompare
 ''''''''''''''''''''''''''''''''''''''''''
 ' Now reset Coll to a new, empty colletion.
@@ -1446,8 +1446,8 @@ Set coll = New VBA.Collection
 ' Load the array back into the new
 ' collection.
 '''''''''''''''''''''''''''''''''''''''''
-For Ndx = LBound(Arr) To UBound(Arr)
-    coll.Add item:=Arr(Ndx)
+For Ndx = LBound(arr) To UBound(arr)
+    coll.Add item:=arr(Ndx)
 Next Ndx
 
 End Sub
@@ -1767,7 +1767,7 @@ Public Sub SortDictionary(dict As Object, _
 Dim Ndx As Long
 Dim KeyValue As String
 Dim ItemValue As Variant
-Dim Arr() As Variant
+Dim arr() As Variant
 Dim KeyArr() As String
 Dim VTypes() As VbVarType
 
@@ -1803,27 +1803,27 @@ If SortByKey = True Then
     ' Dict object, and load that array
     ' with the key names.
     ''''''''''''''''''''''''''''''''''''''''
-    ReDim Arr(0 To dict.Count - 1)
+    ReDim arr(0 To dict.Count - 1)
 
     Dim dict_key As Variant
 
     Ndx = 0
     For Each dict_key In dict
-        Arr(Ndx) = dict_key
+        arr(Ndx) = dict_key
         Ndx = Ndx + 1
     Next dict_key
     
     ''''''''''''''''''''''''''''''''''''''
     ' Sort the key names.
     ''''''''''''''''''''''''''''''''''''''
-    QSortInPlace InputArray:=Arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=CompareMode
+    QSortInPlace InputArray:=arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=CompareMode
     ''''''''''''''''''''''''''''''''''''''''''''
     ' Load TempDict. The key value come from
     ' our sorted array of keys Arr, and the
     ' Item comes from the original Dict object.
     ''''''''''''''''''''''''''''''''''''''''''''
     For Ndx = 0 To dict.Count - 1
-        KeyValue = Arr(Ndx)
+        KeyValue = arr(Ndx)
         TempDict.Add Key:=KeyValue, item:=dict.item(KeyValue)
     Next Ndx
     '''''''''''''''''''''''''''''''''
@@ -1846,7 +1846,7 @@ Else
     ' This keeps the association between the
     ' item and its key.
     '''''''''''''''''''''''''''''''''''''''''''''''
-    ReDim Arr(0 To dict.Count - 1)
+    ReDim arr(0 To dict.Count - 1)
     ReDim VTypes(0 To dict.Count - 1)
 
     For Ndx = 0 To dict.Count - 1
@@ -1864,7 +1864,7 @@ Else
         ' array. We'll use these values later to convert
         ' back to the proper data type for Item.
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            Arr(Ndx) = dict.Items(Ndx) & vbNullChar & dict.keys(Ndx)
+            arr(Ndx) = dict.Items(Ndx) & vbNullChar & dict.keys(Ndx)
             VTypes(Ndx) = VarType(dict.Items(Ndx))
             
     Next Ndx
@@ -1873,15 +1873,15 @@ Else
     ' items of the Dictionary along
     ' with their associated keys
     ''''''''''''''''''''''''''''''''''
-    QSortInPlace InputArray:=Arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=vbTextCompare
+    QSortInPlace InputArray:=arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=vbTextCompare
     
-    For Ndx = LBound(Arr) To UBound(Arr)
+    For Ndx = LBound(arr) To UBound(arr)
         '''''''''''''''''''''''''''''''''''''
         ' Loop trhogh the array of sorted
         ' Items, Split based on vbNullChar
         ' to get the Key from the element
         ' of the array Arr.
-        SplitArr = Split(Arr(Ndx), vbNullChar)
+        SplitArr = Split(arr(Ndx), vbNullChar)
         ''''''''''''''''''''''''''''''''''''''''''
         ' It may have been possible that item in
         ' the dictionary contains a vbNullChar.
@@ -2341,7 +2341,7 @@ QSortCompare = StrComp(S1, S2, Compare)
 
 End Function
 
-Public Function NumberOfArrayDimensions(Arr As Variant) As Integer
+Public Function NumberOfArrayDimensions(arr As Variant) As Integer
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' NumberOfArrayDimensions
 ' This function returns the number of dimensions of an array. An unallocated dynamic array
@@ -2355,7 +2355,7 @@ On Error Resume Next
 ' in the array. Return Ndx - 1.
 Do
     Ndx = Ndx + 1
-    Res = UBound(Arr, Ndx)
+    Res = UBound(arr, Ndx)
 Loop Until err.Number <> 0
 
 NumberOfArrayDimensions = Ndx - 1
@@ -2685,7 +2685,7 @@ End Select
 
 End Function
 
-Public Function IsArrayAllocated(Arr As Variant) As Boolean
+Public Function IsArrayAllocated(arr As Variant) As Boolean
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' IsArrayAllocated
 ' Returns TRUE if the array is allocated (either a static array or a dynamic array that has been
@@ -2698,7 +2698,7 @@ Dim N As Long
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 ' If Arr is not an array, return FALSE and get out.
 '''''''''''''''''''''''''''''''''''''''''''''''''''
-If IsArray(Arr) = False Then
+If IsArray(arr) = False Then
     IsArrayAllocated = False
     Exit Function
 End If
@@ -2708,7 +2708,7 @@ End If
 ' an error will occur. Test Err.Number to see if an error occured.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 On Error Resume Next
-N = UBound(Arr, 1)
+N = UBound(arr, 1)
 If err.Number = 0 Then
     '''''''''''''''''''''''''''''''''''''
     ' No error. Array has been allocated.

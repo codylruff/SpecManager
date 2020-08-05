@@ -3,12 +3,17 @@ Option Explicit
 ' String Constants
 Public Const PUBLIC_DIR               As String = "S:\Data Manager"
 Public Const SM_PATH                  As String = "C:\Users\"
-Public Const DATABASE_PATH            As String = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\Database\SAATI_Spec_Manager.db3"
-Public Const TEST_DATABASE_PATH       As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
 Public Const nullstr                  As String = vbNullString
+Public Const TEST_DATABASE_PATH       As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+
+#If Developer = 1 Then
+    Public Const DATABASE_PATH        As String = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\data\test\SAATI_Spec_Manager_TEST_DB.db3"
+#Else
+    Public Const DATABASE_PATH        As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+#End If
 
 ' SPEC MANAGER ERROR DESCRIPTIONS:
-' Error Id + vbObjectError (ie. -2147221504)
+' Error Id + vbObjectError (ie. Error Id - 2147221504)
 Public Const SM_SEARCH_SUCCESS          As Long = -2147221064
 Public Const SEARCH_ERR                 As Long = -2147221063
 Public Const REGEX_ERR                  As Long = -2147221062
@@ -20,11 +25,12 @@ Public Const DB_DELETE_SUCCESS          As Long = -2147220602
 Public Const DB_DELETE_ERR              As Long = -2147220601
 Public Const DB_SELECT_SUCCESS          As Long = -2147220600
 Public Const DB_SELECT_ERR              As Long = -2147220599
-Public Const DB_PUSH_DENIED_ERR     As Long = -2147220598
-Public Const DB_DELETE_DENIED_ERR   As Long = -2147220597
+Public Const DB_PUSH_DENIED_ERR         As Long = -2147220598
+Public Const DB_DELETE_DENIED_ERR       As Long = -2147220597
 Public Const DB_TRANSACTION_ERR         As Long = -2147220596
 Public Const DB_TRANSACTION_SUCCESS     As Long = -2147220595
 Public Const E_NOTIMPL                  As Long = -2147220594
+Public Const E_NO_DOCUMENT_SELECTED     As Long = -2147220593
 
 ' ACCOUNT PRIVLEDGE LEVELS
 Public Const USER_MANAGER          As Long = 21
@@ -816,14 +822,14 @@ End Type
 Public Sub StartApp()
     App.Start
     GUI.Start
-    GuiCommands.ResetExcelGUI
+    GUI.ResetExcelGUI
     Logger.Trace "Starting Application"
     'App.current_user.ListenTo App.printer
 End Sub
 
 Public Sub RestartApp()
     Logger.Trace "Restarting Application"
-    GuiCommands.ResetExcelGUI
+    GUI.ResetExcelGUI
     App.RefreshObjects
 End Sub
 
@@ -834,7 +840,7 @@ Public Sub StopApp()
     GUI.Shutdown
     App.Shutdown
 ResumeShutdown:
-    GuiCommands.ResetExcelGUI
+    GUI.ResetExcelGUI
 End Sub
 
 Public Sub LoadExistingTemplate(template_type As String)
@@ -864,6 +870,13 @@ End Function
 Function TemplateInput(template_type As String) As String
     Set App.current_template = Factory.CreateNewTemplate(template_type)
     TemplateInput = template_type
+End Function
+
+Function Template_AddProperty(new_property As String)
+' Adds a property to the current template
+    With App.current_template
+        .Properties.Add new_property
+    End With
 End Function
 
 Sub MaterialInput(material_id As String)
@@ -903,6 +916,7 @@ Function SearchForDocuments(material_id As String) As Long
         itms = App.specs.Items
         Set App.current_doc = itms(0)
         Logger.Log "Succesfully retrieved specifications for : " & material_id
+        Logger.Log App.current_doc.MaterialDescription
         ' If SpecManager.UpdateTemplateChanges Then
         '     Logger.Log "Specs updated"
         ' End If
@@ -962,14 +976,14 @@ Function GetDocuments(material_id As String) As Object
     End If
     Exit Function
 NullSpecException:
-    Logger.Log "SpecManager.GetDocuments()"
+    Logger.Error "SpecManager.GetDocuments()"
     Set GetDocuments = Nothing
 End Function
 
-Sub ListDocuments(frm As MSForms.UserForm)
+Sub ListDocuments()
 ' Lists the specifications currently selected in txtConsole for the given form
     Logger.Log "Listing Documents . . . "
-    Set App.printer = Factory.CreateDocumentPrinter(frm)
+    Set App.printer = Factory.CreateDocumentPrinter()
     If Not App.specs Is Nothing Then
         App.printer.ListObjects App.DocumentsByUID
     Else
@@ -977,17 +991,15 @@ Sub ListDocuments(frm As MSForms.UserForm)
     End If
 End Sub
 
-Sub PrintDocument(frm As MSForms.UserForm)
+Sub PrintDocument()
     Logger.Log "Writing Document to Console. . . "
-    Set App.printer.CurrentForm = frm
     If Not App.current_doc Is Nothing Then
         App.printer.PrintObjectToConsole App.current_doc
     End If
 End Sub
 
-Sub PrintTemplate(frm As MSForms.UserForm)
+Sub PrintTemplate()
     Logger.Log "Writing Template to Console . . . "
-    Set App.printer.CurrentForm = frm
     App.printer.PrintObjectToConsole App.current_template
 End Sub
 
@@ -1385,3 +1397,4 @@ Public Sub FilterByMachineId(selected_machine_id As String)
         End With
     Next spec_id
 End Sub
+

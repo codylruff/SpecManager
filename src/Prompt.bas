@@ -113,3 +113,19 @@ Public Function SelectSpecifcationFile() As String
 ' Select an specification file from the file dialog.
     SelectSpecifcationFile = GUI.Krish.OpenFile("Select Document . . .")
 End Function
+
+Public Function SelectFolder() As String
+' Brings up a select folder dialog
+    Dim fldr As FileDialog
+    Dim sItem As String
+    Set fldr = Application.FileDialog(msoFileDialogFolderPicker)
+    With fldr
+        .title = "Select a Folder"
+        .AllowMultiSelect = False
+        If .show <> -1 Then GoTo NextCode
+        sItem = .SelectedItems(1)
+    End With
+NextCode:
+    SelectFolder = sItem
+    Set fldr = Nothing
+End Function

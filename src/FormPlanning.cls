@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "PlanningForm"
+Attribute VB_Name = "FormPlanning"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -15,7 +15,7 @@ Implements IForm
 'Factory Module Constructor function:
 'Function CreatePlanning() As PlanningForm
 ' DEFAULT PROPERTY VALUES
-Private Const FORM_NAME As String = "Planning Form"
+Private Const FORM_NAME As String = "FormPlanning"
 Private Const HELP_TEXT As String = "TODO" ' Thinking of loading this from a text file??
 Private m_IForm_Console As Console
 Private m_IForm_Fields(3) As Variant
@@ -23,7 +23,9 @@ Private m_IForm_Fields(3) As Variant
 ' I_PROPERTIES
 '--------------
 Public Property Set IForm_Console(value As Console): Set m_IForm_Console = value: End Property
-Public Property Get IForm_Console() As Console: Set IForm_Console = m_IForm_Console: End Property
+Public Property Get IForm_Console() As Console
+        Set IForm_Console = m_IForm_Console
+End Property
 
 Public Property Get IForm_Sheet() As Worksheet
     Set IForm_Sheet = shtPlanning
@@ -77,15 +79,35 @@ Public Function IForm_ReformatSheet() As Boolean
     IForm_ReformatSheet = False
 End Function
 
+Public Function IForm_FieldValue(field As String) As Variant
+' Reads the value of a field in the form
+    Dim i As Long
+    Dim val As Variant
+    On Error GoTo Catch
+    IForm_FieldValue = IForm_Sheet.Range(field).value
+    GoTo Finally
+Catch:
+    err.Raise INTERNAL_ERR, "Field not found"
+    IForm_FieldValue = nullstr
+Finally:
+    ' Pass
+End Function
+
+Public Function IForm_ChangeFieldValue(field As String, val As Variant)
+' Changes the value of a field in the form
+    IForm_Sheet.Range(field).value = val
+    'err.Raise INTERNAL_ERR, "Field not found"
+End Function
+
 '----------
 ' COMMANDS
 '----------
 Private Sub cmdPrintDocuments()
     Dim prompt_result As DocumentPackageVariant
-    If IForm_Sheet.Range("console") = nullstr Then
+    If Me.IForm_Console.text = nullstr Then
          Prompt.Error "There is nothing to print!"
          Exit Sub
-    ElseIf IForm_Sheet.Range("console") = "No specifications are available for this code." Then
+    ElseIf Me.IForm_Console.text = "No specifications are available for this code." Then
          Prompt.Error "There is nothing to print!"
          Exit Sub
     ElseIf Not IsNumeric(IForm_Sheet.Range("work_order")) Then
@@ -102,7 +124,7 @@ Private Sub cmdPrintDocuments()
         ' Write the documents to their repsective worksheets
         App.printer.WriteAllDocuments IForm_Sheet.Range("work_order"), prompt_result
         ' Print all of the documents based on the selected doc package and machine
-        PrintSelectedPackage prompt_result
+        cmdPrintSelectedPackage prompt_result
     Else
         Logger.Log CStr(prompt_result)
     End If
@@ -111,7 +133,6 @@ End Sub
 
 Private Sub cmdSearch()
     ' Check for any white space and remove it
-    App.Start
     If Utils.RemoveWhiteSpace(IForm_Sheet.Range("material_id")) = nullstr Then
        Prompt.Error "Please enter a material id."
        Exit Sub
@@ -131,12 +152,12 @@ Private Sub MaterialSearch()
     SpecManager.MaterialInput UCase(IForm_Sheet.Range("material_id"))
     Logger.Log "Listing Documents . . . "
     If Not App.specs Is Nothing Then
-        App.printer.ListObjects App.specs
+        App.printer.ListObjects App.DocumentsByUID
     Else
         App.printer.WriteLine "No specifications are available for this code."
     End If
-    If IForm_Sheet.Range("console") = nullstr Then
-        IForm_Sheet.Range("console") = "No specifications are available for this code."
+    If Me.IForm_Console.text = nullstr Then
+        Me.IForm_Console.text = "No specifications are available for this code."
     End If
 End Sub
 
@@ -174,9 +195,9 @@ End Sub
 '---------
 ' Constructor
 Private Sub Class_Initialize()
-    Set IForm_Console = Factory.CreateConsole(Me.IForm_Sheet)
+    Set Me.IForm_Console = Factory.CreateConsole(Me.IForm_Sheet)
     ' Initialize the fields array to save on Array() calls.
-    m_IForm_Fields = Array("material_id", "work_order", "machine_id")
+    'm_IForm_Fields = Array("material_id", "work_order", "machine_id")
 End Sub
 ' Deconstructor
 Private Sub Class_Terminate()

@@ -127,7 +127,7 @@ End Function
 
 Function CreateSpecFromDict(dict As Object) As Document
     Dim doc As Document
-    Set spec = New Document
+    Set doc = New Document
     'On Error Resume Next
     With dict
         doc.MaterialId = .item("Material_Id")
@@ -139,7 +139,7 @@ Function CreateSpecFromDict(dict As Object) As Document
         doc.JsonToObject .item("Properties_Json")
         doc.MachineId = .item("Machine_Id")
     End With
-    Set CreateSpecFromDict = spec
+    Set CreateSpecFromDict = doc
 End Function
 
 Function CreateTemplateFromDict(dict As Object) As Template
@@ -151,14 +151,9 @@ Function CreateTemplateFromDict(dict As Object) As Template
     Set CreateTemplateFromDict = Temp
 End Function
 
-Function CreateDocumentPrinter(Optional frm As UserForm) As DocumentPrinter
+Function CreateDocumentPrinter() As DocumentPrinter
     Dim obj As DocumentPrinter
     Set obj = New DocumentPrinter
-    If Not Utils.IsNothing(frm) Then
-        Set obj.CurrentForm = frm
-    Else
-        Set obj.CurrentForm = Nothing
-    End If
     Set CreateDocumentPrinter = obj
 End Function
 
@@ -185,18 +180,15 @@ Function CreateConsole(ws As Worksheet) As Console
 ' Creates a Console object to handle a IForm_Console output.
     Dim obj As Console
     Set obj = New Console
-    obj.Sheet = ws
+    Set obj.Sheet = ws
     Set CreateConsole = obj
 End Function
 
-Function CreateWorkOrderAccess() As WorkOrderAccess
+Function CreateFormPlanning() As FormPlanning
 
-    Dim frm As WorkOrderAccess
-    Set frm = New WorkOrderAccess
-    With frm
-        Set .Sheet = shtPlanning
-    End With
-    Set CreateWorkOrderAccess = frm
+    Dim frm As FormPlanning
+    Set frm = New FormPlanning
+    Set CreateFormPlanning = frm
 End Function
 
 Function CreateFormCreate() As FormCreate
@@ -204,6 +196,20 @@ Function CreateFormCreate() As FormCreate
     Dim frm As FormCreate
     Set frm = New FormCreate
     Set CreateFormCreate = frm
+End Function
+
+Function CreateFormPortal() As FormPortal
+' Creates a FormPortal Object for the GUI to handle.
+    Dim frm As FormPortal
+    Set frm = New FormPortal
+    Set CreateFormPortal = frm
+End Function
+
+Function CreateFormNavigation() As FormNavigation
+' Creates a FormNavigation Object for the GUI to handle.
+    Dim frm As FormNavigation
+    Set frm = New FormNavigation
+    Set CreateFormNavigation = frm
 End Function
 
 Function CreateFormEdit() As FormEdit
@@ -235,7 +241,7 @@ End Function
 '    Dim frm As AdminForm
 '    Set frm = New AdminForm
 '    With frm
-'        Set .Sheet = shtAdmin
+'        Set .Sheet = shtCreate
 '    End With
 '    Set CreateAdminForm = frm
 'End Function

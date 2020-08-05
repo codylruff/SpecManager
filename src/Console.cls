@@ -15,20 +15,23 @@ Private m_Text As String
 Private m_Sheet As Worksheet
 Public Property Set Sheet(obj As Worksheet): Set m_Sheet = obj: End Property
 Public Property Get Sheet() As Worksheet: Set Sheet = m_Sheet: End Property
-Public Property Let text(value As String): m_Text = value: End Property
-Public Property Get text() As String: text = m_Text: End Property
-Public Property Let Address(val As Range)
-End Property
+Public Property Let text(val As String): Me.Address.value = val: End Property
+Public Property Get text() As String: text = Me.Address.value: End Property
 Public Property Get Address() As Range
   On Error GoTo Catch
   Set Address = Me.Sheet.Range("console")
   GoTo Finally
 Catch:
   Logger.Error "Could not find a console in the referenced worksheet."
-  Address = Nothing
+  Set Address = Nothing
 Finally:
   'PASS
 End Property
 Public Sub Clear()
   Me.text = nullstr
+End Sub
+Public Sub WriteLine(msg As String)
+' Console.WriteLine
+  Me.text = Me.text & msg & vbNewLine
+   
 End Sub

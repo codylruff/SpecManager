@@ -34,19 +34,12 @@ Private Const DEFAULT_QC_SAMPLE      As String = "1.5"          ' Minimum protec
 '----------------
 'CLASS VARIABLES
 '----------------
-Private CurrentForm_  As IForm
-'Public Event DocumentPrinted(doc As Document, work_order As String)
-'-----------------
-' AUTO-PROPERTIES
-'-----------------
-Public Property Set CurrentForm(value As MSForms.UserForm): Set CurrentForm_ = value: End Property
-Public Property Get CurrentForm() As MSForms.UserForm: Set CurrentForm = GUI.current_form: End Property
 '----------------
 ' PUBLIC METHODS
 '----------------
 Public Sub ClearConsole()
 ' Clears the console of any text
-    CurrentForm.Clear
+    GUI.ClearForm ("")
     Logger.Log "Console Cleared"
 End Sub
 
@@ -63,18 +56,15 @@ Public Sub WriteLine(ParamArray var() As Variant)
              s = s & Left$(var(i) & ":" & Space(Padding), Padding)
          End If
     Next
-    If Me.CurrentForm Is Nothing Then
-        shtPlanning.Range("console") = shtPlanning.Range("console") & s & vbNewLine
-    Else
-        Me.CurrentForm.Console.text = CurrentForm.Console.text & s & vbNewLine
-    End If
+    
+        GUI.CurrentForm.Console.WriteLine s
+    
 End Sub
 
-Public Sub PrintObjectToSheet(doc As Document, sht As Worksheet, Optional prod_order As String = nullstr, _
-           Optional package_variant As DocumentPackageVariant, Optional i As Integer = 2)
+Public Sub PrintObjectToSheet(doc As Document, sht As Worksheet, Optional prod_order As String = "N/A", _
+           Optional package_variant As DocumentPackageVariant = Default, Optional i As Integer = 2)
 ' Print object to specified worksheet starting in cell "A1"
-    ' Disable updates to the gui during processing
-    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
+    
     ' This tree selects any specs which have an associated custom worksheet template
     Select Case doc.SpecType
         Case "Warping Requirements"
@@ -96,16 +86,13 @@ Public Sub PrintObjectToSheet(doc As Document, sht As Worksheet, Optional prod_o
             LoadGenericDocument doc, sht, prod_order
     End Select
     
-    ' Enable updates to the gui after processing
-    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
-    
 End Sub
 
 Public Sub PrintObjectToConsole(obj As Object)
 ' Print object to console
     Dim Key As Variant
     ' Clear the console
-    CurrentForm.Console.text = nullstr
+    GUI.CurrentForm.Console.Clear
     'WriteLine obj.SpecType, obj.MaterialId
     'WriteLine "Revision", obj.Revision
     
@@ -136,17 +123,13 @@ End Function
 Public Sub ListObjects(dict As Object)
 ' Given a dictionary of documents, list the docs by type in the console
     Dim T As Variant
-    shtPlanning.Range("console") = nullstr
+    GUI.CurrentForm.Console.Clear
     For Each T In dict
-        If Me.CurrentForm Is Nothing Then
-            shtPlanning.Range("console") = shtPlanning.Range("console") & CStr(T) & vbNewLine
-        Else
-            Me.CurrentForm.Console.text = CurrentForm.Console.text & CStr(T) & vbNewLine
-        End If
+        GUI.CurrentForm.Console.WriteLine CStr(T)
     Next T
 End Sub
 
-Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = nullstr)
+Public Sub ToPDF(ws As Worksheet, Optional open_file As Boolean = True, Optional destination_path As String = nullstr)
 ' Exports the given ws as a PDF and saves it to S:\Data Manager\Documents
 
     On Error GoTo SaveFileError
@@ -169,7 +152,7 @@ Public Sub ToPDF(ws As Worksheet, Optional destination_path As String = nullstr)
         Quality:=xlQualityStandard, _
         IncludeDocProperties:=True, _
         IgnorePrintAreas:=False, _
-        OpenAfterPublish:=True
+        OpenAfterPublish:=open_file
     Logger.Log "PDF Saved : " & destination_path
     ws.Visible = xlSheetHidden
     Exit Sub
@@ -178,24 +161,19 @@ SaveFileError:
     Logger.Log "Failed to save file PDF Fail"
 End Sub
 
-Public Sub WriteAllDocuments(Optional order_number As String = nullstr, Optional package_variant As DocumentPackageVariant = Default)
+Public Sub WriteAllDocuments(Optional order_number As String = "N/A", Optional package_variant As DocumentPackageVariant = Default)
 ' Write all specification docs to the correct worksheets / create worksheet if missing
     Dim doc As Document
     Dim T As Variant
 
-    ' Toggle Performance Mode
-    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
-
     For Each T In App.specs
         Set doc = App.specs.item(T)
-            App.printer.PrintObjectToSheet doc, _
+            PrintObjectToSheet doc, _
                         ThisWorkbook.Sheets(doc.SpecType), _
                         order_number, _
                         package_variant
+        DoEvents
     Next T
-
-    ' Turn off Performance Mode
-    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
 
 End Sub
 
@@ -205,8 +183,6 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
     Dim doc As Document
     Dim item As Variant
 
-    ' Toggle Performance Mode
-    If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
     ' Print special requirements document if needed. Specials should print out on top!
     If CheckForSpecialRequirements(App.current_doc.MaterialId) Then App.printer.PrintSheet SheetByName(App.current_doc.MaterialId)
     
@@ -227,11 +203,8 @@ Public Sub PrintPackage(doc_package As Object, package_variant As DocumentPackag
             End If
         End With
         ActionLog.DocumentPrinted doc, work_order
+        DoEvents
     Next item
-    
-    ' Turn off Performance Mode
-    GuiCommands.ResetExcelGUI
-    If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
 
 End Sub
 
@@ -390,7 +363,9 @@ Private Sub InsertImage(sht As Worksheet, img_path As String, row_id As Integer)
     Dim img As Picture
     For Each xPic In sht.Pictures
         xPic.Delete
+        DoEvents
     Next
+    ' Activate is usually bad practice but there is no work around in this case that I know of
     sht.Activate
     ActiveSheet.Range("A" & row_id).Activate
     Set img = ActiveSheet.Pictures.Insert(img_path)

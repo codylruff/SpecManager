@@ -16,7 +16,7 @@ Private Sub HideAllSheets(wb As Workbook)
 ' Hides all visible sheets in the given workbook.
     Dim ws As Worksheet
     For Each ws In wb.Worksheets
-        If ws Is shtStart Then
+        If ws Is shtNavigation Then
             'Pass
         ElseIf ws Is shtPlanning Then
             'Pass
@@ -50,7 +50,7 @@ End Sub
 
 Public Sub InitializeApplication()
     SpecManager.StartApp
-    shtAdmin.Visible = xlSheetVeryHidden
+    shtCreate.Visible = xlSheetVeryHidden
     GoToMain
 End Sub
 
@@ -142,7 +142,7 @@ End Sub
 Public Sub CloseConfig()
 'Performs actions needed to close config.
     ThisWorkbook.Save
-    shtAdmin.Visible = xlSheetVeryHidden
+    shtCreate.Visible = xlSheetVeryHidden
     Application.VBE.MainWindow.Visible = False
     Application.DisplayAlerts = False
     GuiCommands.GoToMain
@@ -253,41 +253,30 @@ Public Sub CopyCurrentDocument()
     End If
 End Sub
 
-Public Sub LoadExcelDocument()
-    DocumentParser.LoadNewDocument "excel"
-End Sub
-
-Public Sub LoadJsonDocument()
-    DocumentParser.LoadNewDocument "json"
-End Sub
-
-Public Sub CreateBallisticsDocument()
-    Dim material_id As String
-    Dim package_length_inches As Double
-    Dim fabric_width_inches As Double
-    Dim conditioned_weight_gsm As Double
-    Dim target_psf As Double
-    Dim ret_val As Long
-    Dim machine_id As String
-
-    App.Start
-    material_id = shtAdmin.Range("material_id").value ' this is the material id (SAP Code)
-    package_length_inches = shtAdmin.Range("package_length_inches")
-    fabric_width_inches = shtAdmin.Range("fabric_width_inches")
-    conditioned_weight_gsm = shtAdmin.Range("conditioned_weight_gsm")
-    target_psf = shtAdmin.Range("target_psf")
-    machine_id = CStr(shtAdmin.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
-
-    ret_val = SpecManager.BuildBallisticTestSpec(material_id, package_length_inches, fabric_width_inches, conditioned_weight_gsm, target_psf, machine_id, False)
-    
-    ' Parse return value.
-    If ret_val = DB_PUSH_SUCCESS Then
-        Prompt.Success "New Document Saved."
-    ElseIf ret_val = MATERIAL_EXISTS_ERR Then
-        Prompt.Error "Material Already Exists."
-    Else
-        Prompt.Error "Error Saving Document."
+Public Sub Home()
+    On Error GoTo Catch
+    If Not App.IsRunning Then
+        App.Start
     End If
-    
-    App.Shutdown
+    On Error GoTo 0
+    GoTo Finally
+Catch:
+    App.Start
+Finally:
+    GUI.ActivateForm "FormNavigation"
 End Sub
+
+Public Sub RunCommand(cmd As String)
+    Dim frm_name As String
+    On Error GoTo Catch
+    If Not App.IsRunning Then
+        App.Start
+    End If
+    On Error GoTo 0
+    GoTo Finally
+Catch:
+    App.Start
+Finally:
+    GUI.PassFormCommand cmd
+End Sub
+

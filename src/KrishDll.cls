@@ -458,12 +458,18 @@ Public Function OpenFile(title As String, Optional FilterUsesInlineArray As Obje
 '---------------------------------------------------------------------------------------
 '
 
-    On Error Resume Next
+    On Error GoTo Catch
     If IsBlank(FilterUsesInlineArray) Then
         OpenFile = DLL.Dialog.ShowDialogForFile(title, AllowMultipleFiles, Array("Everything |*.*"))
     Else
         OpenFile = DLL.Dialog.ShowDialogForFile(title, AllowMultipleFiles, FilterUsesInlineArray)
     End If
+    On Error GoTo 0
+    GoTo Finally
+Catch:
+    OpenFile = nullstr
+    Exit Function
+Finally:
     
 End Function
 
@@ -935,7 +941,7 @@ End Function
 Public Function IsKeyDown(Key As Integer) As Boolean
     'Returns if a key is being pressed.
     'for Alt use : VBA.KeyConstants.vbKeyMenu
-    IsKeyDown = DLL.Form.IsKeyDown(Key)
+    IsKeyDown = DLL.form.IsKeyDown(Key)
 End Function
 
 Public Function FormDisableCloseButton(handle As Long, Optional show As Boolean = False)
@@ -944,7 +950,7 @@ Public Function FormDisableCloseButton(handle As Long, Optional show As Boolean 
 '    /// </summary>
 '    /// <param name="handle">Handle of the window</param>
 '    /// <param name="show">True = show, false = hide</param>
-    DLL.Form.DisableCloseButton handle, show
+    DLL.form.DisableCloseButton handle, show
 End Function
 
 Public Function FnGetWindowRect(Hwnd As Long, ByRef Rect As Rect)
@@ -952,12 +958,12 @@ Public Function FnGetWindowRect(Hwnd As Long, ByRef Rect As Rect)
 End Function
 
 Public Function DragMe(handle As Long)
-    DLL.Form.DragMe (handle)
+    DLL.form.DragMe (handle)
 End Function
 
 Public Function ChangeAccessFormColor(HexColourCode As String)
 
-    DLL.Form.RepaintAccessMDI Application.hWndAccessApp, HexColourCode
+    DLL.form.RepaintAccessMDI Application.hWndAccessApp, HexColourCode
     
 End Function
 
@@ -972,11 +978,11 @@ Public Function MakeTransparentForm(handle As Long, AlphaValue As Integer, Optio
 '---------------------------------------------------------------------------------------
 '
 
-    DLL.Form.MakeTransparent handle, HexColour, AlphaValue
+    DLL.form.MakeTransparent handle, HexColour, AlphaValue
 End Function
 
 Public Function FormRepaintWindow(handle As Long, newColour As String)
-    DLL.Form.RepaintWindow handle, newColour
+    DLL.form.RepaintWindow handle, newColour
 End Function
 
 Public Function CreateInputBox(input_type As InputBoxType, title_text As String, message_text As String) As Variant

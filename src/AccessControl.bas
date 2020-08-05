@@ -55,8 +55,6 @@ Public Sub ConfigControl()
     Dim w As Window
     
     If Open_Config(App.current_user) Then
-        ' Turn on Performance Mode
-        If Not GUI.PerformanceModeEnabled Then GUI.PerformanceMode (True)
         If Windows.Count <> 1 Then
             For Each w In Windows
                 If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
@@ -66,11 +64,17 @@ Public Sub ConfigControl()
         End If
         ' Show all worksheets
         GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
-        ThisWorkbook.Sheets("Administrator").Activate
-        ' Turn off Performance Mode
-        If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
+        ThisWorkbook.Sheets("Create").Activate
     End If
 End Sub
+Public Function CheckUserPriveldge(required As Long) As Boolean
+    If App.current_user.PrivledgeLevel >= required Then
+        CheckUserPriveldge = True
+    Else
+        CheckUserPriveldge = False
+        Prompt.Error "You do not have access to this function."
+    End If
+End Function
 
 Private Function Open_Config(User As Account) As Boolean
 'Performs a password check and opens config.
@@ -120,12 +124,12 @@ End Sub
 
 Public Function GetSHA1Hash(str)
   Dim i As Integer
-  Dim Arr() As Byte
-  ReDim Arr(0 To Len(str) - 1) As Byte
+  Dim arr() As Byte
+  ReDim arr(0 To Len(str) - 1) As Byte
   For i = 0 To Len(str) - 1
-   Arr(i) = Asc(Mid(str, i + 1, 1))
+   arr(i) = Asc(Mid(str, i + 1, 1))
   Next i
-  GetSHA1Hash = Replace(LCase(HexDefaultSHA1(Arr)), " ", "")
+  GetSHA1Hash = Replace(LCase(HexDefaultSHA1(arr)), " ", "")
 End Function
 
 Function HexDefaultSHA1(message() As Byte) As String

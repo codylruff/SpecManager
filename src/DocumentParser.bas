@@ -15,16 +15,14 @@ Public Sub LoadNewDocument(file_type As String)
     Dim Revision As String
     Dim template_id As String
 
-    ' Start the application
-    App.Start
 
     ' Initialize document parameters
-    material_id = CStr(shtAdmin.Range("material_id").value) ' this is the material id (SAP Code)
-    description = shtAdmin.Range("description").text        ' This is the material description from SAP
-    file_dir = CStr(shtAdmin.Range("file_dir").value)       ' This is not the file path it is the file directory
-    machine_id = CStr(shtAdmin.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
-    Revision = CStr(shtAdmin.Range("revision").value)       ' This is the document revision number
-    template_id = CStr(shtAdmin.Range("template_id").value) ' This is the template the document is based on
+    material_id = CStr(shtCreate.Range("material_id").value) ' this is the material id (SAP Code)
+    description = shtCreate.Range("description").text        ' This is the material description from SAP
+    file_dir = CStr(shtCreate.Range("file_dir").value)       ' This is not the file path it is the file directory
+    machine_id = CStr(shtCreate.Range("machine_id").value)   ' This is the machine id (ie. loom number, warper, etc...)
+    Revision = CStr(shtCreate.Range("revision").value)       ' This is the document revision number
+    template_id = CStr(shtCreate.Range("template_id").value) ' This is the template the document is based on
     
     ' Initialize an empty specification
     Set doc = CreateDocument
@@ -92,9 +90,9 @@ Public Function ParseExcelDocument(doc As Document, material_id As String, descr
     
     ' Task 2 Parse the Document for a json string
     progress_bar = GUI.Krish.SetProgressBar(progress_bar, 2, "Task 2/4")
-
+    On Error GoTo Catch
     json_string = JsonVBA.ConvertToJson(ParseDocument(file_path, template_id))
-
+    
     ' Task 3 Convert json string into specification object
     progress_bar = GUI.Krish.SetProgressBar(progress_bar, 3, "Task 3/4")
 
@@ -115,6 +113,12 @@ Public Function ParseExcelDocument(doc As Document, material_id As String, descr
 
     ' Save Document to database
     ParseExcelDocument = SpecManager.SaveNewDocument(doc, CStr(description))
+    GoTo Finally
+Catch:
+    Prompt.Error "File Does Not Exist"
+Finally:
+    On Error GoTo 0
+    GUI.Krish.CloseProgressBar progress_bar
 End Function
 
 Public Function ParseJsonDocument(doc As Document, material_id As String, description As String, file_dir As String, machine_id As String, Revision As String, template_id As String) As Long
@@ -128,7 +132,7 @@ Public Function ParseJsonDocument(doc As Document, material_id As String, descri
     Else
         file_path = Prompt.SelectSpecifcationFile
     End If
-
+    On Error GoTo Catch
     ' Read json from file
     json_string = JsonVBA.ReadJsonFileToString(file_path)
 
@@ -145,35 +149,43 @@ Public Function ParseJsonDocument(doc As Document, material_id As String, descri
 
     ' Save Document to database
     ParseJsonDocument = SpecManager.SaveNewDocument(doc, CStr(description))
-
+    GoTo Finally
+Catch:
+    Prompt.Error "File Does Not Exist"
+Finally:
+    On Error GoTo 0
 End Function
 
 Public Sub CreateTemplateFromFile()
+' Creates a template from a json file.
+' TODO: Add function to create templates from csv and excel file
     Dim file_path As String
     Dim Template As Template
 
-    ' Start the application
-    App.Start
-
     ' Prompt user to select file path
     file_path = Prompt.SelectSpecifcationFile
-
+    On Error GoTo Catch
     ' Spec_Type will be name of file selected
     Set Template = Factory.CreateTemplateFromJsonFile(file_path)
-
     ' Parse database return value.
     If SpecManager.SaveTemplate(Template) <> DB_PUSH_SUCCESS Then
         Prompt.Error "Failed to create " & Template.SpecType
         Exit Sub
     End If
+    On Error GoTo 0
     Prompt.Success Template.SpecType & " Created Successfully!"
+    GoTo Finally
+Catch:
+    Prompt.Error "File Does Not Exist"
+Finally:
+    On Error GoTo 0
 End Sub
 
 Public Function ParseDocument(path As String, template_type As String) As Object
     Dim wb As Workbook
     Dim doc_dict As Object
     Dim i As Long
-    Dim Arr
+    Dim arr
     
     ' Turn on Performance Mode
     Application.ScreenUpdating = False
@@ -185,11 +197,11 @@ Public Function ParseDocument(path As String, template_type As String) As Object
 
     ' Retrieve names from the document
     ' The sheet must be named after the Spec_Type to work.
-    Arr = Utils.GetNames(wb, template_type)
+    arr = Utils.GetNames(wb, template_type)
 
     On Error GoTo ParsingError
-    For i = 0 To UBound(Arr, 1) - 1
-        doc_dict.Add Arr(i, 0), Arr(i, 1)
+    For i = 0 To UBound(arr, 1) - 1
+        doc_dict.Add arr(i, 0), arr(i, 1)
     Next i
     On Error GoTo 0
     
@@ -202,7 +214,7 @@ Public Function ParseDocument(path As String, template_type As String) As Object
     Exit Function
 
 ParsingError:
-    Prompt.Error "Parsing Error @" & CStr(Arr(i, 0))
+    Prompt.Error "Parsing Error @" & CStr(arr(i, 0))
 End Function
 
 ' ARCHIVED -------------------------------------------------------------------------
@@ -412,7 +424,7 @@ Public Sub RenameRBAs()
     Next r
 End Sub
 
-Public Function ApplyNames(Arr As Variant, wb As Workbook, ws_name As String) As Object
+Public Function ApplyNames(arr As Variant, wb As Workbook, ws_name As String) As Object
     Dim i As Long
     Dim ws As Worksheet
     Dim Name As String
@@ -420,9 +432,9 @@ Public Function ApplyNames(Arr As Variant, wb As Workbook, ws_name As String) As
     Dim dict As Object
     Set ws = wb.Sheets(ws_name)
     Set dict = CreateObject("Scripting.Dictionary")
-    For i = LBound(Arr) To UBound(Arr)
-        addr = Chr(34) & Arr(i, 1) & Chr(34)
-        Name = Chr(34) & Arr(i, 0) & Chr(34)
+    For i = LBound(arr) To UBound(arr)
+        addr = Chr(34) & arr(i, 1) & Chr(34)
+        Name = Chr(34) & arr(i, 0) & Chr(34)
         wb.Names.Add Name:=Name, RefersTo:=ws.Range(addr)
         dict.Add Key:=Name, item:=IIf(Range(wb.Names(Name)).value = vbNullString, _
                                       vbNullString, Range(wb.Names(Name)).value)
