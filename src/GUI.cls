@@ -85,6 +85,7 @@ Private Sub HideAllSheets(wb As Workbook)
 ' Hides all visible sheets in the given workbook.
     Dim ws As Worksheet
     For Each ws In wb.Worksheets
+        Logger.Log ws.CodeName
         If ws Is shtNavigation Then
             'Pass
         ElseIf ws Is shtPlanning Then

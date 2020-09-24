@@ -835,11 +835,12 @@ Public Sub RestartApp()
 End Sub
 
 Public Sub StopApp()
-    On Error GoTo ResumeShutdown
+    'On Error GoTo ResumeShutdown
     Logger.Trace "Stopping Application"
     Logger.SaveLog
     GUI.Shutdown
     App.Shutdown
+    Exit Sub
 ResumeShutdown:
     GUI.ResetExcelGUI
 End Sub
