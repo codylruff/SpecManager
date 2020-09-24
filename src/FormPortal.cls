@@ -46,13 +46,16 @@ End Property
 ' METHODS
 '----------
 Private Sub PopulateDocumentIdList()
+    Dim ids As Variant
+    ids = App.DocumentsByUID.keys
     Me.IForm_ChangeFieldValue "document_id", nullstr
-    With Me.IForm_Sheet.Range("document_id").Validation
-        .Delete
-        .Add _
+    With Me.IForm_Sheet.Range("document_id")
+        .Validation.Delete
+        .value = "Select a Document Id . . ."
+        .Validation.Add _
             Type:=xlValidateList, _
             AlertStyle:=xlValidAlertStop, _
-            Formula1:=Join(App.DocumentsByUID.keys, ",")
+            Formula1:=IIf(Utils.ArrayLength(ids) > 1, Join(ids, ","), CStr(ids(0)))
     End With
 End Sub
 

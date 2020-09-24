@@ -178,29 +178,29 @@ Public Function ShowDialogRich(message As String, Optional Style As VbMsgBoxStyl
     'If IsBlank(Message) Then Exit Function
     If Style = 0 Then Style = vbInformation
     
-    Dim T As New TDialog
+    Dim t As New TDialog
     
-    T.title = title
-    T.message = message
-    T.dialogType = Style
-    T.TitleForeColour = TitleForeColour
-    T.ThemeBg = ThemeBg
-    T.Duration = Duration
-    T.IsModal = IsModal
+    t.title = title
+    t.message = message
+    t.dialogType = Style
+    t.TitleForeColour = TitleForeColour
+    t.ThemeBg = ThemeBg
+    t.Duration = Duration
+    t.IsModal = IsModal
     
     'Debug.Print Style
     If ((Style And vbInformation) = vbInformation) And Style = vbInformation Or ((Style And vbQuestion) = vbQuestion) And Style = vbQuestion Then
-        T.ThemeBg = "#A6CC56"
+        t.ThemeBg = "#A6CC56"
     End If
     
     If (((Style And vbInformation) = vbInformation) And Style = vbInformation) Or (((Style And vbQuestion) = vbQuestion) And Style = vbQuestion) Or (((Style And vbExclamation) = vbExclamation) And Style = vbExclamation) Or (((Style And vbCritical) = vbCritical) And Style = vbCritical) Then
         ' // no buttons selected show vbokonly?
-        T.ClearButtons
-        T.AddButton "OK", vbOK, True
+        t.ClearButtons
+        t.AddButton "OK", vbOK, True
     End If
     
     'Debug.Print t.ToJSON
-    ShowDialogRich = DLL.Dialog.ShowDialogJson(T.ToJSON)
+    ShowDialogRich = DLL.Dialog.ShowDialogJson(t.ToJSON)
 End Function
 
 Public Function ShowDialogJson(JsonConfig As String)

@@ -415,12 +415,11 @@ End Function
 Sub ChangeActivePrinter()
 '
 ' ChangeActivePrinter Macro
-
     Application.Dialogs(xlDialogPrinterSetup).show
     Logger.Log "Setting default printer for Spec Manager : " & Application.ActivePrinter
     App.current_user.Settings.item("default_printer") = Application.ActivePrinter
     App.current_user.SaveUserJson
-'
+
 End Sub
 
 Public Function ToFileExtension(extension_type As Long) As String

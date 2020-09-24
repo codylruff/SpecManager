@@ -88,18 +88,18 @@ Public Function FnArrayAddItem(ByRef iArray() As String, iItem As String)
 '
 
     On Error Resume Next
-    Dim T As Long
-    T = UBound(iArray())
+    Dim t As Long
+    t = UBound(iArray())
     
-    If T <= 0 Then
-        T = 1
+    If t <= 0 Then
+        t = 1
     Else
-        INC T
+        INC t
     End If
     
     
-    ReDim Preserve iArray(T)
-    iArray(T - 1) = iItem
+    ReDim Preserve iArray(t)
+    iArray(t - 1) = iItem
     
 End Function
 

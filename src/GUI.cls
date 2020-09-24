@@ -211,10 +211,16 @@ Catch:
     Start
 Finally:
     Dim frm As IForm
+    Dim frm_protected As Boolean
+    
     Set frm = GUI.CurrentForm
+    frm_protected = frm.Sheet.ProtectContents
+    
+    If frm_protected Then frm.Sheet.Unprotect
     frm.CmdByName cmd
     ' Turn off Performance Mode
     If GUI.PerformanceModeEnabled Then GUI.PerformanceMode (False)
+    If frm_protected Then frm.Sheet.Protect
 End Sub
 
 Function ClearForm(Name As String) As Boolean

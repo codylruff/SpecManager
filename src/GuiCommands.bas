@@ -7,6 +7,13 @@ Option Explicit
 ' of the import function which is
 ' kept in ThisWorkbook.
 '=================================
+Public Sub SelectDefaultPrinter()
+' This command will allow the user to change the default printer for the current machine.
+    App.Start
+    ChangeActivePrinter
+    GUI.CurrentForm.Sheet.DisplayPageBreaks = False
+    App.Shutdown
+End Sub
 Public Sub ResetExcelGUI()
 ' Sets visible sheets in the excel gui to only start
     HideAllSheets SAATI_Data_Manager.ThisWorkbook

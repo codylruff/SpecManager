@@ -122,11 +122,11 @@ End Function
 
 Public Sub ListObjects(dict As Object)
 ' Given a dictionary of documents, list the docs by type in the console
-    Dim T As Variant
+    Dim t As Variant
     GUI.CurrentForm.Console.Clear
-    For Each T In dict
-        GUI.CurrentForm.Console.WriteLine CStr(T)
-    Next T
+    For Each t In dict
+        GUI.CurrentForm.Console.WriteLine CStr(t)
+    Next t
 End Sub
 
 Public Sub ToPDF(ws As Worksheet, Optional open_file As Boolean = True, Optional destination_path As String = nullstr)
@@ -164,16 +164,16 @@ End Sub
 Public Sub WriteAllDocuments(Optional order_number As String = "N/A", Optional package_variant As DocumentPackageVariant = Default)
 ' Write all specification docs to the correct worksheets / create worksheet if missing
     Dim doc As Document
-    Dim T As Variant
+    Dim t As Variant
 
-    For Each T In App.specs
-        Set doc = App.specs.item(T)
+    For Each t In App.specs
+        Set doc = App.specs.item(t)
             PrintObjectToSheet doc, _
                         ThisWorkbook.Sheets(doc.SpecType), _
                         order_number, _
                         package_variant
         DoEvents
-    Next T
+    Next t
 
 End Sub
 
@@ -210,6 +210,8 @@ End Sub
 
 Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
 ' Prints the sheet of the given name in the spec manager workbook
+    Dim ws_visibility As XlSheetVisibility
+    ws_visibility = ws.Visible
     If ws.Visible = xlSheetHidden Or ws.Visible = xlSheetVeryHidden Then
         ws.Visible = xlSheetVisible
     End If
@@ -225,6 +227,7 @@ Public Sub PrintSheet(ws As Worksheet, Optional FitToPage As Boolean = False)
         Application.PrintCommunication = True
     End If
     ws.PrintOut ActivePrinter:=App.current_user.Settings.item("default_printer")
+    ws.Visible = ws_visibility
 End Sub
 
 ' Public Sub PrintSheets(ws_array As Variant)

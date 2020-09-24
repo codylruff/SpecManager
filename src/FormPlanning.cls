@@ -99,6 +99,20 @@ Public Function IForm_ChangeFieldValue(field As String, val As Variant)
     'err.Raise INTERNAL_ERR, "Field not found"
 End Function
 
+Private Sub PopulateMachineIdList()
+    Dim ids As Variant
+    ids = App.DocumentsByMachineID.keys
+    Me.IForm_ChangeFieldValue "machine_id", nullstr
+    With Me.IForm_Sheet.Range("machine_id")
+        .Validation.Delete
+        .value = "Select a Machine Id . . ."
+        .Validation.Add _
+            Type:=xlValidateList, _
+            AlertStyle:=xlValidAlertStop, _
+            Formula1:=IIf(Utils.ArrayLength(ids) > 1, Join(ids, ","), CStr(ids(0)))
+    End With
+End Sub
+
 '----------
 ' COMMANDS
 '----------
@@ -145,7 +159,7 @@ Private Sub cmdSearch()
     End If
     ' Run search routine
     MaterialSearch
-
+    PopulateMachineIdList
 End Sub
 
 Private Sub MaterialSearch()

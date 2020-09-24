@@ -45,6 +45,7 @@ Function AutoAddNewUser() As Account
     new_user.ChangeSetting "privledge_level", USER_READONLY
     new_user.ProductLine = "User"
     new_user.ChangeSetting "product_line", "User"
+    new_user.ChangeSetting "Secret", nullstr
     new_user.SaveUserJson
     Logger.Log DataAccess.PushIQueryable(new_user, "user_privledges"), UserLog
     Set AutoAddNewUser = new_user
@@ -53,18 +54,19 @@ End Function
 Public Sub ConfigControl()
 'Initializes the password form for config access.
     Dim w As Window
-    
-    If Open_Config(App.current_user) Then
-        If Windows.Count <> 1 Then
-            For Each w In Windows
-                If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
-            Next w
-        Else
-            Application.Visible = True
+    If CheckUserPriveldge(25) Then
+        If Open_Config(App.current_user) Then
+            If Windows.Count <> 1 Then
+                For Each w In Windows
+                    If w.Parent.Name = ThisWorkbook.Name Then w.Visible = True
+                Next w
+            Else
+                Application.Visible = True
+            End If
+            ' Show all worksheets
+            GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
+            ThisWorkbook.Sheets("Create").Activate
         End If
-        ' Show all worksheets
-        GuiCommands.ShowAllSheets SAATI_Data_Manager.ThisWorkbook
-        ThisWorkbook.Sheets("Create").Activate
     End If
 End Sub
 Public Function CheckUserPriveldge(required As Long) As Boolean
@@ -125,11 +127,16 @@ End Sub
 Public Function GetSHA1Hash(str)
   Dim i As Integer
   Dim arr() As Byte
+  On Error GoTo Catch
   ReDim arr(0 To Len(str) - 1) As Byte
   For i = 0 To Len(str) - 1
    arr(i) = Asc(Mid(str, i + 1, 1))
   Next i
   GetSHA1Hash = Replace(LCase(HexDefaultSHA1(arr)), " ", "")
+  GoTo Finally
+Catch:
+  Logger.Log "Secret cannot be null string"
+Finally:
 End Function
 
 Function HexDefaultSHA1(message() As Byte) As String
@@ -157,7 +164,7 @@ Sub xSHA1(message() As Byte, ByVal Key1 As Long, ByVal Key2 As Long, ByVal Key3 
     Dim i As Integer
     Dim w(80) As Long
     Dim A As Long, B As Long, C As Long, D As Long, E As Long
-    Dim T As Long
+    Dim t As Long
 
     H1 = &H67452301: H2 = &HEFCDAB89: H3 = &H98BADCFE: H4 = &H10325476: H5 = &HC3D2E1F0
 
@@ -191,20 +198,20 @@ Sub xSHA1(message() As Byte, ByVal Key1 As Long, ByVal Key2 As Long, ByVal Key3 
         A = H1: B = H2: C = H3: D = H4: E = H5
 
         For i = 0 To 19
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), w(i)), Key1), ((B And C) Or ((Not B) And D)))
-            E = D: D = C: C = U32RotateLeft30(B): B = A: A = T
+            t = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), w(i)), Key1), ((B And C) Or ((Not B) And D)))
+            E = D: D = C: C = U32RotateLeft30(B): B = A: A = t
         Next i
         For i = 20 To 39
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), w(i)), Key2), (B Xor C Xor D))
-            E = D: D = C: C = U32RotateLeft30(B): B = A: A = T
+            t = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), w(i)), Key2), (B Xor C Xor D))
+            E = D: D = C: C = U32RotateLeft30(B): B = A: A = t
         Next i
         For i = 40 To 59
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), w(i)), Key3), ((B And C) Or (B And D) Or (C And D)))
-            E = D: D = C: C = U32RotateLeft30(B): B = A: A = T
+            t = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), w(i)), Key3), ((B And C) Or (B And D) Or (C And D)))
+            E = D: D = C: C = U32RotateLeft30(B): B = A: A = t
         Next i
         For i = 60 To 79
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), w(i)), Key4), (B Xor C Xor D))
-            E = D: D = C: C = U32RotateLeft30(B): B = A: A = T
+            t = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), w(i)), Key4), (B Xor C Xor D))
+            E = D: D = C: C = U32RotateLeft30(B): B = A: A = t
         Next i
 
         H1 = U32Add(H1, A): H2 = U32Add(H2, B): H3 = U32Add(H3, C): H4 = U32Add(H4, D): H5 = U32Add(H5, E)
