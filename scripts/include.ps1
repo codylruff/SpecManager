@@ -33,7 +33,7 @@ function Expand-ZipFile($file, $destination)
 function SpecManagerShortcut($MainDir) {
     $Shell = New-Object -ComObject ("WScript.Shell")
     $ShortCut = $Shell.CreateShortcut("$env:USERPROFILE\Desktop\Spec-Manager.lnk")
-    $ShortCut.TargetPath="$MainDir\scripts\start.bat"
+    $ShortCut.TargetPath="$MainDir\update\scripts\start.bat"
     $ShortCut.Description = "Spec-Manager Shortcut";
     $shortcut.IconLocation="$MainDir\Spec-Manager.ico"
     $ShortCut.WindowStyle = 7

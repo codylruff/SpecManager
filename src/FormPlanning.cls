@@ -136,12 +136,12 @@ Private Sub cmdSearch()
     If Utils.RemoveWhiteSpace(IForm_Sheet.Range("material_id")) = nullstr Then
        Prompt.Error "Please enter a material id."
        Exit Sub
-    ElseIf Utils.RemoveWhiteSpace(IForm_Sheet.Range("work_order")) = nullstr Then
-        Prompt.Error "Please enter a work order number."
-       Exit Sub
-    ElseIf Utils.RemoveWhiteSpace(IForm_Sheet.Range("machine_id")) = nullstr Then
-        Prompt.Error "Please enter a machine id."
-       Exit Sub
+    ' ElseIf Utils.RemoveWhiteSpace(IForm_Sheet.Range("work_order")) = nullstr Then
+    '     Prompt.Error "Please enter a work order number."
+    '    Exit Sub
+    ' ElseIf Utils.RemoveWhiteSpace(IForm_Sheet.Range("machine_id")) = nullstr Then
+    '     Prompt.Error "Please enter a machine id."
+    '    Exit Sub
     End If
     ' Run search routine
     MaterialSearch

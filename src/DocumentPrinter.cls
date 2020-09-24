@@ -130,7 +130,7 @@ Public Sub ListObjects(dict As Object)
 End Sub
 
 Public Sub ToPDF(ws As Worksheet, Optional open_file As Boolean = True, Optional destination_path As String = nullstr)
-' Exports the given ws as a PDF and saves it to S:\Data Manager\Documents
+' Exports the given ws as a PDF and saves it to S:\
 
     On Error GoTo SaveFileError
     ' Parse args
@@ -346,14 +346,14 @@ Private Function GetWeavePatternImagePath(material_id As String) As String
     End Select
 
     Logger.Log "Inserting image : " & weave_id & ".jpg"
-    GetWeavePatternImagePath = "S:\Data Manager\Specifications\weave-pattern\" & weave_id & ".jpg"
+    GetWeavePatternImagePath = IMAGE_DIR & "\weave-pattern\" & weave_id & ".jpg"
 
 End Function
 
 Private Function GetBallisticPackageImagePath() As String
 ' Returns the path of the correct ballistic package image given the requirements
     Dim img_path As String
-    img_path = "S:\Data Manager\Specifications\ballistic-package\15x15-corner.jpg"
+    img_path = IMAGE_DIR & "\ballistic-package\15x15-corner.jpg"
     GetBallisticPackageImagePath = img_path
 End Function
 

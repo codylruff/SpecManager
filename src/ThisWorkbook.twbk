@@ -1,8 +1,8 @@
 '============================================================================
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'NOTES:
-' This file will not be imported and is for reference only. Any changes to 
-' ThisWorkbook must be made in the VBIDE 
+' This file will not be imported and is for reference only. Any changes to
+' ThisWorkbook must be made in the VBIDE
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 '=============================================================================
 Private retry As Long
@@ -18,10 +18,10 @@ End Sub
 Sub ImportAll()
     If Not IsEditorInSync Then SyncVBAEditor
     RemoveAll
-    Application.OnTime Now(), "VSImport"
+    Application.OnTime Now(), "ThisWorkbook.ImportSource"
 End Sub
 
-Sub VSImport()
+Sub ImportSource()
     
     Dim path As String
     Dim VerNum As String
@@ -33,7 +33,7 @@ Sub VSImport()
 
     On Error GoTo ImportFail
     
-    path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
+    path = ThisWorkbook.path & "\src\"
     strFile = Dir(path & "*.bas*")
     
     Do While Len(strFile) > 0
@@ -42,7 +42,6 @@ Sub VSImport()
         strFile = Dir
     Loop
     
-    path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
     strFile = Dir(path & "*.frm*")
     
     Do While Len(strFile) > 0
@@ -51,7 +50,6 @@ Sub VSImport()
         strFile = Dir
     Loop
     
-    path = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\src\"
     strFile = Dir(path & "*.cls*")
     
     Do While Len(strFile) > 0
@@ -95,3 +93,45 @@ Sub SyncVBAEditor()
     End If
     End With
 End Sub
+
+Public Sub ExportAll()
+' Exports the codebase to a project folder as text files
+    Const vbaModule = 1
+    Const vbaClassModule = 2
+    Const vbaForm = 3
+    Const vbaDocument = 100
+    Const Padding = 24
+
+    Dim VBComponent As Object
+    Dim Count As Integer
+    Dim path As String
+    Dim directory As String
+    Dim extension As String
+
+    directory = ThisWorkbook.path & "\src\"
+    
+    For Each VBComponent In ActiveWorkbook.VBProject.VBComponents
+        
+        If VBComponent.Type <> vbaDocument Then
+            Select Case VBComponent.Type
+                Case vbaClassModule
+                    extension = ".cls"
+                    path = directory & VBComponent.Name & extension
+                Case vbaForm
+                    extension = ".frm"
+                    path = directory & VBComponent.Name & extension
+                Case vbaModule
+                    extension = ".bas"
+                    path = directory & VBComponent.Name & extension
+                Case Else
+                    extension = ".txt"
+            End Select
+            
+            Call VBComponent.Export(path)
+
+            On Error GoTo 0
+        End If
+
+    Next
+End Sub
+

@@ -37,15 +37,20 @@ $Status.Text = "Determining latest release . . ."
 $Status.Refresh()
 
 # Initialize variables
-$SpecManagerDir = "$env:APPDATA\Spec-Manager"
+$SpecManagerDir = "$env:APPDATA\Spec-Manager-v3"
 $ZipFile = "$SpecManagerDir\spec-manager.zip"
+$UpdateDir = "$SpecManagerDir\update"
+$AppDir = "$SpecManagerDir\app"
 
 if (!(Test-Path $SpecManagerDir)) {
   New-Item $SpecManagerDir -ItemType Directory | Out-Null
+  New-Item "$SpecManagerDir\app" -ItemType Directory | Out-Null
+  New-Item $UpdateDir -ItemType Directory | Out-Null
+
 } else {
   # Remove old installation
-  Remove-Item -LiteralPath $SpecManagerDir -Force -Recurse
-  New-Item $SpecManagerDir -ItemType Directory | Out-Null
+  Remove-Item -LiteralPath $AppDir -Force -Recurse
+  New-Item $AppDir -ItemType Directory | Out-Null
 }
 
 # Download
@@ -56,9 +61,14 @@ DownloadZipLegacy($ZipFile)
 # Install
 $Status.Text = "Installing Spec-Manager . . ."
 $Status.Refresh()
-ExtractZipLegacy -Zip $ZipFile -OutDir $SpecManagerDir
+ExtractZipLegacy -Zip $ZipFile -OutDir $AppDir
 Remove-Item $ZipFile
-SpecManagerShortcut($SpecManagerDir)
+$CWD = Get-Location
+Copy-Item "$CWD\start.bat $UpdateDir
+Copy-Item "$CWD\start.ps1 $UpdateDir
+Copy-Item "$CWD\include.ps1 $UpdateDir
+Copy-Item "$CWD\Spec-Manager.ico $UpdateDir
+SpecManagerShortcut($UpdateDir)
 Enable-VBOM "Excel"
 
 # -----------------------------------------------------------------------------------------------------------
@@ -68,7 +78,7 @@ $Status.Text = "Launching Spec-Manager . . ."
 $Status.Refresh()
 $Excel = New-Object -comobject Excel.Application
 $tag = GetLatestVersion("Only a test!")
-$FilePath = "$SpecManagerDir\Spec Manager $tag.xlsm"
+$FilePath = "$AppDir\Spec Manager $tag.xlsm"
 #$Excel.WindowState = -4140
 $Excel.visible = $true
 $Excel.Workbooks.Open($FilePath)

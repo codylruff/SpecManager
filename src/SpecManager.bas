@@ -1,15 +1,16 @@
 Attribute VB_Name = "SpecManager"
 Option Explicit
 ' String Constants
-Public Const PUBLIC_DIR               As String = "S:\Data Manager"
+Public Const PUBLIC_DIR               As String = "S:\Production\Protection Production\Spec-Manager"
 Public Const SM_PATH                  As String = "C:\Users\"
 Public Const nullstr                  As String = vbNullString
-Public Const TEST_DATABASE_PATH       As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+Public Const TEST_DATABASE_PATH       As String = "S:\Production\Protection Production\Spec-Manager\Database\SAATI_Spec_Manager.db3"
+Public Const IMAGE_DIR                As String = "S:\Production\Protection Production\Spec-Manager\Specifications"
 
 #If Developer = 1 Then
     Public Const DATABASE_PATH        As String = "C:\Users\cruff\Documents\Projects\source\Spec-Manager\data\test\SAATI_Spec_Manager_TEST_DB.db3"
 #Else
-    Public Const DATABASE_PATH        As String = "S:\Data Manager\Database\SAATI_Spec_Manager.db3"
+    Public Const DATABASE_PATH        As String = "S:\Production\Protection Production\Spec-Manager\Database\SAATI_Spec_Manager.db3"
 #End If
 
 ' SPEC MANAGER ERROR DESCRIPTIONS:
